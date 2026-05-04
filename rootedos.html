@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="A teen-aware Christian reflection tool that creates a warm spiritual growth plan.">
+  <title>RootedOS | RootedByte</title>
+  <style>
+:root {
+  --bg: #07140f;
+  --bg-soft: #0d2118;
+  --card: rgba(255, 255, 255, 0.075);
+  --card-strong: rgba(255, 255, 255, 0.12);
+  --text: #f4fbf6;
+  --muted: #bfd2c7;
+  --line: rgba(255, 255, 255, 0.16);
+  --accent: #8fe3b0;
+  --accent-strong: #52c989;
+  --gold: #f5d487;
+  --danger: #ffb4a8;
+  --shadow: 0 24px 80px rgba(0, 0, 0, 0.35);
+  --radius: 24px;
+  --radius-sm: 16px;
+  --max: 1180px;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color: var(--text);
+  background:
+    radial-gradient(circle at top left, rgba(82, 201, 137, 0.24), transparent 32rem),
+    radial-gradient(circle at 85% 15%, rgba(245, 212, 135, 0.12), transparent 28rem),
+    linear-gradient(135deg, #06110d 0%, #07140f 45%, #0d2118 100%);
+  line-height: 1.6;
+}
+a { color: inherit; text-decoration: none; }
+button, input, select, textarea { font: inherit; }
+.site-header { position: sticky; top: 0; z-index: 100; backdrop-filter: blur(18px); background: rgba(7, 20, 15, 0.82); border-bottom: 1px solid var(--line); }
+.nav { max-width: var(--max); margin: 0 auto; padding: 16px 22px; display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+.brand { display: inline-flex; align-items: center; gap: 10px; font-weight: 800; letter-spacing: -0.04em; font-size: 1.15rem; }
+.brand-mark { width: 38px; height: 38px; border-radius: 14px; display: grid; place-items: center; color: #06110d; background: linear-gradient(135deg, var(--accent), var(--gold)); font-weight: 900; box-shadow: 0 14px 34px rgba(82, 201, 137, 0.25); }
+.nav-links { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: flex-end; }
+.nav-links a { color: var(--muted); padding: 9px 12px; border-radius: 999px; transition: background 180ms ease, color 180ms ease; font-size: 0.95rem; }
+.nav-links a:hover, .nav-links a:focus-visible, .nav-links a.active { color: var(--text); background: rgba(255, 255, 255, 0.09); outline: none; }
+.section { max-width: var(--max); margin: 0 auto; padding: 86px 22px; }
+.hero { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(280px, 0.9fr); align-items: center; gap: 44px; min-height: 72vh; }
+.eyebrow { display: inline-flex; gap: 8px; align-items: center; color: var(--accent); background: rgba(143, 227, 176, 0.1); border: 1px solid rgba(143, 227, 176, 0.22); border-radius: 999px; padding: 8px 12px; font-size: 0.9rem; font-weight: 700; }
+h1, h2, h3 { line-height: 1.05; margin: 0; letter-spacing: -0.05em; }
+h1 { font-size: clamp(3.1rem, 8vw, 6.8rem); max-width: 850px; margin-top: 24px; }
+h2 { font-size: clamp(2.1rem, 5vw, 4rem); }
+h3 { font-size: clamp(1.35rem, 3vw, 2rem); }
+.lead { color: var(--muted); font-size: clamp(1.08rem, 2vw, 1.28rem); max-width: 760px; margin: 24px 0 0; }
+.hero-actions, .button-row { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 30px; }
+.btn { border: 0; cursor: pointer; border-radius: 999px; padding: 13px 18px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 48px; background: rgba(255, 255, 255, 0.1); color: var(--text); border: 1px solid rgba(255, 255, 255, 0.14); transition: transform 180ms ease, background 180ms ease, border 180ms ease; font-weight: 800; }
+.btn:hover { transform: translateY(-2px); background: rgba(255, 255, 255, 0.15); }
+.btn.primary { color: #05110b; background: linear-gradient(135deg, var(--accent), var(--gold)); border: 0; }
+.btn.small { min-height: 38px; padding: 9px 13px; font-size: 0.92rem; }
+.btn:disabled { opacity: 0.65; cursor: not-allowed; transform: none; }
+.hero-card, .mini-card, .app-panel, .contact-card, .form-card, .result-card, .verse-card, .area-card { border-radius: var(--radius); background: var(--card); border: 1px solid var(--line); box-shadow: var(--shadow); }
+.hero-card { padding: 26px; background: linear-gradient(180deg, rgba(255, 255, 255, 0.13), rgba(255, 255, 255, 0.06)); }
+.stats-grid { display: grid; gap: 14px; margin-top: 18px; }
+.stat { padding: 18px; border-radius: 18px; background: rgba(0, 0, 0, 0.18); border: 1px solid rgba(255, 255, 255, 0.1); }
+.stat strong { display: block; font-size: 2rem; color: var(--accent); line-height: 1; }
+.stat span { color: var(--muted); }
+.section-heading { display: flex; align-items: end; justify-content: space-between; gap: 24px; margin-bottom: 28px; }
+.section-heading p { max-width: 680px; color: var(--muted); margin: 12px 0 0; }
+.app-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
+.mini-card { padding: 22px; }
+.mini-card p { color: var(--muted); margin: 12px 0 0; }
+.tag { display: inline-flex; color: var(--gold); font-weight: 800; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 12px; }
+.app-panel { padding: 28px; margin-top: 24px; }
+.app-top { display: grid; grid-template-columns: minmax(0, 0.95fr) minmax(300px, 0.8fr); gap: 26px; align-items: start; }
+.app-copy p { color: var(--muted); margin: 16px 0 0; }
+.form-card { padding: 22px; background: rgba(255, 255, 255, 0.07); }
+.field { display: grid; gap: 8px; margin-bottom: 16px; }
+label { color: var(--text); font-weight: 800; }
+input, select, textarea { width: 100%; color: var(--text); background: rgba(0, 0, 0, 0.28); border: 1px solid rgba(255, 255, 255, 0.14); border-radius: 14px; padding: 13px 14px; outline: none; }
+textarea { min-height: 120px; resize: vertical; }
+input:focus, select:focus, textarea:focus { border-color: var(--accent); box-shadow: 0 0 0 4px rgba(143, 227, 176, 0.12); }
+.hint { color: var(--muted); font-size: 0.92rem; }
+.status { min-height: 24px; margin-top: 14px; color: var(--accent); display: flex; align-items: center; gap: 10px; }
+.status.error { color: var(--danger); }
+.spinner { width: 18px; height: 18px; border-radius: 50%; border: 2px solid rgba(255, 255, 255, 0.24); border-top-color: var(--accent); animation: spin 800ms linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.results { margin-top: 24px; }
+.tone-labels { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; margin-bottom: 18px; }
+.tone-label { padding: 18px; border-radius: 18px; background: rgba(0, 0, 0, 0.18); border: 1px solid rgba(255, 255, 255, 0.1); }
+.tone-label span { color: var(--muted); display: block; font-size: 0.88rem; }
+.tone-label strong { display: block; font-size: 1.2rem; margin-top: 4px; }
+.knob-grid { display: grid; grid-template-columns: repeat(4, minmax(120px, 1fr)); gap: 18px; }
+.knob { display: grid; place-items: center; gap: 9px; padding: 18px 12px; border-radius: 20px; background: rgba(0, 0, 0, 0.18); border: 1px solid rgba(255, 255, 255, 0.1); text-align: center; }
+.dial { --value: 0; width: 92px; height: 92px; border-radius: 50%; background: conic-gradient(var(--accent) calc(var(--value) * 1%), rgba(255, 255, 255, 0.12) 0); display: grid; place-items: center; position: relative; }
+.dial::after { content: ''; position: absolute; inset: 10px; border-radius: 50%; background: #0a1711; border: 1px solid rgba(255, 255, 255, 0.1); }
+.dial strong { z-index: 1; font-size: 1.25rem; }
+.knob small { color: var(--muted); font-weight: 800; }
+.result-card { padding: 22px; margin-top: 16px; }
+.result-card p { color: var(--muted); }
+.verse-grid { display: grid; gap: 16px; margin-top: 16px; }
+.verse-card { padding: 18px; background: rgba(255, 255, 255, 0.065); }
+.verse-card blockquote { margin: 10px 0; color: var(--text); font-size: 1.05rem; }
+.progress { height: 10px; border-radius: 999px; overflow: hidden; background: rgba(255, 255, 255, 0.12); margin: 10px 0; }
+.progress span { display: block; height: 100%; width: var(--width); background: linear-gradient(90deg, var(--accent), var(--gold)); }
+.highlight { border-color: rgba(245, 212, 135, 0.35); background: rgba(245, 212, 135, 0.09); }
+.rootedos-step { min-height: 210px; }
+.step-count { color: var(--gold); font-weight: 800; margin-bottom: 8px; }
+.choice-grid { display: grid; gap: 10px; margin-top: 18px; }
+.choice-button { text-align: left; justify-content: flex-start; border-radius: 16px; background: rgba(0, 0, 0, 0.2); }
+.choice-button.selected { border-color: var(--accent); background: rgba(143, 227, 176, 0.13); }
+.score-wrap { display: grid; grid-template-columns: 220px 1fr; gap: 24px; align-items: center; }
+.score-circle { width: 190px; height: 190px; border-radius: 50%; display: grid; place-items: center; background: conic-gradient(var(--accent) calc(var(--score) * 1%), rgba(255, 255, 255, 0.12) 0); margin: 0 auto; position: relative; }
+.score-circle::after { content: ''; position: absolute; inset: 14px; border-radius: 50%; background: #0b1812; }
+.score-circle strong { z-index: 1; font-size: 3.4rem; }
+.area-list { display: grid; gap: 12px; margin-top: 20px; }
+details.area-card { padding: 0; overflow: hidden; }
+details.area-card summary { cursor: pointer; list-style: none; display: flex; justify-content: space-between; gap: 14px; align-items: center; padding: 18px; font-weight: 900; }
+details.area-card summary::-webkit-details-marker { display: none; }
+.area-body { padding: 0 18px 18px; color: var(--muted); }
+.badge { color: #06110d; background: var(--gold); border-radius: 999px; padding: 6px 10px; font-size: 0.78rem; white-space: nowrap; }
+.plan-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; margin-top: 16px; }
+.plan-item { border-radius: 16px; padding: 16px; background: rgba(0, 0, 0, 0.18); border: 1px solid rgba(255, 255, 255, 0.1); }
+.quote { font-size: 1.2rem; border-left: 4px solid var(--accent); padding-left: 18px; color: var(--text); }
+.mission { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
+.contact-card { padding: 26px; }
+.contact-links { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 18px; }
+.contact-links a { color: var(--accent); padding: 10px 12px; border: 1px solid rgba(143, 227, 176, 0.2); border-radius: 999px; background: rgba(143, 227, 176, 0.08); }
+footer { border-top: 1px solid var(--line); text-align: center; color: var(--muted); padding: 28px 20px 40px; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+@media (max-width: 920px) { .hero, .app-top, .mission, .score-wrap { grid-template-columns: 1fr; } .app-grid { grid-template-columns: 1fr; } .knob-grid { grid-template-columns: repeat(2, minmax(120px, 1fr)); } .section { padding: 62px 18px; } .plan-grid { grid-template-columns: 1fr; } }
+@media (max-width: 620px) { .nav { align-items: flex-start; flex-direction: column; } .nav-links { justify-content: flex-start; } .hero { min-height: auto; padding-top: 54px; } .tone-labels, .knob-grid { grid-template-columns: 1fr; } .score-circle { width: 150px; height: 150px; } }
+</style>
+</head>
+<body>
+  <header class="site-header">
+  <nav class="nav" aria-label="Primary navigation">
+    <a class="brand" href="index.html" aria-label="RootedByte home"><span class="brand-mark">R</span><span>RootedByte</span></a>
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="tone.html">Song Tone Finder</a>
+      <a href="newsverse.html">NewsVerse</a>
+      <a href="rootedos.html" class="active">RootedOS</a>
+      <a href="index.html#contact">Contact</a>
+    </div>
+  </nav>
+</header>
+  <main id="top">
+    <section class="section hero" aria-labelledby="rootedos-title">
+      <div>
+        <span class="eyebrow">App 3 • Spiritual Growth</span>
+        <h1 id="rootedos-title">RootedOS</h1>
+        <p class="lead">A teen-aware reflection tool that avoids harsh, overly direct questions. It starts with everyday habits, pressure, scrolling, friendships, and purpose, then gently guides users toward spiritual reflection.</p>
+      </div>
+      <aside class="hero-card">
+        <span class="tag">Designed for today's teenager</span>
+        <h2>Reflect first. Grow next.</h2>
+        <p class="lead">The questions are framed around real life instead of interrogation. The plan stays warm, Scripture-referenced, and never condemning.</p>
+      </aside>
+    </section>
+    <section class="section">
+      <article class="app-panel" aria-labelledby="rooted-demo-title">
+        <div class="app-top">
+          <div class="app-copy">
+            <span class="tag">Demo</span>
+            <h2 id="rooted-demo-title">Take the reflection</h2>
+            <p>Answer one question at a time. RootedOS bundles the answers into one request and creates a personalized Christian growth plan.</p>
+          </div>
+          <div class="form-card">
+            <div id="rootedStep" class="rootedos-step" aria-live="polite"></div>
+            <div class="button-row">
+              <button class="btn small" id="rootedBack" type="button">Back</button>
+              <button class="btn primary small" id="rootedNext" type="button">Next</button>
+              <button class="btn small" id="rootedReset" type="button">Reset</button>
+            </div>
+            <div class="status" id="rootedStatus" role="status" aria-live="polite"></div>
+          </div>
+        </div>
+        <div class="results" id="rootedResult" aria-live="polite"></div>
+      </article>
+    </section>
+  </main>
+  <footer>
+  <p>© <span id="year"></span> RootedByte. Built for digital wisdom rooted in truth.</p>
+</footer>
+  <script>
+const $ = (selector) => document.querySelector(selector);
+const year = $('#year');
+if (year) year.textContent = new Date().getFullYear();
+function escapeHtml(value) {
+  return String(value ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+function setStatus(element, message, type = 'info', loading = false) {
+  if (!element) return;
+  element.className = type === 'error' ? 'status error' : 'status';
+  element.innerHTML = loading ? `<span class="spinner" aria-hidden="true"></span><span>${escapeHtml(message)}</span>` : escapeHtml(message);
+}
+async function postJson(url, body) {
+  const response = await fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body)
+  });
+  const data = await response.json().catch(() => ({}));
+  if (!response.ok) {
+    throw new Error(data.error || 'Something went wrong. Please try again.');
+  }
+  return data;
+}
+
+
+const rootedQuestions = [
+  { key: 'stressDefault', text: 'When your day gets loud, stressful, or lonely, what do you usually reach for first?', type: 'choice', choices: ['Music or videos', 'Friends or group chats', 'Prayer or quiet', 'Games or scrolling', 'I am not sure'] },
+  { key: 'scriptureRhythm', text: 'In a normal week, how often do you slow down to read or listen to Scripture, even briefly?', type: 'choice', choices: ['Most days', 'A few times', 'About once', 'Rarely right now'] },
+  { key: 'scrollAftereffect', text: 'After scrolling, streaming, or short videos, how do you usually feel inside?', type: 'choice', choices: ['Rested', 'Inspired', 'Numb or distracted', 'Anxious or behind', 'It depends'] },
+  { key: 'pressureVoice', text: 'Which pressure feels loudest lately?', type: 'choice', choices: ['School or grades', 'Family expectations', 'Fitting in', 'Body image or comparison', 'Future plans', 'Hidden stress'] },
+  { key: 'safeConversation', text: 'When something is heavy, who could you honestly talk to?', type: 'choice', choices: ['A parent or guardian', 'A pastor or mentor', 'A faith-rooted friend', 'A regular friend', 'No one yet'] },
+  { key: 'identitySource', text: 'What most often shapes how you see yourself?', type: 'choice', choices: ['What God says', 'What friends think', 'Likes, comments, or attention', 'Performance or achievements', 'My mistakes', 'I am still figuring that out'] },
+  { key: 'purposeClarity', text: 'When you think about your future, what best describes your heart?', type: 'choice', choices: ['Clear and hopeful', 'Curious but unsure', 'Pressured to decide', 'Avoiding it', 'Worried or overwhelmed'] },
+  { key: 'generosityPractice', text: 'When you have time, money, attention, or influence, how often do you use some of it to bless someone else?', type: 'choice', choices: ['Often', 'Sometimes', 'Only when asked', 'Rarely right now', 'I have not thought about it'] }
+];
+let rootedIndex = 0;
+const rootedAnswers = {};
+function renderRootedStep() {
+  const question = rootedQuestions[rootedIndex];
+  const saved = rootedAnswers[question.key] ?? '';
+  $('#rootedStep').innerHTML = `
+    <div>
+      <div class="step-count">Question ${rootedIndex + 1} of ${rootedQuestions.length}</div>
+      <h3>${escapeHtml(question.text)}</h3>
+      <div class="choice-grid">
+        ${question.choices.map((choice) => `<button type="button" class="btn choice-button ${saved === choice ? 'selected' : ''}" data-value="${escapeHtml(choice)}">${escapeHtml(choice)}</button>`).join('')}
+      </div>
+    </div>`;
+  $('#rootedBack').disabled = rootedIndex === 0;
+  $('#rootedNext').textContent = rootedIndex === rootedQuestions.length - 1 ? 'Generate plan' : 'Next';
+  $('#rootedStatus').textContent = '';
+  document.querySelectorAll('.choice-button').forEach((button) => {
+    button.addEventListener('click', () => {
+      rootedAnswers[question.key] = button.dataset.value;
+      renderRootedStep();
+    });
+  });
+}
+function renderRootedPlan(data) {
+  const areas = Array.isArray(data.areas) ? data.areas : [];
+  const plan = data.daily_plan || {};
+  const score = Math.max(0, Math.min(100, Number(data.spiritual_health_score) || 0));
+  return `
+    <div class="result-card">
+      <div class="score-wrap">
+        <div class="score-circle" style="--score:${score}"><strong>${Math.round(score)}</strong></div>
+        <div><h3>Your RootedOS summary</h3><p class="lead">${escapeHtml(data.summary)}</p></div>
+      </div>
+    </div>
+    <div class="area-list">
+      ${areas.map((area) => `<details class="area-card"><summary><span>${escapeHtml(area.area)}</span><span class="badge">${escapeHtml(area.urgency)}</span></summary><div class="area-body"><p><strong>Current state:</strong> ${escapeHtml(area.current_state)}</p><p><strong>Recommendation:</strong> ${escapeHtml(area.recommendation)}</p><p><strong>Scripture:</strong> ${escapeHtml(area.scripture)}</p><p><strong>Action step:</strong> ${escapeHtml(area.action_step)}</p></div></details>`).join('')}
+    </div>
+    <div class="result-card"><span class="tag">Daily plan</span><div class="plan-grid">
+      <div class="plan-item"><strong>Prayer</strong><p>${escapeHtml(plan.prayer_minutes)} minutes</p></div>
+      <div class="plan-item"><strong>Bible reading</strong><p>${escapeHtml(plan.bible_reading_minutes)} minutes</p></div>
+      <div class="plan-item"><strong>Social media limit</strong><p>${escapeHtml(plan.social_media_limit_minutes)} minutes</p></div>
+      <div class="plan-item"><strong>Fasting</strong><p>${escapeHtml(plan.fasting_recommendation)}</p></div>
+      <div class="plan-item"><strong>Community</strong><p>${escapeHtml(plan.community_action)}</p></div>
+    </div></div>
+    <div class="result-card highlight"><span class="tag">Key verse</span><blockquote class="quote">${escapeHtml(data.key_verse?.text || '')}</blockquote><p>${escapeHtml(data.key_verse?.reference || '')}</p></div>
+    <div class="result-card"><span class="tag">Encouragement</span><p>${escapeHtml(data.encouragement)}</p></div>`;
+}
+async function generateRootedPlan() {
+  const nextButton = $('#rootedNext');
+  const backButton = $('#rootedBack');
+  const result = $('#rootedResult');
+  nextButton.disabled = true;
+  backButton.disabled = true;
+  result.innerHTML = '';
+  setStatus($('#rootedStatus'), 'Creating your RootedOS growth plan...', 'info', true);
+  try {
+    const data = await postJson('/api/rootedos', { answers: rootedAnswers });
+    result.innerHTML = renderRootedPlan(data);
+    setStatus($('#rootedStatus'), 'RootedOS plan ready.');
+  } catch (error) {
+    setStatus($('#rootedStatus'), error.message, 'error');
+  } finally {
+    nextButton.disabled = false;
+    backButton.disabled = rootedIndex === 0;
+  }
+}
+$('#rootedNext').addEventListener('click', async () => {
+  const question = rootedQuestions[rootedIndex];
+  if (!rootedAnswers[question.key]) {
+    setStatus($('#rootedStatus'), 'Choose the answer that fits best before continuing.', 'error');
+    return;
+  }
+  if (rootedIndex < rootedQuestions.length - 1) {
+    rootedIndex += 1;
+    renderRootedStep();
+  } else {
+    await generateRootedPlan();
+  }
+});
+$('#rootedBack').addEventListener('click', () => {
+  if (rootedIndex > 0) {
+    rootedIndex -= 1;
+    renderRootedStep();
+  }
+});
+$('#rootedReset').addEventListener('click', () => {
+  Object.keys(rootedAnswers).forEach((key) => delete rootedAnswers[key]);
+  rootedIndex = 0;
+  $('#rootedResult').innerHTML = '';
+  renderRootedStep();
+});
+renderRootedStep();
+</script>
+</body>
+</html>

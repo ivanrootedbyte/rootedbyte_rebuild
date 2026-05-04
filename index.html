@@ -1,0 +1,860 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="RootedByte is a faith-rooted IT portfolio with practical web apps for music tone creation, news reflection, and Christian growth planning.">
+  <title>RootedByte | Technology rooted in truth</title>
+  <style>
+    :root {
+      --bg: #07140f;
+      --bg-soft: #0d2118;
+      --card: rgba(255, 255, 255, 0.075);
+      --card-strong: rgba(255, 255, 255, 0.12);
+      --text: #f4fbf6;
+      --muted: #bfd2c7;
+      --line: rgba(255, 255, 255, 0.16);
+      --accent: #8fe3b0;
+      --accent-strong: #52c989;
+      --gold: #f5d487;
+      --danger: #ffb4a8;
+      --shadow: 0 24px 80px rgba(0, 0, 0, 0.35);
+      --radius: 24px;
+      --radius-sm: 16px;
+      --max: 1180px;
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(82, 201, 137, 0.24), transparent 32rem),
+        radial-gradient(circle at 85% 15%, rgba(245, 212, 135, 0.12), transparent 28rem),
+        linear-gradient(135deg, #06110d 0%, #07140f 45%, #0d2118 100%);
+      line-height: 1.6;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    button, input, select, textarea { font: inherit; }
+
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(18px);
+      background: rgba(7, 20, 15, 0.82);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .nav {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 16px 22px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      font-size: 1.15rem;
+    }
+
+    .brand-mark {
+      width: 38px;
+      height: 38px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      color: #06110d;
+      background: linear-gradient(135deg, var(--accent), var(--gold));
+      font-weight: 900;
+      box-shadow: 0 14px 34px rgba(82, 201, 137, 0.25);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .nav-links a {
+      color: var(--muted);
+      padding: 9px 12px;
+      border-radius: 999px;
+      transition: background 180ms ease, color 180ms ease;
+      font-size: 0.95rem;
+    }
+
+    .nav-links a:hover,
+    .nav-links a:focus-visible {
+      color: var(--text);
+      background: rgba(255, 255, 255, 0.09);
+      outline: none;
+    }
+
+    .section {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 86px 22px;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(280px, 0.9fr);
+      align-items: center;
+      gap: 44px;
+      min-height: 78vh;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      gap: 8px;
+      align-items: center;
+      color: var(--accent);
+      background: rgba(143, 227, 176, 0.1);
+      border: 1px solid rgba(143, 227, 176, 0.22);
+      border-radius: 999px;
+      padding: 8px 12px;
+      font-size: 0.9rem;
+      font-weight: 700;
+    }
+
+    h1, h2, h3 { line-height: 1.05; margin: 0; letter-spacing: -0.05em; }
+    h1 { font-size: clamp(3.1rem, 8vw, 6.8rem); max-width: 850px; margin-top: 24px; }
+    h2 { font-size: clamp(2.1rem, 5vw, 4rem); }
+    h3 { font-size: clamp(1.35rem, 3vw, 2rem); }
+
+    .lead {
+      color: var(--muted);
+      font-size: clamp(1.08rem, 2vw, 1.28rem);
+      max-width: 760px;
+      margin: 24px 0 0;
+    }
+
+    .hero-actions, .button-row {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin-top: 30px;
+    }
+
+    .btn {
+      border: 0;
+      cursor: pointer;
+      border-radius: 999px;
+      padding: 13px 18px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      min-height: 48px;
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--text);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      transition: transform 180ms ease, background 180ms ease, border 180ms ease;
+      font-weight: 800;
+    }
+
+    .btn:hover { transform: translateY(-2px); background: rgba(255, 255, 255, 0.15); }
+    .btn.primary { color: #05110b; background: linear-gradient(135deg, var(--accent), var(--gold)); border: 0; }
+    .btn.small { min-height: 38px; padding: 9px 13px; font-size: 0.92rem; }
+    .btn:disabled { opacity: 0.65; cursor: not-allowed; transform: none; }
+
+    .hero-card {
+      padding: 26px;
+      border-radius: var(--radius);
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.13), rgba(255, 255, 255, 0.06));
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+    }
+
+    .stats-grid { display: grid; gap: 14px; margin-top: 18px; }
+    .stat {
+      padding: 18px;
+      border-radius: 18px;
+      background: rgba(0, 0, 0, 0.18);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .stat strong { display: block; font-size: 2rem; color: var(--accent); line-height: 1; }
+    .stat span { color: var(--muted); }
+
+    .section-heading {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 24px;
+      margin-bottom: 28px;
+    }
+
+    .section-heading p { max-width: 680px; color: var(--muted); margin: 12px 0 0; }
+
+    .app-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .mini-card, .app-panel, .contact-card {
+      border-radius: var(--radius);
+      background: var(--card);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+    }
+
+    .mini-card { padding: 22px; }
+    .mini-card p { color: var(--muted); margin: 12px 0 0; }
+    .tag { display: inline-flex; color: var(--gold); font-weight: 800; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 12px; }
+
+    .app-panel { padding: clamp(20px, 4vw, 34px); margin-top: 28px; overflow: hidden; }
+    .app-panel + .app-panel { margin-top: 34px; }
+
+    .app-top {
+      display: grid;
+      grid-template-columns: minmax(0, 0.95fr) minmax(300px, 1.05fr);
+      gap: 24px;
+      align-items: start;
+    }
+
+    .app-copy p { color: var(--muted); margin: 14px 0 0; }
+
+    .form-card {
+      padding: 20px;
+      border-radius: 22px;
+      background: rgba(0, 0, 0, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+    }
+
+    label { display: block; color: var(--muted); font-weight: 700; margin: 0 0 8px; }
+
+    input, select, textarea {
+      width: 100%;
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      background: rgba(5, 17, 11, 0.72);
+      color: var(--text);
+      border-radius: 16px;
+      padding: 13px 14px;
+      outline: none;
+    }
+
+    textarea { min-height: 118px; resize: vertical; }
+    input:focus, select:focus, textarea:focus { border-color: rgba(143, 227, 176, 0.65); box-shadow: 0 0 0 4px rgba(143, 227, 176, 0.1); }
+    .field { margin-bottom: 16px; }
+    .hint { color: var(--muted); font-size: 0.9rem; margin-top: 8px; }
+
+    .status {
+      min-height: 30px;
+      margin-top: 14px;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .error { color: var(--danger); }
+    .spinner {
+      width: 18px;
+      height: 18px;
+      border-radius: 999px;
+      border: 2px solid rgba(255, 255, 255, 0.24);
+      border-top-color: var(--accent);
+      animation: spin 850ms linear infinite;
+      display: inline-block;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .results { margin-top: 24px; }
+
+    .tone-result {
+      display: none;
+      padding: 22px;
+      border-radius: 22px;
+      background: linear-gradient(135deg, rgba(143, 227, 176, 0.13), rgba(245, 212, 135, 0.08));
+      border: 1px solid rgba(143, 227, 176, 0.2);
+    }
+
+    .tone-labels {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      margin-bottom: 22px;
+    }
+
+    .tone-label {
+      padding: 14px;
+      border-radius: 16px;
+      background: rgba(0, 0, 0, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .tone-label span { display: block; color: var(--muted); font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.08em; }
+    .tone-label strong { font-size: 1.05rem; }
+
+    .knob-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(112px, 1fr));
+      gap: 18px;
+    }
+
+    .knob-card { text-align: center; }
+    .knob {
+      --value: 0;
+      width: 104px;
+      height: 104px;
+      margin: 0 auto 10px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background:
+        radial-gradient(circle at center, #0d2118 0 47%, transparent 49%),
+        conic-gradient(var(--accent) calc(var(--value) * 1%), rgba(255,255,255,0.14) 0);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      box-shadow: inset 0 0 26px rgba(0,0,0,0.42);
+      position: relative;
+    }
+    .knob strong { font-size: 1.3rem; }
+    .knob-card span { color: var(--muted); font-weight: 800; font-size: 0.93rem; }
+    .tone-notes { color: var(--muted); margin-top: 18px; }
+
+    .article-summary, .verse-card, .styled-block, .jesus-lens, .plan-box, .quote-block {
+      border-radius: 18px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: rgba(0, 0, 0, 0.2);
+      padding: 18px;
+      margin-top: 14px;
+    }
+
+    .article-summary h4, .verse-card h4, .styled-block h4, .jesus-lens h4, .plan-box h4 { margin: 0 0 10px; font-size: 1.05rem; }
+    .article-summary p, .verse-card p, .styled-block p, .jesus-lens p, .plan-box p { color: var(--muted); margin: 0; }
+    .progress { height: 10px; border-radius: 999px; overflow: hidden; background: rgba(255, 255, 255, 0.12); margin: 12px 0; }
+    .progress span { display: block; height: 100%; width: 0; background: linear-gradient(90deg, var(--accent), var(--gold)); }
+
+    .jesus-lens { background: linear-gradient(135deg, rgba(245, 212, 135, 0.14), rgba(143, 227, 176, 0.08)); }
+    .prayer-list { color: var(--muted); margin: 12px 0 0; padding-left: 22px; }
+
+    .rootedos-step {
+      min-height: 260px;
+      display: grid;
+      gap: 18px;
+    }
+
+    .step-count { color: var(--accent); font-weight: 900; }
+    .choice-row { display: flex; gap: 10px; flex-wrap: wrap; }
+    .choice-btn[aria-pressed="true"] { background: linear-gradient(135deg, var(--accent), var(--gold)); color: #05110b; border-color: transparent; }
+
+    .score-wrap {
+      display: grid;
+      grid-template-columns: 180px minmax(0, 1fr);
+      gap: 20px;
+      align-items: center;
+      margin-top: 18px;
+    }
+
+    .score-circle {
+      --score: 0;
+      width: 170px;
+      height: 170px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background:
+        radial-gradient(circle at center, #0d2118 0 57%, transparent 59%),
+        conic-gradient(var(--accent) calc(var(--score) * 1%), rgba(255,255,255,0.14) 0);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+    }
+    .score-circle strong { font-size: 2.45rem; line-height: 1; }
+    .score-circle span { display: block; color: var(--muted); font-size: 0.85rem; text-align: center; }
+
+    details.area-card {
+      border-radius: 18px;
+      background: rgba(0, 0, 0, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      padding: 16px;
+      margin-top: 12px;
+    }
+    details.area-card summary {
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      gap: 14px;
+      align-items: center;
+      font-weight: 900;
+    }
+    .badge {
+      display: inline-flex;
+      padding: 5px 9px;
+      border-radius: 999px;
+      background: rgba(143, 227, 176, 0.12);
+      border: 1px solid rgba(143, 227, 176, 0.22);
+      color: var(--accent);
+      font-size: 0.78rem;
+      white-space: nowrap;
+    }
+    details.area-card p { color: var(--muted); margin: 12px 0 0; }
+    .checklist { list-style: none; padding: 0; margin: 12px 0 0; display: grid; gap: 9px; color: var(--muted); }
+    .checklist li::before { content: '✓'; color: var(--accent); margin-right: 8px; font-weight: 900; }
+    .quote-block { border-left: 4px solid var(--gold); }
+    .quote-block blockquote { margin: 0; color: var(--text); font-size: 1.08rem; }
+    .quote-block cite { display: block; margin-top: 10px; color: var(--gold); font-style: normal; font-weight: 900; }
+
+    .mission { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+    .contact-card { padding: 26px; }
+    .contact-links { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 18px; }
+    .contact-links a { color: var(--accent); padding: 10px 12px; border: 1px solid rgba(143, 227, 176, 0.2); border-radius: 999px; background: rgba(143, 227, 176, 0.08); }
+
+    footer {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 32px 22px 54px;
+      color: var(--muted);
+      border-top: 1px solid var(--line);
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    @media (max-width: 920px) {
+      .hero, .app-top, .mission, .score-wrap { grid-template-columns: 1fr; }
+      .app-grid { grid-template-columns: 1fr; }
+      .knob-grid { grid-template-columns: repeat(2, minmax(120px, 1fr)); }
+      .section { padding: 62px 18px; }
+    }
+
+    @media (max-width: 620px) {
+      .nav { align-items: flex-start; flex-direction: column; }
+      .nav-links { justify-content: flex-start; }
+      .hero { min-height: auto; padding-top: 54px; }
+      .tone-labels, .knob-grid { grid-template-columns: 1fr; }
+      .score-circle { width: 150px; height: 150px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <nav class="nav" aria-label="Primary navigation">
+      <a class="brand" href="#top" aria-label="RootedByte home"><span class="brand-mark">R</span><span>RootedByte</span></a>
+      <div class="nav-links">
+        <a href="#apps">Apps</a>
+        <a href="#newsverse">NewsVerse</a>
+        <a href="#faith-tech">Faith + Tech</a>
+        <a href="#contact">Contact</a>
+      </div>
+    </nav>
+  </header>
+
+  <main id="top">
+    <section class="section hero" aria-labelledby="hero-title">
+      <div>
+        <span class="eyebrow">Technology • Scripture • Practical tools</span>
+        <h1 id="hero-title">Modern technology. Biblical clarity.</h1>
+        <p class="lead">RootedByte is an IT specialist portfolio and product lab built to help people use technology wisely, reflect on the world through Scripture, and grow with practical digital tools.</p>
+        <div class="hero-actions">
+          <a class="btn primary" href="#apps">Explore the apps</a>
+          <a class="btn" href="#contact">Connect with me</a>
+        </div>
+      </div>
+      <aside class="hero-card" aria-label="RootedByte overview">
+        <span class="tag">Portfolio and web apps</span>
+        <h2>A faith-rooted digital workspace.</h2>
+        <p class="lead">Three functional tools are embedded below: guitar tone discovery, news-to-Scripture reflection, and a step-by-step Christian growth assessment.</p>
+        <div class="stats-grid">
+          <div class="stat"><strong>03</strong><span>Working web apps</span></div>
+          <div class="stat"><strong>01</strong><span>Shared Gemini key on the backend</span></div>
+          <div class="stat"><strong>0</strong><span>Paid APIs required for v1</span></div>
+        </div>
+      </aside>
+    </section>
+
+    <section class="section" id="apps" aria-labelledby="apps-title">
+      <div class="section-heading">
+        <div>
+          <span class="eyebrow">RootedByte app ecosystem</span>
+          <h2 id="apps-title">Real tools, not mockups.</h2>
+          <p>Each app runs from this single page and talks only to Vercel serverless functions, keeping API keys off the browser.</p>
+        </div>
+      </div>
+      <div class="app-grid">
+        <article class="mini-card"><span class="tag">Music Tech</span><h3>Song Tone Finder</h3><p>Enter a song, Spotify link, or YouTube link and get amp, cab, delay, reverb, and EQ settings for modern guitar gear.</p></article>
+        <article class="mini-card"><span class="tag">Faith + News</span><h3>NewsVerse</h3><p>Paste a public article URL and receive a Scripture-focused reflection with relevance percentages, Jesus Lens, and prayer points.</p></article>
+        <article class="mini-card"><span class="tag">Spiritual Growth</span><h3>RootedOS</h3><p>Answer eight questions one at a time and receive a warm, Scripture-referenced Christian growth plan.</p></article>
+      </div>
+
+      <article class="app-panel" id="tone-finder" aria-labelledby="tone-title">
+        <div class="app-top">
+          <div class="app-copy">
+            <span class="tag">App 1</span>
+            <h2 id="tone-title">Song Tone Finder</h2>
+            <p>Type a song, paste a Spotify track link, or paste a YouTube link. Choose your gear and receive visual amp and effects settings as a starting point.</p>
+          </div>
+          <form class="form-card" id="toneForm">
+            <div class="field">
+              <label for="songInput">Song name, Spotify link, or YouTube link</label>
+              <input id="songInput" name="songInput" type="text" placeholder="Comfortably Numb - Pink Floyd" required>
+            </div>
+            <div class="field">
+              <label for="gearSelect">Gear</label>
+              <select id="gearSelect" name="gear" required>
+                <option value="Line 6 HX Stomp">Line 6 HX Stomp</option>
+                <option value="Line 6 POD Go">Line 6 POD Go</option>
+                <option value="Boss GT-1000">Boss GT-1000</option>
+                <option value="Helix Floor">Helix Floor</option>
+                <option value="Fractal FM3">Fractal FM3</option>
+                <option value="Neural DSP Quad Cortex">Neural DSP Quad Cortex</option>
+              </select>
+            </div>
+            <button class="btn primary" type="submit">Find tone</button>
+            <div class="status" id="toneStatus" role="status" aria-live="polite"></div>
+          </form>
+        </div>
+        <div class="results tone-result" id="toneResult" aria-live="polite"></div>
+      </article>
+
+      <article class="app-panel" id="newsverse" aria-labelledby="newsverse-title">
+        <div class="app-top">
+          <div class="app-copy">
+            <span class="tag">App 2</span>
+            <h2 id="newsverse-title">NewsVerse</h2>
+            <p>Paste a public news article URL. RootedByte extracts readable article text, trims it, and returns a Scripture-rooted analysis with verses, reflection, Jesus Lens, and prayer points.</p>
+          </div>
+          <form class="form-card" id="newsForm">
+            <div class="field">
+              <label for="articleUrl">Article URL</label>
+              <input id="articleUrl" name="articleUrl" type="url" placeholder="https://example.com/news/article" required>
+              <div class="hint">Some sites block article extraction. Public articles work best.</div>
+            </div>
+            <button class="btn primary" type="submit">Analyze article</button>
+            <div class="status" id="newsStatus" role="status" aria-live="polite"></div>
+          </form>
+        </div>
+        <div class="results" id="newsResult" aria-live="polite"></div>
+      </article>
+
+      <article class="app-panel" id="rootedos" aria-labelledby="rootedos-title">
+        <div class="app-top">
+          <div class="app-copy">
+            <span class="tag">App 3</span>
+            <h2 id="rootedos-title">RootedOS</h2>
+            <p>A step-by-step spiritual health assessment for prayer, Scripture, community, digital habits, giving, and calling. Complete all eight questions to generate a personalized plan.</p>
+          </div>
+          <div class="form-card">
+            <div id="rootedStep" class="rootedos-step" aria-live="polite"></div>
+            <div class="button-row">
+              <button class="btn small" id="rootedBack" type="button">Back</button>
+              <button class="btn primary small" id="rootedNext" type="button">Next</button>
+              <button class="btn small" id="rootedReset" type="button">Reset</button>
+            </div>
+            <div class="status" id="rootedStatus" role="status" aria-live="polite"></div>
+          </div>
+        </div>
+        <div class="results" id="rootedResult" aria-live="polite"></div>
+      </article>
+    </section>
+
+    <section class="section" id="faith-tech" aria-labelledby="faith-tech-title">
+      <div class="section-heading">
+        <div>
+          <span class="eyebrow">Faith + technology</span>
+          <h2 id="faith-tech-title">Open-minded, modern, and rooted.</h2>
+          <p>RootedByte is not anti-technology and not fear-based. The mission is to help people think clearly about wisdom, stewardship, creativity, truth, work, speech, and digital life.</p>
+        </div>
+      </div>
+      <div class="mission">
+        <article class="mini-card"><span class="tag">IT Support</span><h3>Practical help</h3><p>Support for everyday tech problems, digital organization, cybersecurity awareness, workflow improvement, and useful web tools.</p></article>
+        <article class="mini-card"><span class="tag">Biblical clarity</span><h3>Rooted reflection</h3><p>Technology can be useful, but wisdom matters. RootedByte keeps the tone welcoming, thoughtful, and anchored in Scripture.</p></article>
+      </div>
+    </section>
+
+    <section class="section" id="contact" aria-labelledby="contact-title">
+      <div class="contact-card">
+        <span class="eyebrow">Contact</span>
+        <h2 id="contact-title">Want to follow or collaborate with RootedByte?</h2>
+        <p class="lead">Reach out about RootedByte, collaboration ideas, early feedback, IT support, or future app improvements.</p>
+        <div class="contact-links">
+          <a href="mailto:[YOUR_EMAIL]">[YOUR_EMAIL]</a>
+          <a href="[YOUR_GITHUB]" rel="noopener">[YOUR_GITHUB]</a>
+          <a href="[YOUR_LINKEDIN]" rel="noopener">[YOUR_LINKEDIN]</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>© <span id="year"></span> RootedByte. Built for digital wisdom rooted in truth.</p>
+  </footer>
+
+  <script>
+    const $ = (selector) => document.querySelector(selector);
+    const year = $('#year');
+    year.textContent = new Date().getFullYear();
+
+    function escapeHtml(value) {
+      return String(value ?? '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    function setStatus(element, message, type = 'info', loading = false) {
+      element.className = type === 'error' ? 'status error' : 'status';
+      element.innerHTML = loading ? `<span class="spinner" aria-hidden="true"></span><span>${escapeHtml(message)}</span>` : escapeHtml(message);
+    }
+
+    async function postJson(url, payload) {
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok) {
+        throw new Error(data.error || 'Something went wrong. Please try again.');
+      }
+      return data;
+    }
+
+    function knob(label, value, suffix = '') {
+      const safeValue = Number.isFinite(Number(value)) ? Number(value) : 0;
+      const percent = suffix === ' ms' ? Math.max(0, Math.min(100, (safeValue / 800) * 100)) : Math.max(0, Math.min(100, safeValue * 10));
+      return `
+        <div class="knob-card">
+          <div class="knob" style="--value:${percent}"><strong>${escapeHtml(safeValue)}${escapeHtml(suffix)}</strong></div>
+          <span>${escapeHtml(label)}</span>
+        </div>`;
+    }
+
+    $('#toneForm').addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const form = event.currentTarget;
+      const button = form.querySelector('button[type="submit"]');
+      const toneResult = $('#toneResult');
+      const toneStatus = $('#toneStatus');
+      button.disabled = true;
+      toneResult.style.display = 'none';
+      toneResult.innerHTML = '';
+      setStatus(toneStatus, 'Building your tone settings...', 'info', true);
+
+      try {
+        const data = await postJson('/api/tone', {
+          songInput: $('#songInput').value.trim(),
+          gear: $('#gearSelect').value
+        });
+        toneResult.innerHTML = `
+          <div class="tone-labels">
+            <div class="tone-label"><span>Song</span><strong>${escapeHtml(data.song)}${data.artist ? ' — ' + escapeHtml(data.artist) : ''}</strong></div>
+            <div class="tone-label"><span>Amp model</span><strong>${escapeHtml(data.amp_model)}</strong></div>
+            <div class="tone-label"><span>Cab</span><strong>${escapeHtml(data.cab)}</strong></div>
+            <div class="tone-label"><span>Gear</span><strong>${escapeHtml($('#gearSelect').value)}</strong></div>
+          </div>
+          <div class="knob-grid">
+            ${knob('Gain', data.gain)}
+            ${knob('Bass', data.bass)}
+            ${knob('Mid', data.mid)}
+            ${knob('Treble', data.treble)}
+            ${knob('Presence', data.presence)}
+            ${knob('Reverb Mix', data.reverb_mix)}
+            ${knob('Delay Time', data.delay_time_ms, ' ms')}
+            ${knob('Delay Mix', data.delay_mix)}
+          </div>
+          <p class="tone-notes">${escapeHtml(data.notes)}</p>`;
+        toneResult.style.display = 'block';
+        setStatus(toneStatus, 'Tone ready. Use these as a starting point and adjust by ear.');
+      } catch (error) {
+        setStatus(toneStatus, error.message, 'error');
+      } finally {
+        button.disabled = false;
+      }
+    });
+
+    $('#newsForm').addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const button = event.currentTarget.querySelector('button[type="submit"]');
+      const newsStatus = $('#newsStatus');
+      const newsResult = $('#newsResult');
+      button.disabled = true;
+      newsResult.innerHTML = '';
+      setStatus(newsStatus, 'Fetching readable article text...', 'info', true);
+
+      try {
+        const article = await postJson('/api/readarticle', { url: $('#articleUrl').value.trim() });
+        setStatus(newsStatus, 'Analyzing article through NewsVerse...', 'info', true);
+        const data = await postJson('/api/newsverse', article);
+        const verses = Array.isArray(data.verses) ? data.verses : [];
+        const prayers = Array.isArray(data.prayer_points) ? data.prayer_points : [];
+        newsResult.innerHTML = `
+          <section class="article-summary"><h4>Article summary</h4><p>${escapeHtml(data.article_summary)}</p>${data.overall_theme ? `<p><strong>Theme:</strong> ${escapeHtml(data.overall_theme)}</p>` : ''}</section>
+          ${verses.map((verse) => `
+            <article class="verse-card">
+              <h4>${escapeHtml(verse.reference)} <span class="badge">${escapeHtml(verse.relevance_percent)}% relevant</span></h4>
+              <p>${escapeHtml(verse.text)}</p>
+              <div class="progress" aria-label="Verse relevance ${escapeHtml(verse.relevance_percent)} percent"><span style="width:${Number(verse.relevance_percent) || 0}%"></span></div>
+              <p>${escapeHtml(verse.relevance_reason)}</p>
+            </article>`).join('')}
+          <section class="styled-block"><h4>Exegesis</h4><p>${escapeHtml(data.exegesis)}</p></section>
+          <section class="jesus-lens"><h4>Jesus Lens</h4><p>${escapeHtml(data.jesus_lens)}</p></section>
+          <section class="styled-block"><h4>Prayer points</h4><ol class="prayer-list">${prayers.map((point) => `<li>${escapeHtml(point)}</li>`).join('')}</ol></section>`;
+        setStatus(newsStatus, 'NewsVerse analysis ready.');
+      } catch (error) {
+        setStatus(newsStatus, error.message, 'error');
+      } finally {
+        button.disabled = false;
+      }
+    });
+
+    const rootedQuestions = [
+      { key: 'prayerMinutes', text: 'How many minutes do you pray daily?', type: 'number', min: 0, suffix: 'minutes' },
+      { key: 'bibleTimes', text: 'How many times do you read the Bible per week?', type: 'number', min: 0, suffix: 'times per week' },
+      { key: 'socialHours', text: 'How many hours do you spend on social media daily?', type: 'number', min: 0, step: '0.5', suffix: 'hours' },
+      { key: 'churchAttendance', text: 'Do you attend church regularly?', type: 'choice', choices: ['Yes', 'Sometimes', 'No'] },
+      { key: 'spirituallyDry', text: 'Do you feel spiritually dry or disconnected lately?', type: 'choice', choices: ['Yes', 'Sometimes', 'No'] },
+      { key: 'faithFriendships', text: 'Are your closest friendships faith-rooted?', type: 'choice', choices: ['Yes', 'Some are', 'No'] },
+      { key: 'callingClarity', text: 'Do you feel clarity and purpose in your calling?', type: 'choice', choices: ['Yes', 'Somewhat', 'No'] },
+      { key: 'givingRegularly', text: 'Do you tithe or give regularly?', type: 'choice', choices: ['Yes', 'Sometimes', 'No'] }
+    ];
+
+    let rootedIndex = 0;
+    const rootedAnswers = {};
+
+    function renderRootedStep() {
+      const question = rootedQuestions[rootedIndex];
+      const saved = rootedAnswers[question.key] ?? '';
+      const inputHtml = question.type === 'number'
+        ? `<input id="rootedInput" type="number" min="${question.min}" step="${question.step || '1'}" value="${escapeHtml(saved)}" aria-label="${escapeHtml(question.text)}"><div class="hint">${escapeHtml(question.suffix)}</div>`
+        : `<div class="choice-row">${question.choices.map((choice) => `<button type="button" class="btn choice-btn" data-value="${escapeHtml(choice)}" aria-pressed="${saved === choice ? 'true' : 'false'}">${escapeHtml(choice)}</button>`).join('')}</div>`;
+
+      $('#rootedStep').innerHTML = `
+        <div>
+          <div class="step-count">Question ${rootedIndex + 1} of ${rootedQuestions.length}</div>
+          <h3>${escapeHtml(question.text)}</h3>
+        </div>
+        <div>${inputHtml}</div>`;
+
+      $('#rootedBack').disabled = rootedIndex === 0;
+      $('#rootedNext').textContent = rootedIndex === rootedQuestions.length - 1 ? 'Generate plan' : 'Next';
+      $('#rootedStatus').textContent = '';
+
+      document.querySelectorAll('.choice-btn').forEach((button) => {
+        button.addEventListener('click', () => {
+          rootedAnswers[question.key] = button.dataset.value;
+          document.querySelectorAll('.choice-btn').forEach((btn) => btn.setAttribute('aria-pressed', 'false'));
+          button.setAttribute('aria-pressed', 'true');
+        });
+      });
+    }
+
+    function saveCurrentRootedAnswer() {
+      const question = rootedQuestions[rootedIndex];
+      if (question.type === 'number') {
+        const input = $('#rootedInput');
+        const value = input.value;
+        if (value === '' || Number(value) < 0) {
+          setStatus($('#rootedStatus'), 'Please enter a number of zero or more.', 'error');
+          return false;
+        }
+        rootedAnswers[question.key] = value;
+      }
+      if (!rootedAnswers[question.key]) {
+        setStatus($('#rootedStatus'), 'Please choose an answer before continuing.', 'error');
+        return false;
+      }
+      return true;
+    }
+
+    async function generateRootedPlan() {
+      const nextButton = $('#rootedNext');
+      const backButton = $('#rootedBack');
+      const result = $('#rootedResult');
+      nextButton.disabled = true;
+      backButton.disabled = true;
+      result.innerHTML = '';
+      setStatus($('#rootedStatus'), 'Creating your RootedOS growth plan...', 'info', true);
+
+      try {
+        const data = await postJson('/api/rootedos', { answers: rootedAnswers });
+        const areas = Array.isArray(data.areas) ? data.areas : [];
+        const plan = data.daily_plan || {};
+        const score = Number(data.spiritual_health_score) || 0;
+        result.innerHTML = `
+          <section class="score-wrap">
+            <div class="score-circle" style="--score:${score}"><div><strong>${escapeHtml(score)}</strong><span>Spiritual health score</span></div></div>
+            <div><h3>Your RootedOS summary</h3><p class="lead">${escapeHtml(data.summary)}</p></div>
+          </section>
+          <section>${areas.map((area) => `
+            <details class="area-card">
+              <summary><span>${escapeHtml(area.area)}</span><span class="badge">${escapeHtml(area.urgency)}</span></summary>
+              <p><strong>Current state:</strong> ${escapeHtml(area.current_state)}</p>
+              <p><strong>Recommendation:</strong> ${escapeHtml(area.recommendation)}</p>
+              <p><strong>Scripture:</strong> ${escapeHtml(area.scripture)}</p>
+              <p><strong>Action step:</strong> ${escapeHtml(area.action_step)}</p>
+            </details>`).join('')}</section>
+          <section class="plan-box">
+            <h4>Daily plan</h4>
+            <ul class="checklist">
+              <li>Prayer: ${escapeHtml(plan.prayer_minutes ?? 0)} minutes</li>
+              <li>Bible reading: ${escapeHtml(plan.bible_reading_minutes ?? 0)} minutes</li>
+              <li>Social media limit: ${escapeHtml(plan.social_media_limit_minutes ?? 0)} minutes</li>
+              <li>Fasting: ${escapeHtml(plan.fasting_recommendation || '')}</li>
+              <li>Community: ${escapeHtml(plan.community_action || '')}</li>
+            </ul>
+          </section>
+          <section class="quote-block"><blockquote>${escapeHtml(data.key_verse?.text || '')}</blockquote><cite>${escapeHtml(data.key_verse?.reference || '')}</cite></section>
+          <section class="styled-block"><h4>Encouragement</h4><p>${escapeHtml(data.encouragement)}</p></section>`;
+        setStatus($('#rootedStatus'), 'RootedOS plan ready.');
+      } catch (error) {
+        setStatus($('#rootedStatus'), error.message, 'error');
+      } finally {
+        nextButton.disabled = false;
+        backButton.disabled = rootedIndex === 0;
+      }
+    }
+
+    $('#rootedNext').addEventListener('click', async () => {
+      if (!saveCurrentRootedAnswer()) return;
+      if (rootedIndex < rootedQuestions.length - 1) {
+        rootedIndex += 1;
+        renderRootedStep();
+      } else {
+        await generateRootedPlan();
+      }
+    });
+
+    $('#rootedBack').addEventListener('click', () => {
+      if (rootedIndex > 0) {
+        rootedIndex -= 1;
+        renderRootedStep();
+      }
+    });
+
+    $('#rootedReset').addEventListener('click', () => {
+      Object.keys(rootedAnswers).forEach((key) => delete rootedAnswers[key]);
+      rootedIndex = 0;
+      $('#rootedResult').innerHTML = '';
+      renderRootedStep();
+    });
+
+    renderRootedStep();
+  </script>
+</body>
+</html>

@@ -1,0 +1,17 @@
+{
+  "name": "rootedbyte-portfolio-apps",
+  "version": "1.0.0",
+  "private": true,
+  "description": "RootedByte portfolio with Song Tone Finder, NewsVerse, and RootedOS Vercel serverless apps.",
+  "scripts": {
+    "dev": "vercel dev",
+    "start": "vercel dev"
+  },
+  "dependencies": {
+    "@mozilla/readability": "^0.6.0",
+    "jsdom": "^25.0.1"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
