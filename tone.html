@@ -98,6 +98,28 @@ input:focus, select:focus, textarea:focus { border-color: var(--accent); box-sha
 .knob small { color: var(--muted); font-weight: 800; }
 .result-card { padding: 22px; margin-top: 16px; }
 .result-card p { color: var(--muted); }
+.preset-grid {
+  display: grid;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.preset-link {
+  display: grid;
+  gap: 6px;
+  padding: 16px;
+  border-radius: 16px;
+  background: rgba(143, 227, 176, 0.08);
+  border: 1px solid rgba(143, 227, 176, 0.22);
+}
+
+.preset-link strong {
+  color: var(--accent);
+}
+
+.preset-link span {
+  color: var(--muted);
+}
 .verse-grid { display: grid; gap: 16px; margin-top: 16px; }
 .verse-card { padding: 18px; background: rgba(255, 255, 255, 0.065); }
 .verse-card blockquote { margin: 10px 0; color: var(--text); font-size: 1.05rem; }
@@ -150,7 +172,7 @@ footer { border-top: 1px solid var(--line); text-align: center; color: var(--mut
       <div>
         <span class="eyebrow">App 1 • Music Tech</span>
         <h1 id="tone-title">Song Tone Finder</h1>
-        <p class="lead">Type a song, paste a Spotify track link, or paste a YouTube link. Choose your gear and receive visual amp and effects settings as a starting point.</p>
+        <p class="lead">Type a song and artist, or paste a YouTube link. Choose your gear and receive visual amp settings, effects suggestions, estimated BPM/key, and gear-aware preset search links.</p>
       </div>
       <aside class="hero-card">
         <span class="tag">Works through /api/tone.js</span>
@@ -230,6 +252,117 @@ function renderKnob(label, value, max = 10) {
   const display = max === 800 ? `${Math.round(number)}ms` : number.toFixed(1).replace('.0', '');
   return `<div class="knob"><div class="dial" style="--value:${percent}"><strong>${display}</strong></div><small>${escapeHtml(label)}</small></div>`;
 }
+function buildPresetLinks(data, gear) {
+  const song = data.song || '';
+  const artist = data.artist || '';
+  const cleanGear = gear || '';
+  const baseTerms = `${song} ${artist} ${cleanGear}`.trim();
+
+  let searches = [];
+
+  if (/line 6|hx stomp|pod go|helix/i.test(cleanGear)) {
+    searches = [
+      {
+        label: 'Official Line 6 Marketplace',
+        note: 'Searches official Line 6 Marketplace-compatible presets for Helix, HX Stomp, or POD Go.',
+        query: `site:line6.com/marketplace ${baseTerms} preset patch`
+      },
+      {
+        label: 'Line 6 CustomTone Free Patches',
+        note: 'Searches Line 6 CustomTone and community-created .hlx or Line 6-compatible patches.',
+        query: `site:line6.com/customtone ${baseTerms} .hlx patch preset`
+      },
+      {
+        label: 'Worship Vendor Patches',
+        note: 'Searches worship-focused vendors such as Worship Tutorials and Sunday Shred.',
+        query: `${baseTerms} Worship Tutorials Sunday Shred Helix HX Stomp POD Go preset`
+      }
+    ];
+  } else if (/boss|gt-1000/i.test(cleanGear)) {
+    searches = [
+      {
+        label: 'Boss GT-1000 Patch Search',
+        note: 'Searches for Boss GT-1000-compatible user patches and preset downloads.',
+        query: `${baseTerms} Boss GT-1000 patch preset download`
+      },
+      {
+        label: 'Boss Community Patches',
+        note: 'Searches community-created Boss GT-1000 patches and tone-sharing pages.',
+        query: `${baseTerms} Boss GT-1000 user patch tone exchange`
+      },
+      {
+        label: 'Worship Vendor Patches',
+        note: 'Searches worship-focused preset vendors for Boss GT-1000-compatible tones.',
+        query: `${baseTerms} Boss GT-1000 worship guitar patch preset`
+      }
+    ];
+  } else if (/fractal|fm3/i.test(cleanGear)) {
+    searches = [
+      {
+        label: 'Fractal Axe-Change',
+        note: 'Searches Fractal Axe-Change and community sources for FM3-compatible presets.',
+        query: `site:axechange.fractalaudio.com ${baseTerms} FM3 preset`
+      },
+      {
+        label: 'Fractal Community Presets',
+        note: 'Searches public FM3 preset downloads and user-created Fractal patches.',
+        query: `${baseTerms} Fractal FM3 preset download`
+      },
+      {
+        label: 'Worship Vendor Patches',
+        note: 'Searches worship-focused vendors for Fractal FM3 worship tones.',
+        query: `${baseTerms} Fractal FM3 worship preset patch`
+      }
+    ];
+  } else if (/neural|quad cortex/i.test(cleanGear)) {
+    searches = [
+      {
+        label: 'Cortex Cloud Presets',
+        note: 'Searches Neural DSP Quad Cortex preset and Cortex Cloud-related results.',
+        query: `${baseTerms} Quad Cortex Cortex Cloud preset`
+      },
+      {
+        label: 'Quad Cortex Community Presets',
+        note: 'Searches public user-created Quad Cortex presets and captures.',
+        query: `${baseTerms} Neural DSP Quad Cortex preset download`
+      },
+      {
+        label: 'Worship Vendor Patches',
+        note: 'Searches worship-focused vendors for Quad Cortex worship tones.',
+        query: `${baseTerms} Quad Cortex worship preset patch`
+      }
+    ];
+  } else {
+    searches = [
+      {
+        label: 'Official Preset Search',
+        note: 'Searches official preset marketplaces or vendor sources for the selected gear.',
+        query: `${baseTerms} official preset marketplace`
+      },
+      {
+        label: 'Community Preset Search',
+        note: 'Searches public community-created presets and patch downloads.',
+        query: `${baseTerms} community preset patch download`
+      },
+      {
+        label: 'Worship Vendor Search',
+        note: 'Searches worship-focused preset vendors for this song and gear.',
+        query: `${baseTerms} worship guitar preset patch`
+      }
+    ];
+  }
+
+  return searches.map((item) => {
+    const url = `https://www.google.com/search?q=${encodeURIComponent(item.query)}`;
+    return `
+      <a class="preset-link" href="${url}" target="_blank" rel="noreferrer">
+        <strong>${escapeHtml(item.label)}</strong>
+        <span>${escapeHtml(item.note)}</span>
+      </a>
+    `;
+  }).join('');
+}
+    
 $('#toneForm').addEventListener('submit', async (event) => {
   event.preventDefault();
   const songInput = $('#songInput').value.trim();
@@ -261,7 +394,16 @@ $('#toneForm').addEventListener('submit', async (event) => {
         ${renderKnob('Delay mix', data.delay_mix)}
         ${renderKnob('Delay time', data.delay_time_ms, 800)}
       </div>
-      <div class="result-card"><span class="tag">Notes</span><p>${escapeHtml(data.notes)}</p></div>`;
+        <div class="result-card"><span class="tag">Notes</span><p>${escapeHtml(data.notes)}</p></div>
+        <div class="result-card">
+        <span class="tag">Preset Finder</span>
+        <h3>Find downloadable presets</h3>
+        <p>These links search official, community, and worship-focused preset sources based on your selected gear. Some presets may be paid, free, account-required, or unavailable for a specific song.</p>
+        <div class="preset-grid">
+        ${buildPresetLinks(data, gear)}
+      </div>
+  <p class="hint">Always respect copyright, vendor licenses, and each platform’s download rules.</p>
+</div>`;
     setStatus(status, 'Tone settings ready.');
   } catch (error) {
     setStatus(status, error.message, 'error');
