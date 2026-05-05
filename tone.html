@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Find guitar tone settings for a song using free backend APIs and protected Vercel functions.">
+  <meta name="description" content="Find guitar tone settings, BPM, key, and preset search links for a song using protected Vercel functions.">
   <title>Song Tone Finder | RootedByte</title>
   <style>
 :root {
@@ -98,28 +98,12 @@ input:focus, select:focus, textarea:focus { border-color: var(--accent); box-sha
 .knob small { color: var(--muted); font-weight: 800; }
 .result-card { padding: 22px; margin-top: 16px; }
 .result-card p { color: var(--muted); }
-.preset-grid {
-  display: grid;
-  gap: 12px;
-  margin-top: 16px;
-}
-
-.preset-link {
-  display: grid;
-  gap: 6px;
-  padding: 16px;
-  border-radius: 16px;
-  background: rgba(143, 227, 176, 0.08);
-  border: 1px solid rgba(143, 227, 176, 0.22);
-}
-
-.preset-link strong {
-  color: var(--accent);
-}
-
-.preset-link span {
-  color: var(--muted);
-}
+.source-list { display: grid; gap: 10px; margin-top: 12px; }
+.source-list a { color: var(--accent); word-break: break-word; }
+.preset-grid { display: grid; gap: 12px; margin-top: 16px; }
+.preset-link { display: grid; gap: 6px; padding: 16px; border-radius: 16px; background: rgba(143, 227, 176, 0.08); border: 1px solid rgba(143, 227, 176, 0.22); }
+.preset-link strong { color: var(--accent); }
+.preset-link span { color: var(--muted); }
 .verse-grid { display: grid; gap: 16px; margin-top: 16px; }
 .verse-card { padding: 18px; background: rgba(255, 255, 255, 0.065); }
 .verse-card blockquote { margin: 10px 0; color: var(--text); font-size: 1.05rem; }
@@ -156,28 +140,28 @@ footer { border-top: 1px solid var(--line); text-align: center; color: var(--mut
 </head>
 <body>
   <header class="site-header">
-  <nav class="nav" aria-label="Primary navigation">
-    <a class="brand" href="index.html" aria-label="RootedByte home"><span class="brand-mark">R</span><span>RootedByte</span></a>
-    <div class="nav-links">
-      <a href="index.html">Home</a>
-      <a href="tone.html" class="active">Song Tone Finder</a>
-      <a href="newsverse.html">NewsVerse</a>
-      <a href="rootedos.html">RootedOS</a>
-      <a href="index.html#contact">Contact</a>
-    </div>
-  </nav>
-</header>
+    <nav class="nav" aria-label="Primary navigation">
+      <a class="brand" href="index.html" aria-label="RootedByte home"><span class="brand-mark">R</span><span>RootedByte</span></a>
+      <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="tone.html" class="active">Song Tone Finder</a>
+        <a href="newsverse.html">NewsVerse</a>
+        <a href="rootedos.html">RootedOS</a>
+        <a href="index.html#contact">Contact</a>
+      </div>
+    </nav>
+  </header>
   <main id="top">
     <section class="section hero" aria-labelledby="tone-title">
       <div>
         <span class="eyebrow">App 1 • Music Tech</span>
         <h1 id="tone-title">Song Tone Finder</h1>
-        <p class="lead">Type a song and artist, or paste a YouTube link. Choose your gear and receive visual amp settings, effects suggestions, estimated BPM/key, and gear-aware preset search links.</p>
+        <p class="lead">Type a song and artist, or paste a YouTube link. The app reads the title, searches for BPM/key through the backend, then creates gear-specific guitar tone settings and preset search links.</p>
       </div>
       <aside class="hero-card">
         <span class="tag">Works through /api/tone.js</span>
         <h2>Protected backend calls.</h2>
-        <p class="lead">Spotify and Gemini credentials stay in Vercel environment variables, not in the browser.</p>
+        <p class="lead">Gemini credentials stay in Vercel environment variables, not in the browser. Spotify lookup is not used in this version.</p>
       </aside>
     </section>
     <section class="section">
@@ -186,12 +170,13 @@ footer { border-top: 1px solid var(--line); text-align: center; color: var(--mut
           <div class="app-copy">
             <span class="tag">Demo</span>
             <h2 id="tone-demo-title">Find a guitar tone</h2>
-            <p>Use a plain song title, Spotify track URL, or YouTube URL. Results appear as amp labels and CSS knobs.</p>
+            <p>Use a plain song title and artist, or paste a YouTube URL. Results appear as song metadata, source links, amp labels, CSS knobs, notes, and preset searches.</p>
           </div>
           <form class="form-card" id="toneForm">
             <div class="field">
-              <label for="songInput">Song name, Spotify link, or YouTube link</label>
-              <input id="songInput" name="songInput" type="text" placeholder="Comfortably Numb - Pink Floyd" required>
+              <label for="songInput">Song name and artist, or YouTube link</label>
+              <input id="songInput" name="songInput" type="text" placeholder="Who Else - Gateway Worship feat. Abbie Gamboa" required>
+              <p class="hint">Spotify links are not supported in this version. Type the song name/artist or paste a YouTube link.</p>
             </div>
             <div class="field">
               <label for="gearSelect">Gear</label>
@@ -213,12 +198,13 @@ footer { border-top: 1px solid var(--line); text-align: center; color: var(--mut
     </section>
   </main>
   <footer>
-  <p>© <span id="year"></span> RootedByte. Built for digital wisdom rooted in truth.</p>
-</footer>
+    <p>© <span id="year"></span> RootedByte. Built for digital wisdom rooted in truth.</p>
+  </footer>
   <script>
 const $ = (selector) => document.querySelector(selector);
 const year = $('#year');
 if (year) year.textContent = new Date().getFullYear();
+
 function escapeHtml(value) {
   return String(value ?? '')
     .replace(/&/g, '&amp;')
@@ -227,11 +213,13 @@ function escapeHtml(value) {
     .replace(/"/g, '&quot;')
     .replace(/'/g, '&#039;');
 }
+
 function setStatus(element, message, type = 'info', loading = false) {
   if (!element) return;
   element.className = type === 'error' ? 'status error' : 'status';
   element.innerHTML = loading ? `<span class="spinner" aria-hidden="true"></span><span>${escapeHtml(message)}</span>` : escapeHtml(message);
 }
+
 async function postJson(url, body) {
   const response = await fetch(url, {
     method: 'POST',
@@ -245,13 +233,31 @@ async function postJson(url, body) {
   return data;
 }
 
-
 function renderKnob(label, value, max = 10) {
   const number = Math.max(0, Math.min(max, Number(value) || 0));
   const percent = max === 800 ? (number / 800) * 100 : (number / 10) * 100;
   const display = max === 800 ? `${Math.round(number)}ms` : number.toFixed(1).replace('.0', '');
   return `<div class="knob"><div class="dial" style="--value:${percent}"><strong>${display}</strong></div><small>${escapeHtml(label)}</small></div>`;
 }
+
+function buildMetadataSources(data) {
+  const links = Array.isArray(data.source_links) ? data.source_links.filter(Boolean).slice(0, 3) : [];
+  const sourceText = [];
+
+  if (data.bpm_source) sourceText.push(`<p><strong>BPM source:</strong> ${escapeHtml(data.bpm_source)}</p>`);
+  if (data.key_source) sourceText.push(`<p><strong>Key source:</strong> ${escapeHtml(data.key_source)}</p>`);
+
+  if (!links.length && !sourceText.length) {
+    return '<p class="hint">No public source links were returned. BPM/key may be AI-estimated.</p>';
+  }
+
+  const linkHtml = links.length
+    ? `<div class="source-list">${links.map((url, index) => `<a href="${escapeHtml(url)}" target="_blank" rel="noreferrer">Source ${index + 1}</a>`).join('')}</div>`
+    : '';
+
+  return `${sourceText.join('')}${linkHtml}`;
+}
+
 function buildPresetLinks(data, gear, originalInput = '') {
   const song = data.song || '';
   const artist = data.artist || '';
@@ -264,91 +270,91 @@ function buildPresetLinks(data, gear, originalInput = '') {
   if (/line 6|hx stomp|pod go|helix/i.test(cleanGear)) {
     searches = [
       {
-        label: 'Official Line 6 Marketplace',
-        note: 'Searches official Line 6 Marketplace-compatible presets for Helix, HX Stomp, or POD Go.',
-        query: `site:line6.com/marketplace ${baseTerms} preset patch`
+        label: 'Official Line 6 Marketplace Search',
+        note: 'Searches public results for official Line 6-compatible preset products for Helix, HX Stomp, or POD Go.',
+        query: `${baseTerms} Line 6 Marketplace preset patch download`
       },
       {
-        label: 'Line 6 CustomTone Free Patches',
-        note: 'Searches Line 6 CustomTone and community-created .hlx or Line 6-compatible patches.',
-        query: `site:line6.com/customtone ${baseTerms} .hlx patch preset`
+        label: 'Line 6 CustomTone Free Patch Search',
+        note: 'Searches public results for community-created Line 6 patches and free preset downloads.',
+        query: `${baseTerms} Line 6 CustomTone free patch preset download`
       },
       {
-        label: 'Worship Vendor Patches',
-        note: 'Searches worship-focused vendors such as Worship Tutorials and Sunday Shred.',
-        query: `${baseTerms} Worship Tutorials Sunday Shred Helix HX Stomp POD Go preset`
+        label: 'Worship Vendor Search',
+        note: 'Searches worship-focused preset vendors such as Worship Tutorials and Sunday Shred.',
+        query: `${baseTerms} Worship Tutorials Sunday Shred Helix HX Stomp POD Go preset download`
       }
     ];
   } else if (/boss|gt-1000/i.test(cleanGear)) {
     searches = [
       {
         label: 'Boss GT-1000 Patch Search',
-        note: 'Searches for Boss GT-1000-compatible user patches and preset downloads.',
+        note: 'Searches public results for Boss GT-1000-compatible user patches and preset downloads.',
         query: `${baseTerms} Boss GT-1000 patch preset download`
       },
       {
-        label: 'Boss Community Patches',
-        note: 'Searches community-created Boss GT-1000 patches and tone-sharing pages.',
-        query: `${baseTerms} Boss GT-1000 user patch tone exchange`
+        label: 'Boss Community Patch Search',
+        note: 'Searches public results for community-created Boss GT-1000 patches and tone-sharing pages.',
+        query: `${baseTerms} Boss GT-1000 user patch tone exchange download`
       },
       {
-        label: 'Worship Vendor Patches',
+        label: 'Worship Vendor Search',
         note: 'Searches worship-focused preset vendors for Boss GT-1000-compatible tones.',
-        query: `${baseTerms} Boss GT-1000 worship guitar patch preset`
+        query: `${baseTerms} Boss GT-1000 worship guitar patch preset download`
       }
     ];
   } else if (/fractal|fm3/i.test(cleanGear)) {
     searches = [
       {
-        label: 'Fractal Axe-Change',
-        note: 'Searches Fractal Axe-Change and community sources for FM3-compatible presets.',
-        query: `site:axechange.fractalaudio.com ${baseTerms} FM3 preset`
+        label: 'Fractal Axe-Change Search',
+        note: 'Searches public results for Fractal Axe-Change and FM3-compatible presets.',
+        query: `${baseTerms} Fractal Axe-Change FM3 preset download`
       },
       {
-        label: 'Fractal Community Presets',
-        note: 'Searches public FM3 preset downloads and user-created Fractal patches.',
+        label: 'Fractal Community Preset Search',
+        note: 'Searches public results for FM3 preset downloads and user-created Fractal patches.',
         query: `${baseTerms} Fractal FM3 preset download`
       },
       {
-        label: 'Worship Vendor Patches',
+        label: 'Worship Vendor Search',
         note: 'Searches worship-focused vendors for Fractal FM3 worship tones.',
-        query: `${baseTerms} Fractal FM3 worship preset patch`
+        query: `${baseTerms} Fractal FM3 worship preset patch download`
       }
     ];
   } else if (/neural|quad cortex/i.test(cleanGear)) {
     searches = [
       {
-        label: 'Cortex Cloud Presets',
-        note: 'Searches Neural DSP Quad Cortex preset and Cortex Cloud-related results.',
-        query: `${baseTerms} Quad Cortex Cortex Cloud preset`
+        label: 'Cortex Cloud Preset Search',
+        note: 'Searches public results for Neural DSP Quad Cortex and Cortex Cloud presets.',
+        query: `${baseTerms} Quad Cortex Cortex Cloud preset download`
       },
       {
-        label: 'Quad Cortex Community Presets',
-        note: 'Searches public user-created Quad Cortex presets and captures.',
-        query: `${baseTerms} Neural DSP Quad Cortex preset download`
+        label: 'Quad Cortex Community Search',
+        note: 'Searches public results for user-created Quad Cortex presets and captures.',
+        query: `${baseTerms} Neural DSP Quad Cortex preset capture download`
       },
       {
-        label: 'Worship Vendor Patches',
+        label: 'Worship Vendor Search',
         note: 'Searches worship-focused vendors for Quad Cortex worship tones.',
-        query: `${baseTerms} Quad Cortex worship preset patch`
+        query: `${baseTerms} Quad Cortex worship preset patch download`
       }
     ];
   } else {
     searches = [
       {
         label: 'Official Preset Search',
-        note: 'Searches official preset marketplaces or vendor sources for the selected gear.',
-        query: `${baseTerms} official preset marketplace`
+        note: 'Searches public results for official preset marketplaces or vendor sources for the selected gear.',
+        query: `${baseTerms} official preset marketplace download`
       },
       {
         label: 'Community Preset Search',
-        note: 'Searches public community-created presets and patch downloads.',
+        note: 'Searches public results for community-created presets and patch downloads.',
         query: `${baseTerms} community preset patch download`
       },
       {
         label: 'Worship Vendor Search',
         note: 'Searches worship-focused preset vendors for this song and gear.',
-        query: `${baseTerms} worship guitar preset patch`
+        query: `${baseTerms} worship guitar preset patch download`
       }
     ];
   }
@@ -363,7 +369,7 @@ function buildPresetLinks(data, gear, originalInput = '') {
     `;
   }).join('');
 }
-    
+
 $('#toneForm').addEventListener('submit', async (event) => {
   event.preventDefault();
   const songInput = $('#songInput').value.trim();
@@ -371,11 +377,19 @@ $('#toneForm').addEventListener('submit', async (event) => {
   const status = $('#toneStatus');
   const result = $('#toneResult');
   result.innerHTML = '';
+
   if (!songInput) {
-    setStatus(status, 'Please enter a song name or link.', 'error');
+    setStatus(status, 'Please enter a song name or YouTube link.', 'error');
     return;
   }
-  setStatus(status, 'Building your tone settings...', 'info', true);
+
+  if (/open\.spotify\.com\/track\//i.test(songInput)) {
+    setStatus(status, 'Spotify lookup is unavailable in this version. Please type the song name and artist, or paste a YouTube link.', 'error');
+    return;
+  }
+
+  setStatus(status, 'Researching song metadata and building your tone settings...', 'info', true);
+
   try {
     const data = await postJson('/api/tone', { songInput, gear });
     result.innerHTML = `
@@ -384,8 +398,13 @@ $('#toneForm').addEventListener('submit', async (event) => {
         <div class="tone-label"><span>Gear</span><strong>${escapeHtml(gear)}</strong></div>
         <div class="tone-label"><span>BPM</span><strong>${data.bpm ? escapeHtml(data.bpm) : 'Unknown'}</strong></div>
         <div class="tone-label"><span>Key</span><strong>${escapeHtml(data.key || 'Unknown')}</strong></div>
+        <div class="tone-label"><span>Confidence</span><strong>${escapeHtml(data.metadata_confidence || 'low')}</strong></div>
         <div class="tone-label"><span>Amp model</span><strong>${escapeHtml(data.amp_model)}</strong></div>
         <div class="tone-label"><span>Cab</span><strong>${escapeHtml(data.cab)}</strong></div>
+      </div>
+      <div class="result-card">
+        <span class="tag">BPM / Key Sources</span>
+        ${buildMetadataSources(data)}
       </div>
       <div class="knob-grid">
         ${renderKnob('Gain', data.gain)}
@@ -397,16 +416,16 @@ $('#toneForm').addEventListener('submit', async (event) => {
         ${renderKnob('Delay mix', data.delay_mix)}
         ${renderKnob('Delay time', data.delay_time_ms, 800)}
       </div>
-        <div class="result-card"><span class="tag">Notes</span><p>${escapeHtml(data.notes)}</p></div>
-        <div class="result-card">
+      <div class="result-card"><span class="tag">Notes</span><p>${escapeHtml(data.notes)}</p></div>
+      <div class="result-card">
         <span class="tag">Preset Finder</span>
         <h3>Find downloadable presets</h3>
-        <p>These links search official, community, and worship-focused preset sources based on your selected gear. Some presets may be paid, free, account-required, or unavailable for a specific song.</p>
+        <p>These links open normal public searches for official, community, and worship-focused preset sources based on your song and selected gear. Some presets may be paid, free, account-required, or unavailable for a specific song.</p>
         <div class="preset-grid">
-        ${buildPresetLinks(data, gear, songInput)}
-      </div>
-  <p class="hint">Always respect copyright, vendor licenses, and each platform’s download rules.</p>
-</div>`;
+          ${buildPresetLinks(data, gear, songInput)}
+        </div>
+        <p class="hint">Always respect copyright, vendor licenses, and each platform’s download rules.</p>
+      </div>`;
     setStatus(status, 'Tone settings ready.');
   } catch (error) {
     setStatus(status, error.message, 'error');
