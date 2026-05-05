@@ -60,7 +60,17 @@ async function callGemini(userPrompt) {
   });
 
   if (!response.ok) {
-    throw new Error('Gemini could not analyze this article right now.');
+  const errorText = await response.text().catch(() => '');
+
+  if (response.status === 503 || /high demand|overloaded|try again later/i.test(errorText)) {
+    throw new Error('The AI reflection engine is busy right now. Please try again in a minute.');
+  }
+
+  if (response.status === 429 || /quota|rate limit/i.test(errorText)) {
+    throw new Error('The AI reflection engine is temporarily limited. Please try again later.');
+  }
+
+  throw new Error('The AI reflection engine could not analyze this article right now. Please try again.');
   }
 
   const data = await response.json();
