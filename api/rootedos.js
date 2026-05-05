@@ -1,4 +1,4 @@
-const GEMINI_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent';
+const GEMINI_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent';
 
 const SYSTEM_PROMPT = `You are a compassionate Christian life coach. Based on the user's answers, return ONLY raw JSON with no markdown, no code fences. Structure:
 {
@@ -64,7 +64,7 @@ async function callGemini(userPrompt) {
   });
 
   if (!response.ok) {
-    throw new Error('Gemini could not create a growth plan right now.');
+    throw new Error('The AI growth engine could not create a growth plan right now. Please try again.');
   }
 
   const data = await response.json();
@@ -99,8 +99,19 @@ module.exports = async function handler(req, res) {
       return res.status(400).json({ error: 'Please complete every assessment question.' });
     }
 
-    const userPrompt = `Create a personalized Christian growth plan from these answers:\n1. Daily prayer minutes: ${answers.prayerMinutes}\n2. Bible reading times per week: ${answers.bibleTimes}\n3. Daily social media hours: ${answers.socialHours}\n4. Attends church regularly: ${answers.churchAttendance}\n5. Feels spiritually dry or disconnected lately: ${answers.spirituallyDry}\n6. Closest friendships are faith-rooted: ${answers.faithFriendships}\n7. Feels clarity and purpose in calling: ${answers.callingClarity}\n8. Tithes or gives regularly: ${answers.givingRegularly}`;
+    const userPrompt = `Create a personalized Christian growth plan for a teenager based on these reflection answers:
 
+    1. When life feels loud, stressful, or lonely, they usually reach for: ${answers.stressDefault}
+    2. Scripture rhythm in a normal week: ${answers.scriptureRhythm}
+    3. After scrolling, streaming, or short videos, they usually feel: ${answers.scrollAftereffect}
+    4. The pressure that feels loudest lately: ${answers.pressureVoice}
+    5. When something is heavy, they could honestly talk to: ${answers.safeConversation}
+    6. What most often shapes how they see themselves: ${answers.identitySource}
+    7. When thinking about the future, their heart feels: ${answers.purposeClarity}
+    8. How often they use time, money, attention, or influence to bless someone else: ${answers.generosityPractice}
+
+    Keep the tone warm, teen-aware, gentle, practical, Scripture-rooted, and never condemning.`;
+    
     const plan = await callGemini(userPrompt);
     return res.status(200).json(plan);
   } catch (error) {
