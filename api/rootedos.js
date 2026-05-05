@@ -92,8 +92,8 @@ module.exports = async function handler(req, res) {
     if (!answers || typeof answers !== 'object') {
       return res.status(400).json({ error: 'All eight assessment answers are required.' });
     }
-
-    const requiredKeys = ['prayerMinutes', 'bibleTimes', 'socialHours', 'churchAttendance', 'spirituallyDry', 'faithFriendships', 'callingClarity', 'givingRegularly'];
+  
+  const requiredKeys = ['stressDefault', 'scriptureRhythm', 'scrollAftereffect', 'pressureVoice', 'safeConversation', 'identitySource', 'purposeClarity', 'generosityPractice'];
     const missing = requiredKeys.filter((key) => answers[key] === undefined || answers[key] === null || answers[key] === '');
     if (missing.length) {
       return res.status(400).json({ error: 'Please complete every assessment question.' });
