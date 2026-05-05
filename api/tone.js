@@ -1,7 +1,7 @@
 const GEMINI_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent';
 
 const SYSTEM_PROMPT = `You are a guitar tone expert. When given a song and gear type, return ONLY raw JSON with no markdown, no code fences, no explanation text. Structure: { "song": "", "artist": "", "bpm": 0, "key": "", "amp_model": "", "cab": "", "gain": 0, "bass": 0, "mid": 0, "treble": 0, "presence": 0, "reverb_mix": 0, "delay_time_ms": 0, "delay_mix": 0, "notes": "" }
-All knob values 0-10. delay_time_ms is 0-800. bpm must be the approximate song tempo as a number. key must be the most likely musical key, such as "D minor", "A major", or "E minor". If unknown, estimate based on the song title and artist.`;
+All knob values 0-10. delay_time_ms is 0-800. bpm must be the approximate song tempo as a number. key must be the most likely musical key, such as "D minor", "A major", or "E minor". BPM and key must be based ONLY on the song title and artist, not the selected gear. Gear should affect only amp_model, cab, knob values, delay, reverb, and notes. If BPM or key are unknown, estimate based on the song title and artist.`;
 
 function setCors(res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -71,6 +71,25 @@ async function getSpotifyTrack(trackId) {
 }
 
 async function getYouTubeTitle(url) {
+  const oembedUrl = `https://www.youtube.com/oembed?url=${encodeURIComponent(url)}&format=json`;
+
+  try {
+    const oembedResponse = await fetch(oembedUrl, {
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (compatible; RootedByteBot/1.0; +https://rootedbyte.vercel.app)'
+      }
+    });
+
+    if (oembedResponse.ok) {
+      const oembedData = await oembedResponse.json();
+      if (oembedData?.title) {
+        return cleanYouTubeTitle(oembedData.title);
+      }
+    }
+  } catch {
+    // Fall back to reading the page title below.
+  }
+
   const response = await fetch(url, {
     headers: {
       'User-Agent': 'Mozilla/5.0 (compatible; RootedByteBot/1.0; +https://rootedbyte.vercel.app)'
@@ -78,13 +97,14 @@ async function getYouTubeTitle(url) {
   });
 
   if (!response.ok) {
-    throw new Error('Could not read that YouTube page.');
+    throw new Error('Could not read that YouTube page. Please type the song name and artist instead.');
   }
 
   const html = await response.text();
   const titleMatch = html.match(/<title[^>]*>([^<]+)<\/title>/i);
+
   if (!titleMatch) {
-    throw new Error('Could not find the YouTube video title.');
+    throw new Error('Could not find the YouTube video title. Please type the song name and artist instead.');
   }
 
   return cleanYouTubeTitle(titleMatch[1]);
@@ -159,7 +179,10 @@ module.exports = async function handler(req, res) {
       resolvedSong = await getYouTubeTitle(resolvedSong);
     }
 
-    const userPrompt = `Song: ${resolvedSong}\nGear: ${gear}\nReturn a practical starting tone for this exact gear.`;
+    const userPrompt = `Song title and artist only: ${resolvedSong}
+    Selected gear for tone settings only: ${gear}
+
+    Return the most likely song title, artist, BPM, and key based only on the song title and artist. Then return a practical starting guitar tone for the selected gear. Do not let the selected gear change the BPM or key.`;
     const tone = await callGemini(userPrompt);
     return res.status(200).json(tone);
   } catch (error) {
