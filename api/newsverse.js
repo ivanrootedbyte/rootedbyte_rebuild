@@ -101,7 +101,27 @@ module.exports = async function handler(req, res) {
       return res.status(400).json({ error: 'Readable article text is required before analysis.' });
     }
 
-    const userPrompt = `Article title: ${cleanText(title, 250)}\nArticle URL: ${cleanText(url, 500)}\nArticle text: ${articleText}`;
+    const basisLabel = summaryBasis === 'full_article'
+  ? 'full article text'
+  : summaryBasis === 'headline_and_description'
+    ? 'headline and available page summary'
+    : 'headline extracted from the URL';
+
+  const userPrompt = `Analyze this news item using the ${basisLabel}.
+
+  Important:
+  - If this is based only on a headline or short page summary, clearly say that the reflection is limited.
+  - Do not pretend you read the full article if only a headline or summary was available.
+  - Keep the response helpful, biblical, careful, and not sensational.
+
+  Title:
+  ${title || 'Untitled news item'}
+
+  Source URL:
+  ${sourceUrl || 'Not provided'}
+
+  Content:
+  ${articleText}`;    
     const analysis = await callGemini(userPrompt);
     return res.status(200).json(analysis);
   } catch (error) {
