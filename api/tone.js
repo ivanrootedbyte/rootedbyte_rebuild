@@ -1,7 +1,7 @@
 const GEMINI_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent';
 
 const SYSTEM_PROMPT = `You are a guitar tone expert. When given a song and gear type, return ONLY raw JSON with no markdown, no code fences, no explanation text. Structure: { "song": "", "artist": "", "bpm": 0, "key": "", "amp_model": "", "cab": "", "gain": 0, "bass": 0, "mid": 0, "treble": 0, "presence": 0, "reverb_mix": 0, "delay_time_ms": 0, "delay_mix": 0, "notes": "" }
-All knob values 0-10. delay_time_ms is 0-800. bpm must be the approximate song tempo as a number. key must be the most likely musical key, such as "D minor", "A major", or "E minor". If unknown, estimate based on the song title and artist.
+All knob values 0-10. delay_time_ms is 0-800. bpm must be the approximate song tempo as a number. key must be the most likely musical key, such as "D minor", "A major", or "E minor". If unknown, estimate based on the song title and artist.`;
 
 function setCors(res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
