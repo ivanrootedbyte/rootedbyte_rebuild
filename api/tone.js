@@ -160,9 +160,18 @@ async function callGemini({ systemPrompt, userPrompt, useSearch = false }) {
   });
 
   if (!response.ok) {
-    const errorText = await response.text().catch(() => '');
-    throw new Error(`Gemini request failed. ${errorText ? errorText.slice(0, 180) : 'Please try again.'}`);
+  const errorText = await response.text().catch(() => '');
+
+  if (response.status === 503 || /high demand|overloaded|try again later/i.test(errorText)) {
+    throw new Error('The AI Engine is busy right now. Please try again in a minute.');
   }
+
+  if (response.status === 429 || /quota|rate limit/i.test(errorText)) {
+    throw new Error('The AI Engine is temporarily limited. Please try again later.');
+  }
+
+  throw new Error('The AI Engine could not create this tone right now. Please try again.');
+}
 
   const data = await response.json();
   const raw = data?.candidates?.[0]?.content?.parts?.[0]?.text;
