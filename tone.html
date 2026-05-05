@@ -252,11 +252,12 @@ function renderKnob(label, value, max = 10) {
   const display = max === 800 ? `${Math.round(number)}ms` : number.toFixed(1).replace('.0', '');
   return `<div class="knob"><div class="dial" style="--value:${percent}"><strong>${display}</strong></div><small>${escapeHtml(label)}</small></div>`;
 }
-function buildPresetLinks(data, gear) {
+function buildPresetLinks(data, gear, originalInput = '') {
   const song = data.song || '';
   const artist = data.artist || '';
   const cleanGear = gear || '';
-  const baseTerms = `${song} ${artist} ${cleanGear}`.trim();
+  const userTerms = originalInput && !/^https?:\/\//i.test(originalInput) ? originalInput : '';
+  const baseTerms = `${userTerms} ${song} ${artist} ${cleanGear}`.replace(/\s+/g, ' ').trim();
 
   let searches = [];
 
@@ -381,6 +382,8 @@ $('#toneForm').addEventListener('submit', async (event) => {
       <div class="tone-labels">
         <div class="tone-label"><span>Song</span><strong>${escapeHtml(data.song)}${data.artist ? ' - ' + escapeHtml(data.artist) : ''}</strong></div>
         <div class="tone-label"><span>Gear</span><strong>${escapeHtml(gear)}</strong></div>
+        <div class="tone-label"><span>BPM</span><strong>${data.bpm ? escapeHtml(data.bpm) : 'Unknown'}</strong></div>
+        <div class="tone-label"><span>Key</span><strong>${escapeHtml(data.key || 'Unknown')}</strong></div>
         <div class="tone-label"><span>Amp model</span><strong>${escapeHtml(data.amp_model)}</strong></div>
         <div class="tone-label"><span>Cab</span><strong>${escapeHtml(data.cab)}</strong></div>
       </div>
@@ -400,7 +403,7 @@ $('#toneForm').addEventListener('submit', async (event) => {
         <h3>Find downloadable presets</h3>
         <p>These links search official, community, and worship-focused preset sources based on your selected gear. Some presets may be paid, free, account-required, or unavailable for a specific song.</p>
         <div class="preset-grid">
-        ${buildPresetLinks(data, gear)}
+        ${buildPresetLinks(data, gear, songInput)}
       </div>
   <p class="hint">Always respect copyright, vendor licenses, and each platform’s download rules.</p>
 </div>`;
