@@ -462,7 +462,46 @@
       transform: translateY(-2px);
       background: rgba(143, 227, 176, 0.12);
     }
+    
+.icon-links a {
+  width: 54px;
+  height: 54px;
+  padding: 0;
+  display: inline-grid;
+  place-items: center;
+  position: relative;
+}
 
+.icon-links svg {
+  width: 24px;
+  height: 24px;
+  fill: currentColor;
+}
+
+.icon-links span {
+  position: absolute;
+  left: 50%;
+  bottom: -34px;
+  transform: translateX(-50%);
+  opacity: 0;
+  pointer-events: none;
+  white-space: nowrap;
+  color: var(--text);
+  background: rgba(7, 20, 15, 0.92);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 5px 9px;
+  font-size: 0.78rem;
+  transition: opacity 180ms ease, bottom 180ms ease;
+}
+
+.icon-links a:hover span,
+.icon-links a:focus-visible span {
+  opacity: 1;
+  bottom: -40px;
+}
+
+    
     footer {
       max-width: var(--max);
       margin: 0 auto;
@@ -725,33 +764,40 @@
     <section class="section" id="mission">
       <div class="story-layout">
         <article class="story-card reveal">
-          <span class="eyebrow">Mission</span>
-          <h2>Open-minded, modern, and spiritually grounded.</h2>
-          <p>
-            RootedByte exists to explore what it looks like to use digital tools with wisdom. The goal is
-            not just functionality, but helpful functionality — technology that supports reflection, stewardship,
-            creativity, and truth.
-          </p>
-          <ul class="story-list">
-            <li>Keep the interface clear, modern, and easy to use.</li>
-            <li>Use backend protection so private keys stay off the frontend.</li>
-            <li>Give spiritual tools a warmer, more human tone.</li>
-            <li>Build experiences that feel practical, not gimmicky.</li>
-            <li>Leave space for future expansion without overcrowding the homepage.</li>
-          </ul>
+      <span class="eyebrow">Mission</span>
+      <h2>Helping people stay spiritually rooted in a digital world.</h2>
+      <p>
+        RootedByte is being built for people who are trying to follow Jesus while living in a world shaped by
+        constant information, screens, music, pressure, creativity, and technology. The goal is to create simple
+        tools that help people pause, reflect, worship, learn, and grow with wisdom instead of just reacting to
+        whatever is in front of them.
+      </p>
+      <p>
+        Whether someone is preparing a worship tone for church, reading daily news, or reflecting honestly on
+        their spiritual life, RootedByte is meant to be a calm space where technology supports spiritual growth
+        instead of distracting from it.
+      </p>
 
-          <div class="hero-actions">
-            <a class="btn primary" href="newsverse.html">Try NewsVerse</a>
-            <a class="btn" href="rootedos.html">Try RootedOS</a>
-          </div>
-        </article>
+      <ul class="story-list">
+        <li>Support worship preparation with practical tone tools for musicians and church teams.</li>
+        <li>Help users read today’s news with Scripture-rooted reflection instead of fear or outrage.</li>
+        <li>Create gentle spiritual-growth tools that invite honesty without shame or condemnation.</li>
+        <li>Encourage people, especially teens, to reflect on identity, purpose, habits, pressure, and faith.</li>
+        <li>Use technology as a tool for wisdom, worship, service, learning, and spiritual formation.</li>
+      </ul>
 
-        <div class="story-photo reveal">
-          <img
-            src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=1400&q=80"
-            alt="Creative collaboration and thoughtful digital work"
-          />
-        </div>
+      <div class="hero-actions">
+        <a class="btn primary" href="newsverse.html">Reflect on today’s news</a>
+        <a class="btn" href="rootedos.html">Start spiritual reflection</a>
+      </div>
+      </article>
+
+      <div class="story-photo reveal">
+      <img
+        src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1400&q=80"
+        alt="Peaceful open landscape representing reflection, growth, and clarity"
+      />
+       </div>
       </div>
     </section>
 
@@ -763,13 +809,35 @@
           Reach out for feedback, collaboration, project ideas, or future improvements to the RootedByte toolset.
         </p>
 
-        <div class="contact-links">
-          <a href="mailto:rootedbyte@outlook.com">rootedbyte@outlook.com</a>
-          <a href="https://github.com/ivanrootedbyte/rootedbyte_rebuild" target="_blank" rel="noopener noreferrer">
-            GitHub Repo
+        <div class="contact-links icon-links" aria-label="RootedByte social links">
+          <a href="mailto:rootedbyte@outlook.com" aria-label="Email RootedByte">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M4 5h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2Zm0 3.2V17h16V8.2l-8 5.2-8-5.2Zm1.2-1.2 6.8 4.4L18.8 7H5.2Z"/>
+          </svg>
+          <span>Email</span>
+            </a>
+
+            <a href="[YOUR_INSTAGRAM]" target="_blank" rel="noopener noreferrer" aria-label="RootedByte Instagram">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M7.8 2h8.4A5.8 5.8 0 0 1 22 7.8v8.4a5.8 5.8 0 0 1-5.8 5.8H7.8A5.8 5.8 0 0 1 2 16.2V7.8A5.8 5.8 0 0 1 7.8 2Zm0 2A3.8 3.8 0 0 0 4 7.8v8.4A3.8 3.8 0 0 0 7.8 20h8.4a3.8 3.8 0 0 0 3.8-3.8V7.8A3.8 3.8 0 0 0 16.2 4H7.8Zm4.2 3.3A4.7 4.7 0 1 1 7.3 12 4.7 4.7 0 0 1 12 7.3Zm0 2A2.7 2.7 0 1 0 14.7 12 2.7 2.7 0 0 0 12 9.3Zm5.1-2.4a1.1 1.1 0 1 1-1.1 1.1 1.1 1.1 0 0 1 1.1-1.1Z"/>
+          </svg>
+          <span>Instagram</span>
+            </a>
+
+          <a href="[YOUR_YOUTUBE]" target="_blank" rel="noopener noreferrer" aria-label="RootedByte YouTube">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M21.6 7.2s-.2-1.6-.8-2.3c-.8-.8-1.7-.8-2.1-.9C15.8 3.8 12 3.8 12 3.8h-.1s-3.8 0-6.7.2c-.4.1-1.3.1-2.1.9-.6.7-.8 2.3-.8 2.3S2 9.1 2 11v1.8c0 1.9.2 3.8.2 3.8s.2 1.6.8 2.3c.8.8 1.9.8 2.4.9 1.8.2 6.6.2 6.6.2s3.8 0 6.7-.2c.4-.1 1.3-.1 2.1-.9.6-.7.8-2.3.8-2.3s.2-1.9.2-3.8V11c0-1.9-.2-3.8-.2-3.8ZM10 14.7V8.9l5.4 2.9-5.4 2.9Z"/>
+            </svg>
+          <span>YouTube</span>
           </a>
-          <a href="[YOUR_LINKEDIN]" target="_blank" rel="noopener noreferrer">[YOUR_LINKEDIN]</a>
-        </div>
+
+          <a href="[YOUR_LINKEDIN]" target="_blank" rel="noopener noreferrer" aria-label="RootedByte LinkedIn">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M4.98 3.5A2.5 2.5 0 1 1 5 8.5a2.5 2.5 0 0 1-.02-5ZM3 21h4V9.5H3V21Zm6.2-11.5H13v1.6h.1c.5-.9 1.7-1.9 3.6-1.9 3.8 0 4.5 2.5 4.5 5.8V21h-4v-5.4c0-1.3 0-3-1.8-3s-2.1 1.4-2.1 2.9V21h-4V9.5Z"/>
+        </svg>
+        <span>LinkedIn</span>
+        </a>
+      </div>
       </div>
     </section>
   </main>
