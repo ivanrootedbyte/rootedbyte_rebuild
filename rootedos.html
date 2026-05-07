@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="A teen-aware Christian reflection tool that creates a warm spiritual growth plan.">
+  <meta name="description" content="A reflective Christian growth tool that creates a warm, personalized spiritual growth plan.">
   <title>RootedOS | RootedByte</title>
   <style>
 :root {
@@ -130,6 +130,9 @@ footer { border-top: 1px solid var(--line); text-align: center; color: var(--mut
 .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
 @media (max-width: 920px) { .hero, .app-top, .mission, .score-wrap { grid-template-columns: 1fr; } .app-grid { grid-template-columns: 1fr; } .knob-grid { grid-template-columns: repeat(2, minmax(120px, 1fr)); } .section { padding: 62px 18px; } .plan-grid { grid-template-columns: 1fr; } }
 @media (max-width: 620px) { .nav { align-items: flex-start; flex-direction: column; } .nav-links { justify-content: flex-start; } .hero { min-height: auto; padding-top: 54px; } .tone-labels, .knob-grid { grid-template-columns: 1fr; } .score-circle { width: 150px; height: 150px; } }
+
+.hero-card { overflow: hidden; }
+.hero-card img { width: 100%; height: 260px; object-fit: cover; display: block; }
 </style>
 </head>
 <body>
@@ -150,12 +153,15 @@ footer { border-top: 1px solid var(--line); text-align: center; color: var(--mut
       <div>
         <span class="eyebrow">App 3 • Spiritual Growth</span>
         <h1 id="rootedos-title">RootedOS</h1>
-        <p class="lead">A teen-aware reflection tool that avoids harsh, overly direct questions. It starts with everyday habits, pressure, scrolling, friendships, and purpose, then gently guides users toward spiritual reflection.</p>
+        <p class="lead">A reflective growth tool that avoids harsh, overly direct questions. It starts with everyday habits, pressure, scrolling, relationships, and purpose, then gently guides users toward spiritual reflection.</p>
       </div>
       <aside class="hero-card">
-        <span class="tag">Designed for today's teenager</span>
-        <h2>Reflect first. Grow next.</h2>
-        <p class="lead">The questions are framed around real life instead of interrogation. The plan stays warm, Scripture-referenced, and never condemning.</p>
+        <img src="https://images.unsplash.com/photo-1499750310107-5fef28a66643?auto=format&fit=crop&w=1200&q=80" alt="Notebook and laptop used for personal reflection">
+        <div style="padding:26px;">
+          <span class="tag">Designed for real life</span>
+          <h2>Reflect first. Grow next.</h2>
+          <p class="lead">The questions are framed around real life instead of interrogation. The plan stays warm, Scripture-referenced, and never condemning.</p>
+        </div>
       </aside>
     </section>
     <section class="section">
@@ -219,7 +225,7 @@ const rootedQuestions = [
   { key: 'scriptureRhythm', text: 'In a normal week, how often do you slow down to read or listen to Scripture, even briefly?', type: 'choice', choices: ['Most days', 'A few times', 'About once', 'Rarely right now'] },
   { key: 'scrollAftereffect', text: 'After scrolling, streaming, or short videos, how do you usually feel inside?', type: 'choice', choices: ['Rested', 'Inspired', 'Numb or distracted', 'Anxious or behind', 'It depends'] },
   { key: 'pressureVoice', text: 'Which pressure feels loudest lately?', type: 'choice', choices: ['School or grades', 'Family expectations', 'Fitting in', 'Body image or comparison', 'Future plans', 'Hidden stress'] },
-  { key: 'safeConversation', text: 'When something is heavy, who could you honestly talk to?', type: 'choice', choices: ['A parent or guardian', 'A pastor or mentor', 'A faith-rooted friend', 'A regular friend', 'No one yet'] },
+  { key: 'safeConversation', text: 'When something is heavy, who could you honestly talk to?', type: 'choice', choices: ['A parent or guardian', 'Partner or spouse', 'Girlfriend or boyfriend', 'Sibling', 'A pastor or mentor', 'A faith-rooted friend', 'A regular friend', 'No one yet'] },
   { key: 'identitySource', text: 'What most often shapes how you see yourself?', type: 'choice', choices: ['What God says', 'What friends think', 'Likes, comments, or attention', 'Performance or achievements', 'My mistakes', 'I am still figuring that out'] },
   { key: 'purposeClarity', text: 'When you think about your future, what best describes your heart?', type: 'choice', choices: ['Clear and hopeful', 'Curious but unsure', 'Pressured to decide', 'Avoiding it', 'Worried or overwhelmed'] },
   { key: 'generosityPractice', text: 'When you have time, money, attention, or influence, how often do you use some of it to bless someone else?', type: 'choice', choices: ['Often', 'Sometimes', 'Only when asked', 'Rarely right now', 'I have not thought about it'] }
@@ -268,7 +274,7 @@ function renderRootedPlan(data) {
       <div class="plan-item"><strong>Fasting</strong><p>${escapeHtml(plan.fasting_recommendation)}</p></div>
       <div class="plan-item"><strong>Community</strong><p>${escapeHtml(plan.community_action)}</p></div>
     </div></div>
-    <div class="result-card highlight"><span class="tag">Key verse</span><blockquote class="quote">${escapeHtml(data.key_verse?.text || '')}</blockquote><p>${escapeHtml(data.key_verse?.reference || '')}</p></div>
+    <div class="result-card highlight"><span class="tag">3 verses to reflect on</span>${(Array.isArray(data.reflection_verses) ? data.reflection_verses.slice(0,3) : []).map((verse) => `<blockquote class="quote">${escapeHtml(verse.text || '')}</blockquote><p><strong>${escapeHtml(verse.reference || '')}</strong>${verse.reflection_prompt ? ' — ' + escapeHtml(verse.reflection_prompt) : ''}</p>`).join('')}</div>
     <div class="result-card"><span class="tag">Encouragement</span><p>${escapeHtml(data.encouragement)}</p></div>`;
 }
 async function generateRootedPlan() {
