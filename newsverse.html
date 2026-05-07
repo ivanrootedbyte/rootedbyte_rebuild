@@ -159,9 +159,12 @@ footer { border-top: 1px solid var(--line); text-align: center; color: var(--mut
       <aside class="hero-card">
         <img src="https://images.unsplash.com/photo-1504711434969-e33886168f5c?auto=format&fit=crop&w=1200&q=80" alt="News reading on a phone and newspaper">
         <div style="padding:26px;">
-          <span class="tag">Smart article fallback</span>
-          <h2>Still reflect when links are limited.</h2>
-          <p class="lead">If a news site blocks full article reading, NewsVerse uses the best available details — like the page title, summary, or cleaned headline — and clearly marks the reflection as based on limited information.</p>
+          <span class="tag">Reflect on the news</span>
+            <h2>Pause before the headlines shape you.</h2>
+            <p class="lead">
+              NewsVerse helps you slow down and process current events with Scripture, prayer, and a Jesus-centered lens.
+              Instead of only reacting to headlines, it invites you to reflect on what is happening, what matters, and how to respond with wisdom.
+            </p>
         </div>
       </aside>
     </section>
@@ -170,8 +173,11 @@ footer { border-top: 1px solid var(--line); text-align: center; color: var(--mut
         <div class="app-top">
           <div class="app-copy">
             <span class="tag">Try it</span>
-            <h2 id="news-demo-title">Analyze a news article</h2>
-            <p>Public articles work best. If the full article text is blocked, the fallback uses the best available headline instead of failing completely.</p>
+            <h2 id="news-demo-title">Reflect before you react</h2>
+            <p>
+              Paste a news article link and let NewsVerse help you slow down, consider the story through Scripture,
+              and turn what you read into reflection, prayer, and wiser response.
+            </p>
           </div>
           <form class="form-card" id="newsForm">
             <div class="field">
@@ -179,7 +185,7 @@ footer { border-top: 1px solid var(--line); text-align: center; color: var(--mut
               <input id="articleUrl" name="articleUrl" type="url" placeholder="https://example.com/news/article" required>
               <div class="hint">No paid APIs. Extraction uses Readability on the server.</div>
             </div>
-            <button class="btn primary" type="submit">Analyze article</button>
+            <button class="btn primary" type="submit">NewsVersify</button>
             <div class="status" id="newsStatus" role="status" aria-live="polite"></div>
           </form>
         </div>
