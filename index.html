@@ -3,592 +3,107 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta
-    name="description"
-    content="RootedByte is a faith-rooted digital workspace featuring practical tools for guitar tone creation, Scripture-based news reflection, and teen spiritual growth."
-  />
+  <meta name="description" content="RootedByte is a modern digital workspace for worship preparation, news reflection, and personal spiritual growth." />
   <title>RootedByte | Technology rooted in truth</title>
-
   <style>
     :root {
       --bg: #07140f;
       --bg-soft: #0d2118;
-      --card: rgba(255, 255, 255, 0.075);
-      --card-strong: rgba(255, 255, 255, 0.12);
+      --card: rgba(255,255,255,0.075);
+      --card-strong: rgba(255,255,255,0.12);
       --text: #f4fbf6;
       --muted: #bfd2c7;
-      --line: rgba(255, 255, 255, 0.14);
+      --line: rgba(255,255,255,0.14);
       --accent: #8fe3b0;
-      --accent-strong: #52c989;
       --gold: #f5d487;
       --danger: #ffb4a8;
-      --shadow: 0 24px 80px rgba(0, 0, 0, 0.35);
+      --shadow: 0 24px 80px rgba(0,0,0,0.35);
       --radius: 26px;
-      --radius-sm: 18px;
       --max: 1180px;
     }
-
     * { box-sizing: border-box; }
-
     html { scroll-behavior: smooth; }
-
     body {
       margin: 0;
       min-height: 100vh;
       font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       color: var(--text);
       background:
-        radial-gradient(circle at top left, rgba(82, 201, 137, 0.24), transparent 32rem),
-        radial-gradient(circle at 85% 15%, rgba(245, 212, 135, 0.12), transparent 28rem),
+        radial-gradient(circle at top left, rgba(82,201,137,0.24), transparent 32rem),
+        radial-gradient(circle at 85% 15%, rgba(245,212,135,0.12), transparent 28rem),
         linear-gradient(135deg, #06110d 0%, #07140f 45%, #0d2118 100%);
       line-height: 1.6;
     }
-
-    img {
-      max-width: 100%;
-      display: block;
-    }
-
-    a {
-      color: inherit;
-      text-decoration: none;
-    }
-
-    button, input, select, textarea {
-      font: inherit;
-    }
-
-    .site-header {
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      backdrop-filter: blur(18px);
-      background: rgba(7, 20, 15, 0.82);
-      border-bottom: 1px solid var(--line);
-    }
-
-    .nav {
-      max-width: var(--max);
-      margin: 0 auto;
-      padding: 16px 22px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 20px;
-    }
-
-    .brand {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      font-weight: 800;
-      letter-spacing: -0.04em;
-      font-size: 1.15rem;
-    }
-
-    .brand-mark {
-      width: 38px;
-      height: 38px;
-      border-radius: 14px;
-      display: grid;
-      place-items: center;
-      color: #06110d;
-      background: linear-gradient(135deg, var(--accent), var(--gold));
-      font-weight: 900;
-      box-shadow: 0 14px 34px rgba(82, 201, 137, 0.25);
-    }
-
-    .nav-links {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      flex-wrap: wrap;
-      justify-content: flex-end;
-    }
-
-    .nav-links a {
-      color: var(--muted);
-      padding: 9px 12px;
-      border-radius: 999px;
-      transition: background 180ms ease, color 180ms ease, transform 180ms ease;
-      font-size: 0.95rem;
-    }
-
-    .nav-links a:hover,
-    .nav-links a:focus-visible {
-      color: var(--text);
-      background: rgba(255, 255, 255, 0.09);
-      outline: none;
-      transform: translateY(-1px);
-    }
-
-    .nav-links .nav-cta {
-      color: #05110b;
-      background: linear-gradient(135deg, var(--accent), var(--gold));
-      font-weight: 800;
-    }
-
-    .section {
-      max-width: var(--max);
-      margin: 0 auto;
-      padding: 88px 22px;
-    }
-
-    .eyebrow {
-      display: inline-flex;
-      gap: 8px;
-      align-items: center;
-      color: var(--accent);
-      background: rgba(143, 227, 176, 0.1);
-      border: 1px solid rgba(143, 227, 176, 0.22);
-      border-radius: 999px;
-      padding: 8px 12px;
-      font-size: 0.9rem;
-      font-weight: 700;
-    }
-
-    h1, h2, h3 {
-      line-height: 1.05;
-      margin: 0;
-      letter-spacing: -0.05em;
-    }
-
-    h1 {
-      font-size: clamp(3.1rem, 8vw, 6.5rem);
-      max-width: 760px;
-      margin-top: 24px;
-    }
-
-    h2 {
-      font-size: clamp(2.1rem, 5vw, 3.8rem);
-    }
-
-    h3 {
-      font-size: clamp(1.35rem, 3vw, 2rem);
-    }
-
-    .lead {
-      color: var(--muted);
-      font-size: clamp(1.08rem, 2vw, 1.22rem);
-      max-width: 740px;
-      margin: 22px 0 0;
-    }
-
-    .hero {
-      display: grid;
-      grid-template-columns: minmax(0, 1.02fr) minmax(320px, 0.98fr);
-      align-items: center;
-      gap: 40px;
-      min-height: 82vh;
-    }
-
-    .hero-actions,
-    .button-row {
-      display: flex;
-      gap: 14px;
-      flex-wrap: wrap;
-      margin-top: 30px;
-    }
-
-    .btn {
-      border: 0;
-      cursor: pointer;
-      border-radius: 999px;
-      padding: 13px 18px;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      min-height: 48px;
-      background: rgba(255, 255, 255, 0.1);
-      color: var(--text);
-      border: 1px solid rgba(255, 255, 255, 0.14);
-      transition: transform 180ms ease, background 180ms ease, border 180ms ease;
-      font-weight: 800;
-    }
-
-    .btn:hover {
-      transform: translateY(-2px);
-      background: rgba(255, 255, 255, 0.15);
-    }
-
-    .btn.primary {
-      color: #05110b;
-      background: linear-gradient(135deg, var(--accent), var(--gold));
-      border: 0;
-    }
-
-    .hero-visual {
-      position: relative;
-      min-height: 560px;
-    }
-
-    .hero-image {
-      height: 100%;
-      min-height: 560px;
-      overflow: hidden;
-      border-radius: 30px;
-      border: 1px solid var(--line);
-      box-shadow: var(--shadow);
-      background: #08150f;
-    }
-
-    .hero-image img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      filter: saturate(1.02) contrast(1.02);
-    }
-
-    .floating-card {
-      position: absolute;
-      border-radius: 22px;
-      background: rgba(7, 20, 15, 0.78);
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      box-shadow: var(--shadow);
-      backdrop-filter: blur(12px);
-      padding: 16px 18px;
-    }
-
-    .floating-card strong {
-      display: block;
-      font-size: 1.35rem;
-      color: var(--accent);
-      line-height: 1;
-      margin-bottom: 6px;
-    }
-
-    .floating-card span {
-      display: block;
-      color: var(--muted);
-      font-size: 0.95rem;
-    }
-
-    .float-one {
-      left: -18px;
-      bottom: 26px;
-      max-width: 220px;
-    }
-
-    .float-two {
-      right: -18px;
-      top: 28px;
-      max-width: 240px;
-    }
-
-    .section-heading {
-      display: flex;
-      align-items: end;
-      justify-content: space-between;
-      gap: 24px;
-      margin-bottom: 28px;
-    }
-
-    .section-heading p {
-      max-width: 700px;
-      color: var(--muted);
-      margin: 12px 0 0;
-    }
-
-    .feature-strip {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 18px;
-      margin-top: 28px;
-    }
-
-    .feature-item,
-    .app-card,
-    .story-card,
-    .contact-card {
-      border-radius: var(--radius);
-      background: var(--card);
-      border: 1px solid var(--line);
-      box-shadow: var(--shadow);
-    }
-
-    .feature-item {
-      padding: 22px;
-    }
-
-    .feature-item p {
-      color: var(--muted);
-      margin: 10px 0 0;
-    }
-
-    .tag {
-      display: inline-flex;
-      color: var(--gold);
-      font-weight: 800;
-      font-size: 0.82rem;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      margin-bottom: 12px;
-    }
-
-    .apps-grid {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 22px;
-      margin-top: 24px;
-    }
-
-    .app-card {
-      overflow: hidden;
-      transition: transform 220ms ease, border 220ms ease, background 220ms ease;
-    }
-
-    .app-card:hover {
-      transform: translateY(-6px);
-      border-color: rgba(143, 227, 176, 0.24);
-      background: rgba(255, 255, 255, 0.09);
-    }
-
-    .app-photo {
-      height: 220px;
-      overflow: hidden;
-      background: #0b1712;
-    }
-
-    .app-photo img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    .app-content {
-      padding: 22px;
-    }
-
-    .app-content p {
-      color: var(--muted);
-      margin: 12px 0 0;
-    }
-
-    .app-meta {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-top: 16px;
-    }
-
-    .pill {
-      display: inline-flex;
-      align-items: center;
-      padding: 7px 10px;
-      border-radius: 999px;
-      color: var(--muted);
-      background: rgba(255, 255, 255, 0.06);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      font-size: 0.82rem;
-      font-weight: 700;
-    }
-
-    .app-link {
-      display: inline-flex;
-      margin-top: 18px;
-      font-weight: 800;
-      color: var(--accent);
-    }
-
-    .story-layout {
-      display: grid;
-      grid-template-columns: minmax(0, 0.95fr) minmax(320px, 1.05fr);
-      gap: 24px;
-      align-items: stretch;
-    }
-
-    .story-card {
-      padding: 28px;
-    }
-
-    .story-card p {
-      color: var(--muted);
-      margin: 14px 0 0;
-    }
-
-    .story-list {
-      list-style: none;
-      padding: 0;
-      margin: 20px 0 0;
-      display: grid;
-      gap: 12px;
-      color: var(--muted);
-    }
-
-    .story-list li::before {
-      content: "✓";
-      color: var(--accent);
-      margin-right: 10px;
-      font-weight: 900;
-    }
-
-    .story-photo {
-      overflow: hidden;
-      border-radius: var(--radius);
-      border: 1px solid var(--line);
-      box-shadow: var(--shadow);
-      min-height: 100%;
-    }
-
-    .story-photo img {
-      width: 100%;
-      height: 100%;
-      min-height: 420px;
-      object-fit: cover;
-    }
-
-    .contact-card {
-      padding: 28px;
-    }
-
-    .contact-links {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-      margin-top: 22px;
-    }
-
-    .contact-links a {
-      color: var(--accent);
-      padding: 10px 12px;
-      border: 1px solid rgba(143, 227, 176, 0.2);
-      border-radius: 999px;
-      background: rgba(143, 227, 176, 0.08);
-      transition: transform 180ms ease, background 180ms ease;
-    }
-
-    .contact-links a:hover {
-      transform: translateY(-2px);
-      background: rgba(143, 227, 176, 0.12);
-    }
-    
-.icon-links a {
-  width: 54px;
-  height: 54px;
-  padding: 0;
-  display: inline-grid;
-  place-items: center;
-  position: relative;
-}
-
-.icon-links svg {
-  width: 24px;
-  height: 24px;
-  fill: currentColor;
-}
-
-.icon-links span {
-  position: absolute;
-  left: 50%;
-  bottom: -34px;
-  transform: translateX(-50%);
-  opacity: 0;
-  pointer-events: none;
-  white-space: nowrap;
-  color: var(--text);
-  background: rgba(7, 20, 15, 0.92);
-  border: 1px solid var(--line);
-  border-radius: 999px;
-  padding: 5px 9px;
-  font-size: 0.78rem;
-  transition: opacity 180ms ease, bottom 180ms ease;
-}
-
-.icon-links a:hover span,
-.icon-links a:focus-visible span {
-  opacity: 1;
-  bottom: -40px;
-}
-
-    
-    footer {
-      max-width: var(--max);
-      margin: 0 auto;
-      padding: 32px 22px 56px;
-      color: var(--muted);
-      border-top: 1px solid var(--line);
-    }
-
-    .reveal {
-      opacity: 0;
-      transform: translateY(18px);
-      transition: opacity 600ms ease, transform 600ms ease;
-    }
-
-    .reveal.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    @media (max-width: 980px) {
-      .hero,
-      .story-layout {
-        grid-template-columns: 1fr;
-      }
-
-      .apps-grid,
-      .feature-strip {
-        grid-template-columns: 1fr;
-      }
-
-      .hero-visual {
-        min-height: auto;
-      }
-
-      .hero-image {
-        min-height: 420px;
-      }
-
-      .float-one,
-      .float-two {
-        position: static;
-        margin-top: 14px;
-        max-width: none;
-      }
-    }
-
-    @media (max-width: 620px) {
-      .nav {
-        align-items: flex-start;
-        flex-direction: column;
-      }
-
-      .nav-links {
-        justify-content: flex-start;
-      }
-
-      .section {
-        padding: 64px 18px;
-      }
-
-      .hero {
-        min-height: auto;
-        padding-top: 28px;
-      }
-
-      .hero-image {
-        min-height: 320px;
-      }
-
-      .app-photo {
-        height: 200px;
-      }
-
-      .story-photo img {
-        min-height: 300px;
-      }
-    }
+    img { max-width: 100%; display: block; }
+    a { color: inherit; text-decoration: none; }
+    .site-header { position: sticky; top: 0; z-index: 100; backdrop-filter: blur(18px); background: rgba(7,20,15,0.82); border-bottom: 1px solid var(--line); }
+    .nav { max-width: var(--max); margin: 0 auto; padding: 16px 22px; display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+    .brand { display: inline-flex; align-items: center; gap: 10px; font-weight: 800; letter-spacing: -0.04em; font-size: 1.15rem; }
+    .brand-mark { width: 38px; height: 38px; border-radius: 14px; display: grid; place-items: center; color: #06110d; background: linear-gradient(135deg, var(--accent), var(--gold)); font-weight: 900; box-shadow: 0 14px 34px rgba(82,201,137,0.25); }
+    .nav-links { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: flex-end; }
+    .nav-links a { color: var(--muted); padding: 9px 12px; border-radius: 999px; transition: background 180ms ease, color 180ms ease, transform 180ms ease; font-size: 0.95rem; }
+    .nav-links a:hover, .nav-links a:focus-visible { color: var(--text); background: rgba(255,255,255,0.09); outline: none; transform: translateY(-1px); }
+    .nav-links .nav-cta { color: #05110b; background: linear-gradient(135deg, var(--accent), var(--gold)); font-weight: 800; }
+    .section { max-width: var(--max); margin: 0 auto; padding: 88px 22px; }
+    .eyebrow { display: inline-flex; gap: 8px; align-items: center; color: var(--accent); background: rgba(143,227,176,0.1); border: 1px solid rgba(143,227,176,0.22); border-radius: 999px; padding: 8px 12px; font-size: 0.9rem; font-weight: 700; }
+    h1, h2, h3 { line-height: 1.05; margin: 0; letter-spacing: -0.05em; }
+    h1 { font-size: clamp(3.1rem, 8vw, 6.5rem); max-width: 760px; margin-top: 24px; }
+    h2 { font-size: clamp(2.1rem, 5vw, 3.8rem); }
+    h3 { font-size: clamp(1.35rem, 3vw, 2rem); }
+    .lead { color: var(--muted); font-size: clamp(1.08rem, 2vw, 1.22rem); max-width: 740px; margin: 22px 0 0; }
+    .hero { display: grid; grid-template-columns: minmax(0,1.02fr) minmax(320px,0.98fr); align-items: center; gap: 40px; min-height: 82vh; }
+    .hero-actions, .button-row { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 30px; }
+    .btn { border-radius: 999px; padding: 13px 18px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 48px; background: rgba(255,255,255,0.1); color: var(--text); border: 1px solid rgba(255,255,255,0.14); transition: transform 180ms ease, background 180ms ease; font-weight: 800; }
+    .btn:hover { transform: translateY(-2px); background: rgba(255,255,255,0.15); }
+    .btn.primary { color: #05110b; background: linear-gradient(135deg, var(--accent), var(--gold)); border: 0; }
+    .hero-visual { position: relative; min-height: 560px; }
+    .hero-image { height: 100%; min-height: 560px; overflow: hidden; border-radius: 30px; border: 1px solid var(--line); box-shadow: var(--shadow); background: #08150f; }
+    .hero-image img { width: 100%; height: 100%; object-fit: cover; filter: saturate(1.02) contrast(1.02); }
+    .floating-card { position: absolute; border-radius: 22px; background: rgba(7,20,15,0.78); border: 1px solid rgba(255,255,255,0.12); box-shadow: var(--shadow); backdrop-filter: blur(12px); padding: 16px 18px; }
+    .floating-card strong { display: block; font-size: 1.35rem; color: var(--accent); line-height: 1; margin-bottom: 6px; }
+    .floating-card span { display: block; color: var(--muted); font-size: 0.95rem; }
+    .float-one { left: -18px; bottom: 26px; max-width: 220px; }
+    .float-two { right: -18px; top: 28px; max-width: 240px; }
+    .section-heading { display: flex; align-items: end; justify-content: space-between; gap: 24px; margin-bottom: 28px; }
+    .section-heading p { max-width: 760px; color: var(--muted); margin: 12px 0 0; }
+    .feature-strip, .apps-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 22px; margin-top: 24px; }
+    .feature-item, .app-card, .story-card, .contact-card { border-radius: var(--radius); background: var(--card); border: 1px solid var(--line); box-shadow: var(--shadow); }
+    .feature-item { padding: 22px; }
+    .feature-item p, .app-content p, .story-card p { color: var(--muted); margin: 12px 0 0; }
+    .tag { display: inline-flex; color: var(--gold); font-weight: 800; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 12px; }
+    .app-card { overflow: hidden; transition: transform 220ms ease, border 220ms ease, background 220ms ease; }
+    .app-card:hover { transform: translateY(-6px); border-color: rgba(143,227,176,0.24); background: rgba(255,255,255,0.09); }
+    .app-photo { height: 220px; overflow: hidden; background: #0b1712; display: block; }
+    .app-photo img { width: 100%; height: 100%; object-fit: cover; transition: transform 320ms ease; }
+    .app-photo:hover img { transform: scale(1.04); }
+    .app-content { padding: 22px; }
+    .app-meta { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+    .pill { display: inline-flex; align-items: center; padding: 7px 10px; border-radius: 999px; color: var(--muted); background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); font-size: 0.82rem; font-weight: 700; }
+    .app-link { display: inline-flex; margin-top: 18px; font-weight: 800; color: var(--accent); }
+    .story-layout { display: grid; grid-template-columns: minmax(0,0.95fr) minmax(320px,1.05fr); gap: 24px; align-items: stretch; }
+    .story-card, .contact-card { padding: 28px; }
+    .story-list { list-style: none; padding: 0; margin: 20px 0 0; display: grid; gap: 12px; color: var(--muted); }
+    .story-list li::before { content: "✓"; color: var(--accent); margin-right: 10px; font-weight: 900; }
+    .story-photo { overflow: hidden; border-radius: var(--radius); border: 1px solid var(--line); box-shadow: var(--shadow); min-height: 100%; }
+    .story-photo img { width: 100%; height: 100%; min-height: 420px; object-fit: cover; }
+    .contact-links { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 22px; }
+    .contact-links a { color: var(--accent); padding: 10px 12px; border: 1px solid rgba(143,227,176,0.2); border-radius: 999px; background: rgba(143,227,176,0.08); transition: transform 180ms ease, background 180ms ease; }
+    .contact-links a:hover { transform: translateY(-2px); background: rgba(143,227,176,0.12); }
+    .icon-links a { width: 54px; height: 54px; padding: 0; display: inline-grid; place-items: center; position: relative; }
+    .icon-links svg { width: 24px; height: 24px; fill: currentColor; }
+    .icon-links span { position: absolute; left: 50%; bottom: -34px; transform: translateX(-50%); opacity: 0; pointer-events: none; white-space: nowrap; color: var(--text); background: rgba(7,20,15,0.92); border: 1px solid var(--line); border-radius: 999px; padding: 5px 9px; font-size: 0.78rem; transition: opacity 180ms ease, bottom 180ms ease; }
+    .icon-links a:hover span, .icon-links a:focus-visible span { opacity: 1; bottom: -40px; }
+    footer { max-width: var(--max); margin: 0 auto; padding: 32px 22px 56px; color: var(--muted); border-top: 1px solid var(--line); }
+    .reveal { opacity: 0; transform: translateY(18px); transition: opacity 600ms ease, transform 600ms ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    @media (max-width: 980px) { .hero, .story-layout { grid-template-columns: 1fr; } .apps-grid, .feature-strip { grid-template-columns: 1fr; } .hero-visual { min-height: auto; } .hero-image { min-height: 420px; } .float-one, .float-two { position: static; margin-top: 14px; max-width: none; } }
+    @media (max-width: 620px) { .nav { align-items: flex-start; flex-direction: column; } .nav-links { justify-content: flex-start; } .section { padding: 64px 18px; } .hero { min-height: auto; padding-top: 28px; } .hero-image { min-height: 320px; } .app-photo { height: 200px; } .story-photo img { min-height: 300px; } }
   </style>
 </head>
 <body>
   <header class="site-header">
     <nav class="nav" aria-label="Primary navigation">
-      <a class="brand" href="index.html" aria-label="RootedByte home">
-        <span class="brand-mark">R</span>
-        <span>RootedByte</span>
-      </a>
-
+      <a class="brand" href="index.html" aria-label="RootedByte home"><span class="brand-mark">R</span><span>RootedByte</span></a>
       <div class="nav-links">
         <a href="index.html">Home</a>
         <a href="#apps">Apps</a>
@@ -601,37 +116,20 @@
   <main>
     <section class="section hero">
       <div class="reveal">
-        <span class="eyebrow">Technology • Scripture • Practical tools</span>
+        <span class="eyebrow">Technology • Worship • Reflection</span>
         <h1>Modern tools, built with clarity and rooted in truth.</h1>
-        <p class="lead">
-          RootedByte is a faith-rooted digital workspace that blends practical tech, thoughtful design,
-          and biblical reflection. Explore three focused tools: a guitar tone finder, a Scripture-based
-          news reflection tool, and a teen-aware spiritual growth guide.
-        </p>
-
+        <p class="lead">RootedByte is a modern digital workspace for people who want technology to support creativity, worship preparation, daily reflection, and practical spiritual growth in the middle of real life.</p>
         <div class="hero-actions">
           <a class="btn primary" href="#apps">Explore the apps</a>
           <a class="btn" href="#contact">Get in touch</a>
         </div>
       </div>
-
       <div class="hero-visual reveal">
         <div class="hero-image">
-          <img
-            src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1400&q=80"
-            alt="Modern technology workspace with laptop and creative setup"
-          />
+          <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1400&q=80" alt="Modern technology workspace with laptop and creative setup" />
         </div>
-
-        <div class="floating-card float-one">
-          <strong>3 focused apps</strong>
-          <span>Purpose-built pages for Tone Finder, NewsVerse, and RootedOS.</span>
-        </div>
-
-        <div class="floating-card float-two">
-          <strong>Faith + function</strong>
-          <span>Built to be practical, calm, modern, and spiritually grounded.</span>
-        </div>
+        <div class="floating-card float-one"><strong>3 focused apps</strong><span>Song DiveIn, NewsVerse, and RootedOS.</span></div>
+        <div class="floating-card float-two"><strong>Faith + function</strong><span>Practical tools for creating, reflecting, and growing with purpose.</span></div>
       </div>
     </section>
 
@@ -639,41 +137,14 @@
       <div class="section-heading">
         <div>
           <span class="eyebrow">What RootedByte stands for</span>
-          <h2>Useful technology with a thoughtful center.</h2>
-          <p>
-            RootedByte is not fear-based or anti-technology. The aim is to use digital tools wisely —
-            helping people create, reflect, and grow with tools that feel modern, simple, and grounded.
-          </p>
+          <h2>Simple tools for creating, reflecting, and growing with intention.</h2>
+          <p>RootedByte is built for a generation surrounded by worship music, daily headlines, social feeds, school and work pressure, and constant notifications — helping people slow down, create with purpose, think clearly, and reflect honestly on their spiritual life.</p>
         </div>
       </div>
-
       <div class="feature-strip">
-        <article class="feature-item">
-          <span class="tag">Practical</span>
-          <h3>Real use cases</h3>
-          <p>
-            Each tool is designed around a genuine need: finding a tone, reflecting on current events,
-            or gently assessing spiritual health.
-          </p>
-        </article>
-
-        <article class="feature-item">
-          <span class="tag">Biblical</span>
-          <h3>Scripture-rooted</h3>
-          <p>
-            Faith is not added as decoration. It shapes the perspective, tone, and outcomes across the
-            RootedByte experience.
-          </p>
-        </article>
-
-        <article class="feature-item">
-          <span class="tag">Modern</span>
-          <h3>Clean and accessible</h3>
-          <p>
-            The project keeps the interface visually polished and approachable while protecting backend
-            logic through serverless functions.
-          </p>
-        </article>
+        <article class="feature-item"><span class="tag">Creative</span><h3>Sound with purpose</h3><p>Support worship preparation and practice with useful musical insights, tone ideas, song meaning, chord links, lyric links, and gear-specific starting points.</p></article>
+        <article class="feature-item"><span class="tag">Reflective</span><h3>News with perspective</h3><p>Turn daily headlines into Scripture-rooted reflection, prayer, and thoughtful response instead of fear, outrage, or information overload.</p></article>
+        <article class="feature-item"><span class="tag">Personal</span><h3>Growth without shame</h3><p>Use guided reflection to notice habits, pressure, identity, relationships, purpose, and the next step toward a more grounded life.</p></article>
       </div>
     </section>
 
@@ -681,53 +152,31 @@
       <div class="section-heading reveal">
         <div>
           <span class="eyebrow">RootedByte app ecosystem</span>
-          <h2>Simple tools for creating, reflecting, and growing with intention.</h2>
-          <p>
-            RootedByte is built for a generation surrounded by worship music, daily headlines, social feeds,
-            school and work pressure, and constant notifications — helping people slow down, create with
-            purpose, think clearly, and reflect honestly on their spiritual life.
-          </p>
+          <h2>Practical tools for creativity, clarity, and reflection.</h2>
+          <p>RootedByte brings everyday life into a more thoughtful space — helping people prepare for worship, explore songs more deeply, reflect on what is happening in the world, and examine their own hearts with honesty, grace, and purpose.</p>
         </div>
       </div>
-
       <div class="apps-grid">
         <article class="app-card reveal">
-          <div class="app-photo">
-            <img
-              src="https://images.unsplash.com/photo-1511379938547-c1f69419868d?auto=format&fit=crop&w=1200&q=80"
-              alt="Musician and guitar equipment in a studio setting"
-            />
-          </div>
+          <a class="app-photo" href="tone.html" aria-label="Open Song DiveIn"><img src="https://images.unsplash.com/photo-1511379938547-c1f69419868d?auto=format&fit=crop&w=1200&q=80" alt="Musician and guitar equipment in a studio setting" /></a>
           <div class="app-content">
             <span class="tag">App 1 • Music Tech</span>
-            <h3>Song Tone Finder</h3>
-            <p>
-              For worship musicians, church teams, and guitar learners who want to prepare with intention.
-              Enter a song or YouTube link, choose your gear, and receive practical tone settings to help you start shaping the sound.
-            </p>
+            <h3>Song DiveIn</h3>
+            <p>Explore a song before you play it. Enter a title or YouTube link to receive song meaning, worship/practice context, tone settings, and source links for chords and lyrics when available.</p>
             <div class="app-meta">
-              <span class="pill">Prepare worship guitar tones</span>
-              <span class="pill">Build practice starting points</span>
-              <span class="pill">Match settings to your gear</span>
+              <span class="pill">Understand song meaning</span>
+              <span class="pill">Find chord and lyric links</span>
+              <span class="pill">Shape tones for your gear</span>
             </div>
-            <a class="app-link" href="tone.html">Open Song Tone Finder →</a>
+            <a class="app-link" href="tone.html">Open Song DiveIn →</a>
           </div>
         </article>
-
         <article class="app-card reveal">
-          <div class="app-photo">
-            <img
-              src="https://images.unsplash.com/photo-1504711434969-e33886168f5c?auto=format&fit=crop&w=1200&q=80"
-              alt="News reading on a phone and newspaper"
-            />
-          </div>
+          <a class="app-photo" href="newsverse.html" aria-label="Open NewsVerse"><img src="https://images.unsplash.com/photo-1504711434969-e33886168f5c?auto=format&fit=crop&w=1200&q=80" alt="News reading on a phone and newspaper" /></a>
           <div class="app-content">
             <span class="tag">App 2 • Faith + News</span>
             <h3>NewsVerse</h3>
-            <p>
-              For people who read the news but do not want to be shaped by fear, outrage, or confusion.
-              Paste an article link and receive Scripture-rooted reflection, a Jesus Lens perspective, and prayer points.
-            </p>
+            <p>Paste a public article URL and turn daily news into a slower moment of reflection with Scripture, a Jesus Lens perspective, and prayer points.</p>
             <div class="app-meta">
               <span class="pill">Reflect on daily news</span>
               <span class="pill">Connect headlines to Scripture</span>
@@ -736,21 +185,12 @@
             <a class="app-link" href="newsverse.html">Open NewsVerse →</a>
           </div>
         </article>
-
         <article class="app-card reveal">
-          <div class="app-photo">
-            <img
-              src="https://images.unsplash.com/photo-1513258496099-48168024aec0?auto=format&fit=crop&w=1200&q=80"
-              alt="Young person reflecting with notebook and coffee"
-            />
-          </div>
+          <a class="app-photo" href="rootedos.html" aria-label="Open RootedOS"><img src="https://images.unsplash.com/photo-1513258496099-48168024aec0?auto=format&fit=crop&w=1200&q=80" alt="Person reflecting with notebook and coffee" /></a>
           <div class="app-content">
-            <span class="tag">App 3 • Teen Spiritual Growth</span>
+            <span class="tag">App 3 • Spiritual Growth</span>
             <h3>RootedOS</h3>
-            <p>
-              For anyone trying to stay grounded while navigating pressure, comparison, digital habits, relationships,
-              purpose, and big life questions. RootedOS helps people reflect honestly and take one intentional step forward.
-            </p>
+            <p>For anyone trying to stay grounded while navigating pressure, comparison, digital habits, relationships, purpose, and big life questions. RootedOS helps people reflect honestly and take one intentional step forward.</p>
             <div class="app-meta">
               <span class="pill">Reflect on identity and pressure</span>
               <span class="pill">Notice digital habits honestly</span>
@@ -765,40 +205,23 @@
     <section class="section" id="mission">
       <div class="story-layout">
         <article class="story-card reveal">
-      <span class="eyebrow">Mission</span>
-      <h2>Helping people stay spiritually rooted in a digital world.</h2>
-      <p>
-        RootedByte is being built for people who are trying to follow Jesus while living in a world shaped by
-        constant information, screens, music, pressure, creativity, and technology. The goal is to create simple
-        tools that help people pause, reflect, worship, learn, and grow with wisdom instead of just reacting to
-        whatever is in front of them.
-      </p>
-      <p>
-        Whether someone is preparing a worship tone for church, reading daily news, or reflecting honestly on
-        their spiritual life, RootedByte is meant to be a calm space where technology supports spiritual growth
-        instead of distracting from it.
-      </p>
-
-      <ul class="story-list">
-        <li>Support worship preparation with practical tone tools for musicians and church teams.</li>
-        <li>Help users read today’s news with Scripture-rooted reflection instead of fear or outrage.</li>
-        <li>Create gentle spiritual-growth tools that invite honesty without shame or condemnation.</li>
-        <li>Encourage people, especially teens, to reflect on identity, purpose, habits, pressure, and faith.</li>
-        <li>Use technology as a tool for wisdom, worship, service, learning, and spiritual formation.</li>
-      </ul>
-
-      <div class="hero-actions">
-        <a class="btn primary" href="newsverse.html">Reflect on today’s news</a>
-        <a class="btn" href="rootedos.html">Start spiritual reflection</a>
-      </div>
-      </article>
-
-      <div class="story-photo reveal">
-      <img
-        src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1400&q=80"
-        alt="Peaceful open landscape representing reflection, growth, and clarity"
-      />
-       </div>
+          <span class="eyebrow">Mission</span>
+          <h2>Helping people stay spiritually rooted in a digital world.</h2>
+          <p>RootedByte is being built for people who are trying to follow Jesus while living in a world shaped by constant information, screens, music, pressure, creativity, and technology. The goal is to create simple tools that help people pause, reflect, worship, learn, and grow with wisdom instead of just reacting to whatever is in front of them.</p>
+          <p>Whether someone is preparing a worship tone for church, reading daily news, or reflecting honestly on their spiritual life, RootedByte is meant to be a calm space where technology supports spiritual growth instead of distracting from it.</p>
+          <ul class="story-list">
+            <li>Support worship preparation with practical song, tone, chord, and lyric-source tools.</li>
+            <li>Help users read today’s news with Scripture-rooted reflection instead of fear or outrage.</li>
+            <li>Create gentle spiritual-growth tools that invite honesty without shame or condemnation.</li>
+            <li>Encourage people to reflect on identity, purpose, habits, pressure, relationships, and faith.</li>
+            <li>Use technology as a tool for wisdom, worship, service, learning, and spiritual formation.</li>
+          </ul>
+          <div class="hero-actions">
+            <a class="btn primary" href="newsverse.html">Reflect on today’s news</a>
+            <a class="btn" href="rootedos.html">Start spiritual reflection</a>
+          </div>
+        </article>
+        <div class="story-photo reveal"><img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1400&q=80" alt="Peaceful open landscape representing reflection, growth, and clarity" /></div>
       </div>
     </section>
 
@@ -806,55 +229,21 @@
       <div class="contact-card reveal">
         <span class="eyebrow">Contact</span>
         <h2>Connect with RootedByte</h2>
-        <p class="lead">
-          Reach out for feedback, collaboration, project ideas, or future improvements to the RootedByte toolset.
-        </p>
-
+        <p class="lead">Reach out for feedback, collaboration, project ideas, or future improvements to the RootedByte toolset.</p>
         <div class="contact-links icon-links" aria-label="RootedByte social links">
-          <a href="mailto:rootedbyte@outlook.com" aria-label="Email RootedByte">
-          <svg viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M4 5h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2Zm0 3.2V17h16V8.2l-8 5.2-8-5.2Zm1.2-1.2 6.8 4.4L18.8 7H5.2Z"/>
-          </svg>
-          <span>Email</span>
-            </a>
-
-            <a href="[YOUR_INSTAGRAM]" target="_blank" rel="noopener noreferrer" aria-label="RootedByte Instagram">
-            <svg viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M7.8 2h8.4A5.8 5.8 0 0 1 22 7.8v8.4a5.8 5.8 0 0 1-5.8 5.8H7.8A5.8 5.8 0 0 1 2 16.2V7.8A5.8 5.8 0 0 1 7.8 2Zm0 2A3.8 3.8 0 0 0 4 7.8v8.4A3.8 3.8 0 0 0 7.8 20h8.4a3.8 3.8 0 0 0 3.8-3.8V7.8A3.8 3.8 0 0 0 16.2 4H7.8Zm4.2 3.3A4.7 4.7 0 1 1 7.3 12 4.7 4.7 0 0 1 12 7.3Zm0 2A2.7 2.7 0 1 0 14.7 12 2.7 2.7 0 0 0 12 9.3Zm5.1-2.4a1.1 1.1 0 1 1-1.1 1.1 1.1 1.1 0 0 1 1.1-1.1Z"/>
-          </svg>
-          <span>Instagram</span>
-            </a>
-
-          <a href="[YOUR_YOUTUBE]" target="_blank" rel="noopener noreferrer" aria-label="RootedByte YouTube">
-            <svg viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M21.6 7.2s-.2-1.6-.8-2.3c-.8-.8-1.7-.8-2.1-.9C15.8 3.8 12 3.8 12 3.8h-.1s-3.8 0-6.7.2c-.4.1-1.3.1-2.1.9-.6.7-.8 2.3-.8 2.3S2 9.1 2 11v1.8c0 1.9.2 3.8.2 3.8s.2 1.6.8 2.3c.8.8 1.9.8 2.4.9 1.8.2 6.6.2 6.6.2s3.8 0 6.7-.2c.4-.1 1.3-.1 2.1-.9.6-.7.8-2.3.8-2.3s.2-1.9.2-3.8V11c0-1.9-.2-3.8-.2-3.8ZM10 14.7V8.9l5.4 2.9-5.4 2.9Z"/>
-            </svg>
-          <span>YouTube</span>
-          </a>
-
-          <a href="[YOUR_LINKEDIN]" target="_blank" rel="noopener noreferrer" aria-label="RootedByte LinkedIn">
-          <svg viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M4.98 3.5A2.5 2.5 0 1 1 5 8.5a2.5 2.5 0 0 1-.02-5ZM3 21h4V9.5H3V21Zm6.2-11.5H13v1.6h.1c.5-.9 1.7-1.9 3.6-1.9 3.8 0 4.5 2.5 4.5 5.8V21h-4v-5.4c0-1.3 0-3-1.8-3s-2.1 1.4-2.1 2.9V21h-4V9.5Z"/>
-        </svg>
-        <span>LinkedIn</span>
-        </a>
-      </div>
+          <a href="mailto:rootedbyte@outlook.com" aria-label="Email RootedByte"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2Zm0 3.2V17h16V8.2l-8 5.2-8-5.2Zm1.2-1.2 6.8 4.4L18.8 7H5.2Z"/></svg><span>Email</span></a>
+          <a href="[YOUR_INSTAGRAM]" target="_blank" rel="noopener noreferrer" aria-label="RootedByte Instagram"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7.8 2h8.4A5.8 5.8 0 0 1 22 7.8v8.4a5.8 5.8 0 0 1-5.8 5.8H7.8A5.8 5.8 0 0 1 2 16.2V7.8A5.8 5.8 0 0 1 7.8 2Zm0 2A3.8 3.8 0 0 0 4 7.8v8.4A3.8 3.8 0 0 0 7.8 20h8.4a3.8 3.8 0 0 0 3.8-3.8V7.8A3.8 3.8 0 0 0 16.2 4H7.8Zm4.2 3.3A4.7 4.7 0 1 1 7.3 12 4.7 4.7 0 0 1 12 7.3Zm0 2A2.7 2.7 0 1 0 14.7 12 2.7 2.7 0 0 0 12 9.3Zm5.1-2.4a1.1 1.1 0 1 1-1.1 1.1 1.1 1.1 0 0 1 1.1-1.1Z"/></svg><span>Instagram</span></a>
+          <a href="[YOUR_YOUTUBE]" target="_blank" rel="noopener noreferrer" aria-label="RootedByte YouTube"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21.6 7.2s-.2-1.6-.8-2.3c-.8-.8-1.7-.8-2.1-.9C15.8 3.8 12 3.8 12 3.8h-.1s-3.8 0-6.7.2c-.4.1-1.3.1-2.1.9-.6.7-.8 2.3-.8 2.3S2 9.1 2 11v1.8c0 1.9.2 3.8.2 3.8s.2 1.6.8 2.3c.8.8 1.9.8 2.4.9 1.8.2 6.6.2 6.6.2s3.8 0 6.7-.2c.4-.1 1.3-.1 2.1-.9.6-.7.8-2.3.8-2.3s.2-1.9.2-3.8V11c0-1.9-.2-3.8-.2-3.8ZM10 14.7V8.9l5.4 2.9-5.4 2.9Z"/></svg><span>YouTube</span></a>
+          <a href="[YOUR_LINKEDIN]" target="_blank" rel="noopener noreferrer" aria-label="RootedByte LinkedIn"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.98 3.5A2.5 2.5 0 1 1 5 8.5a2.5 2.5 0 0 1-.02-5ZM3 21h4V9.5H3V21Zm6.2-11.5H13v1.6h.1c.5-.9 1.7-1.9 3.6-1.9 3.8 0 4.5 2.5 4.5 5.8V21h-4v-5.4c0-1.3 0-3-1.8-3s-2.1 1.4-2.1 2.9V21h-4V9.5Z"/></svg><span>LinkedIn</span></a>
+        </div>
       </div>
     </section>
   </main>
-
-  <footer>
-    <p>© <span id="year"></span> RootedByte. Built for digital wisdom rooted in truth.</p>
-  </footer>
-
+  <footer><p>© <span id="year"></span> RootedByte. Built for digital wisdom rooted in truth.</p></footer>
   <script>
     const year = document.getElementById('year');
-    if (year) {
-      year.textContent = new Date().getFullYear();
-    }
-
+    if (year) year.textContent = new Date().getFullYear();
     const revealItems = document.querySelectorAll('.reveal');
-
     const revealObserver = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
@@ -862,10 +251,7 @@
           revealObserver.unobserve(entry.target);
         }
       });
-    }, {
-      threshold: 0.14
-    });
-
+    }, { threshold: 0.14 });
     revealItems.forEach((item) => revealObserver.observe(item));
   </script>
 </body>
