@@ -130,6 +130,10 @@ footer { border-top: 1px solid var(--line); text-align: center; color: var(--mut
 .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
 @media (max-width: 920px) { .hero, .app-top, .mission, .score-wrap { grid-template-columns: 1fr; } .app-grid { grid-template-columns: 1fr; } .knob-grid { grid-template-columns: repeat(2, minmax(120px, 1fr)); } .section { padding: 62px 18px; } .plan-grid { grid-template-columns: 1fr; } }
 @media (max-width: 620px) { .nav { align-items: flex-start; flex-direction: column; } .nav-links { justify-content: flex-start; } .hero { min-height: auto; padding-top: 54px; } .tone-labels, .knob-grid { grid-template-columns: 1fr; } .score-circle { width: 150px; height: 150px; } }
+
+.hero-card { overflow: hidden; }
+.hero-card img { width: 100%; height: 260px; object-fit: cover; display: block; }
+.hero-card .hero-card-copy { padding: 0; }
 </style>
 </head>
 <body>
@@ -153,9 +157,12 @@ footer { border-top: 1px solid var(--line); text-align: center; color: var(--mut
         <p class="lead">Paste a public news article URL. RootedByte extracts readable text when possible, then returns a Scripture-rooted analysis with verses, Jesus Lens, and prayer points.</p>
       </div>
       <aside class="hero-card">
-        <span class="tag">Blocked article fallback</span>
-        <h2>Headline-only mode.</h2>
-        <p class="lead">If a site blocks extraction, NewsVerse will try the page metadata first. If that is unavailable, it creates a clean headline from the URL and clearly labels the analysis as headline-based.</p>
+        <img src="https://images.unsplash.com/photo-1504711434969-e33886168f5c?auto=format&fit=crop&w=1200&q=80" alt="News reading on a phone and newspaper">
+        <div style="padding:26px;">
+          <span class="tag">Blocked article fallback</span>
+          <h2>Headline-only mode.</h2>
+          <p class="lead">If a site blocks extraction, NewsVerse will try the page metadata first. If that is unavailable, it creates a clean headline from the URL and clearly labels the analysis as headline-based.</p>
+        </div>
       </aside>
     </section>
     <section class="section">
