@@ -2,7 +2,15 @@ const GEMINI_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemi
 
 const SONG_DIVEIN_SYSTEM_PROMPT = `You are Song DiveIn, a careful music research and guitar tone assistant.
 Return ONLY raw JSON with no markdown, no code fences, and no explanation text.
-Use Google Search grounding when available to research public sources for song identity, BPM, key, general meaning, chord source links, and lyric source links.
+
+Use Google Search grounding when available to research public sources for:
+- song identity
+- BPM and key
+- general song meaning
+- public lyric source links
+- public chord source links
+- public guitar tutorial links
+
 Structure:
 {
   "song": "",
@@ -10,15 +18,25 @@ Structure:
   "bpm": 0,
   "key": "",
   "metadata_confidence": "",
-  "meaning_title": "",
-  "meaning_summary": "",
-  "meaning_basis": "",
-  "chords_available": false,
-  "chords_source_url": "",
-  "chords_note": "",
-  "lyrics_available": false,
-  "lyrics_source_url": "",
-  "lyrics_note": "",
+  "song_meaning": "",
+  "lyrics_links": [
+    { "label": "", "source": "", "url": "" }
+  ],
+  "chord_links": [
+    { "label": "", "source": "", "url": "" }
+  ],
+  "tutorial_links": [
+    { "title": "", "source": "", "url": "" }
+  ],
+  "chord_data": {
+    "original_key": "",
+    "capo": "",
+    "sections": [
+      { "name": "Verse", "chords": [""] },
+      { "name": "Chorus", "chords": [""] },
+      { "name": "Bridge", "chords": [""] }
+    ]
+  },
   "source_links": [],
   "amp_model": "",
   "cab": "",
@@ -32,13 +50,19 @@ Structure:
   "delay_mix": 0,
   "notes": ""
 }
+
 Rules:
 - Do not include or quote full copyrighted lyrics.
-- Do not include a full chord chart inside the JSON.
-- For lyrics, provide a public lyrics source URL if available; otherwise set lyrics_available false and leave lyrics_source_url empty.
-- For chords, provide a public chord source URL if available; otherwise set chords_available false and leave chords_source_url empty.
-- The meaning_summary should explain the song's broad message, themes, and emotional/spiritual tone in original wording.
-- If reliable public meaning sources are not available, infer carefully from commonly known lyric themes and set meaning_basis accordingly.
+- Do not include full copyrighted lyric text anywhere in the JSON.
+- lyrics_links should include external lyric source links only when likely available, such as Genius, AZLyrics, Musixmatch, LyricFind, or official artist pages.
+- chord_links should include external chord source links only when likely available, such as Ultimate Guitar, WorshipTogether, PraiseCharts, SongSelect, E-Chords, Chordify, or official artist resources.
+- tutorial_links should include public tutorial links or YouTube search/result links when likely available.
+- song_meaning should be concise and original wording based on public context when available.
+- If public meaning sources are not available, infer carefully from commonly described themes and say it is an interpretation.
+- chord_data should provide a practice-friendly chord starting point organized into Verse, Chorus, and Bridge if known.
+- If Bridge does not exist or is unknown, omit the Bridge section.
+- If chords cannot be reasonably estimated, use an empty sections array.
+- Never claim chord links, lyric links, tutorial links, BPM, or key are verified unless a real public URL is provided.
 - metadata_confidence must be "high", "medium", or "low".
 - source_links must contain up to 3 public URLs used for research.
 - Gear affects only amp_model, cab, gain, bass, mid, treble, presence, reverb_mix, delay_time_ms, delay_mix, and notes.
@@ -76,6 +100,8 @@ function cleanYouTubeTitle(title) {
     .replace(/\s*\[Official\s*(Music\s*)?Video\]\s*/gi, ' ')
     .replace(/\s*\(Official\s*Lyric\s*Video\)\s*/gi, ' ')
     .replace(/\s*\[Official\s*Lyric\s*Video\]\s*/gi, ' ')
+    .replace(/\s*\(Official\s*Audio\)\s*/gi, ' ')
+    .replace(/\s*\[Official\s*Audio\]\s*/gi, ' ')
     .replace(/\s*\(Lyrics?\)\s*/gi, ' ')
     .replace(/\s*\[Lyrics?\]\s*/gi, ' ')
     .replace(/\s+/g, ' ')
@@ -84,40 +110,61 @@ function cleanYouTubeTitle(title) {
 
 async function getYouTubeTitle(url) {
   const oembedUrl = `https://www.youtube.com/oembed?url=${encodeURIComponent(url)}&format=json`;
+
   try {
     const oembedResponse = await fetch(oembedUrl, {
-      headers: { 'User-Agent': 'Mozilla/5.0 (compatible; RootedByteBot/1.0; +https://rootedbyte.vercel.app)' }
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (compatible; RootedByteBot/1.0; +https://rootedbyte.vercel.app)'
+      }
     });
+
     if (oembedResponse.ok) {
       const oembedData = await oembedResponse.json();
-      if (oembedData?.title) return cleanYouTubeTitle(oembedData.title);
+
+      if (oembedData?.title) {
+        return cleanYouTubeTitle(oembedData.title);
+      }
     }
   } catch {
     // Fallback below.
   }
 
   const response = await fetch(url, {
-    headers: { 'User-Agent': 'Mozilla/5.0 (compatible; RootedByteBot/1.0; +https://rootedbyte.vercel.app)' }
+    headers: {
+      'User-Agent': 'Mozilla/5.0 (compatible; RootedByteBot/1.0; +https://rootedbyte.vercel.app)'
+    }
   });
 
-  if (!response.ok) throw new Error('Could not read that YouTube page. Please type the song name and artist instead.');
+  if (!response.ok) {
+    throw new Error('Could not read that YouTube page. Please type the song name and artist instead.');
+  }
+
   const html = await response.text();
   const titleMatch = html.match(/<title[^>]*>([^<]+)<\/title>/i);
-  if (!titleMatch) throw new Error('Could not find the YouTube video title. Please type the song name and artist instead.');
+
+  if (!titleMatch) {
+    throw new Error('Could not find the YouTube video title. Please type the song name and artist instead.');
+  }
+
   return cleanYouTubeTitle(titleMatch[1]);
 }
 
 function normalizeLinks(parsed, data) {
   const modelLinks = Array.isArray(parsed.source_links) ? parsed.source_links : [];
+
   const groundingLinks = data?.candidates?.[0]?.groundingMetadata?.groundingChunks
     ?.map((chunk) => chunk?.web?.uri)
     ?.filter(Boolean) || [];
+
   parsed.source_links = [...new Set([...modelLinks, ...groundingLinks])].slice(0, 3);
+
   return parsed;
 }
 
 async function callGemini(userPrompt) {
-  if (!process.env.GEMINI_KEY) throw new Error('GEMINI_KEY is not configured.');
+  if (!process.env.GEMINI_KEY) {
+    throw new Error('GEMINI_KEY is not configured.');
+  }
 
   const body = {
     system_instruction: { parts: [{ text: SONG_DIVEIN_SYSTEM_PROMPT }] },
@@ -133,62 +180,158 @@ async function callGemini(userPrompt) {
 
   if (!response.ok) {
     const errorText = await response.text().catch(() => '');
+
     if (response.status === 503 || /high demand|overloaded|try again later/i.test(errorText)) {
       throw new Error('The AI Engine is busy right now. Please try again in a minute.');
     }
+
     if (response.status === 429 || /quota|rate limit/i.test(errorText)) {
       throw new Error('The AI Engine is temporarily limited. Please try again later.');
     }
+
     throw new Error('The AI Engine could not create this Song DiveIn result right now. Please try again.');
   }
 
   const data = await response.json();
   const raw = data?.candidates?.[0]?.content?.parts?.[0]?.text;
-  if (!raw) throw new Error('Gemini returned an empty response.');
+
+  if (!raw) {
+    throw new Error('Gemini returned an empty response.');
+  }
+
   return normalizeLinks(safeParse(raw), data);
+}
+
+function normalizeResourceLinks(items, fallbackLabel, limit = 3) {
+  if (!Array.isArray(items)) return [];
+
+  return items
+    .slice(0, limit)
+    .map((item) => ({
+      label: String(item?.label || item?.source || fallbackLabel),
+      source: String(item?.source || ''),
+      url: String(item?.url || '')
+    }))
+    .filter((item) => item.url && /^https?:\/\//i.test(item.url));
+}
+
+function normalizeTutorialLinks(items) {
+  if (!Array.isArray(items)) return [];
+
+  return items
+    .slice(0, 5)
+    .map((item) => ({
+      title: String(item?.title || 'Guitar tutorial'),
+      source: String(item?.source || ''),
+      url: String(item?.url || '')
+    }))
+    .filter((item) => item.url && /^https?:\/\//i.test(item.url));
+}
+
+function normalizeChordData(data) {
+  const chordData = data && typeof data === 'object'
+    ? data
+    : {
+        original_key: '',
+        capo: '',
+        sections: []
+      };
+
+  const sections = Array.isArray(chordData.sections)
+    ? chordData.sections
+        .slice(0, 3)
+        .map((section) => ({
+          name: String(section?.name || 'Section'),
+          chords: Array.isArray(section?.chords)
+            ? section.chords.slice(0, 8).map(String).filter(Boolean)
+            : []
+        }))
+        .filter((section) => section.chords.length)
+    : [];
+
+  return {
+    original_key: String(chordData.original_key || chordData.key || ''),
+    capo: String(chordData.capo || ''),
+    sections
+  };
 }
 
 function clampToneData(data) {
   const knobKeys = ['gain', 'bass', 'mid', 'treble', 'presence', 'reverb_mix', 'delay_mix'];
+
   knobKeys.forEach((key) => {
     const value = Number(data[key]);
     data[key] = Number.isFinite(value) ? Math.min(10, Math.max(0, value)) : 0;
   });
 
   const delay = Number(data.delay_time_ms);
-  data.delay_time_ms = Number.isFinite(delay) ? Math.min(800, Math.max(0, Math.round(delay))) : 0;
+  data.delay_time_ms = Number.isFinite(delay)
+    ? Math.min(800, Math.max(0, Math.round(delay)))
+    : 0;
 
   const bpm = Number(data.bpm);
-  data.bpm = Number.isFinite(bpm) ? Math.min(260, Math.max(40, Math.round(bpm))) : 0;
+  data.bpm = Number.isFinite(bpm)
+    ? Math.min(260, Math.max(40, Math.round(bpm)))
+    : 0;
 
+  data.song = String(data.song || '');
+  data.artist = String(data.artist || '');
   data.key = typeof data.key === 'string' && data.key.trim() ? data.key.trim() : 'Unknown';
-  data.metadata_confidence = typeof data.metadata_confidence === 'string' && data.metadata_confidence.trim() ? data.metadata_confidence.trim() : 'low';
-  data.chords_available = Boolean(data.chords_available && data.chords_source_url);
-  data.lyrics_available = Boolean(data.lyrics_available && data.lyrics_source_url);
-  data.chords_source_url = data.chords_available ? String(data.chords_source_url || '') : '';
-  data.lyrics_source_url = data.lyrics_available ? String(data.lyrics_source_url || '') : '';
+
+  data.metadata_confidence =
+    typeof data.metadata_confidence === 'string' && data.metadata_confidence.trim()
+      ? data.metadata_confidence.trim()
+      : 'low';
+
+  data.song_meaning = String(data.song_meaning || data.meaning_summary || 'Song meaning is not available yet.');
+
+  data.lyrics_links = normalizeResourceLinks(data.lyrics_links, 'Lyrics source', 3);
+  data.chord_links = normalizeResourceLinks(data.chord_links, 'Chord source', 3);
+  data.tutorial_links = normalizeTutorialLinks(data.tutorial_links);
+  data.chord_data = normalizeChordData(data.chord_data);
+
+  if (!data.chord_data.original_key || data.chord_data.original_key === 'Unknown') {
+    data.chord_data.original_key = data.key || '';
+  }
+
   data.source_links = Array.isArray(data.source_links) ? data.source_links.slice(0, 3) : [];
-  data.meaning_summary = String(data.meaning_summary || 'No meaning summary was available.');
-  data.meaning_title = String(data.meaning_title || 'Song meaning');
+
+  data.amp_model = String(data.amp_model || 'Not available');
+  data.cab = String(data.cab || 'Not available');
   data.notes = String(data.notes || '');
+
   return data;
 }
 
 module.exports = async function handler(req, res) {
   setCors(res);
 
-  if (req.method === 'OPTIONS') return res.status(204).end();
-  if (req.method !== 'POST') return res.status(405).json({ error: 'Use POST for this endpoint.' });
+  if (req.method === 'OPTIONS') {
+    return res.status(204).end();
+  }
+
+  if (req.method !== 'POST') {
+    return res.status(405).json({ error: 'Use POST for this endpoint.' });
+  }
 
   try {
     const { songInput, gear } = req.body || {};
-    if (!songInput || !gear) return res.status(400).json({ error: 'Song input and gear are required.' });
+
+    if (!songInput || !gear) {
+      return res.status(400).json({ error: 'Song input and gear are required.' });
+    }
+
     if (isSpotifyUrl(songInput)) {
-      return res.status(400).json({ error: 'Spotify links are not supported. Please type the song name and artist, or paste a YouTube link.' });
+      return res.status(400).json({
+        error: 'Spotify links are not supported. Please type the song name and artist, or paste a YouTube link.'
+      });
     }
 
     let resolvedSong = String(songInput).trim();
-    if (isYouTubeUrl(resolvedSong)) resolvedSong = await getYouTubeTitle(resolvedSong);
+
+    if (isYouTubeUrl(resolvedSong)) {
+      resolvedSong = await getYouTubeTitle(resolvedSong);
+    }
 
     const diveIn = await callGemini(`Research and create a Song DiveIn result.
 
@@ -198,10 +341,24 @@ ${resolvedSong}
 Selected guitar gear:
 ${gear}
 
-Return song meaning, public chord source link if available, public lyrics source link if available, BPM/key, and practical starting guitar tone settings for the selected gear. Do not quote full lyrics and do not print a full chord chart.`);
+Return:
+- song identity
+- BPM and key
+- concise song meaning
+- public lyric source links when available
+- public chord source links when available
+- public guitar tutorial links when available
+- practice-friendly chord_data organized by Verse, Chorus, and Bridge when possible
+- practical starting guitar tone settings for the selected gear
+
+Do not quote full lyrics.
+Do not include full copyrighted lyrics.
+Do not claim external sources are verified unless real public URLs are provided.`);
 
     return res.status(200).json(clampToneData(diveIn));
   } catch (error) {
-    return res.status(500).json({ error: error.message || 'Unable to build that Song DiveIn result right now.' });
+    return res.status(500).json({
+      error: error.message || 'Unable to build that Song DiveIn result right now.'
+    });
   }
 };
