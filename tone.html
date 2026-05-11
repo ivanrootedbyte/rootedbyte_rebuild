@@ -544,6 +544,97 @@
         padding-top: 54px;
       }
     }
+  .result-card,
+.deep-dive-card,
+.preset-link,
+.tone-label,
+.app-panel {
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+  overflow-wrap: anywhere;
+  word-break: normal;
+}
+
+.result-card h3,
+.deep-dive-card h3,
+.preset-link strong,
+.preset-link span,
+.result-card p,
+.deep-dive-card p {
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.knob-grid,
+.preset-grid,
+.song-deep-dive-grid {
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+.knob {
+  min-width: 0;
+}
+
+.resource-action-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+  margin-top: 16px;
+}
+
+.resource-action {
+  display: grid;
+  gap: 10px;
+  padding: 18px;
+  border-radius: 18px;
+  color: var(--text);
+  background: rgba(143, 227, 176, 0.08);
+  border: 1px solid rgba(143, 227, 176, 0.18);
+  transition: transform 180ms ease, background 180ms ease, border 180ms ease;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.resource-action:hover,
+.resource-action:focus-visible {
+  transform: translateY(-3px);
+  background: rgba(143, 227, 176, 0.13);
+  border-color: rgba(143, 227, 176, 0.32);
+  outline: none;
+}
+
+.resource-action-icon {
+  width: 46px;
+  height: 46px;
+  border-radius: 16px;
+  display: grid;
+  place-items: center;
+  color: #06110d;
+  background: linear-gradient(135deg, var(--accent), var(--gold));
+  font-size: 1.35rem;
+}
+
+.resource-action strong {
+  color: var(--accent);
+  font-size: 1.05rem;
+}
+
+.resource-action span {
+  color: var(--muted);
+  font-size: 0.92rem;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 760px) {
+  .resource-action-grid {
+    grid-template-columns: 1fr;
+  }
+}
   </style>
 </head>
 
@@ -702,19 +793,37 @@
       `;
     }
 
-    function renderSingleLink(item, unavailableText) {
-      if (!item || !item.url || !item.validated_for_song) {
-        return `<p class="hint">${escapeHtml(unavailableText)}</p>`;
-      }
+function buildSearchUrl(query) {
+  return `https://www.google.com/search?q=${encodeURIComponent(query || '')}`;
+}
 
-      return `
-        <div class="resource-links">
-          <a href="${escapeHtml(item.url)}" target="_blank" rel="noreferrer">
-            ${escapeHtml(item.label || item.source || item.url)}
-          </a>
-        </div>
-      `;
-    }
+function renderResourceActionButtons(data) {
+  const lyricsQuery = data.lyrics_search_query || `${data.song || ''} ${data.artist || ''} lyrics`;
+  const chordQuery = data.chord_search_query || `${data.song || ''} ${data.artist || ''} chords`;
+  const tutorialQuery = data.tutorial_search_query || `${data.song || ''} ${data.artist || ''} guitar tutorial`;
+
+  return `
+    <div class="resource-action-grid">
+      <a class="resource-action" href="${escapeHtml(buildSearchUrl(lyricsQuery))}" target="_blank" rel="noreferrer">
+        <div class="resource-action-icon" aria-hidden="true">♪</div>
+        <strong>Lyrics</strong>
+        <span>Search public lyrics sources. Full lyrics are not copied into Song DiveIn.</span>
+      </a>
+
+      <a class="resource-action" href="${escapeHtml(buildSearchUrl(chordQuery))}" target="_blank" rel="noreferrer">
+        <div class="resource-action-icon" aria-hidden="true">♬</div>
+        <strong>Chords</strong>
+        <span>Search chord or tab sources that can help you learn the song.</span>
+      </a>
+
+      <a class="resource-action" href="${escapeHtml(buildSearchUrl(tutorialQuery))}" target="_blank" rel="noreferrer">
+        <div class="resource-action-icon" aria-hidden="true">▶</div>
+        <strong>Guitar Tutorial</strong>
+        <span>Search walkthroughs, rhythm ideas, and guitar lessons for this song.</span>
+      </a>
+    </div>
+  `;
+}
 
     function buildPresetLinks(data, gear, originalInput = '') {
       const song = data.song || '';
@@ -757,53 +866,35 @@
       }).join('');
     }
 
-    function renderSongDeepDive(data) {
-      const songMeaning =
-        data.song_meaning ||
-        data.meaning_summary ||
-        'Song meaning is not available yet.';
+   function renderSongDeepDive(data) {
+  const songMeaning =
+    data.song_meaning ||
+    data.meaning_summary ||
+    'Song meaning is not available yet.';
 
-      return `
-        <div class="song-deep-dive-grid">
-          <div class="deep-dive-card">
-            <span class="tag">Song Meaning</span>
-            <h3>What the song is about</h3>
-            <p>${escapeHtml(songMeaning)}</p>
-            <p class="hint">
-              This is AI-generated from public context when available. If public context is limited,
-              it may be an interpretation and should be verified with official artist notes when possible.
-            </p>
-          </div>
+  return `
+    <div class="song-deep-dive-grid">
+      <div class="deep-dive-card">
+        <span class="tag">Song Meaning</span>
+        <h3>What the song is about</h3>
+        <p>${escapeHtml(songMeaning)}</p>
+        <p class="hint">
+          This is AI-generated from public context when available. If public context is limited,
+          it may be an interpretation and should be verified with official artist notes when possible.
+        </p>
+      </div>
 
-          <div class="deep-dive-card">
-            <span class="tag">Lyrics Source</span>
-            <h3>Lyrics link</h3>
-            <p>
-              Full lyrics are not embedded here. Use the external lyric source when a matching song page is found.
-            </p>
-            ${renderSingleLink(data.lyrics_link, 'No verified lyrics link was found for this song.')}
-          </div>
-
-          <div class="deep-dive-card">
-            <span class="tag">Chord Source</span>
-            <h3>Chord link</h3>
-            <p>
-              Song DiveIn only shows a chord link when it appears to match the requested song.
-            </p>
-            ${renderSingleLink(data.chord_link, 'No verified chord link was found for this song.')}
-          </div>
-
-          <div class="deep-dive-card">
-            <span class="tag">Guitar Tutorial</span>
-            <h3>Learn to play it</h3>
-            <p>
-              Open a matching guitar tutorial when one is found.
-            </p>
-            ${renderSingleLink(data.tutorial_link, 'No verified guitar tutorial link was found for this song.')}
-          </div>
-        </div>
-      `;
-    }
+      <div class="deep-dive-card">
+        <span class="tag">Song Resources</span>
+        <h3>Find lyrics, chords, and tutorials</h3>
+        <p>
+          Use these buttons to search public sources for this song. Full lyrics and chord charts are not copied into Song DiveIn.
+        </p>
+        ${renderResourceActionButtons(data)}
+      </div>
+    </div>
+  `;
+}
 
     $('#toneForm').addEventListener('submit', async (event) => {
       event.preventDefault();
