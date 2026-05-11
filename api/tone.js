@@ -19,23 +19,9 @@ Structure:
   "key": "",
   "metadata_confidence": "",
   "song_meaning": "",
-  "lyrics_links": [
-    { "label": "", "source": "", "url": "" }
-  ],
-  "chord_links": [
-    { "label": "", "source": "", "url": "" }
-  ],
-  "tutorial_links": [
-    { "title": "", "source": "", "url": "" }
-  ],
-  "chord_data": {
-    "original_key": "",
-    "capo": "",
-    "sections": [
-      { "name": "Verse", "chords": [""] },
-      { "name": "Chorus", "chords": [""] },
-      { "name": "Bridge", "chords": [""] }
-    ]
+  "lyrics_link": { "label": "", "source": "", "url": "", "validated_for_song": false },
+  "chord_link": { "label": "", "source": "", "url": "", "validated_for_song": false },
+  "tutorial_link": { "label": "", "source": "", "url": "", "validated_for_song": false },
   },
   "source_links": [],
   "amp_model": "",
@@ -67,7 +53,17 @@ Rules:
 - source_links must contain up to 3 public URLs used for research.
 - Gear affects only amp_model, cab, gain, bass, mid, treble, presence, reverb_mix, delay_time_ms, delay_mix, and notes.
 - All knob values are 0-10.
-- delay_time_ms is 0-800.`;
+- delay_time_ms is 0-800.
+- Return only ONE best lyrics_link, ONE best chord_link, and ONE best tutorial_link.
+- Only return a URL if it appears to be directly for the requested song and artist.
+- For chord_link, prefer a real chord/tab page for the exact song, not a general search result.
+- For tutorial_link, prefer a YouTube or guitar tutorial page clearly matching the exact song.
+- For lyrics_link, prefer a public external lyrics page clearly matching the exact song.
+- If no direct matching source is found, set url to "" and validated_for_song to false.
+- Do not return generic Google search URLs as validated links.
+- Do not invent URLs.
+- Do not include full lyrics.
+- Do not include chord charts.`;
 
 function setCors(res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -149,16 +145,26 @@ async function getYouTubeTitle(url) {
   return cleanYouTubeTitle(titleMatch[1]);
 }
 
-function normalizeLinks(parsed, data) {
-  const modelLinks = Array.isArray(parsed.source_links) ? parsed.source_links : [];
+function normalizeSingleLink(item, fallbackLabel) {
+  if (!item || typeof item !== 'object') {
+    return {
+      label: fallbackLabel,
+      source: '',
+      url: '',
+      validated_for_song: false
+    };
+  }
 
-  const groundingLinks = data?.candidates?.[0]?.groundingMetadata?.groundingChunks
-    ?.map((chunk) => chunk?.web?.uri)
-    ?.filter(Boolean) || [];
+  const url = String(item.url || '').trim();
+  const isRealUrl = /^https?:\/\//i.test(url);
+  const isGenericSearch = /google\.com\/search|bing\.com\/search|duckduckgo\.com/i.test(url);
 
-  parsed.source_links = [...new Set([...modelLinks, ...groundingLinks])].slice(0, 3);
-
-  return parsed;
+  return {
+    label: String(item.label || fallbackLabel),
+    source: String(item.source || ''),
+    url: isRealUrl && !isGenericSearch ? url : '',
+    validated_for_song: Boolean(item.validated_for_song && isRealUrl && !isGenericSearch)
+  };
 }
 
 async function callGemini(userPrompt) {
@@ -285,10 +291,9 @@ function clampToneData(data) {
 
   data.song_meaning = String(data.song_meaning || data.meaning_summary || 'Song meaning is not available yet.');
 
-  data.lyrics_links = normalizeResourceLinks(data.lyrics_links, 'Lyrics source', 3);
-  data.chord_links = normalizeResourceLinks(data.chord_links, 'Chord source', 3);
-  data.tutorial_links = normalizeTutorialLinks(data.tutorial_links);
-  data.chord_data = normalizeChordData(data.chord_data);
+data.lyrics_link = normalizeSingleLink(data.lyrics_link, 'Lyrics source');
+data.chord_link = normalizeSingleLink(data.chord_link, 'Chord source');
+data.tutorial_link = normalizeSingleLink(data.tutorial_link, 'Guitar tutorial');
 
   if (!data.chord_data.original_key || data.chord_data.original_key === 'Unknown') {
     data.chord_data.original_key = data.key || '';
