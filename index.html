@@ -987,35 +987,28 @@
     padding: 74px 0 34px;
   }
 
-  /* keep the rest of your existing mobile CSS here */
+  .hero-grid,
+  .purpose-grid {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+
+  .hero-panel {
+    display: none;
+  }
+
+  .ecosystem-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .app-card {
+    min-height: auto;
+  }
+
+  .bottom-nav {
+    display: grid;
+  }
 }
-
-      .hero {
-        padding: 74px 0 34px;
-      }
-
-      .hero-grid,
-      .purpose-grid {
-        grid-template-columns: 1fr;
-        gap: 28px;
-      }
-
-      .hero-panel {
-        display: none;
-      }
-
-      .ecosystem-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .app-card {
-        min-height: auto;
-      }
-
-      .bottom-nav {
-        display: grid;
-      }
-    }
 
     @media (max-width: 560px) {
       .container {
