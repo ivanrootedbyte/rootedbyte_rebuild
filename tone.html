@@ -6,7 +6,7 @@
 
   <meta
     name="description"
-    content="Song DiveIn helps users understand a song, find chord and lyric source links, discover guitar tutorials, transpose chords, and create practical guitar tone settings."
+    content="Song DiveIn helps users understand a song, find chord and lyric source links, discover a guitar tutorial link, and create practical guitar tone settings."
   />
 
   <title>Song DiveIn | RootedByte</title>
@@ -245,6 +245,7 @@
     .source-card p {
       color: var(--muted);
       margin: 16px 0 0;
+      overflow-wrap: anywhere;
     }
 
     .form-card {
@@ -366,6 +367,7 @@
       display: block;
       font-size: 1.2rem;
       margin-top: 4px;
+      overflow-wrap: anywhere;
     }
 
     .knob-grid {
@@ -373,6 +375,7 @@
       grid-template-columns: repeat(4,minmax(120px,1fr));
       gap: 18px;
       margin-top: 18px;
+      overflow: hidden;
     }
 
     .knob {
@@ -416,28 +419,6 @@
       font-weight: 800;
     }
 
-    .source-grid {
-      display: grid;
-      grid-template-columns: repeat(2,minmax(0,1fr));
-      gap: 14px;
-      margin-top: 14px;
-    }
-
-    .source-card {
-      padding: 18px;
-      background: rgba(0,0,0,.18);
-    }
-
-    .source-card a {
-      color: var(--accent);
-      font-weight: 800;
-      word-break: break-word;
-    }
-
-    .source-card.unavailable {
-      opacity: .75;
-    }
-
     .preset-grid {
       display: grid;
       gap: 12px;
@@ -451,20 +432,34 @@
       border-radius: 16px;
       background: rgba(143,227,176,.08);
       border: 1px solid rgba(143,227,176,.22);
+      min-width: 0;
+      overflow-wrap: anywhere;
+      word-break: normal;
     }
 
     .preset-link strong {
       color: var(--accent);
+      overflow-wrap: anywhere;
     }
 
     .preset-link span {
       color: var(--muted);
+      overflow-wrap: anywhere;
+      word-break: break-word;
     }
 
     .song-deep-dive-grid {
       display: grid;
       gap: 16px;
       margin-top: 18px;
+    }
+
+    .deep-dive-card,
+    .result-card,
+    .tone-label {
+      min-width: 0;
+      overflow-wrap: anywhere;
+      word-break: normal;
     }
 
     .deep-dive-card {
@@ -474,8 +469,10 @@
       border: 1px solid rgba(255, 255, 255, 0.1);
     }
 
-    .deep-dive-card h3 {
+    .deep-dive-card h3,
+    .result-card h3 {
       margin-bottom: 10px;
+      overflow-wrap: anywhere;
     }
 
     .deep-dive-card p {
@@ -493,46 +490,7 @@
       color: var(--accent);
       font-weight: 800;
       word-break: break-word;
-    }
-
-    .chord-toolbar {
-      display: flex;
-      gap: 12px;
-      align-items: end;
-      flex-wrap: wrap;
-      margin: 16px 0;
-    }
-
-    .chord-toolbar .field {
-      min-width: 180px;
-      margin-bottom: 0;
-    }
-
-    .chord-section-grid {
-      display: grid;
-      gap: 14px;
-      margin-top: 14px;
-    }
-
-    .chord-section {
-      padding: 16px;
-      border-radius: 16px;
-      background: rgba(143, 227, 176, 0.08);
-      border: 1px solid rgba(143, 227, 176, 0.18);
-    }
-
-    .chord-section strong {
-      display: block;
-      color: var(--gold);
-      margin-bottom: 10px;
-    }
-
-    .chord-line {
-      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
-      color: var(--text);
-      font-size: 1rem;
-      line-height: 1.8;
-      white-space: pre-wrap;
+      overflow-wrap: anywhere;
     }
 
     .notice-box {
@@ -542,30 +500,6 @@
       color: var(--muted);
       background: rgba(245, 212, 135, 0.08);
       border: 1px solid rgba(245, 212, 135, 0.18);
-    }
-
-    .tutorial-list {
-      display: grid;
-      gap: 12px;
-      margin-top: 12px;
-    }
-
-    .tutorial-link {
-      display: grid;
-      gap: 4px;
-      padding: 14px;
-      border-radius: 16px;
-      background: rgba(255, 255, 255, 0.055);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-    }
-
-    .tutorial-link strong {
-      color: var(--accent);
-    }
-
-    .tutorial-link span {
-      color: var(--muted);
-      font-size: 0.92rem;
     }
 
     footer {
@@ -581,8 +515,7 @@
         grid-template-columns: 1fr;
       }
 
-      .knob-grid,
-      .source-grid {
+      .knob-grid {
         grid-template-columns: repeat(2,minmax(120px,1fr));
       }
 
@@ -602,8 +535,7 @@
       }
 
       .tone-labels,
-      .knob-grid,
-      .source-grid {
+      .knob-grid {
         grid-template-columns: 1fr;
       }
 
@@ -640,8 +572,8 @@
         <h1 id="tone-title">Song DiveIn</h1>
         <p class="lead">
           Go deeper before you play a song. Search a song title or paste a YouTube link to explore meaning,
-          chord and lyric source links, guitar tutorials, transposable chords, and practical guitar tone settings
-          for your gear.
+          chord and lyric source links, a matching guitar tutorial when available, and practical guitar tone
+          settings for your gear.
           <a class="inline-try-link" href="#try-it">Try it!</a>
         </p>
       </div>
@@ -657,7 +589,7 @@
           <h2>From listening to preparing.</h2>
           <p class="lead">
             Designed for worship teams, guitar learners, and musicians who want context, sources,
-            tutorials, chord help, and starting tones in one place.
+            tutorials, and starting tones in one place.
           </p>
         </div>
       </aside>
@@ -671,7 +603,8 @@
             <h2 id="tone-demo-title">Dive into a song</h2>
             <p>
               Use a plain song title and artist, or paste a YouTube URL. Spotify links are not supported.
-              Full lyrics are not copied into the app; Song DiveIn links to public lyric sources when available.
+              Full lyrics and chord charts are not copied into the app; Song DiveIn links to matching public
+              sources when available.
             </p>
           </div>
 
@@ -769,181 +702,16 @@
       `;
     }
 
-    const CHROMATIC_KEYS = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
-
-    const FLAT_TO_SHARP = {
-      Db: 'C#',
-      Eb: 'D#',
-      Gb: 'F#',
-      Ab: 'G#',
-      Bb: 'A#'
-    };
-
-    let currentChordData = null;
-
-    function normalizeKeyName(key) {
-      if (!key) return '';
-
-      const cleaned = String(key)
-        .trim()
-        .replace('♭', 'b')
-        .replace('♯', '#');
-
-      const root = cleaned.match(/[A-G](#|b)?/i)?.[0];
-
-      if (!root) return '';
-
-      const formatted = root.charAt(0).toUpperCase() + root.slice(1);
-      return FLAT_TO_SHARP[formatted] || formatted;
-    }
-
-    function getKeyIndex(key) {
-      const normalized = normalizeKeyName(key);
-      return CHROMATIC_KEYS.indexOf(normalized);
-    }
-
-    function transposeChord(chord, semitones) {
-      return String(chord || '').replace(/[A-G](#|b)?/g, (match) => {
-        const normalized = FLAT_TO_SHARP[match] || match;
-        const index = CHROMATIC_KEYS.indexOf(normalized);
-
-        if (index === -1) return match;
-
-        return CHROMATIC_KEYS[(index + semitones + 120) % 12];
-      });
-    }
-
-    function transposeChordLine(line, semitones) {
-      return String(line || '')
-        .split(/\s+/)
-        .map((chord) => transposeChord(chord, semitones))
-        .join(' ');
-    }
-
-    function calculateCapo(originalKey, targetKey) {
-      const originalIndex = getKeyIndex(originalKey);
-      const targetIndex = getKeyIndex(targetKey);
-
-      if (originalIndex === -1 || targetIndex === -1) {
-        return 'Capo suggestion unavailable.';
-      }
-
-      const upDistance = (targetIndex - originalIndex + 12) % 12;
-      const downDistance = (originalIndex - targetIndex + 12) % 12;
-
-      if (upDistance === 0) {
-        return 'No capo needed for the original key.';
-      }
-
-      if (downDistance > 0 && downDistance <= 7) {
-        return `Optional capo idea: play in ${targetKey} shapes with capo ${downDistance}.`;
-      }
-
-      return `Transpose up ${upDistance} semitone${upDistance === 1 ? '' : 's'} from the original key.`;
-    }
-
-    function renderChordSections(chordData, selectedKey = '') {
-      if (!chordData || !Array.isArray(chordData.sections) || !chordData.sections.length) {
-        return `
-          <div class="notice-box">
-            Chords are not available for this song yet. Try the external chord source link if one was found.
-          </div>
-        `;
-      }
-
-      const originalKey = normalizeKeyName(chordData.original_key || chordData.key || '');
-      const targetKey = selectedKey || originalKey || 'C';
-
-      const originalIndex = getKeyIndex(originalKey);
-      const targetIndex = getKeyIndex(targetKey);
-
-      const semitones = originalIndex !== -1 && targetIndex !== -1
-        ? (targetIndex - originalIndex + 12) % 12
-        : 0;
-
-      const sectionsHtml = chordData.sections.map((section) => {
-        const lines = Array.isArray(section.chords) ? section.chords : [];
-        const transposedLines = lines.map((line) => transposeChordLine(line, semitones));
-
-        return `
-          <div class="chord-section">
-            <strong>${escapeHtml(section.name || 'Section')} Chords</strong>
-            <div class="chord-line">${escapeHtml(transposedLines.join('\n'))}</div>
-          </div>
-        `;
-      }).join('');
-
-      return `
-        <div class="chord-toolbar">
-          <div class="field">
-            <label for="transposeKey">Transpose to Key</label>
-            <select id="transposeKey">
-              ${CHROMATIC_KEYS.map((key) => `
-                <option value="${key}" ${key === targetKey ? 'selected' : ''}>${key}</option>
-              `).join('')}
-            </select>
-          </div>
-
-          <div class="notice-box">
-            ${escapeHtml(calculateCapo(originalKey, targetKey))}
-          </div>
-        </div>
-
-        <div class="chord-section-grid">
-          ${sectionsHtml}
-        </div>
-      `;
-    }
-
-    function bindTransposeControl() {
-      const transposeSelect = document.getElementById('transposeKey');
-      const chordContainer = document.getElementById('interactiveChords');
-
-      if (!transposeSelect || !chordContainer || !currentChordData) return;
-
-      transposeSelect.addEventListener('change', () => {
-        chordContainer.innerHTML = renderChordSections(currentChordData, transposeSelect.value);
-        bindTransposeControl();
-      });
-    }
-
-    function renderResourceLinks(resources = []) {
-      const safeResources = Array.isArray(resources)
-        ? resources.filter((item) => item && item.url)
-        : [];
-
-      if (!safeResources.length) {
-        return '<p class="hint">No external source link was found for this item.</p>';
+    function renderSingleLink(item, unavailableText) {
+      if (!item || !item.url || !item.validated_for_song) {
+        return `<p class="hint">${escapeHtml(unavailableText)}</p>`;
       }
 
       return `
         <div class="resource-links">
-          ${safeResources.map((item) => `
-            <a href="${escapeHtml(item.url)}" target="_blank" rel="noreferrer">
-              ${escapeHtml(item.label || item.source || item.url)}
-            </a>
-          `).join('')}
-        </div>
-      `;
-    }
-
-    function renderTutorialLinks(tutorials = []) {
-      const safeTutorials = Array.isArray(tutorials)
-        ? tutorials.filter((item) => item && item.url)
-        : [];
-
-      if (!safeTutorials.length) {
-        return '<p class="hint">No tutorial links were found. Try searching YouTube with the song title and artist.</p>';
-      }
-
-      return `
-        <div class="tutorial-list">
-          ${safeTutorials.map((item) => `
-            <a class="tutorial-link" href="${escapeHtml(item.url)}" target="_blank" rel="noreferrer">
-              <strong>${escapeHtml(item.title || 'Guitar tutorial')}</strong>
-              <span>${escapeHtml(item.source || 'External tutorial source')}</span>
-            </a>
-          `).join('')}
+          <a href="${escapeHtml(item.url)}" target="_blank" rel="noreferrer">
+            ${escapeHtml(item.label || item.source || item.url)}
+          </a>
         </div>
       `;
     }
@@ -990,13 +758,6 @@
     }
 
     function renderSongDeepDive(data) {
-      const chordData = data.chord_data || null;
-      currentChordData = chordData;
-
-      const lyricsResources = Array.isArray(data.lyrics_links) ? data.lyrics_links : [];
-      const chordResources = Array.isArray(data.chord_links) ? data.chord_links : [];
-      const tutorials = Array.isArray(data.tutorial_links) ? data.tutorial_links : [];
-
       const songMeaning =
         data.song_meaning ||
         data.meaning_summary ||
@@ -1018,30 +779,27 @@
             <span class="tag">Lyrics Source</span>
             <h3>Lyrics link</h3>
             <p>
-              For copyright reasons, full lyrics are not embedded here. Use the external source link when available.
+              Full lyrics are not embedded here. Use the external lyric source when a matching song page is found.
             </p>
-            ${renderResourceLinks(lyricsResources)}
+            ${renderSingleLink(data.lyrics_link, 'No verified lyrics link was found for this song.')}
           </div>
 
           <div class="deep-dive-card">
-            <span class="tag">Interactive Chords</span>
-            <h3>Verse, chorus, and bridge chords</h3>
+            <span class="tag">Chord Source</span>
+            <h3>Chord link</h3>
             <p>
-              These chords are a practice-friendly starting point. Always verify against the linked chord source when available.
+              Song DiveIn only shows a chord link when it appears to match the requested song.
             </p>
-            ${renderResourceLinks(chordResources)}
-            <div id="interactiveChords">
-              ${renderChordSections(chordData)}
-            </div>
+            ${renderSingleLink(data.chord_link, 'No verified chord link was found for this song.')}
           </div>
 
           <div class="deep-dive-card">
-            <span class="tag">Guitar Tutorials</span>
+            <span class="tag">Guitar Tutorial</span>
             <h3>Learn to play it</h3>
             <p>
-              Open external tutorials for walkthroughs, rhythm ideas, or worship guitar approaches.
+              Open a matching guitar tutorial when one is found.
             </p>
-            ${renderTutorialLinks(tutorials)}
+            ${renderSingleLink(data.tutorial_link, 'No verified guitar tutorial link was found for this song.')}
           </div>
         </div>
       `;
@@ -1144,7 +902,6 @@
           </div>
         `;
 
-        bindTransposeControl();
         setStatus(status, 'Song DiveIn results ready.');
       } catch (error) {
         setStatus(status, error.message, 'error');
