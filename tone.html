@@ -370,13 +370,12 @@
       overflow-wrap: anywhere;
     }
 
-    .knob-grid {
-      display: grid;
-      grid-template-columns: repeat(4,minmax(120px,1fr));
-      gap: 18px;
-      margin-top: 18px;
-      overflow: hidden;
-    }
+.knob-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(145px, 1fr));
+  gap: 16px;
+  margin-top: 20px;
+}
 
     .knob {
       display: grid;
@@ -633,6 +632,117 @@
 @media (max-width: 760px) {
   .resource-action-grid {
     grid-template-columns: 1fr;
+  }
+}
+    /* --- Song DiveIn result UI fixes --- */
+
+.results {
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+.result-card,
+.deep-dive-card,
+.app-panel {
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
+  padding: 22px;
+}
+
+.result-card + .result-card,
+.deep-dive-card + .deep-dive-card {
+  margin-top: 18px;
+}
+
+.result-card h3,
+.deep-dive-card h3 {
+  font-size: clamp(1.45rem, 4vw, 2.15rem);
+  line-height: 1.08;
+  overflow-wrap: anywhere;
+}
+
+.result-card p,
+.deep-dive-card p {
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  word-break: normal;
+}
+
+/* Fix knob cards overflowing horizontally */
+.knob-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(145px, 1fr));
+  gap: 16px;
+  width: 100%;
+  max-width: 100%;
+  overflow: visible;
+  margin-top: 20px;
+}
+
+.knob {
+  min-width: 0;
+  width: 100%;
+  padding: 18px 12px;
+}
+
+/* Make knob circles responsive */
+.dial {
+  width: clamp(72px, 18vw, 92px);
+  height: clamp(72px, 18vw, 92px);
+}
+
+.dial strong {
+  font-size: clamp(1rem, 3vw, 1.25rem);
+}
+
+/* Fix tone notes spacing */
+.result-card .knob-grid + p {
+  margin-top: 22px;
+  padding-top: 4px;
+  line-height: 1.7;
+}
+
+/* Fix preset card overflow */
+.preset-grid {
+  width: 100%;
+  max-width: 100%;
+  overflow: visible;
+}
+
+.preset-link {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  overflow: hidden;
+  overflow-wrap: anywhere;
+}
+
+.preset-link strong,
+.preset-link span {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+/* Phone polish */
+@media (max-width: 620px) {
+  .app-panel {
+    padding: 18px;
+  }
+
+  .result-card,
+  .deep-dive-card {
+    padding: 18px;
+  }
+
+  .knob-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .result-card h3,
+  .deep-dive-card h3 {
+    font-size: 1.55rem;
   }
 }
   </style>
