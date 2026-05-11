@@ -1,449 +1,1155 @@
-<script>
-const $ = (selector) => document.querySelector(selector);
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-const year = $('#year');
-if (year) year.textContent = new Date().getFullYear();
+  <meta
+    name="description"
+    content="Song DiveIn helps users understand a song, find chord and lyric source links, discover guitar tutorials, transpose chords, and create practical guitar tone settings."
+  />
 
-function escapeHtml(value) {
-  return String(value ?? '')
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#039;');
-}
+  <title>Song DiveIn | RootedByte</title>
 
-function setStatus(element, message, type = 'info', loading = false) {
-  if (!element) return;
-
-  element.className = type === 'error' ? 'status error' : 'status';
-  element.innerHTML = loading
-    ? `<span class="spinner" aria-hidden="true"></span><span>${escapeHtml(message)}</span>`
-    : escapeHtml(message);
-}
-
-async function postJson(url, body) {
-  const response = await fetch(url, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(body)
-  });
-
-  const data = await response.json().catch(() => ({}));
-
-  if (!response.ok) {
-    throw new Error(data.error || 'Something went wrong. Please try again.');
-  }
-
-  return data;
-}
-
-function renderKnob(label, value, max = 10) {
-  const number = Math.max(0, Math.min(max, Number(value) || 0));
-  const percent = max === 800 ? (number / 800) * 100 : (number / 10) * 100;
-  const display = max === 800 ? `${Math.round(number)}ms` : number.toFixed(1).replace('.0', '');
-
-  return `
-    <div class="knob">
-      <div class="dial" style="--value:${percent}">
-        <strong>${display}</strong>
-      </div>
-      <small>${escapeHtml(label)}</small>
-    </div>
-  `;
-}
-
-/* -----------------------------
-   Chord transpose helpers
------------------------------- */
-
-const CHROMATIC_KEYS = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
-
-const FLAT_TO_SHARP = {
-  Db: 'C#',
-  Eb: 'D#',
-  Gb: 'F#',
-  Ab: 'G#',
-  Bb: 'A#'
-};
-
-let currentChordData = null;
-
-function normalizeKeyName(key) {
-  if (!key) return '';
-
-  const cleaned = String(key)
-    .trim()
-    .replace('♭', 'b')
-    .replace('♯', '#');
-
-  const root = cleaned.match(/[A-G](#|b)?/i)?.[0];
-
-  if (!root) return '';
-
-  const formatted = root.charAt(0).toUpperCase() + root.slice(1);
-  return FLAT_TO_SHARP[formatted] || formatted;
-}
-
-function getKeyIndex(key) {
-  const normalized = normalizeKeyName(key);
-  return CHROMATIC_KEYS.indexOf(normalized);
-}
-
-function transposeChord(chord, semitones) {
-  return String(chord || '').replace(/[A-G](#|b)?/g, (match) => {
-    const normalized = FLAT_TO_SHARP[match] || match;
-    const index = CHROMATIC_KEYS.indexOf(normalized);
-
-    if (index === -1) return match;
-
-    return CHROMATIC_KEYS[(index + semitones + 120) % 12];
-  });
-}
-
-function transposeChordLine(line, semitones) {
-  return String(line || '')
-    .split(/\s+/)
-    .map((chord) => transposeChord(chord, semitones))
-    .join(' ');
-}
-
-function calculateCapo(originalKey, targetKey) {
-  const originalIndex = getKeyIndex(originalKey);
-  const targetIndex = getKeyIndex(targetKey);
-
-  if (originalIndex === -1 || targetIndex === -1) {
-    return 'Capo suggestion unavailable.';
-  }
-
-  const upDistance = (targetIndex - originalIndex + 12) % 12;
-  const downDistance = (originalIndex - targetIndex + 12) % 12;
-
-  if (upDistance === 0) {
-    return 'No capo needed for the original key.';
-  }
-
-  if (downDistance > 0 && downDistance <= 7) {
-    return `Optional capo idea: play in ${targetKey} shapes with capo ${downDistance}.`;
-  }
-
-  return `Transpose up ${upDistance} semitone${upDistance === 1 ? '' : 's'} from the original key.`;
-}
-
-function renderChordSections(chordData, selectedKey = '') {
-  if (!chordData || !Array.isArray(chordData.sections) || !chordData.sections.length) {
-    return `
-      <div class="notice-box">
-        Chords are not available for this song yet. Try the external chord source link if one was found.
-      </div>
-    `;
-  }
-
-  const originalKey = normalizeKeyName(chordData.original_key || chordData.key || '');
-  const targetKey = selectedKey || originalKey || 'C';
-
-  const originalIndex = getKeyIndex(originalKey);
-  const targetIndex = getKeyIndex(targetKey);
-
-  const semitones = originalIndex !== -1 && targetIndex !== -1
-    ? (targetIndex - originalIndex + 12) % 12
-    : 0;
-
-  const sectionsHtml = chordData.sections.map((section) => {
-    const lines = Array.isArray(section.chords) ? section.chords : [];
-    const transposedLines = lines.map((line) => transposeChordLine(line, semitones));
-
-    return `
-      <div class="chord-section">
-        <strong>${escapeHtml(section.name || 'Section')} Chords</strong>
-        <div class="chord-line">${escapeHtml(transposedLines.join('\n'))}</div>
-      </div>
-    `;
-  }).join('');
-
-  return `
-    <div class="chord-toolbar">
-      <div class="field">
-        <label for="transposeKey">Transpose to Key</label>
-        <select id="transposeKey">
-          ${CHROMATIC_KEYS.map((key) => `
-            <option value="${key}" ${key === targetKey ? 'selected' : ''}>${key}</option>
-          `).join('')}
-        </select>
-      </div>
-
-      <div class="notice-box">
-        ${escapeHtml(calculateCapo(originalKey, targetKey))}
-      </div>
-    </div>
-
-    <div class="chord-section-grid">
-      ${sectionsHtml}
-    </div>
-  `;
-}
-
-function bindTransposeControl() {
-  const transposeSelect = document.getElementById('transposeKey');
-  const chordContainer = document.getElementById('interactiveChords');
-
-  if (!transposeSelect || !chordContainer || !currentChordData) return;
-
-  transposeSelect.addEventListener('change', () => {
-    chordContainer.innerHTML = renderChordSections(currentChordData, transposeSelect.value);
-    bindTransposeControl();
-  });
-}
-
-/* -----------------------------
-   Resource render helpers
------------------------------- */
-
-function renderResourceLinks(resources = []) {
-  const safeResources = Array.isArray(resources)
-    ? resources.filter((item) => item && item.url)
-    : [];
-
-  if (!safeResources.length) {
-    return '<p class="hint">No external source link was found for this item.</p>';
-  }
-
-  return `
-    <div class="resource-links">
-      ${safeResources.map((item) => `
-        <a href="${escapeHtml(item.url)}" target="_blank" rel="noreferrer">
-          ${escapeHtml(item.label || item.source || item.url)}
-        </a>
-      `).join('')}
-    </div>
-  `;
-}
-
-function renderTutorialLinks(tutorials = []) {
-  const safeTutorials = Array.isArray(tutorials)
-    ? tutorials.filter((item) => item && item.url)
-    : [];
-
-  if (!safeTutorials.length) {
-    return '<p class="hint">No tutorial links were found. Try searching YouTube with the song title and artist.</p>';
-  }
-
-  return `
-    <div class="tutorial-list">
-      ${safeTutorials.map((item) => `
-        <a class="tutorial-link" href="${escapeHtml(item.url)}" target="_blank" rel="noreferrer">
-          <strong>${escapeHtml(item.title || 'Guitar tutorial')}</strong>
-          <span>${escapeHtml(item.source || 'External tutorial source')}</span>
-        </a>
-      `).join('')}
-    </div>
-  `;
-}
-
-function buildPresetLinks(data, gear, originalInput = '') {
-  const song = data.song || '';
-  const artist = data.artist || '';
-
-  const terms = `
-    ${originalInput && !/^https?:\/\//i.test(originalInput) ? originalInput : ''}
-    ${song}
-    ${artist}
-    ${gear}
-  `.replace(/\s+/g, ' ').trim();
-
-  const searches = [
-    {
-      label: 'Official or vendor preset search',
-      note: 'Searches public results for presets related to this song and gear.',
-      query: `${terms} official guitar preset patch download`
-    },
-    {
-      label: 'Community preset search',
-      note: 'Searches public results for shared patches and community tone ideas.',
-      query: `${terms} community guitar preset patch download`
-    },
-    {
-      label: 'Worship tone search',
-      note: 'Searches worship-focused tone sources and preset vendors.',
-      query: `${terms} worship guitar tone preset`
+  <style>
+    :root {
+      --bg: #07140f;
+      --card: rgba(255,255,255,.075);
+      --text: #f4fbf6;
+      --muted: #bfd2c7;
+      --line: rgba(255,255,255,.16);
+      --accent: #8fe3b0;
+      --gold: #f5d487;
+      --danger: #ffb4a8;
+      --shadow: 0 24px 80px rgba(0,0,0,.35);
+      --radius: 24px;
+      --max: 1180px;
     }
-  ];
 
-  return searches.map((item) => {
-    const url = `https://www.google.com/search?q=${encodeURIComponent(item.query)}`;
+    * {
+      box-sizing: border-box;
+    }
 
-    return `
-      <a class="preset-link" href="${url}" target="_blank" rel="noreferrer">
-        <strong>${escapeHtml(item.label)}</strong>
-        <span>${escapeHtml(item.note)}</span>
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(82,201,137,.24), transparent 32rem),
+        radial-gradient(circle at 85% 15%, rgba(245,212,135,.12), transparent 28rem),
+        linear-gradient(135deg,#06110d 0%,#07140f 45%,#0d2118 100%);
+      line-height: 1.6;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button,
+    input,
+    select {
+      font: inherit;
+    }
+
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(18px);
+      background: rgba(7,20,15,.82);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .nav {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 16px 22px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 800;
+      letter-spacing: -.04em;
+      font-size: 1.15rem;
+    }
+
+    .brand-mark {
+      width: 38px;
+      height: 38px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      color: #06110d;
+      background: linear-gradient(135deg,var(--accent),var(--gold));
+      font-weight: 900;
+      box-shadow: 0 14px 34px rgba(82,201,137,.25);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .nav-links a {
+      color: var(--muted);
+      padding: 9px 12px;
+      border-radius: 999px;
+      transition: background .18s ease,color .18s ease;
+      font-size: .95rem;
+    }
+
+    .nav-links a:hover,
+    .nav-links a.active {
+      color: var(--text);
+      background: rgba(255,255,255,.09);
+    }
+
+    .section {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 86px 22px;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0,1.05fr) minmax(320px,.95fr);
+      align-items: center;
+      gap: 44px;
+      min-height: 72vh;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      gap: 8px;
+      align-items: center;
+      color: var(--accent);
+      background: rgba(143,227,176,.1);
+      border: 1px solid rgba(143,227,176,.22);
+      border-radius: 999px;
+      padding: 8px 12px;
+      font-size: .9rem;
+      font-weight: 700;
+    }
+
+    h1,
+    h2,
+    h3 {
+      line-height: 1.05;
+      margin: 0;
+      letter-spacing: -.05em;
+    }
+
+    h1 {
+      font-size: clamp(3.1rem,8vw,6.8rem);
+      max-width: 850px;
+      margin-top: 24px;
+    }
+
+    h2 {
+      font-size: clamp(2.1rem,5vw,4rem);
+    }
+
+    h3 {
+      font-size: clamp(1.35rem,3vw,2rem);
+    }
+
+    .lead {
+      color: var(--muted);
+      font-size: clamp(1.08rem,2vw,1.28rem);
+      max-width: 760px;
+      margin: 24px 0 0;
+    }
+
+    .inline-try-link {
+      display: inline-flex;
+      margin-left: 6px;
+      color: var(--accent);
+      font-weight: 900;
+      border-bottom: 1px solid rgba(143, 227, 176, 0.45);
+    }
+
+    .inline-try-link:hover,
+    .inline-try-link:focus-visible {
+      color: var(--gold);
+      border-bottom-color: var(--gold);
+      outline: none;
+    }
+
+    .hero-card,
+    .app-panel,
+    .form-card,
+    .result-card,
+    .tone-label,
+    .source-card {
+      border-radius: var(--radius);
+      background: var(--card);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+    }
+
+    .hero-card {
+      padding: 0;
+      overflow: hidden;
+    }
+
+    .hero-card img {
+      width: 100%;
+      height: 360px;
+      object-fit: cover;
+      display: block;
+    }
+
+    .hero-card-content {
+      padding: 24px;
+    }
+
+    .tag {
+      display: inline-flex;
+      color: var(--gold);
+      font-weight: 800;
+      font-size: .82rem;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      margin-bottom: 12px;
+    }
+
+    .app-panel {
+      padding: 28px;
+      margin-top: 24px;
+    }
+
+    .app-top {
+      display: grid;
+      grid-template-columns: minmax(0,.95fr) minmax(300px,.8fr);
+      gap: 26px;
+      align-items: start;
+    }
+
+    .app-copy p,
+    .result-card p,
+    .source-card p {
+      color: var(--muted);
+      margin: 16px 0 0;
+    }
+
+    .form-card {
+      padding: 22px;
+      background: rgba(255,255,255,.07);
+    }
+
+    .field {
+      display: grid;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    label {
+      color: var(--text);
+      font-weight: 800;
+    }
+
+    input,
+    select {
+      width: 100%;
+      color: var(--text);
+      background: rgba(0,0,0,.28);
+      border: 1px solid rgba(255,255,255,.14);
+      border-radius: 14px;
+      padding: 13px 14px;
+      outline: none;
+    }
+
+    input:focus,
+    select:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 4px rgba(143,227,176,.12);
+    }
+
+    .hint {
+      color: var(--muted);
+      font-size: .92rem;
+    }
+
+    .btn {
+      border: 0;
+      cursor: pointer;
+      border-radius: 999px;
+      padding: 13px 18px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      min-height: 48px;
+      background: rgba(255,255,255,.1);
+      color: var(--text);
+      border: 1px solid rgba(255,255,255,.14);
+      font-weight: 800;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      background: rgba(255,255,255,.15);
+    }
+
+    .btn.primary {
+      color: #05110b;
+      background: linear-gradient(135deg,var(--accent),var(--gold));
+      border: 0;
+    }
+
+    .status {
+      min-height: 24px;
+      margin-top: 14px;
+      color: var(--accent);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .status.error {
+      color: var(--danger);
+    }
+
+    .spinner {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      border: 2px solid rgba(255,255,255,.24);
+      border-top-color: var(--accent);
+      animation: spin .8s linear infinite;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .results {
+      margin-top: 24px;
+    }
+
+    .tone-labels {
+      display: grid;
+      grid-template-columns: repeat(2,minmax(0,1fr));
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+
+    .tone-label {
+      padding: 18px;
+      background: rgba(0,0,0,.18);
+    }
+
+    .tone-label span {
+      color: var(--muted);
+      display: block;
+      font-size: .88rem;
+    }
+
+    .tone-label strong {
+      display: block;
+      font-size: 1.2rem;
+      margin-top: 4px;
+    }
+
+    .knob-grid {
+      display: grid;
+      grid-template-columns: repeat(4,minmax(120px,1fr));
+      gap: 18px;
+      margin-top: 18px;
+    }
+
+    .knob {
+      display: grid;
+      place-items: center;
+      gap: 9px;
+      padding: 18px 12px;
+      border-radius: 20px;
+      background: rgba(0,0,0,.18);
+      border: 1px solid rgba(255,255,255,.1);
+      text-align: center;
+    }
+
+    .dial {
+      --value: 0;
+      width: 92px;
+      height: 92px;
+      border-radius: 50%;
+      background: conic-gradient(var(--accent) calc(var(--value)*1%),rgba(255,255,255,.12) 0);
+      display: grid;
+      place-items: center;
+      position: relative;
+    }
+
+    .dial::after {
+      content: '';
+      position: absolute;
+      inset: 10px;
+      border-radius: 50%;
+      background: #0a1711;
+      border: 1px solid rgba(255,255,255,.1);
+    }
+
+    .dial strong {
+      z-index: 1;
+      font-size: 1.25rem;
+    }
+
+    .knob small {
+      color: var(--muted);
+      font-weight: 800;
+    }
+
+    .source-grid {
+      display: grid;
+      grid-template-columns: repeat(2,minmax(0,1fr));
+      gap: 14px;
+      margin-top: 14px;
+    }
+
+    .source-card {
+      padding: 18px;
+      background: rgba(0,0,0,.18);
+    }
+
+    .source-card a {
+      color: var(--accent);
+      font-weight: 800;
+      word-break: break-word;
+    }
+
+    .source-card.unavailable {
+      opacity: .75;
+    }
+
+    .preset-grid {
+      display: grid;
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .preset-link {
+      display: grid;
+      gap: 6px;
+      padding: 16px;
+      border-radius: 16px;
+      background: rgba(143,227,176,.08);
+      border: 1px solid rgba(143,227,176,.22);
+    }
+
+    .preset-link strong {
+      color: var(--accent);
+    }
+
+    .preset-link span {
+      color: var(--muted);
+    }
+
+    .song-deep-dive-grid {
+      display: grid;
+      gap: 16px;
+      margin-top: 18px;
+    }
+
+    .deep-dive-card {
+      padding: 20px;
+      border-radius: 20px;
+      background: rgba(0, 0, 0, 0.18);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .deep-dive-card h3 {
+      margin-bottom: 10px;
+    }
+
+    .deep-dive-card p {
+      color: var(--muted);
+      margin: 8px 0 0;
+    }
+
+    .resource-links {
+      display: grid;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .resource-links a {
+      color: var(--accent);
+      font-weight: 800;
+      word-break: break-word;
+    }
+
+    .chord-toolbar {
+      display: flex;
+      gap: 12px;
+      align-items: end;
+      flex-wrap: wrap;
+      margin: 16px 0;
+    }
+
+    .chord-toolbar .field {
+      min-width: 180px;
+      margin-bottom: 0;
+    }
+
+    .chord-section-grid {
+      display: grid;
+      gap: 14px;
+      margin-top: 14px;
+    }
+
+    .chord-section {
+      padding: 16px;
+      border-radius: 16px;
+      background: rgba(143, 227, 176, 0.08);
+      border: 1px solid rgba(143, 227, 176, 0.18);
+    }
+
+    .chord-section strong {
+      display: block;
+      color: var(--gold);
+      margin-bottom: 10px;
+    }
+
+    .chord-line {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      color: var(--text);
+      font-size: 1rem;
+      line-height: 1.8;
+      white-space: pre-wrap;
+    }
+
+    .notice-box {
+      margin-top: 12px;
+      padding: 14px;
+      border-radius: 16px;
+      color: var(--muted);
+      background: rgba(245, 212, 135, 0.08);
+      border: 1px solid rgba(245, 212, 135, 0.18);
+    }
+
+    .tutorial-list {
+      display: grid;
+      gap: 12px;
+      margin-top: 12px;
+    }
+
+    .tutorial-link {
+      display: grid;
+      gap: 4px;
+      padding: 14px;
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.055);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .tutorial-link strong {
+      color: var(--accent);
+    }
+
+    .tutorial-link span {
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    footer {
+      border-top: 1px solid var(--line);
+      text-align: center;
+      color: var(--muted);
+      padding: 28px 20px 40px;
+    }
+
+    @media(max-width: 920px) {
+      .hero,
+      .app-top {
+        grid-template-columns: 1fr;
+      }
+
+      .knob-grid,
+      .source-grid {
+        grid-template-columns: repeat(2,minmax(120px,1fr));
+      }
+
+      .section {
+        padding: 62px 18px;
+      }
+    }
+
+    @media(max-width: 620px) {
+      .nav {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .nav-links {
+        justify-content: flex-start;
+      }
+
+      .tone-labels,
+      .knob-grid,
+      .source-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hero {
+        min-height: auto;
+        padding-top: 54px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header class="site-header">
+    <nav class="nav" aria-label="Primary navigation">
+      <a class="brand" href="index.html" aria-label="RootedByte home">
+        <span class="brand-mark">R</span>
+        <span>RootedByte</span>
       </a>
-    `;
-  }).join('');
-}
 
-function renderSongDeepDive(data) {
-  const chordData = data.chord_data || null;
-  currentChordData = chordData;
+      <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="tone.html" class="active">Song DiveIn</a>
+        <a href="newsverse.html">NewsVerse</a>
+        <a href="rootedos.html">RootedOS</a>
+        <a href="index.html#contact">Contact</a>
+      </div>
+    </nav>
+  </header>
 
-  const lyricsResources = Array.isArray(data.lyrics_links) ? data.lyrics_links : [];
-  const chordResources = Array.isArray(data.chord_links) ? data.chord_links : [];
-  const tutorials = Array.isArray(data.tutorial_links) ? data.tutorial_links : [];
-
-  const songMeaning =
-    data.song_meaning ||
-    data.meaning_summary ||
-    'Song meaning is not available yet.';
-
-  return `
-    <div class="song-deep-dive-grid">
-      <div class="deep-dive-card">
-        <span class="tag">Song Meaning</span>
-        <h3>What the song is about</h3>
-        <p>${escapeHtml(songMeaning)}</p>
-        <p class="hint">
-          This is AI-generated from public context when available. If public context is limited,
-          it may be an interpretation and should be verified with official artist notes when possible.
+  <main id="top">
+    <section class="section hero" aria-labelledby="tone-title">
+      <div>
+        <span class="eyebrow">App 1 • Music Tech</span>
+        <h1 id="tone-title">Song DiveIn</h1>
+        <p class="lead">
+          Go deeper before you play a song. Search a song title or paste a YouTube link to explore meaning,
+          chord and lyric source links, guitar tutorials, transposable chords, and practical guitar tone settings
+          for your gear.
+          <a class="inline-try-link" href="#try-it">Try it!</a>
         </p>
       </div>
 
-      <div class="deep-dive-card">
-        <span class="tag">Lyrics Source</span>
-        <h3>Lyrics link</h3>
-        <p>
-          For copyright reasons, full lyrics are not embedded here. Use the external source link when available.
-        </p>
-        ${renderResourceLinks(lyricsResources)}
-      </div>
+      <aside class="hero-card">
+        <img
+          src="https://images.unsplash.com/photo-1516924962500-2b4b3b99ea02?auto=format&fit=crop&w=1200&q=80"
+          alt="Electric guitar in a modern music setup"
+        />
 
-      <div class="deep-dive-card">
-        <span class="tag">Interactive Chords</span>
-        <h3>Verse, chorus, and bridge chords</h3>
-        <p>
-          These chords are a practice-friendly starting point. Always verify against the linked chord source when available.
-        </p>
-        ${renderResourceLinks(chordResources)}
-        <div id="interactiveChords">
-          ${renderChordSections(chordData)}
+        <div class="hero-card-content">
+          <span class="tag">Song meaning + tone</span>
+          <h2>From listening to preparing.</h2>
+          <p class="lead">
+            Designed for worship teams, guitar learners, and musicians who want context, sources,
+            tutorials, chord help, and starting tones in one place.
+          </p>
         </div>
-      </div>
+      </aside>
+    </section>
 
-      <div class="deep-dive-card">
-        <span class="tag">Guitar Tutorials</span>
-        <h3>Learn to play it</h3>
-        <p>
-          Open external tutorials for walkthroughs, rhythm ideas, or worship guitar approaches.
-        </p>
-        ${renderTutorialLinks(tutorials)}
-      </div>
-    </div>
-  `;
-}
+    <section class="section" id="try-it">
+      <article class="app-panel" aria-labelledby="tone-demo-title">
+        <div class="app-top">
+          <div class="app-copy">
+            <span class="tag">Try it</span>
+            <h2 id="tone-demo-title">Dive into a song</h2>
+            <p>
+              Use a plain song title and artist, or paste a YouTube URL. Spotify links are not supported.
+              Full lyrics are not copied into the app; Song DiveIn links to public lyric sources when available.
+            </p>
+          </div>
 
-/* -----------------------------
-   Main Song DiveIn submit
------------------------------- */
+          <form class="form-card" id="toneForm">
+            <div class="field">
+              <label for="songInput">Song name and artist, or YouTube link</label>
+              <input
+                id="songInput"
+                name="songInput"
+                type="text"
+                placeholder="Who Else - Gateway Worship feat. Abbie Gamboa"
+                required
+              />
+              <p class="hint">Example: song title + artist works best. YouTube links are used to read the video title.</p>
+            </div>
 
-$('#toneForm').addEventListener('submit', async (event) => {
-  event.preventDefault();
+            <div class="field">
+              <label for="gearSelect">Gear</label>
+              <select id="gearSelect" name="gear" required>
+                <option value="Line 6 HX Stomp">Line 6 HX Stomp</option>
+                <option value="Line 6 POD Go">Line 6 POD Go</option>
+                <option value="Boss GT-1000">Boss GT-1000</option>
+                <option value="Helix Floor">Helix Floor</option>
+                <option value="Fractal FM3">Fractal FM3</option>
+                <option value="Neural DSP Quad Cortex">Neural DSP Quad Cortex</option>
+              </select>
+            </div>
 
-  const songInput = $('#songInput').value.trim();
-  const gear = $('#gearSelect').value;
-  const status = $('#toneStatus');
-  const result = $('#toneResult');
-
-  result.innerHTML = '';
-
-  if (!songInput) {
-    setStatus(status, 'Please enter a song name or YouTube link.', 'error');
-    return;
-  }
-
-  if (/open\.spotify\.com\/track\//i.test(songInput)) {
-    setStatus(status, 'Spotify links are not supported. Please type the song name and artist, or paste a YouTube link.', 'error');
-    return;
-  }
-
-  setStatus(status, 'Researching the song and building your Song DiveIn results...', 'info', true);
-
-  try {
-    const data = await postJson('/api/tone', { songInput, gear });
-
-    result.innerHTML = `
-      <div class="tone-labels">
-        <div class="tone-label">
-          <span>Song</span>
-          <strong>${escapeHtml(data.song)}${data.artist ? ' - ' + escapeHtml(data.artist) : ''}</strong>
+            <button class="btn primary" type="submit">Dive in</button>
+            <div class="status" id="toneStatus" role="status" aria-live="polite"></div>
+          </form>
         </div>
 
-        <div class="tone-label">
-          <span>Gear</span>
-          <strong>${escapeHtml(gear)}</strong>
+        <div class="results" id="toneResult" aria-live="polite"></div>
+      </article>
+    </section>
+  </main>
+
+  <footer>
+    <p>© <span id="year"></span> RootedByte. Built for digital wisdom rooted in truth.</p>
+  </footer>
+
+  <script>
+    const $ = (selector) => document.querySelector(selector);
+
+    const year = $('#year');
+    if (year) year.textContent = new Date().getFullYear();
+
+    function escapeHtml(value) {
+      return String(value ?? '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    function setStatus(element, message, type = 'info', loading = false) {
+      if (!element) return;
+
+      element.className = type === 'error' ? 'status error' : 'status';
+      element.innerHTML = loading
+        ? `<span class="spinner" aria-hidden="true"></span><span>${escapeHtml(message)}</span>`
+        : escapeHtml(message);
+    }
+
+    async function postJson(url, body) {
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body)
+      });
+
+      const data = await response.json().catch(() => ({}));
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Something went wrong. Please try again.');
+      }
+
+      return data;
+    }
+
+    function renderKnob(label, value, max = 10) {
+      const number = Math.max(0, Math.min(max, Number(value) || 0));
+      const percent = max === 800 ? (number / 800) * 100 : (number / 10) * 100;
+      const display = max === 800 ? `${Math.round(number)}ms` : number.toFixed(1).replace('.0', '');
+
+      return `
+        <div class="knob">
+          <div class="dial" style="--value:${percent}">
+            <strong>${display}</strong>
+          </div>
+          <small>${escapeHtml(label)}</small>
+        </div>
+      `;
+    }
+
+    const CHROMATIC_KEYS = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
+
+    const FLAT_TO_SHARP = {
+      Db: 'C#',
+      Eb: 'D#',
+      Gb: 'F#',
+      Ab: 'G#',
+      Bb: 'A#'
+    };
+
+    let currentChordData = null;
+
+    function normalizeKeyName(key) {
+      if (!key) return '';
+
+      const cleaned = String(key)
+        .trim()
+        .replace('♭', 'b')
+        .replace('♯', '#');
+
+      const root = cleaned.match(/[A-G](#|b)?/i)?.[0];
+
+      if (!root) return '';
+
+      const formatted = root.charAt(0).toUpperCase() + root.slice(1);
+      return FLAT_TO_SHARP[formatted] || formatted;
+    }
+
+    function getKeyIndex(key) {
+      const normalized = normalizeKeyName(key);
+      return CHROMATIC_KEYS.indexOf(normalized);
+    }
+
+    function transposeChord(chord, semitones) {
+      return String(chord || '').replace(/[A-G](#|b)?/g, (match) => {
+        const normalized = FLAT_TO_SHARP[match] || match;
+        const index = CHROMATIC_KEYS.indexOf(normalized);
+
+        if (index === -1) return match;
+
+        return CHROMATIC_KEYS[(index + semitones + 120) % 12];
+      });
+    }
+
+    function transposeChordLine(line, semitones) {
+      return String(line || '')
+        .split(/\s+/)
+        .map((chord) => transposeChord(chord, semitones))
+        .join(' ');
+    }
+
+    function calculateCapo(originalKey, targetKey) {
+      const originalIndex = getKeyIndex(originalKey);
+      const targetIndex = getKeyIndex(targetKey);
+
+      if (originalIndex === -1 || targetIndex === -1) {
+        return 'Capo suggestion unavailable.';
+      }
+
+      const upDistance = (targetIndex - originalIndex + 12) % 12;
+      const downDistance = (originalIndex - targetIndex + 12) % 12;
+
+      if (upDistance === 0) {
+        return 'No capo needed for the original key.';
+      }
+
+      if (downDistance > 0 && downDistance <= 7) {
+        return `Optional capo idea: play in ${targetKey} shapes with capo ${downDistance}.`;
+      }
+
+      return `Transpose up ${upDistance} semitone${upDistance === 1 ? '' : 's'} from the original key.`;
+    }
+
+    function renderChordSections(chordData, selectedKey = '') {
+      if (!chordData || !Array.isArray(chordData.sections) || !chordData.sections.length) {
+        return `
+          <div class="notice-box">
+            Chords are not available for this song yet. Try the external chord source link if one was found.
+          </div>
+        `;
+      }
+
+      const originalKey = normalizeKeyName(chordData.original_key || chordData.key || '');
+      const targetKey = selectedKey || originalKey || 'C';
+
+      const originalIndex = getKeyIndex(originalKey);
+      const targetIndex = getKeyIndex(targetKey);
+
+      const semitones = originalIndex !== -1 && targetIndex !== -1
+        ? (targetIndex - originalIndex + 12) % 12
+        : 0;
+
+      const sectionsHtml = chordData.sections.map((section) => {
+        const lines = Array.isArray(section.chords) ? section.chords : [];
+        const transposedLines = lines.map((line) => transposeChordLine(line, semitones));
+
+        return `
+          <div class="chord-section">
+            <strong>${escapeHtml(section.name || 'Section')} Chords</strong>
+            <div class="chord-line">${escapeHtml(transposedLines.join('\n'))}</div>
+          </div>
+        `;
+      }).join('');
+
+      return `
+        <div class="chord-toolbar">
+          <div class="field">
+            <label for="transposeKey">Transpose to Key</label>
+            <select id="transposeKey">
+              ${CHROMATIC_KEYS.map((key) => `
+                <option value="${key}" ${key === targetKey ? 'selected' : ''}>${key}</option>
+              `).join('')}
+            </select>
+          </div>
+
+          <div class="notice-box">
+            ${escapeHtml(calculateCapo(originalKey, targetKey))}
+          </div>
         </div>
 
-        <div class="tone-label">
-          <span>BPM</span>
-          <strong>${data.bpm ? escapeHtml(data.bpm) : 'Unknown'}</strong>
+        <div class="chord-section-grid">
+          ${sectionsHtml}
         </div>
+      `;
+    }
 
-        <div class="tone-label">
-          <span>Key</span>
-          <strong>${escapeHtml(data.key || 'Unknown')}</strong>
+    function bindTransposeControl() {
+      const transposeSelect = document.getElementById('transposeKey');
+      const chordContainer = document.getElementById('interactiveChords');
+
+      if (!transposeSelect || !chordContainer || !currentChordData) return;
+
+      transposeSelect.addEventListener('change', () => {
+        chordContainer.innerHTML = renderChordSections(currentChordData, transposeSelect.value);
+        bindTransposeControl();
+      });
+    }
+
+    function renderResourceLinks(resources = []) {
+      const safeResources = Array.isArray(resources)
+        ? resources.filter((item) => item && item.url)
+        : [];
+
+      if (!safeResources.length) {
+        return '<p class="hint">No external source link was found for this item.</p>';
+      }
+
+      return `
+        <div class="resource-links">
+          ${safeResources.map((item) => `
+            <a href="${escapeHtml(item.url)}" target="_blank" rel="noreferrer">
+              ${escapeHtml(item.label || item.source || item.url)}
+            </a>
+          `).join('')}
         </div>
+      `;
+    }
 
-        <div class="tone-label">
-          <span>Confidence</span>
-          <strong>${escapeHtml(data.metadata_confidence || 'low')}</strong>
+    function renderTutorialLinks(tutorials = []) {
+      const safeTutorials = Array.isArray(tutorials)
+        ? tutorials.filter((item) => item && item.url)
+        : [];
+
+      if (!safeTutorials.length) {
+        return '<p class="hint">No tutorial links were found. Try searching YouTube with the song title and artist.</p>';
+      }
+
+      return `
+        <div class="tutorial-list">
+          ${safeTutorials.map((item) => `
+            <a class="tutorial-link" href="${escapeHtml(item.url)}" target="_blank" rel="noreferrer">
+              <strong>${escapeHtml(item.title || 'Guitar tutorial')}</strong>
+              <span>${escapeHtml(item.source || 'External tutorial source')}</span>
+            </a>
+          `).join('')}
         </div>
+      `;
+    }
 
-        <div class="tone-label">
-          <span>Amp model</span>
-          <strong>${escapeHtml(data.amp_model || 'Not available')}</strong>
+    function buildPresetLinks(data, gear, originalInput = '') {
+      const song = data.song || '';
+      const artist = data.artist || '';
+
+      const terms = `
+        ${originalInput && !/^https?:\/\//i.test(originalInput) ? originalInput : ''}
+        ${song}
+        ${artist}
+        ${gear}
+      `.replace(/\s+/g, ' ').trim();
+
+      const searches = [
+        {
+          label: 'Official or vendor preset search',
+          note: 'Searches public results for presets related to this song and gear.',
+          query: `${terms} official guitar preset patch download`
+        },
+        {
+          label: 'Community preset search',
+          note: 'Searches public results for shared patches and community tone ideas.',
+          query: `${terms} community guitar preset patch download`
+        },
+        {
+          label: 'Worship tone search',
+          note: 'Searches worship-focused tone sources and preset vendors.',
+          query: `${terms} worship guitar tone preset`
+        }
+      ];
+
+      return searches.map((item) => {
+        const url = `https://www.google.com/search?q=${encodeURIComponent(item.query)}`;
+
+        return `
+          <a class="preset-link" href="${url}" target="_blank" rel="noreferrer">
+            <strong>${escapeHtml(item.label)}</strong>
+            <span>${escapeHtml(item.note)}</span>
+          </a>
+        `;
+      }).join('');
+    }
+
+    function renderSongDeepDive(data) {
+      const chordData = data.chord_data || null;
+      currentChordData = chordData;
+
+      const lyricsResources = Array.isArray(data.lyrics_links) ? data.lyrics_links : [];
+      const chordResources = Array.isArray(data.chord_links) ? data.chord_links : [];
+      const tutorials = Array.isArray(data.tutorial_links) ? data.tutorial_links : [];
+
+      const songMeaning =
+        data.song_meaning ||
+        data.meaning_summary ||
+        'Song meaning is not available yet.';
+
+      return `
+        <div class="song-deep-dive-grid">
+          <div class="deep-dive-card">
+            <span class="tag">Song Meaning</span>
+            <h3>What the song is about</h3>
+            <p>${escapeHtml(songMeaning)}</p>
+            <p class="hint">
+              This is AI-generated from public context when available. If public context is limited,
+              it may be an interpretation and should be verified with official artist notes when possible.
+            </p>
+          </div>
+
+          <div class="deep-dive-card">
+            <span class="tag">Lyrics Source</span>
+            <h3>Lyrics link</h3>
+            <p>
+              For copyright reasons, full lyrics are not embedded here. Use the external source link when available.
+            </p>
+            ${renderResourceLinks(lyricsResources)}
+          </div>
+
+          <div class="deep-dive-card">
+            <span class="tag">Interactive Chords</span>
+            <h3>Verse, chorus, and bridge chords</h3>
+            <p>
+              These chords are a practice-friendly starting point. Always verify against the linked chord source when available.
+            </p>
+            ${renderResourceLinks(chordResources)}
+            <div id="interactiveChords">
+              ${renderChordSections(chordData)}
+            </div>
+          </div>
+
+          <div class="deep-dive-card">
+            <span class="tag">Guitar Tutorials</span>
+            <h3>Learn to play it</h3>
+            <p>
+              Open external tutorials for walkthroughs, rhythm ideas, or worship guitar approaches.
+            </p>
+            ${renderTutorialLinks(tutorials)}
+          </div>
         </div>
+      `;
+    }
 
-        <div class="tone-label">
-          <span>Cab</span>
-          <strong>${escapeHtml(data.cab || 'Not available')}</strong>
-        </div>
-      </div>
+    $('#toneForm').addEventListener('submit', async (event) => {
+      event.preventDefault();
 
-      ${renderSongDeepDive(data)}
+      const songInput = $('#songInput').value.trim();
+      const gear = $('#gearSelect').value;
+      const status = $('#toneStatus');
+      const result = $('#toneResult');
 
-      <div class="result-card">
-        <span class="tag">Tone Settings</span>
-        <h3>Starting-point guitar tone</h3>
+      result.innerHTML = '';
 
-        <div class="knob-grid">
-          ${renderKnob('Gain', data.gain)}
-          ${renderKnob('Bass', data.bass)}
-          ${renderKnob('Mid', data.mid)}
-          ${renderKnob('Treble', data.treble)}
-          ${renderKnob('Presence', data.presence)}
-          ${renderKnob('Reverb mix', data.reverb_mix)}
-          ${renderKnob('Delay mix', data.delay_mix)}
-          ${renderKnob('Delay time', data.delay_time_ms, 800)}
-        </div>
+      if (!songInput) {
+        setStatus(status, 'Please enter a song name or YouTube link.', 'error');
+        return;
+      }
 
-        <p>${escapeHtml(data.notes || '')}</p>
-      </div>
+      if (/open\.spotify\.com\/track\//i.test(songInput)) {
+        setStatus(status, 'Spotify links are not supported. Please type the song name and artist, or paste a YouTube link.', 'error');
+        return;
+      }
 
-      <div class="result-card">
-        <span class="tag">Preset Finder</span>
-        <h3>Find downloadable presets</h3>
-        <p>
-          These public searches can help you find official, community, or worship-focused preset sources.
-          Some presets may be paid, account-required, or unavailable.
-        </p>
+      setStatus(status, 'Researching the song and building your Song DiveIn results...', 'info', true);
 
-        <div class="preset-grid">
-          ${buildPresetLinks(data, gear, songInput)}
-        </div>
-      </div>
-    `;
+      try {
+        const data = await postJson('/api/tone', { songInput, gear });
 
-    bindTransposeControl();
-    setStatus(status, 'Song DiveIn results ready.');
-  } catch (error) {
-    setStatus(status, error.message, 'error');
-  }
-});
-</script>
+        result.innerHTML = `
+          <div class="tone-labels">
+            <div class="tone-label">
+              <span>Song</span>
+              <strong>${escapeHtml(data.song)}${data.artist ? ' - ' + escapeHtml(data.artist) : ''}</strong>
+            </div>
+
+            <div class="tone-label">
+              <span>Gear</span>
+              <strong>${escapeHtml(gear)}</strong>
+            </div>
+
+            <div class="tone-label">
+              <span>BPM</span>
+              <strong>${data.bpm ? escapeHtml(data.bpm) : 'Unknown'}</strong>
+            </div>
+
+            <div class="tone-label">
+              <span>Key</span>
+              <strong>${escapeHtml(data.key || 'Unknown')}</strong>
+            </div>
+
+            <div class="tone-label">
+              <span>Confidence</span>
+              <strong>${escapeHtml(data.metadata_confidence || 'low')}</strong>
+            </div>
+
+            <div class="tone-label">
+              <span>Amp model</span>
+              <strong>${escapeHtml(data.amp_model || 'Not available')}</strong>
+            </div>
+
+            <div class="tone-label">
+              <span>Cab</span>
+              <strong>${escapeHtml(data.cab || 'Not available')}</strong>
+            </div>
+          </div>
+
+          ${renderSongDeepDive(data)}
+
+          <div class="result-card">
+            <span class="tag">Tone Settings</span>
+            <h3>Starting-point guitar tone</h3>
+
+            <div class="knob-grid">
+              ${renderKnob('Gain', data.gain)}
+              ${renderKnob('Bass', data.bass)}
+              ${renderKnob('Mid', data.mid)}
+              ${renderKnob('Treble', data.treble)}
+              ${renderKnob('Presence', data.presence)}
+              ${renderKnob('Reverb mix', data.reverb_mix)}
+              ${renderKnob('Delay mix', data.delay_mix)}
+              ${renderKnob('Delay time', data.delay_time_ms, 800)}
+            </div>
+
+            <p>${escapeHtml(data.notes || '')}</p>
+          </div>
+
+          <div class="result-card">
+            <span class="tag">Preset Finder</span>
+            <h3>Find downloadable presets</h3>
+            <p>
+              These public searches can help you find official, community, or worship-focused preset sources.
+              Some presets may be paid, account-required, or unavailable.
+            </p>
+
+            <div class="preset-grid">
+              ${buildPresetLinks(data, gear, songInput)}
+            </div>
+          </div>
+        `;
+
+        bindTransposeControl();
+        setStatus(status, 'Song DiveIn results ready.');
+      } catch (error) {
+        setStatus(status, error.message, 'error');
+      }
+    });
+  </script>
+</body>
+</html>
