@@ -160,22 +160,18 @@
       line-height: 1;
     }
 
-    .brand-title strong {
-      font-family: "Outfit", system-ui, sans-serif;
-      font-size: 1.18rem;
-      font-weight: 500;
-      color: var(--text-light);
-      letter-spacing: -0.03em;
-    }
+  .brand-title strong {
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: 1.72rem;
+  font-weight: 500;
+  color: var(--text-light);
+  letter-spacing: -0.025em;
+  line-height: 1;
+}
 
-    .brand-title span {
-      margin-top: 5px;
-      font-size: 0.7rem;
-      letter-spacing: 0.09em;
-      text-transform: uppercase;
-      color: var(--muted-light);
-      font-weight: 400;
-    }
+.brand-title span {
+  display: none;
+}
 
     .nav-links {
       display: flex;
@@ -648,24 +644,24 @@
     .story-list li:nth-child(4)::before { content: "✦"; }
     .story-list li:nth-child(5)::before { content: "⌁"; }
 
-    .story-photo {
-      position: sticky;
-      top: 94px;
-      align-self: start;
-      overflow: hidden;
-      border-radius: var(--radius-lg);
-      border: 1px solid var(--line-dark);
-      box-shadow: var(--shadow-soft);
-      min-height: 100%;
-    }
+.story-photo {
+  position: sticky;
+  top: 94px;
+  align-self: stretch;
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--line-dark);
+  box-shadow: var(--shadow-soft);
+  min-height: 100%;
+}
 
-    .story-photo img {
-      width: 100%;
-      height: 100%;
-      min-height: 520px;
-      object-fit: cover;
-      filter: saturate(0.88) contrast(1.04);
-    }
+.story-photo img {
+  width: 100%;
+  height: 100%;
+  min-height: 100%;
+  object-fit: cover;
+  filter: saturate(0.88) contrast(1.04);
+}
 
     .contact-card {
       padding: 32px;
@@ -870,14 +866,13 @@
         </span>
         <span class="brand-title">
           <strong>RootedByte</strong>
-          <span>Rooted digital tools</span>
         </span>
       </a>
 
       <div class="nav-links">
         <a href="#home" data-nav="home">Home</a>
         <a href="#apps" data-nav="apps">Apps</a>
-        <a href="#mission" data-nav="mission">Mission</a>
+        <a href="#mission" data-nav="mission">Purpose</a>
         <a href="#contact" data-nav="contact" class="nav-cta">Contact</a>
       </div>
     </nav>
@@ -1013,13 +1008,15 @@
       </div>
     </section>
 
-    <section class="section reveal" id="mission">
-      <div class="story-layout">
-        <article class="story-card">
-          <span class="eyebrow">Mission</span>
-          <h2>Helping people stay spiritually rooted in a digital world.</h2>
-          <p>RootedByte is being built for people who are trying to follow Jesus while living in a world shaped by constant information, screens, music, pressure, creativity, and technology. The goal is to create simple tools that help people pause, reflect, worship, learn, and grow with wisdom instead of just reacting to whatever is in front of them.</p>
-          <p>Whether someone is preparing a worship tone for church, reading daily news, or reflecting honestly on their spiritual life, RootedByte is meant to be a calm space where technology supports spiritual growth instead of distracting from it.</p>
+   <section class="section reveal" id="mission">
+  <div class="story-layout">
+    <article class="story-card">
+      <span class="eyebrow">Purpose</span>
+      <h2>Helping people stay spiritually rooted in a digital world.</h2>
+      <p>
+        RootedByte exists to help people use technology with intention — preparing for worship,
+        reflecting on daily news, and growing spiritually with clarity instead of distraction.
+      </p>
 
           <ul class="story-list">
             <li>Support worship preparation with practical song, tone, chord, and lyric-source tools.</li>
