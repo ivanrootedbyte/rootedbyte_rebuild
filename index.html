@@ -3,50 +3,33 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
+  <title>RootedByte | Intentional Technology</title>
   <meta
     name="description"
-    content="RootedByte is a modern digital workspace for worship preparation, news reflection, and personal spiritual growth."
+    content="RootedByte builds tools for clarity, reflection, and growth—technology that turns digital noise into intentional focus."
   />
 
-  <title>RootedByte | Technology rooted in truth</title>
-
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500&family=Outfit:wght@300;400;500&display=swap"
-    rel="stylesheet"
-  >
-
   <style>
-    :root {
-      --primary-dark: #1C3A2E;
-      --primary-darker: #10251D;
-      --brand-accent: #C9873F;
-      --parchment: #F5ECD7;
-      --text-light: #FAF7F2;
-      --muted-light: rgba(250, 247, 242, 0.72);
-      --muted-dark: #526359;
-      --card-dark: rgba(245, 236, 215, 0.075);
-      --card-dark-strong: rgba(245, 236, 215, 0.12);
-      --line-dark: rgba(245, 236, 215, 0.18);
-      --line-accent: rgba(201, 135, 63, 0.3);
-
-      --song-accent: #C9873F;
-      --news-accent: #4A7FA5;
-      --rooted-accent: #A0522D;
-
-      --shadow-soft: 0 20px 55px rgba(0, 0, 0, 0.22);
-      --shadow-lift: 0 30px 75px rgba(0, 0, 0, 0.32);
-      --radius-lg: 28px;
-      --radius-md: 20px;
-      --radius-pill: 999px;
-      --max: 1180px;
-      --transition: 260ms ease;
-    }
+   :root {
+  --cream: #FAF8F2;
+  --cream-soft: #FFFFFF;
+  --charcoal: #17201B;
+  --charcoal-soft: #66736A;
+  --forest: #214D35;
+  --forest-dark: #13291E;
+  --forest-light: #D9E7D6;
+  --sage: #66736A;
+  --line: rgba(23, 32, 27, 0.10);
+  --shadow: 0 24px 70px rgba(23, 32, 27, 0.08);
+  --radius-xl: 32px;
+  --radius-lg: 24px;
+  --radius-md: 18px;
+  }
 
     * {
       box-sizing: border-box;
+      margin: 0;
+      padding: 0;
     }
 
     html {
@@ -54,19 +37,14 @@
     }
 
     body {
-      margin: 0;
       min-height: 100vh;
-      font-family: "Outfit", system-ui, sans-serif;
-      font-weight: 300;
-      color: var(--text-light);
-      background: var(--primary-dark);
-      line-height: 1.65;
-      overflow-x: hidden;
-    }
-
-    img {
-      max-width: 100%;
-      display: block;
+      background:
+        radial-gradient(circle at 82% 12%, rgba(41, 75, 53, 0.10), transparent 34%),
+        radial-gradient(circle at 8% 35%, rgba(220, 200, 160, 0.20), transparent 30%),
+        var(--cream);
+      color: var(--charcoal);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.6;
     }
 
     a {
@@ -74,1070 +52,788 @@
       text-decoration: none;
     }
 
-    h1,
-    h2,
-    h3 {
-      font-family: "Cormorant Garamond", Georgia, serif;
-      font-weight: 500;
-      margin: 0;
-      line-height: 1.02;
-      letter-spacing: -0.025em;
+    .page-shell {
+      overflow: hidden;
+      padding-bottom: 88px;
     }
 
-    h1 {
-      font-size: clamp(56px, 8vw, 104px);
-      max-width: 880px;
-      margin-top: 24px;
-    }
-
-    h2 {
-      font-size: clamp(42px, 5vw, 68px);
-    }
-
-    h3 {
-      font-size: clamp(28px, 3vw, 38px);
-    }
-
-    p {
-      margin: 0;
+    .container {
+      width: min(1120px, calc(100% - 40px));
+      margin: 0 auto;
     }
 
     .site-header {
       position: sticky;
       top: 0;
-      z-index: 100;
-      background: transparent;
-      border-bottom: 1px solid transparent;
-      transition: background var(--transition), border-color var(--transition), backdrop-filter var(--transition), box-shadow var(--transition);
+      z-index: 50;
+      border-bottom: 1px solid var(--line);
+      background: rgba(247, 243, 234, 0.86);
+      backdrop-filter: blur(18px);
     }
 
-    .site-header.scrolled {
-      background: rgba(28, 58, 46, 0.82);
-      backdrop-filter: blur(12px);
-      border-bottom-color: rgba(245, 236, 215, 0.14);
-      box-shadow: 0 14px 34px rgba(0, 0, 0, 0.18);
-    }
-
-    .nav {
-      max-width: var(--max);
-      margin: 0 auto;
-      padding: 16px 22px;
+    .header-inner {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 20px;
+      min-height: 74px;
     }
 
     .brand {
       display: inline-flex;
       align-items: center;
       gap: 12px;
-      min-width: 0;
+      font-weight: 800;
+      letter-spacing: -0.03em;
     }
 
-    .brand-logo-shell {
-      width: 56px;
-      height: 52px;
-      border-radius: 16px;
-      display: grid;
-      place-items: center;
-      overflow: hidden;
-      background: rgba(245, 236, 215, 0.08);
-      border: 1px solid rgba(245, 236, 215, 0.18);
-      flex: 0 0 auto;
-    }
-
-    .brand-logo {
-      width: 46px;
-      height: 42px;
-      object-fit: contain;
-      border-radius: 10px;
-    }
-
-    .brand-title {
-      display: inline-flex;
-      flex-direction: column;
-      line-height: 1;
-    }
-
-  .brand-title strong {
-  font-family: "Cormorant Garamond", Georgia, serif;
-  font-size: 1.72rem;
-  font-weight: 500;
-  color: var(--text-light);
-  letter-spacing: -0.025em;
-  line-height: 1;
+  .brand-mark {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 16px;
+  background: transparent;
+  overflow: hidden;
 }
 
-    
-.brand-rooted {
-  color: var(--text-light);
+.brand-mark img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
 }
 
-.brand-byte {
-  color: var(--brand-accent);
-}
-    
-    .nav-links {
+    .brand-text span {
+      display: block;
+    }
+
+    .brand-kicker {
+      margin-top: -2px;
+      color: var(--charcoal-soft);
+      font-size: 0.74rem;
+      font-weight: 600;
+      letter-spacing: 0;
+    }
+
+    .desktop-nav {
       display: flex;
       align-items: center;
-      gap: 8px;
-      flex-wrap: wrap;
-      justify-content: flex-end;
+      gap: 28px;
+      color: var(--charcoal-soft);
+      font-size: 0.92rem;
+      font-weight: 700;
     }
 
-    .nav-links a {
+    .desktop-nav a {
+      transition: color 180ms ease;
+    }
+
+    .desktop-nav a:hover {
+      color: var(--charcoal);
+    }
+
+    .header-cta,
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      min-height: 48px;
+      border-radius: 999px;
+      background: var(--charcoal);
+      color: var(--cream-soft);
+      font-size: 0.94rem;
+      font-weight: 800;
+      letter-spacing: -0.01em;
+      transition: transform 180ms ease, background 180ms ease, box-shadow 180ms ease;
+      box-shadow: 0 14px 34px rgba(29, 36, 31, 0.16);
+    }
+
+    .header-cta {
+      padding: 0 20px;
+    }
+
+    .button {
+      width: 100%;
+      padding: 0 22px;
+    }
+
+.header-cta:hover,
+.button:hover {
+  background: var(--forest-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 18px 42px rgba(33, 77, 53, 0.20);
+}
+
+    .hero {
       position: relative;
-      color: var(--muted-light);
-      padding: 9px 12px;
-      border-radius: var(--radius-pill);
-      font-size: 0.95rem;
-      font-weight: 400;
-      transition: color var(--transition), background var(--transition);
+      padding: 100px 0 58px;
     }
 
-    .nav-links a::after {
-      content: "";
-      position: absolute;
-      left: 13px;
-      right: 13px;
-      bottom: 6px;
-      height: 2px;
-      border-radius: var(--radius-pill);
-      background: var(--brand-accent);
-      transform: scaleX(0);
-      transform-origin: left;
-      transition: transform var(--transition);
-    }
-
-    .nav-links a:hover,
-    .nav-links a:focus-visible,
-    .nav-links a.active {
-      color: var(--text-light);
-      background: rgba(245, 236, 215, 0.08);
-      outline: none;
-    }
-
-    .nav-links a:hover::after,
-    .nav-links a.active::after {
-      transform: scaleX(1);
-    }
-
-    .nav-links .nav-cta {
-      color: var(--primary-dark);
-      background: var(--brand-accent);
-      font-weight: 500;
-    }
-
-    .nav-links .nav-cta::after {
-      display: none;
-    }
-
-    .section {
-      max-width: var(--max);
-      margin: 0 auto;
-      padding: 92px 22px;
+    .hero-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.05fr) minmax(280px, 0.6fr);
+      align-items: center;
+      gap: 72px;
     }
 
     .eyebrow {
       display: inline-flex;
       align-items: center;
-      gap: 8px;
-      color: var(--brand-accent);
-      background: rgba(201, 135, 63, 0.12);
-      border: 1px solid rgba(201, 135, 63, 0.3);
-      border-radius: var(--radius-pill);
-      padding: 8px 13px;
+      gap: 10px;
+      margin-bottom: 28px;
+      padding: 9px 14px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(255, 252, 245, 0.66);
+      color: var(--forest);
       font-size: 0.84rem;
-      font-weight: 500;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
+      font-weight: 800;
+      box-shadow: 0 10px 32px rgba(29, 36, 31, 0.05);
     }
 
-    .lead {
-      color: var(--muted-light);
-      font-size: clamp(1.08rem, 2vw, 1.24rem);
-      max-width: 760px;
-      margin-top: 24px;
+    .eyebrow-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: var(--forest);
     }
 
-    .hero {
-      position: relative;
-      min-height: 88vh;
-      display: grid;
-      align-items: center;
-      overflow: hidden;
-      isolation: isolate;
-      background: var(--primary-dark);
+    h1 {
+      max-width: 880px;
+      color: var(--charcoal);
+      font-size: clamp(3.2rem, 7vw, 6.8rem);
+      font-weight: 900;
+      letter-spacing: -0.075em;
+      line-height: 0.94;
     }
 
-    .hero::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background:
-        radial-gradient(circle at 18% 16%, rgba(201, 135, 63, 0.08), transparent 26rem),
-        radial-gradient(circle at 82% 22%, rgba(201, 135, 63, 0.06), transparent 30rem),
-        radial-gradient(circle at 55% 85%, rgba(245, 236, 215, 0.045), transparent 28rem),
-        linear-gradient(135deg, var(--primary-dark), var(--primary-darker));
-      z-index: -2;
+    .hero-subheadline {
+      max-width: 690px;
+      margin-top: 30px;
+      color: var(--charcoal-soft);
+      font-size: clamp(1.12rem, 2vw, 1.42rem);
+      font-weight: 450;
+      letter-spacing: -0.015em;
     }
 
-    .hero::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background-image:
-        linear-gradient(rgba(245, 236, 215, 0.035) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(245, 236, 215, 0.035) 1px, transparent 1px);
-      background-size: 56px 56px;
-      mask-image: linear-gradient(to bottom, black, transparent 92%);
-      z-index: -1;
-    }
-
-    .hero-inner {
-      width: min(var(--max), calc(100% - 44px));
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: minmax(0, 1.05fr) minmax(320px, 0.95fr);
-      align-items: center;
-      gap: 46px;
-      padding: 110px 0 96px;
-    }
-
-    .hero-copy {
-      animation: heroIn 650ms ease both;
-    }
-
-    .hero-tagline {
-      display: block;
-      margin-top: 22px;
-      font-family: "Cormorant Garamond", Georgia, serif;
-      font-size: clamp(2.2rem, 5vw, 4.8rem);
-      line-height: 1;
-      color: var(--parchment);
-      max-width: 760px;
+    .hero-subheadline strong {
+      color: var(--forest);
+      font-weight: 850;
     }
 
     .hero-actions {
       display: flex;
-      gap: 14px;
       flex-wrap: wrap;
-      margin-top: 34px;
+      align-items: center;
+      gap: 16px;
+      margin-top: 36px;
     }
 
-    .btn {
-      border-radius: var(--radius-pill);
-      padding: 14px 20px;
+    .hero-actions .button {
+      width: auto;
+      padding-inline: 26px;
+    }
+
+    .text-link {
       display: inline-flex;
       align-items: center;
-      justify-content: center;
-      min-height: 50px;
-      transition: transform var(--transition), background var(--transition), border-color var(--transition), color var(--transition);
-      font-weight: 500;
-      border: 1px solid rgba(245, 236, 215, 0.18);
-    }
-
-    .btn:hover,
-    .btn:focus-visible {
-      transform: translateY(-2px);
-      outline: none;
-    }
-
-    .btn.primary {
-      color: var(--primary-dark);
-      background: var(--brand-accent);
-      border-color: var(--brand-accent);
-      box-shadow: 0 18px 40px rgba(201, 135, 63, 0.22);
-    }
-
-    .btn.secondary {
-      color: var(--brand-accent);
-      background: transparent;
-      border-color: var(--brand-accent);
-    }
-
-    .btn.secondary:hover {
-      background: rgba(201, 135, 63, 0.1);
+      gap: 8px;
+      min-height: 48px;
+      color: var(--charcoal-soft);
+      font-size: 0.96rem;
+      font-weight: 800;
     }
 
     .hero-panel {
-      position: relative;
-      min-height: 520px;
-      border-radius: 34px;
-      background:
-        radial-gradient(circle at 35% 28%, rgba(201, 135, 63, 0.11), transparent 18rem),
-        rgba(245, 236, 215, 0.055);
-      border: 1px solid rgba(245, 236, 215, 0.14);
-      box-shadow: var(--shadow-soft);
-      overflow: hidden;
-      animation: heroIn 800ms ease 90ms both;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-xl);
+      background: rgba(255, 252, 245, 0.58);
+      padding: 24px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(18px);
     }
 
-    .hero-panel::before {
-      content: "";
-      position: absolute;
-      width: 420px;
-      height: 420px;
-      border-radius: 50%;
-      border: 1px solid rgba(245, 236, 215, 0.12);
-      left: 50%;
-      top: 50%;
-      transform: translate(-50%, -50%);
-    }
-
-    .hero-panel::after {
-      content: "⌘";
-      position: absolute;
-      inset: 0;
+    .focus-orb {
       display: grid;
       place-items: center;
-      font-size: clamp(6rem, 14vw, 11rem);
-      color: rgba(245, 236, 215, 0.72);
-      text-shadow: 0 28px 50px rgba(0, 0, 0, 0.35);
+      min-height: 360px;
+      border-radius: 28px;
+      background:
+        linear-gradient(145deg, rgba(255, 252, 245, 0.96), rgba(220, 232, 216, 0.52)),
+        radial-gradient(circle, rgba(41, 75, 53, 0.12), transparent 54%);
+      border: 1px solid rgba(29, 36, 31, 0.08);
     }
 
-    .floating-card {
-      position: absolute;
-      border-radius: 22px;
-      background: rgba(16, 37, 29, 0.86);
-      border: 1px solid rgba(245, 236, 215, 0.16);
-      box-shadow: var(--shadow-soft);
-      backdrop-filter: blur(12px);
-      padding: 17px 18px;
-      color: inherit;
-      transition: transform var(--transition), background var(--transition), border-color var(--transition);
-      z-index: 2;
+    .orb-content {
+      width: 210px;
+      height: 210px;
+      border: 1px solid rgba(41, 75, 53, 0.18);
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      color: var(--forest);
+      background: rgba(247, 243, 234, 0.62);
+      box-shadow: inset 0 0 50px rgba(41, 75, 53, 0.07);
     }
 
-    .floating-card:hover,
-    .floating-card:focus-visible {
-      transform: translateY(-5px);
-      background: rgba(28, 58, 46, 0.94);
-      border-color: rgba(201, 135, 63, 0.42);
-      outline: none;
-    }
-
-    .floating-card strong {
+    .orb-content span {
       display: block;
-      font-family: "Outfit", system-ui, sans-serif;
-      font-size: 1.15rem;
-      font-weight: 500;
-      color: var(--brand-accent);
+      font-size: 3rem;
       line-height: 1;
-      margin-bottom: 8px;
     }
 
-    .floating-card span {
-      display: block;
-      color: var(--muted-light);
-      font-size: 0.95rem;
+    .orb-content p {
+      max-width: 130px;
+      margin-top: 12px;
+      font-size: 0.85rem;
+      font-weight: 800;
+      line-height: 1.25;
     }
 
-    .float-one {
-      left: 26px;
-      bottom: 28px;
-      max-width: 230px;
-    }
-
-    .float-two {
-      right: 26px;
-      top: 28px;
-      max-width: 255px;
-    }
-
-    @keyframes heroIn {
-      from {
-        opacity: 0;
-        transform: translateY(22px);
-      }
-
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+    .section {
+      padding: 52px 0;
     }
 
     .section-heading {
-      display: flex;
-      align-items: end;
-      justify-content: space-between;
-      gap: 24px;
-      margin-bottom: 30px;
-    }
-
-    .section-heading p {
       max-width: 760px;
-      color: var(--muted-light);
-      margin-top: 14px;
+      margin-bottom: 28px;
     }
 
-    .feature-strip {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 22px;
-      margin-top: 24px;
-    }
-
-    .feature-item,
-    .app-card,
-    .story-card,
-    .contact-card {
-      border-radius: var(--radius-lg);
-      background: var(--card-dark);
-      border: 1px solid var(--line-dark);
-      box-shadow: var(--shadow-soft);
-    }
-
-    .feature-item {
-      padding: 26px;
-      background: rgba(245, 236, 215, 0.065);
-    }
-
-    .feature-item p,
-    .app-content p,
-    .story-card p {
-      color: var(--muted-light);
-      margin-top: 12px;
-    }
-
-    .tag {
-      display: inline-flex;
-      color: var(--brand-accent);
-      font-weight: 500;
-      font-size: 0.78rem;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
+    .section-label {
       margin-bottom: 12px;
+      color: var(--forest);
+      font-size: 0.78rem;
+      font-weight: 900;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
     }
 
-    .apps-grid {
+    h2 {
+      color: var(--charcoal);
+      font-size: clamp(2rem, 4vw, 3.75rem);
+      font-weight: 900;
+      letter-spacing: -0.055em;
+      line-height: 1;
+    }
+
+    .section-copy {
+      margin-top: 16px;
+      color: var(--charcoal-soft);
+      font-size: 1.05rem;
+      font-weight: 450;
+    }
+
+    .ecosystem-grid {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 24px;
-      margin-top: 28px;
+      gap: 18px;
     }
 
     .app-card {
+      position: relative;
+      display: flex;
+      min-height: 430px;
+      flex-direction: column;
+      justify-content: space-between;
       overflow: hidden;
-      transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition), background var(--transition);
-      border-left-width: 5px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-xl);
+      background: rgba(255, 252, 245, 0.74);
+      padding: 28px;
+      box-shadow: 0 20px 60px rgba(29, 36, 31, 0.06);
+      transition: transform 200ms ease, box-shadow 200ms ease, border-color 200ms ease;
     }
 
-    .app-card.song {
-      border-left-color: var(--song-accent);
-    }
-
-    .app-card.news {
-      border-left-color: var(--news-accent);
-    }
-
-    .app-card.rooted {
-      border-left-color: var(--rooted-accent);
+    .app-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 20% 8%, rgba(41, 75, 53, 0.12), transparent 34%);
+      opacity: 0;
+      transition: opacity 200ms ease;
     }
 
     .app-card:hover {
-      transform: translateY(-8px);
-      box-shadow: var(--shadow-lift);
-      background: var(--card-dark-strong);
+      border-color: rgba(41, 75, 53, 0.28);
+      box-shadow: 0 28px 80px rgba(29, 36, 31, 0.10);
+      transform: translateY(-5px);
     }
 
-    .app-photo {
-      display: block;
-      height: 200px;
-      overflow: hidden;
-      background: var(--primary-darker);
+    .app-card:hover::before {
+      opacity: 1;
     }
 
-    .app-photo img {
-      width: 100%;
-      height: 200px;
-      object-fit: cover;
-      transition: transform var(--transition);
+    .app-card > * {
+      position: relative;
+      z-index: 1;
     }
 
-    .app-card:hover .app-photo img {
-      transform: scale(1.04);
-    }
-
-    .app-content {
-      padding: 24px;
+    .icon-wrap {
+      display: grid;
+      place-items: center;
+      width: 58px;
+      height: 58px;
+      margin-bottom: 28px;
+      border: 1px solid rgba(41, 75, 53, 0.18);
+      border-radius: 22px;
+      background: var(--forest-light);
+      color: var(--forest);
     }
 
     .app-meta {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-top: 18px;
+      color: var(--sage);
+      font-size: 0.78rem;
+      font-weight: 900;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
     }
 
-    .pill {
-      display: inline-flex;
-      align-items: center;
-      padding: 7px 10px;
-      border-radius: var(--radius-pill);
-      color: var(--muted-light);
-      background: rgba(245, 236, 215, 0.06);
-      border: 1px solid rgba(245, 236, 215, 0.12);
-      font-size: 0.82rem;
-      font-weight: 400;
+    .app-card h3 {
+      margin-top: 10px;
+      color: var(--charcoal);
+      font-size: 2rem;
+      font-weight: 900;
+      letter-spacing: -0.05em;
+      line-height: 1;
     }
 
-    .app-link {
-      display: inline-flex;
-      margin-top: 20px;
-      font-weight: 500;
-      color: var(--brand-accent);
-      transition: transform var(--transition), color var(--transition);
+    .app-tagline {
+      margin-top: 24px;
+      color: var(--charcoal);
+      font-size: 1.28rem;
+      font-weight: 900;
+      letter-spacing: -0.035em;
+      line-height: 1.1;
     }
 
-    .app-link:hover {
-      transform: translateX(4px);
-      color: var(--parchment);
+    .app-description {
+      margin-top: 12px;
+      color: var(--charcoal-soft);
+      font-size: 0.98rem;
+      font-weight: 450;
     }
 
-    .story-layout {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) minmax(310px, 0.82fr);
-      gap: 26px;
-      align-items: stretch;
+    .app-card .button {
+      margin-top: 34px;
     }
 
-    .story-card {
-      padding: 32px;
-      background: rgba(245, 236, 215, 0.065);
-    }
-
-    .story-list {
-      list-style: none;
-      padding: 0;
-      margin: 26px 0 0;
+    .purpose-grid {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 14px;
+      gap: 18px;
     }
 
-    .story-list li {
-      display: grid;
-      grid-template-columns: auto 1fr;
-      gap: 12px;
-      align-items: start;
-      min-height: 96px;
-      padding: 18px;
-      border-radius: 18px;
-      color: var(--muted-light);
-      background: rgba(245, 236, 215, 0.105);
-      border: 1px solid rgba(245, 236, 215, 0.13);
+    .purpose-card {
+      min-height: 360px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-xl);
+      padding: 34px;
+      box-shadow: 0 22px 64px rgba(29, 36, 31, 0.06);
     }
 
-    .story-list li::before {
-      width: 30px;
-      height: 30px;
+    .problem-card {
+      background: rgba(29, 36, 31, 0.95);
+      color: var(--cream-soft);
+    }
+
+    .solution-card {
+      background: rgba(255, 252, 245, 0.74);
+      color: var(--charcoal);
+    }
+
+    .purpose-icon {
       display: grid;
       place-items: center;
-      border-radius: 10px;
-      color: var(--primary-dark);
-      background: var(--brand-accent);
-      font-weight: 500;
+      width: 58px;
+      height: 58px;
+      margin-bottom: 28px;
+      border-radius: 22px;
+    }
+
+    .problem-card .purpose-icon {
+      background: rgba(247, 243, 234, 0.12);
+      color: var(--cream);
+    }
+
+    .solution-card .purpose-icon {
+      background: var(--forest-light);
+      color: var(--forest);
+    }
+
+    .purpose-card h3 {
+      font-size: clamp(1.8rem, 3vw, 3rem);
+      font-weight: 900;
+      letter-spacing: -0.055em;
       line-height: 1;
-      flex: 0 0 auto;
     }
 
-    .story-list li:nth-child(1)::before { content: "♪"; }
-    .story-list li:nth-child(2)::before { content: "◌"; }
-    .story-list li:nth-child(3)::before { content: "♡"; }
-    .story-list li:nth-child(4)::before { content: "✦"; }
-    .story-list li:nth-child(5)::before { content: "⌁"; }
-
-.story-photo {
-  position: sticky;
-  top: 94px;
-  align-self: stretch;
-  overflow: hidden;
-  border-radius: var(--radius-lg);
-  border: 1px solid var(--line-dark);
-  box-shadow: var(--shadow-soft);
-  min-height: 100%;
-}
-
-.story-photo img {
-  width: 100%;
-  height: 100%;
-  min-height: 100%;
-  object-fit: cover;
-  filter: saturate(0.88) contrast(1.04);
-}
-
-    .contact-card {
-      padding: 32px;
-      background: rgba(245, 236, 215, 0.065);
+    .purpose-card p {
+      margin-top: 18px;
+      font-size: 1.02rem;
+      font-weight: 430;
     }
 
-    .contact-links {
-      display: flex;
-      flex-wrap: wrap;
+    .problem-card p {
+      color: rgba(255, 252, 245, 0.72);
+    }
+
+    .solution-card p {
+      color: var(--charcoal-soft);
+    }
+
+    .outcome-list {
+      display: grid;
       gap: 12px;
-      margin-top: 24px;
+      margin-top: 28px;
+      list-style: none;
     }
 
-    .contact-links a {
-      color: var(--brand-accent);
-      padding: 12px 16px;
-      border: 1px solid rgba(201, 135, 63, 0.36);
-      border-radius: var(--radius-pill);
-      background: rgba(201, 135, 63, 0.08);
-      transition: transform var(--transition), background var(--transition), color var(--transition);
-      font-weight: 400;
+    .outcome-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      font-size: 0.98rem;
+      font-weight: 650;
     }
 
-    .contact-links a:hover {
-      transform: translateY(-2px);
-      background: rgba(201, 135, 63, 0.14);
-      color: var(--parchment);
+    .outcome-list span {
+      display: inline-grid;
+      flex: 0 0 auto;
+      place-items: center;
+      width: 24px;
+      height: 24px;
+      border-radius: 999px;
+      background: rgba(41, 75, 53, 0.14);
+      color: var(--forest);
+      font-size: 0.76rem;
+      font-weight: 900;
     }
 
-    .site-footer {
-      border-top: 1px solid var(--line-accent);
-      background: var(--primary-darker);
-      color: var(--muted-light);
+    .problem-card .outcome-list span {
+      background: rgba(247, 243, 234, 0.14);
+      color: var(--cream);
     }
 
-    .footer-grid {
-      max-width: var(--max);
-      margin: 0 auto;
-      padding: 44px 22px;
+    .bottom-nav {
+      position: fixed;
+      right: 16px;
+      bottom: 16px;
+      left: 16px;
+      z-index: 60;
+      display: none;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      padding: 8px;
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      background: rgba(255, 252, 245, 0.92);
+      box-shadow: 0 20px 60px rgba(29, 36, 31, 0.16);
+      backdrop-filter: blur(18px);
+    }
+
+    .bottom-nav a {
       display: grid;
-      grid-template-columns: 1.1fr 0.9fr 1fr;
-      gap: 28px;
+      place-items: center;
+      min-height: 48px;
+      border-radius: 17px;
+      color: var(--charcoal-soft);
+      font-size: 0.78rem;
+      font-weight: 900;
     }
 
-    .footer-grid h3 {
-      color: var(--text-light);
-      margin-bottom: 10px;
-      font-size: 2rem;
+    .bottom-nav a:first-child {
+      background: var(--charcoal);
+      color: var(--cream-soft);
     }
 
-    .footer-grid h4 {
-      margin: 0 0 12px;
-      color: var(--parchment);
-      font-size: 0.85rem;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      font-weight: 500;
-    }
+    @media (max-width: 900px) {
+      .desktop-nav,
+      .header-cta {
+        display: none;
+      }
 
-    .footer-links {
-      display: grid;
-      gap: 9px;
-    }
+      .hero {
+        padding: 74px 0 34px;
+      }
 
-    .footer-links a {
-      color: var(--muted-light);
-      transition: color var(--transition), transform var(--transition);
-    }
-
-    .footer-links a:hover {
-      color: var(--brand-accent);
-      transform: translateX(3px);
-    }
-
-    .footer-bottom {
-      max-width: var(--max);
-      margin: 0 auto;
-      padding: 18px 22px 36px;
-      color: rgba(250, 247, 242, 0.54);
-      border-top: 1px solid rgba(245, 236, 215, 0.09);
-    }
-
-    .reveal {
-      opacity: 0;
-      transform: translateY(20px);
-      transition: opacity 500ms ease, transform 500ms ease;
-    }
-
-    .reveal.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    @media (max-width: 980px) {
-      .hero-inner,
-      .story-layout {
+      .hero-grid,
+      .purpose-grid {
         grid-template-columns: 1fr;
+        gap: 28px;
       }
 
       .hero-panel {
-        min-height: 420px;
+        display: none;
+      }
+
+      .ecosystem-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .app-card {
+        min-height: auto;
+        padding: 26px;
+      }
+
+      .bottom-nav {
         display: grid;
-        align-content: end;
-        padding-bottom: 18px;
-      }
-
-      .feature-strip,
-      .apps-grid,
-      .story-list {
-        grid-template-columns: 1fr;
-      }
-
-      .story-photo {
-        position: relative;
-        top: auto;
-      }
-
-      .story-photo img {
-        min-height: 360px;
-      }
-
-      .float-one,
-      .float-two {
-        position: static;
-        max-width: none;
-        margin: 14px 18px 0;
-      }
-
-      .footer-grid {
-        grid-template-columns: 1fr;
       }
     }
 
-    @media (max-width: 620px) {
-      .nav {
-        align-items: flex-start;
+    @media (max-width: 560px) {
+      .container {
+        width: min(100% - 28px, 1120px);
+      }
+
+      .header-inner {
+        min-height: 66px;
+      }
+
+      .brand-mark {
+        width: 38px;
+        height: 38px;
+        border-radius: 14px;
+      }
+
+      h1 {
+        font-size: clamp(3rem, 16vw, 4.6rem);
+      }
+
+      .hero-subheadline {
+        margin-top: 24px;
+      }
+
+      .hero-actions {
+        align-items: stretch;
         flex-direction: column;
       }
 
-      .nav-links {
-        justify-content: flex-start;
+      .hero-actions .button,
+      .text-link {
+        width: 100%;
       }
 
-      .brand-logo-shell {
-        width: 52px;
-        height: 48px;
-      }
-
-      .brand-logo {
-        width: 42px;
-        height: 38px;
-      }
-
-      .brand-title strong {
-        font-size: 1.08rem;
-      }
-
-      .brand-title span {
-        font-size: 0.68rem;
+      .text-link {
+        justify-content: center;
       }
 
       .section {
-        padding: 66px 18px;
+        padding: 42px 0;
       }
 
-      .hero-inner {
-        width: min(100% - 36px, var(--max));
-        padding: 78px 0 66px;
-      }
-
-      .hero-panel {
-        min-height: 360px;
-      }
-
-      .hero-panel::after {
-        font-size: 6.5rem;
-      }
-
-      .app-photo,
-      .app-photo img {
-        height: 200px;
-      }
-
-      .story-card,
-      .contact-card {
-        padding: 24px;
-      }
-
-      .story-list li {
+      .purpose-card {
         min-height: auto;
+        padding: 26px;
       }
     }
   </style>
 </head>
 
 <body>
-  <header class="site-header" id="siteHeader">
-    <nav class="nav" aria-label="Primary navigation">
-      <a class="brand" href="index.html" aria-label="RootedByte home">
-        <span class="brand-logo-shell">
-          <img class="brand-logo" src="images/rootedbyte-icon.png" alt="RootedByte logo" />
-        </span>
-<span class="brand-title">
-  <strong>
-    <span class="brand-rooted">Rooted</span><span class="brand-byte">Byte</span>
-  </strong>
-</span>
-      </a>
+  <div class="page-shell">
+    <header class="site-header">
+      <div class="container header-inner">
+        <a href="#top" class="brand" aria-label="RootedByte home">
+          <span class="brand-mark">
+            <img src="images/rootedbyte-icon.png" alt="RootedByte logo" />
+           </span>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+              <path d="M12 21V9" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+              <path d="M12 13C7.5 13 5 10.5 5 6c4.5 0 7 2.5 7 7Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round" />
+              <path d="M12 15c4.5 0 7-2.5 7-7-4.5 0-7 2.5-7 7Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round" />
+            </svg>
+          </span>
+          <span class="brand-text">
+            <span>RootedByte</span>
+            <span class="brand-kicker">Intentional technology</span>
+          </span>
+        </a>
 
-      <div class="nav-links">
-        <a href="#home" data-nav="home">Home</a>
-        <a href="#apps" data-nav="apps">Apps</a>
-        <a href="#mission" data-nav="mission">Purpose</a>
-        <a href="#contact" data-nav="contact" class="nav-cta">Contact</a>
+        <nav class="desktop-nav" aria-label="Primary navigation">
+          <a href="#apps">Apps</a>
+          <a href="#purpose">Purpose</a>
+          <a href="#growth">Growth</a>
+        </nav>
+
+        <a href="#apps" class="header-cta">Get Started</a>
       </div>
-    </nav>
-  </header>
+    </header>
 
-  <main>
-    <section class="hero" id="home">
-      <div class="hero-inner">
-        <div class="hero-copy">
-          <span class="eyebrow">Technology • Worship • Reflection</span>
-          <h1>Modern tools, built with clarity and rooted in truth.</h1>
-          <span class="hero-tagline">Technology rooted in truth.</span>
-
-          <p class="lead">
-            RootedByte is a modern digital workspace for people who want technology to support creativity, worship preparation, daily reflection, and practical spiritual growth in the middle of real life.
-          </p>
-
-          <div class="hero-actions">
-            <a class="btn primary" href="#apps">Explore the apps</a>
-            <a class="btn secondary" href="#contact">Get in touch</a>
-          </div>
-        </div>
-
-        <div class="hero-panel">
-          <a class="floating-card float-one" href="#apps" aria-label="Go to RootedByte apps section">
-            <strong>3 apps</strong>
-            <span>Explore tools for songs, news reflection, and personal growth.</span>
-          </a>
-
-          <a class="floating-card float-two" href="#mission" aria-label="Go to RootedByte purpose section">
-            <strong>Purpose</strong>
-            <span>Helping people stay grounded while navigating today’s digital world.</span>
-          </a>
-        </div>
-      </div>
-    </section>
-
-    <section class="section reveal">
-      <div class="section-heading">
-        <div>
-          <span class="eyebrow">What RootedByte helps with</span>
-          <h2>Create, reflect, and grow with intention.</h2>
-          <p>
-            RootedByte brings together music, news, reflection, and spiritual growth into one simple digital space for everyday life.
-          </p>
-        </div>
-      </div>
-
-      <div class="feature-strip">
-        <article class="feature-item">
-          <span class="tag">Creative</span>
-          <h3>Sound with purpose</h3>
-          <p>Support worship preparation and practice with useful musical insights, tone ideas, song meaning, chord links, lyric links, and gear-specific starting points.</p>
-        </article>
-
-        <article class="feature-item">
-          <span class="tag">Reflective</span>
-          <h3>News with perspective</h3>
-          <p>Turn daily headlines into Scripture-rooted reflection, prayer, and thoughtful response instead of fear, outrage, or information overload.</p>
-        </article>
-
-        <article class="feature-item">
-          <span class="tag">Personal</span>
-          <h3>Growth without shame</h3>
-          <p>Use guided reflection to notice habits, pressure, identity, relationships, purpose, and the next step toward a more grounded life.</p>
-        </article>
-      </div>
-    </section>
-
-    <section class="section reveal" id="apps">
-      <div class="section-heading">
-        <div>
-          <span class="eyebrow">RootedByte app ecosystem</span>
-          <h2>Practical tools for creativity, clarity, and reflection.</h2>
-          <p>RootedByte brings everyday life into a more thoughtful space — helping people prepare for worship, explore songs more deeply, reflect on what is happening in the world, and examine their own hearts with honesty, grace, and purpose.</p>
-        </div>
-      </div>
-
-      <div class="apps-grid">
-        <article class="app-card song">
-          <a class="app-photo" href="tone.html" aria-label="Open Song DiveIn">
-            <img src="https://images.unsplash.com/photo-1511379938547-c1f69419868d?auto=format&fit=crop&w=1200&q=80" alt="Musician and guitar equipment in a studio setting" />
-          </a>
-
-          <div class="app-content">
-            <span class="tag">App 1 • Music Tech</span>
-            <h3>Song DiveIn</h3>
-            <p>Explore a song before you play it. Enter a title or YouTube link to receive song meaning, worship/practice context, tone settings, and source links for chords and lyrics when available.</p>
-            <div class="app-meta">
-              <span class="pill">Understand song meaning</span>
-              <span class="pill">Find chord and lyric links</span>
-              <span class="pill">Shape tones for your gear</span>
+    <main>
+      <section id="top" class="hero">
+        <div class="container hero-grid">
+          <div>
+            <div class="eyebrow">
+              <span class="eyebrow-dot" aria-hidden="true"></span>
+              Calm tools for focused living
             </div>
-            <a class="app-link" href="tone.html">Open Song DiveIn →</a>
-          </div>
-        </article>
 
-        <article class="app-card news">
-          <a class="app-photo" href="newsverse.html" aria-label="Open NewsVerse">
-            <img src="https://images.unsplash.com/photo-1504711434969-e33886168f5c?auto=format&fit=crop&w=1200&q=80" alt="News reading on a phone and newspaper" />
-          </a>
+            <h1>Technology that turns digital noise into intentional focus.</h1>
 
-          <div class="app-content">
-            <span class="tag">App 2 • Faith + News</span>
-            <h3>NewsVerse</h3>
-            <p>Paste a public article URL and turn daily news into a slower moment of reflection with Scripture, a Jesus Lens perspective, and prayer points.</p>
-            <div class="app-meta">
-              <span class="pill">Reflect on daily news</span>
-              <span class="pill">Connect headlines to Scripture</span>
-              <span class="pill">Turn concern into prayer</span>
+            <p class="hero-subheadline">
+              RootedByte creates <strong>tools for clarity, reflection, and growth</strong>—helping you study deeper, stay informed with purpose, and build rhythms that support anchored living.
+            </p>
+
+            <div class="hero-actions">
+              <a href="#apps" class="button">Explore the ecosystem</a>
+              <a href="#purpose" class="text-link">
+                See what it helps with
+                <span aria-hidden="true">→</span>
+              </a>
             </div>
-            <a class="app-link" href="newsverse.html">Open NewsVerse →</a>
           </div>
-        </article>
 
-        <article class="app-card rooted">
-          <a class="app-photo" href="rootedos.html" aria-label="Open RootedOS">
-            <img src="https://images.unsplash.com/photo-1513258496099-48168024aec0?auto=format&fit=crop&w=1200&q=80" alt="Person reflecting with notebook and coffee" />
-          </a>
-
-          <div class="app-content">
-            <span class="tag">App 3 • Spiritual Growth</span>
-            <h3>RootedOS</h3>
-            <p>For anyone trying to stay grounded while navigating pressure, comparison, digital habits, relationships, purpose, and big life questions. RootedOS helps people reflect honestly and take one intentional step forward.</p>
-            <div class="app-meta">
-              <span class="pill">Reflect on identity and pressure</span>
-              <span class="pill">Notice digital habits honestly</span>
-              <span class="pill">Create a gentle growth plan</span>
+          <aside class="hero-panel" aria-label="Intentional focus visual">
+            <div class="focus-orb">
+              <div class="orb-content">
+                <div>
+                  <span aria-hidden="true">◎</span>
+                  <p>Less noise. More direction.</p>
+                </div>
+              </div>
             </div>
-            <a class="app-link" href="rootedos.html">Open RootedOS →</a>
+          </aside>
+        </div>
+      </section>
+
+      <section id="apps" class="section" aria-labelledby="apps-title">
+        <div class="container">
+          <div class="section-heading">
+            <p class="section-label">Fast Access</p>
+            <h2 id="apps-title">Choose the tool that meets your moment.</h2>
+            <p class="section-copy">
+              A focused ecosystem designed around music, news, and personal growth—each one simple enough to use daily and intentional enough to matter.
+            </p>
           </div>
-        </article>
-      </div>
-    </section>
 
-   <section class="section reveal" id="mission">
-  <div class="story-layout">
-    <article class="story-card">
-      <span class="eyebrow">Purpose</span>
-      <h2>Helping people stay spiritually rooted in a digital world.</h2>
-      <p>
-        RootedByte exists to help people use technology with intention — preparing for worship,
-        reflecting on daily news, and growing spiritually with clarity instead of distraction.
-      </p>
+          <div class="ecosystem-grid">
+            <article class="app-card">
+              <div>
+                <div class="icon-wrap" aria-hidden="true">
+                  <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
+                    <path d="M9 18V5l10-2v13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                    <circle cx="7" cy="18" r="3" stroke="currentColor" stroke-width="2" />
+                    <circle cx="17" cy="16" r="3" stroke="currentColor" stroke-width="2" />
+                  </svg>
+                </div>
+                <p class="app-meta">Music</p>
+                <h3>VibeTune</h3>
+                <p class="app-tagline">Focus without the noise.</p>
+                <p class="app-description">
+                  A distraction-free music player designed to anchor your mind during study, deep work, or quiet reflection.
+                </p>
+              </div>
+              <a class="button" href="#growth">Get Started</a>
+            </article>
 
-          <ul class="story-list">
-            <li>Support worship preparation with practical song, tone, chord, and lyric-source tools.</li>
-            <li>Help users read today’s news with Scripture-rooted reflection instead of fear or outrage.</li>
-            <li>Create gentle spiritual-growth tools that invite honesty without shame or condemnation.</li>
-            <li>Encourage people to reflect on identity, purpose, habits, pressure, relationships, and faith.</li>
-            <li>Use technology as a tool for wisdom, worship, service, learning, and spiritual formation.</li>
-          </ul>
+            <article class="app-card">
+              <div>
+                <div class="icon-wrap" aria-hidden="true">
+                  <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
+                    <path d="M4 5h12a4 4 0 0 1 4 4v10H8a4 4 0 0 1-4-4V5Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round" />
+                    <path d="M8 9h7M8 13h8M8 17h5" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                  </svg>
+                </div>
+                <p class="app-meta">News</p>
+                <h3>NewsVerse</h3>
+                <p class="app-tagline">Perspective that matters.</p>
+                <p class="app-description">
+                  Stay informed with trending stories curated to highlight truth, integrity, and meaningful world impact.
+                </p>
+              </div>
+              <a class="button" href="#growth">Get Started</a>
+            </article>
 
-          <div class="hero-actions">
-            <a class="btn primary" href="newsverse.html">Reflect on today’s news</a>
-            <a class="btn secondary" href="rootedos.html">Start spiritual reflection</a>
+            <article class="app-card">
+              <div>
+                <div class="icon-wrap" aria-hidden="true">
+                  <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
+                    <path d="M12 21V10" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                    <path d="M12 14C7 14 4 11 4 6c5 0 8 3 8 8Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round" />
+                    <path d="M12 16c5 0 8-3 8-8-5 0-8 3-8 8Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round" />
+                  </svg>
+                </div>
+                <p class="app-meta">Growth</p>
+                <h3>RootedByte Plus</h3>
+                <p class="app-tagline">Your simple growth plan.</p>
+                <p class="app-description">
+                  Access practical guidance and structured plans to help you build a life grounded in lasting purpose.
+                </p>
+              </div>
+              <a class="button" href="#growth">Get Started</a>
+            </article>
           </div>
-        </article>
-
-        <div class="story-photo">
-          <img
-            src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1400&q=80"
-            alt="Peaceful open landscape representing reflection, growth, and clarity"
-          />
         </div>
-      </div>
-    </section>
+      </section>
 
-    <section class="section reveal" id="contact">
-      <div class="contact-card">
-        <span class="eyebrow">Contact</span>
-        <h2>Connect with RootedByte</h2>
-        <p class="lead">Reach out for feedback, collaboration, project ideas, or future improvements to the RootedByte toolset.</p>
+      <section id="purpose" class="section" aria-labelledby="purpose-title">
+        <div class="container">
+          <div class="section-heading">
+            <p class="section-label">What RootedByte helps with</p>
+            <h2 id="purpose-title">A calmer way to move through the digital world.</h2>
+          </div>
 
-        <div class="contact-links">
-          <a href="mailto:rootedbyte@outlook.com">rootedbyte@outlook.com</a>
+          <div class="purpose-grid">
+            <article class="purpose-card problem-card">
+              <div class="purpose-icon" aria-hidden="true">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
+                  <path d="M12 3v18M4 8h16M6 16h12" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                </svg>
+              </div>
+              <p class="section-label" style="color: rgba(255,252,245,.64);">The problem</p>
+              <h3>Digital Overwhelm</h3>
+              <p>
+                Feeds, alerts, noise, and endless options can make attention feel scattered. RootedByte starts by naming the problem clearly: too much input, not enough intention.
+              </p>
+              <ul class="outcome-list">
+                <li><span>1</span>Constant distraction</li>
+                <li><span>2</span>Shallow information habits</li>
+                <li><span>3</span>Unstructured growth</li>
+              </ul>
+            </article>
+
+            <article class="purpose-card solution-card">
+              <div class="purpose-icon" aria-hidden="true">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
+                  <path d="M12 21s7-4.5 7-11V5l-7-3-7 3v5c0 6.5 7 11 7 11Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round" />
+                  <path d="m9 12 2 2 4-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+              </div>
+              <p class="section-label">The solution</p>
+              <h3>Anchored Living</h3>
+              <p>
+                RootedByte offers focused tools that help you replace passive scrolling with purposeful rhythms: listen with intention, read with discernment, and grow with structure.
+              </p>
+              <ul class="outcome-list">
+                <li><span>✓</span><strong>Clarity</strong> for what deserves attention</li>
+                <li><span>✓</span><strong>Reflection</strong> for better daily choices</li>
+                <li><span>✓</span><strong>Growth</strong> through simple next steps</li>
+              </ul>
+            </article>
+          </div>
         </div>
-      </div>
-    </section>
-  </main>
+      </section>
 
-  <footer class="site-footer">
-    <div class="footer-grid">
-      <div>
-        <h3>RootedByte</h3>
-        <p>Modern tools, built with clarity and rooted in truth.</p>
-      </div>
-
-      <div>
-        <h4>Quick links</h4>
-        <div class="footer-links">
-          <a href="tone.html">Song DiveIn</a>
-          <a href="newsverse.html">NewsVerse</a>
-          <a href="rootedos.html">RootedOS</a>
+      <section id="growth" class="section" aria-labelledby="growth-title">
+        <div class="container">
+          <div class="section-heading">
+            <p class="section-label">Start small</p>
+            <h2 id="growth-title">Build a digital life with more purpose and less noise.</h2>
+            <p class="section-copy">
+              Begin with one focused tool, one intentional habit, and one clear next step. RootedByte is designed to support consistent growth without adding more clutter.
+            </p>
+          </div>
         </div>
-      </div>
+      </section>
+    </main>
+  </div>
 
-      <div>
-        <h4>Contact</h4>
-        <div class="footer-links">
-          <a href="mailto:rootedbyte@outlook.com">rootedbyte@outlook.com</a>
-        </div>
-      </div>
-    </div>
-
-    <div class="footer-bottom">
-      <p>© <span id="year"></span> RootedByte. Built for digital wisdom rooted in truth.</p>
-    </div>
-  </footer>
-
-  <script>
-    const year = document.getElementById('year');
-    if (year) {
-      year.textContent = new Date().getFullYear();
-    }
-
-    const header = document.getElementById('siteHeader');
-    const navLinks = document.querySelectorAll('[data-nav]');
-    const sections = document.querySelectorAll('#home, #apps, #mission, #contact');
-    const revealItems = document.querySelectorAll('.reveal');
-
-    function setHeaderState() {
-      if (!header) return;
-      header.classList.toggle('scrolled', window.scrollY > 60);
-    }
-
-    setHeaderState();
-    window.addEventListener('scroll', setHeaderState, { passive: true });
-
-    const revealObserver = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-          revealObserver.unobserve(entry.target);
-        }
-      });
-    }, {
-      threshold: 0.14
-    });
-
-    revealItems.forEach((item) => revealObserver.observe(item));
-
-    const sectionObserver = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (!entry.isIntersecting) return;
-
-        const id = entry.target.id;
-
-        navLinks.forEach((link) => {
-          link.classList.toggle('active', link.dataset.nav === id);
-        });
-      });
-    }, {
-      rootMargin: '-40% 0px -52% 0px',
-      threshold: 0
-    });
-
-    sections.forEach((section) => sectionObserver.observe(section));
-  </script>
+  <nav class="bottom-nav" aria-label="Mobile quick navigation">
+    <a href="#apps">Apps</a>
+    <a href="#purpose">Purpose</a>
+    <a href="#growth">Growth</a>
+  </nav>
 </body>
 </html>
