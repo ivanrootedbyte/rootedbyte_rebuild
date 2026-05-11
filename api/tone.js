@@ -19,24 +19,9 @@ Structure:
   "key": "",
   "metadata_confidence": "",
   "song_meaning": "",
-  "lyrics_link": {
-    "label": "",
-    "source": "",
-    "url": "",
-    "validated_for_song": false
-  },
-  "chord_link": {
-    "label": "",
-    "source": "",
-    "url": "",
-    "validated_for_song": false
-  },
-  "tutorial_link": {
-    "label": "",
-    "source": "",
-    "url": "",
-    "validated_for_song": false
-  },
+"lyrics_search_query": "",
+"chord_search_query": "",
+"tutorial_search_query": "",
   "source_links": [],
   "amp_model": "",
   "cab": "",
@@ -59,8 +44,14 @@ Rules:
 - For lyrics_link, prefer a public external lyrics page clearly matching the exact song.
 - For chord_link, prefer a real chord/tab page for the exact song, not a general search result.
 - For tutorial_link, prefer a YouTube or guitar tutorial page clearly matching the exact song.
-- If no direct matching source is found, set url to "" and validated_for_song to false.
-- Do not return generic Google search URLs as validated links.
+- Do not provide exact lyrics, chord, or tutorial URLs.
+- Provide search queries instead.
+- lyrics_search_query should search for the exact song lyrics.
+- chord_search_query should search for the exact song chords or tabs.
+- tutorial_search_query should search for the exact song guitar tutorial.
+- Search queries should include the song title and artist when known.
+- Do not include full lyrics.
+- Do not include chord charts.
 - Do not invent URLs.
 - song_meaning should be concise and written in original wording based on public context when available.
 - If public meaning sources are not available, infer carefully and say it is an interpretation.
@@ -217,16 +208,6 @@ async function callGemini(userPrompt) {
   return normalizeSourceLinks(safeParse(raw), data);
 }
 
-function normalizeSingleLink(item, fallbackLabel) {
-  if (!item || typeof item !== 'object') {
-    return {
-      label: fallbackLabel,
-      source: '',
-      url: '',
-      validated_for_song: false
-    };
-  }
-
   const url = String(item.url || '').trim();
   const isRealUrl = /^https?:\/\//i.test(url);
   const isGenericSearch = /google\.com\/search|bing\.com\/search|duckduckgo\.com|search\.yahoo\.com/i.test(url);
@@ -279,9 +260,19 @@ function clampToneData(data) {
     'Song meaning is not available yet.'
   );
 
-  data.lyrics_link = normalizeSingleLink(data.lyrics_link, 'Lyrics source');
-  data.chord_link = normalizeSingleLink(data.chord_link, 'Chord source');
-  data.tutorial_link = normalizeSingleLink(data.tutorial_link, 'Guitar tutorial');
+const songArtist = `${data.song || ''} ${data.artist || ''}`.trim();
+
+data.lyrics_search_query = String(
+  data.lyrics_search_query || `${songArtist} lyrics`
+).trim();
+
+data.chord_search_query = String(
+  data.chord_search_query || `${songArtist} chords`
+).trim();
+
+data.tutorial_search_query = String(
+  data.tutorial_search_query || `${songArtist} guitar tutorial`
+).trim();
 
   data.source_links = Array.isArray(data.source_links)
     ? data.source_links
@@ -342,17 +333,14 @@ Return:
 - song identity
 - BPM and key
 - concise song meaning
-- ONE direct public lyrics page link if available
-- ONE direct public chord/tab page link if available
-- ONE direct guitar tutorial link if available
+- a search query for lyrics
+- a search query for chords or tabs
+- a search query for a guitar tutorial
 - practical starting guitar tone settings for the selected gear
 
 Important:
 - Do not quote full lyrics.
-- Do not include chord charts.
-- Do not return generic search result URLs as validated links.
-- Only mark validated_for_song true if the URL appears to directly match the requested song and artist.
-- If a matching link is not found, return url "" and validated_for_song false.`);
+- Do not include chord charts.`);
 
     return res.status(200).json(clampToneData(diveIn));
   } catch (error) {
