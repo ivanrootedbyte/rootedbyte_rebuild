@@ -4,645 +4,770 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-<meta
-  name="description"
-  content="Song DiveIn helps worship musicians prepare songs with verified song details, lyrics and chord links, instrument tutorials, faith-centered reflections, rehearsal guidance, and role-specific coaching."
-/>
+  <meta
+    name="description"
+    content="Song DiveIn helps worship musicians prepare songs with verified song details, lyrics and chord links, instrument tutorials, faith-centered reflections, rehearsal guidance, and role-specific coaching."
+  />
 
-</head>
+  <title>Song DiveIn | RootedByte</title>
 
-<body>
-  <main class="song-divein-page app-page" data-app="song-divein">
-  <section class="song-hero">
-    <div class="song-hero__content">
-      <p class="eyebrow">Worship Team Ready</p>
-      <h1>Song DiveIn</h1>
-      <p class="song-hero__subtitle">
-        Go beyond the song link. Get the heart, flow, and practice notes your worship team needs before rehearsal.
-      </p>
-      <div class="hero-actions">
-        <a href="#songSearchForm" class="primary-action hero-link">Start a Song Dive</a>
-        <a href="#prep-cards-title" class="ghost-link">See Prep Cards</a>
-      </div>
-    </div>
-
-    <div class="song-hero__image-wrap" aria-label="Worship musician preparing a song">
-      <img
-        src="https://images.unsplash.com/photo-1660834772989-c15d049c35d7?auto=format&fit=crop&w=1200&q=80"
-        alt="Worship musician preparation with music and warm lighting"
-        class="song-hero__image"
-      />
-    </div>
-  </section>
-
-  <section class="song-search-card" aria-labelledby="song-search-title">
-    <div class="section-heading">
-      <p class="eyebrow">Song Lookup</p>
-      <h2 id="song-search-title">What are you preparing?</h2>
-      <p>Enter the song and artist so Song DiveIn can gather the essentials and shape the prep around the worship moment.</p>
-    </div>
-
-    <form id="songSearchForm" class="song-search-form">
-  <div class="field-group song-input-wide">
-    <label for="songInput">Song link or song name</label>
-    <input
-      id="songInput"
-      name="songInput"
-      type="text"
-      placeholder="Paste a YouTube link or type: Goodness of God - Bethel Music"
-      autocomplete="off"
-      required
-    />
-  </div>
-
-  <button type="submit" class="primary-action">Generate Song Prep</button>
-</form>
-  </section>
-
-<section id="songResultsArea" class="song-results-area" hidden>
-
-  <!-- Song Snapshot -->
-  <section class="verified-song-card" aria-labelledby="verified-song-title">
-    <div class="section-heading compact-heading">
-      <p class="eyebrow">Song Snapshot</p>
-      <h2 id="verified-song-title">The essentials</h2>
-      <p>Verified song details stay untouched so the prep stays honest and useful.</p>
-    </div>
-
-    <div class="verified-grid">
-      <article class="verified-item">
-        <span>Song</span>
-        <strong id="verifiedSongName">Search a song</strong>
-      </article>
-
-      <article class="verified-item">
-        <span>Artist</span>
-        <strong id="verifiedArtist">Add artist</strong>
-      </article>
-
-      <article class="verified-item">
-        <span>BPM</span>
-        <strong id="verifiedBpm">Unable to verify</strong>
-      </article>
-
-      <article class="verified-item">
-        <span>Key</span>
-        <strong id="verifiedKey">Unable to verify</strong>
-      </article>
-
-      <article class="verified-item">
-        <span>Confidence</span>
-        <strong id="verifiedConfidence">Not detected</strong>
-      </article>
-    </div>
-  </section>
-
-  <!-- Quick Links -->
-  <section class="lookup-actions-card" aria-labelledby="lookup-actions-title">
-    <div class="section-heading compact-heading">
-      <p class="eyebrow">Quick Links</p>
-      <h2 id="lookup-actions-title">Lyrics, chords, and tutorial help</h2>
-      <p>Jump into the resources your team usually needs before the first run-through.</p>
-    </div>
-
-    <div class="lookup-actions">
-      <button id="lyricsLookupBtn" type="button" class="secondary-action">Find Lyrics</button>
-      <button id="chordsLookupBtn" type="button" class="secondary-action">Find Chords</button>
-      <button id="tutorialSearchBtn" type="button" class="secondary-action">Find Instrument Tutorial</button>
-    </div>
-
-    <div class="resource-results">
-      <article class="resource-panel">
-        <h3>Lyrics</h3>
-        <div id="lyricsResult" class="resource-output"></div>
-      </article>
-
-      <article class="resource-panel">
-        <h3>Chords</h3>
-        <div id="chordsResult" class="resource-output"></div>
-      </article>
-
-      <article class="resource-panel">
-        <h3>Instrument Tutorial</h3>
-        <div id="tutorialResult" class="resource-output"></div>
-      </article>
-    </div>
-  </section>
-  
-  <!-- Heart Check -->
-  <section class="song-meaning-card" aria-labelledby="song-meaning-title">
-    <div class="section-heading compact-heading">
-      <p class="eyebrow">Heart Check</p>
-      <h2 id="song-meaning-title">What the song is saying</h2>
-      <p>A focused look at the message so your team leads with meaning, not just memory.</p>
-    </div>
-
-    <div id="songMeaningResult" class="meaning-output"></div>
-  </section>
-
-  <section class="instrument-card" aria-labelledby="instrument-title">
-    <div class="section-heading compact-heading">
-      <p class="eyebrow">Your Role</p>
-      <h2 id="instrument-title">Pick your lane</h2>
-      <p>Song DiveIn shapes the practice notes around how you serve the song.</p>
-    </div>
-
-    <div class="instrument-select-row">
-      <div class="field-group">
-        <label for="instrumentSelect">Instrument</label>
-        <select id="instrumentSelect" name="instrument">
-          <option value="acoustic-guitar">Acoustic Guitar</option>
-          <option value="electric-guitar">Electric Guitar</option>
-          <option value="bass">Bass</option>
-          <option value="drums">Drums</option>
-          <option value="keys-piano">Keys / Piano</option>
-          <option value="vocals">Vocals</option>
-        </select>
-      </div>
-      <p class="field-helper">Your tutorial search and coaching will shift with your selected role.</p>
-    </div>
-  </section>
-
-   <!-- Prep Cards -->
-  <section class="prep-cards" aria-labelledby="prep-cards-title">
-    <div class="section-heading compact-heading">
-      <p class="eyebrow">Prep Cards</p>
-      <h2 id="prep-cards-title">Ready for rehearsal</h2>
-      <p>Short, useful cards for the heart, the sound, and the team moment.</p>
-    </div>
-
-    <details class="prep-card" open>
-      <summary>
-        <span>Faith Lens</span>
-        <small>Scripture connections, God-focus, and worship posture</small>
-      </summary>
-      <div id="faithLensResult" class="prep-card__body"></div>
-    </details>
-
-    <details class="prep-card">
-      <summary>
-        <span>Song Flow</span>
-        <small>How the moment may move from reflection to response</small>
-      </summary>
-      <div id="arrangementFeelResult" class="prep-card__body"></div>
-    </details>
-
-    <details class="prep-card">
-      <summary>
-        <span>Listen Closely</span>
-        <small>Dynamic lifts, repeated lines, and moments to leave space</small>
-      </summary>
-      <div id="listeningGuideResult" class="prep-card__body"></div>
-    </details>
-
-    <details class="prep-card">
-      <summary>
-        <span>Rehearsal Moves</span>
-        <small>Practical reminders for transitions, cues, and team unity</small>
-      </summary>
-      <div id="rehearsalPrepResult" class="prep-card__body"></div>
-    </details>
-
-    <details class="prep-card">
-      <summary>
-        <span>Before You Lead</span>
-        <small>A short reflection, prayer prompt, and worship mindset</small>
-      </summary>
-      <div id="spiritualReflectionResult" class="prep-card__body"></div>
-    </details>
-
-    <details class="prep-card">
-      <summary>
-        <span>Role Coaching</span>
-        <small>Guidance for your selected instrument or vocal role</small>
-      </summary>
-      <div id="instrumentGuidanceResult" class="prep-card__body"></div>
-    </details>
-  </section>
-  
-</section>
-  
-</main>
-
-<style>
-  :root {
-    --song-bg: #eef4ff;
-    --song-bg-soft: #f8fbff;
-    --song-card: rgba(255, 255, 255, 0.78);
-    --song-card-strong: rgba(255, 255, 255, 0.94);
-    --song-card-soft: rgba(248, 251, 255, 0.92);
-    --song-primary: #7c3aed;
-    --song-primary-soft: rgba(124, 58, 237, 0.12);
-    --song-secondary: #f59e0b;
-    --song-secondary-soft: rgba(245, 158, 11, 0.16);
-    --song-accent: #0ea5e9;
-    --song-text: #182033;
-    --song-muted: #61708a;
-    --song-border: rgba(52, 74, 108, 0.14);
-    --song-radius: 28px;
-    --song-shadow: 0 24px 70px rgba(68, 82, 115, 0.16);
-  }
-
-  .song-divein-page {
-    min-height: 100vh;
-    padding: clamp(1rem, 3vw, 3rem);
-    color: var(--song-text);
-    background:
-      radial-gradient(circle at top left, rgba(14, 165, 233, 0.2), transparent 32rem),
-      radial-gradient(circle at 80% 10%, rgba(124, 58, 237, 0.16), transparent 32rem),
-      linear-gradient(180deg, #f7fbff 0%, var(--song-bg) 52%, #fff7ed 100%);
-  }
-
-  .song-divein-page,
-  .song-divein-page input,
-  .song-divein-page select,
-  .song-divein-page button {
-    font-family: inherit;
-  }
-
-  .song-hero,
-  .song-search-card,
-  .verified-song-card,
-  .lookup-actions-card,
-  .song-meaning-card,
-  .instrument-card,
-  .prep-cards {
-    width: min(1120px, 100%);
-    margin: 0 auto 1.25rem;
-    padding: clamp(1.1rem, 3vw, 2rem);
-    border: 1px solid var(--song-border);
-    border-radius: var(--song-radius);
-    background: var(--song-card);
-    box-shadow: var(--song-shadow);
-    backdrop-filter: blur(22px);
-  }
-
-  .song-hero {
-    display: grid;
-    grid-template-columns: minmax(0, 1.05fr) minmax(280px, 0.95fr);
-    gap: clamp(1.2rem, 4vw, 3rem);
-    align-items: center;
-    min-height: 430px;
-    overflow: hidden;
-  }
-
-  .song-hero__content {
-    position: relative;
-    z-index: 2;
-  }
-.song-results-area {
-  display: grid;
-  gap: 1.25rem;
-}
-
-.song-results-area[hidden] {
-  display: none;
-}
-  .song-hero__image-wrap {
-    position: relative;
-    min-height: 340px;
-    border-radius: 32px;
-    overflow: hidden;
-    box-shadow: 0 28px 60px rgba(33, 46, 79, 0.22);
-  }
-
-  .song-hero__image-wrap::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background:
-      linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(124, 58, 237, 0.2)),
-      radial-gradient(circle at bottom left, rgba(245, 158, 11, 0.26), transparent 50%);
-  }
-
-  .song-hero__image {
-    width: 100%;
-    height: 100%;
-    min-height: 340px;
-    object-fit: cover;
-    transform: scale(1.02);
-  }
-
-  .eyebrow {
-    margin: 0 0 0.4rem;
-    color: var(--song-primary);
-    font-size: 0.76rem;
-    font-weight: 850;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-  }
-
-  .song-hero h1,
-  .section-heading h2 {
-    margin: 0;
-    line-height: 1.04;
-    letter-spacing: -0.045em;
-  }
-
-  .song-hero h1 {
-    font-size: clamp(3rem, 8vw, 6.7rem);
-  }
-
-  .section-heading h2 {
-    font-size: clamp(1.55rem, 3vw, 2.4rem);
-  }
-
-  .song-hero__subtitle,
-  .section-heading p,
-  .field-helper {
-    max-width: 720px;
-    color: var(--song-muted);
-    line-height: 1.7;
-  }
-
-  .song-hero__subtitle {
-    font-size: clamp(1rem, 2vw, 1.25rem);
-  }
-
-  .hero-actions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.8rem;
-    align-items: center;
-    margin-top: 1.4rem;
-  }
-
-  .hero-link,
-  .ghost-link {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    text-decoration: none;
-  }
-
-  .ghost-link {
-    min-height: 48px;
-    border: 1px solid var(--song-border);
-    border-radius: 999px;
-    padding: 0 1.15rem;
-    color: var(--song-text);
-    font-weight: 800;
-    background: rgba(255, 255, 255, 0.55);
-  }
-
-  .compact-heading {
-    margin-bottom: 1rem;
-  }
-
-  .song-search-form,
-  .instrument-card,
-  .instrument-select-row {
-    display: grid;
-    gap: 0.8rem;
-  }
-
-.song-search-form {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  gap: 0.8rem;
-  align-items: end;
-}
-
-.song-input-wide {
-  min-width: 0;
-}
-
-  .field-group {
-    display: grid;
-    gap: 0.45rem;
-  }
-
-  .song-search-form label,
-  .instrument-card label {
-    color: var(--song-muted);
-    font-size: 0.88rem;
-    font-weight: 800;
-  }
-
-  .song-search-form input,
-  .instrument-card select {
-    min-height: 50px;
-    border: 1px solid var(--song-border);
-    border-radius: 18px;
-    padding: 0 1rem;
-    color: var(--song-text);
-    background: rgba(255, 255, 255, 0.78);
-    outline: none;
-  }
-
-  .song-search-form input:focus,
-  .instrument-card select:focus {
-    border-color: var(--song-primary);
-    box-shadow: 0 0 0 4px var(--song-primary-soft);
-  }
-
-  .primary-action,
-  .secondary-action {
-    min-height: 50px;
-    border: 0;
-    border-radius: 999px;
-    padding: 0 1.2rem;
-    font-weight: 850;
-    cursor: pointer;
-    transition: transform 160ms ease, box-shadow 160ms ease, background 160ms ease;
-  }
-
-  .primary-action:hover,
-  .secondary-action:hover,
-  .ghost-link:hover {
-    transform: translateY(-2px);
-  }
-
-  .primary-action {
-    color: #ffffff;
-    background: linear-gradient(135deg, var(--song-primary), var(--song-accent));
-    box-shadow: 0 14px 28px rgba(124, 58, 237, 0.24);
-  }
-
-  .secondary-action {
-    color: var(--song-text);
-    border: 1px solid var(--song-border);
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.9), rgba(248, 251, 255, 0.68));
-  }
-
-  .verified-grid {
-    display: grid;
-    grid-template-columns: repeat(5, minmax(0, 1fr));
-    gap: 0.85rem;
-  }
-
-  .verified-item,
-  .resource-panel,
-  .prep-card,
-  .meaning-output {
-    border: 1px solid var(--song-border);
-    border-radius: 22px;
-    background: var(--song-card-strong);
-  }
-
-  .verified-item {
-    position: relative;
-    padding: 1rem;
-    overflow: hidden;
-  }
-
-  .verified-item::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 4px;
-    background: linear-gradient(90deg, var(--song-primary), var(--song-secondary));
-    opacity: 0.75;
-  }
-
-  .verified-item span {
-    display: block;
-    margin-bottom: 0.35rem;
-    color: var(--song-muted);
-    font-size: 0.76rem;
-    font-weight: 850;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-  }
-
-  .verified-item strong {
-    font-size: 1.02rem;
-  }
-
-  .lookup-actions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.7rem;
-    margin-bottom: 1rem;
-  }
-
-  .resource-results {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 1rem;
-  }
-
-  .resource-panel {
-    padding: 1rem;
-  }
-
-  .resource-panel h3 {
-    margin-top: 0;
-  }
-
-  .resource-output,
-  .meaning-output,
-  .prep-card__body {
-    color: var(--song-muted);
-    line-height: 1.65;
-  }
-
-  .meaning-output {
-    padding: 1rem;
-  }
-
-  .prep-cards {
-    display: grid;
-    gap: 1rem;
-  }
-
-  .prep-card {
-    overflow: hidden;
-    transition: transform 160ms ease, box-shadow 160ms ease;
-  }
-
-  .prep-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 18px 40px rgba(68, 82, 115, 0.12);
-  }
-
-  .prep-card summary {
-    display: flex;
-    justify-content: space-between;
-    gap: 1rem;
-    padding: 1rem;
-    cursor: pointer;
-    list-style: none;
-  }
-
-  .prep-card summary::-webkit-details-marker {
-    display: none;
-  }
-
-  .prep-card summary span {
-    font-weight: 900;
-  }
-
-  .prep-card summary small {
-    max-width: 430px;
-    color: var(--song-muted);
-    text-align: right;
-  }
-
-  .prep-card__body {
-    border-top: 1px solid var(--song-border);
-    padding: 1rem;
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.54), rgba(248, 251, 255, 0.76));
-  }
-
-  @media (prefers-color-scheme: dark) {
+  <style>
     :root {
-      --song-bg: #151a2f;
-      --song-bg-soft: #1b2138;
-      --song-card: rgba(26, 32, 54, 0.76);
-      --song-card-strong: rgba(31, 38, 63, 0.92);
-      --song-card-soft: rgba(36, 44, 72, 0.9);
-      --song-text: #f8fafc;
-      --song-muted: #cbd5e1;
-      --song-border: rgba(255, 255, 255, 0.12);
+      --song-bg: #eef4ff;
+      --song-card: rgba(255, 255, 255, 0.78);
+      --song-card-strong: rgba(255, 255, 255, 0.94);
+      --song-primary: #7c3aed;
+      --song-primary-soft: rgba(124, 58, 237, 0.12);
+      --song-secondary: #f59e0b;
+      --song-accent: #0ea5e9;
+      --song-text: #182033;
+      --song-muted: #61708a;
+      --song-border: rgba(52, 74, 108, 0.14);
+      --song-radius: 28px;
+      --song-shadow: 0 24px 70px rgba(68, 82, 115, 0.16);
+      --max: 1180px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--song-text);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(14, 165, 233, 0.2), transparent 32rem),
+        radial-gradient(circle at 80% 10%, rgba(124, 58, 237, 0.16), transparent 32rem),
+        linear-gradient(180deg, #f7fbff 0%, var(--song-bg) 52%, #fff7ed 100%);
+    }
+
+    a {
+      color: inherit;
+    }
+
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      padding: 0.85rem clamp(1rem, 3vw, 2rem);
+      border-bottom: 1px solid var(--song-border);
+      background: rgba(248, 251, 255, 0.76);
+      backdrop-filter: blur(18px);
+    }
+
+    .nav-shell {
+      width: min(var(--max), 100%);
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.65rem;
+      text-decoration: none;
+      font-weight: 950;
+      letter-spacing: -0.04em;
+    }
+
+    .brand-mark {
+      width: 38px;
+      height: 38px;
+      display: grid;
+      place-items: center;
+      border-radius: 14px;
+      color: #ffffff;
+      background: linear-gradient(135deg, var(--song-primary), var(--song-accent));
+      box-shadow: 0 12px 26px rgba(124, 58, 237, 0.22);
+    }
+
+    .site-nav {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      gap: 0.35rem;
+    }
+
+    .site-nav a {
+      padding: 0.65rem 0.85rem;
+      border-radius: 999px;
+      color: var(--song-muted);
+      font-size: 0.92rem;
+      font-weight: 800;
+      text-decoration: none;
+    }
+
+    .site-nav a:hover,
+    .site-nav a[aria-current="page"] {
+      color: var(--song-text);
+      background: rgba(124, 58, 237, 0.1);
     }
 
     .song-divein-page {
+      padding: clamp(1rem, 3vw, 3rem);
+    }
+
+    .song-hero,
+    .song-search-card,
+    .verified-song-card,
+    .lookup-actions-card,
+    .song-meaning-card,
+    .instrument-card,
+    .prep-cards {
+      width: min(1120px, 100%);
+      margin: 0 auto 1.25rem;
+      padding: clamp(1.1rem, 3vw, 2rem);
+      border: 1px solid var(--song-border);
+      border-radius: var(--song-radius);
+      background: var(--song-card);
+      box-shadow: var(--song-shadow);
+      backdrop-filter: blur(22px);
+    }
+
+    .song-hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1.05fr) minmax(280px, 0.95fr);
+      gap: clamp(1.2rem, 4vw, 3rem);
+      align-items: center;
+      min-height: 430px;
+      overflow: hidden;
+    }
+
+    .song-hero__content {
+      position: relative;
+      z-index: 2;
+    }
+
+    .song-hero__image-wrap {
+      position: relative;
+      min-height: 340px;
+      border-radius: 32px;
+      overflow: hidden;
+      box-shadow: 0 28px 60px rgba(33, 46, 79, 0.22);
+    }
+
+    .song-hero__image-wrap::after {
+      content: "";
+      position: absolute;
+      inset: 0;
       background:
-        radial-gradient(circle at top left, rgba(14, 165, 233, 0.18), transparent 32rem),
-        radial-gradient(circle at 80% 10%, rgba(124, 58, 237, 0.2), transparent 32rem),
-        linear-gradient(180deg, #111827 0%, var(--song-bg) 56%, #241b35 100%);
+        linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(124, 58, 237, 0.2)),
+        radial-gradient(circle at bottom left, rgba(245, 158, 11, 0.26), transparent 50%);
+    }
+
+    .song-hero__image {
+      width: 100%;
+      height: 100%;
+      min-height: 340px;
+      object-fit: cover;
+      transform: scale(1.02);
+    }
+
+    .eyebrow {
+      margin: 0 0 0.4rem;
+      color: var(--song-primary);
+      font-size: 0.76rem;
+      font-weight: 850;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+    .song-hero h1,
+    .section-heading h2 {
+      margin: 0;
+      line-height: 1.04;
+      letter-spacing: -0.045em;
+    }
+
+    .song-hero h1 {
+      font-size: clamp(3rem, 8vw, 6.7rem);
+    }
+
+    .section-heading h2 {
+      font-size: clamp(1.55rem, 3vw, 2.4rem);
+    }
+
+    .song-hero__subtitle,
+    .section-heading p,
+    .field-helper {
+      max-width: 720px;
+      color: var(--song-muted);
+      line-height: 1.7;
+    }
+
+    .song-hero__subtitle {
+      font-size: clamp(1rem, 2vw, 1.25rem);
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.8rem;
+      align-items: center;
+      margin-top: 1.4rem;
+    }
+
+    .hero-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+    }
+
+    .compact-heading {
+      margin-bottom: 1rem;
+    }
+
+    .song-search-form,
+    .instrument-card,
+    .instrument-select-row {
+      display: grid;
+      gap: 0.8rem;
+    }
+
+    .song-search-form {
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 0.8rem;
+      align-items: end;
+    }
+
+    .song-input-wide {
+      min-width: 0;
+    }
+
+    .field-group {
+      display: grid;
+      gap: 0.45rem;
+    }
+
+    .song-search-form label,
+    .instrument-card label {
+      color: var(--song-muted);
+      font-size: 0.88rem;
+      font-weight: 800;
     }
 
     .song-search-form input,
-    .instrument-card select,
-    .secondary-action,
-    .ghost-link {
+    .instrument-card select {
+      min-height: 52px;
+      border: 1px solid var(--song-border);
+      border-radius: 18px;
+      padding: 0 1rem;
       color: var(--song-text);
-      background: rgba(255, 255, 255, 0.08);
+      background: rgba(255, 255, 255, 0.82);
+      outline: none;
     }
 
+    .song-search-form input:focus,
+    .instrument-card select:focus {
+      border-color: var(--song-primary);
+      box-shadow: 0 0 0 4px var(--song-primary-soft);
+    }
+
+    .primary-action,
+    .secondary-action {
+      min-height: 52px;
+      border: 0;
+      border-radius: 999px;
+      padding: 0 1.2rem;
+      font-weight: 850;
+      cursor: pointer;
+      transition: transform 160ms ease, box-shadow 160ms ease, background 160ms ease;
+    }
+
+    .primary-action:hover,
+    .secondary-action:hover {
+      transform: translateY(-2px);
+    }
+
+    .primary-action {
+      color: #ffffff;
+      background: linear-gradient(135deg, var(--song-primary), var(--song-accent));
+      box-shadow: 0 14px 28px rgba(124, 58, 237, 0.24);
+    }
+
+    .secondary-action {
+      color: var(--song-text);
+      border: 1px solid var(--song-border);
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.9), rgba(248, 251, 255, 0.68));
+    }
+
+    .song-results-area {
+      display: grid;
+      gap: 1.25rem;
+    }
+
+    .song-results-area[hidden] {
+      display: none;
+    }
+
+    .verified-grid {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 0.85rem;
+    }
+
+    .verified-item,
+    .resource-panel,
+    .prep-card,
+    .meaning-output {
+      border: 1px solid var(--song-border);
+      border-radius: 22px;
+      background: var(--song-card-strong);
+    }
+
+    .verified-item {
+      position: relative;
+      padding: 1rem;
+      overflow: hidden;
+    }
+
+    .verified-item::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(90deg, var(--song-primary), var(--song-secondary));
+      opacity: 0.75;
+    }
+
+    .verified-item span {
+      display: block;
+      margin-bottom: 0.35rem;
+      color: var(--song-muted);
+      font-size: 0.76rem;
+      font-weight: 850;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .verified-item strong {
+      font-size: 1.02rem;
+    }
+
+    .lookup-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.7rem;
+      margin-bottom: 1rem;
+    }
+
+    .resource-results {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1rem;
+    }
+
+    .resource-panel {
+      padding: 1rem;
+    }
+
+    .resource-panel h3 {
+      margin-top: 0;
+    }
+
+    .resource-output,
+    .meaning-output,
     .prep-card__body {
-      background: rgba(255, 255, 255, 0.04);
-    }
-  }
-
-@media (max-width: 900px) {
-  .song-search-form {
-    grid-template-columns: 1fr;
-  }
-}
-
-    .song-hero {
-      min-height: auto;
+      color: var(--song-muted);
+      line-height: 1.65;
     }
 
-    .song-hero__image-wrap,
-    .song-hero__image {
-      min-height: 260px;
+    .meaning-output {
+      padding: 1rem;
+    }
+
+    .prep-cards {
+      display: grid;
+      gap: 1rem;
+    }
+
+    .prep-card {
+      overflow: hidden;
+      transition: transform 160ms ease, box-shadow 160ms ease;
+    }
+
+    .prep-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 18px 40px rgba(68, 82, 115, 0.12);
     }
 
     .prep-card summary {
-      display: grid;
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 1rem;
+      cursor: pointer;
+      list-style: none;
+    }
+
+    .prep-card summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .prep-card summary span {
+      font-weight: 900;
     }
 
     .prep-card summary small {
-      text-align: left;
+      max-width: 430px;
+      color: var(--song-muted);
+      text-align: right;
     }
-  }
-</style>
+
+    .prep-card__body {
+      border-top: 1px solid var(--song-border);
+      padding: 1rem;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.54), rgba(248, 251, 255, 0.76));
+    }
+
+    .resource-link {
+      display: inline-flex;
+      align-items: center;
+      color: var(--song-primary);
+      font-weight: 850;
+      text-decoration: none;
+    }
+
+    .resource-link:hover {
+      text-decoration: underline;
+    }
+
+    .resource-note {
+      margin-bottom: 0;
+      color: var(--song-muted);
+      font-size: 0.92rem;
+    }
+
+    .loading-text {
+      color: var(--song-muted);
+    }
+
+    .error-text {
+      color: #ef4444;
+    }
+
+    .site-footer {
+      padding: 2rem clamp(1rem, 3vw, 2rem) 2.4rem;
+      color: var(--song-muted);
+      text-align: center;
+    }
+
+    .footer-shell {
+      width: min(var(--max), 100%);
+      margin: 0 auto;
+      padding-top: 1.25rem;
+      border-top: 1px solid var(--song-border);
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --song-bg: #151a2f;
+        --song-card: rgba(26, 32, 54, 0.76);
+        --song-card-strong: rgba(31, 38, 63, 0.92);
+        --song-text: #f8fafc;
+        --song-muted: #cbd5e1;
+        --song-border: rgba(255, 255, 255, 0.12);
+      }
+
+      body {
+        background:
+          radial-gradient(circle at top left, rgba(14, 165, 233, 0.18), transparent 32rem),
+          radial-gradient(circle at 80% 10%, rgba(124, 58, 237, 0.2), transparent 32rem),
+          linear-gradient(180deg, #111827 0%, var(--song-bg) 56%, #241b35 100%);
+      }
+
+      .site-header {
+        background: rgba(17, 24, 39, 0.74);
+      }
+
+      .song-search-form input,
+      .instrument-card select,
+      .secondary-action {
+        color: var(--song-text);
+        background: rgba(255, 255, 255, 0.08);
+      }
+
+      .prep-card__body {
+        background: rgba(255, 255, 255, 0.04);
+      }
+    }
+
+    @media (max-width: 900px) {
+      .nav-shell {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .site-nav {
+        justify-content: flex-start;
+      }
+
+      .song-hero,
+      .song-search-form,
+      .verified-grid,
+      .resource-results {
+        grid-template-columns: 1fr;
+      }
+
+      .song-hero {
+        min-height: auto;
+      }
+
+      .song-hero__image-wrap,
+      .song-hero__image {
+        min-height: 260px;
+      }
+
+      .prep-card summary {
+        display: grid;
+      }
+
+      .prep-card summary small {
+        text-align: left;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header class="site-header">
+    <div class="nav-shell">
+      <a class="brand" href="index.html" aria-label="RootedByte home">
+        <span class="brand-mark">RB</span>
+        <span>RootedByte</span>
+      </a>
+
+      <nav class="site-nav" aria-label="Primary navigation">
+        <a href="index.html">Home</a>
+        <a href="tone.html" aria-current="page">Song DiveIn</a>
+        <a href="newsverse.html">NewsVerse</a>
+        <a href="rooted-os.html">Rooted OS</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="song-divein-page app-page" data-app="song-divein">
+    <section class="song-hero">
+      <div class="song-hero__content">
+        <p class="eyebrow">Worship Team Ready</p>
+        <h1>Song DiveIn</h1>
+        <p class="song-hero__subtitle">
+          Drop in a YouTube link or type the song and artist. Song DiveIn turns it into a focused rehearsal-ready worship prep.
+        </p>
+        <div class="hero-actions">
+          <a href="#songSearchForm" class="primary-action hero-link">Start a Song Dive</a>
+        </div>
+      </div>
+
+      <div class="song-hero__image-wrap" aria-label="Worship musician preparing a song">
+        <img
+          src="https://images.unsplash.com/photo-1660834772989-c15d049c35d7?auto=format&fit=crop&w=1200&q=80"
+          alt="Worship musician preparation with music and warm lighting"
+          class="song-hero__image"
+        />
+      </div>
+    </section>
+
+    <section class="song-search-card" aria-labelledby="song-search-title">
+      <div class="section-heading">
+        <p class="eyebrow">Song Lookup</p>
+        <h2 id="song-search-title">What are you preparing?</h2>
+        <p>Paste a YouTube link, or type the song title and artist in one line.</p>
+      </div>
+
+      <form id="songSearchForm" class="song-search-form">
+        <div class="field-group song-input-wide">
+          <label for="songInput">Song title, artist, or YouTube link</label>
+          <input
+            id="songInput"
+            name="songInput"
+            type="text"
+            placeholder="Goodness of God - Bethel Music or paste a YouTube link"
+            autocomplete="off"
+            required
+          />
+        </div>
+
+        <button type="submit" class="primary-action">Generate Song Prep</button>
+      </form>
+    </section>
+
+    <section class="instrument-card" aria-labelledby="instrument-title">
+      <div class="section-heading compact-heading">
+        <p class="eyebrow">Your Role</p>
+        <h2 id="instrument-title">Pick your lane</h2>
+        <p>Choose how you serve the song so the tutorial search and coaching fit your role.</p>
+      </div>
+
+      <div class="instrument-select-row">
+        <div class="field-group">
+          <label for="instrumentSelect">Instrument</label>
+          <select id="instrumentSelect" name="instrument">
+            <option value="acoustic-guitar">Acoustic Guitar</option>
+            <option value="electric-guitar">Electric Guitar</option>
+            <option value="bass">Bass</option>
+            <option value="drums">Drums</option>
+            <option value="keys-piano">Keys / Piano</option>
+            <option value="vocals">Vocals</option>
+          </select>
+        </div>
+      </div>
+    </section>
+
+    <section id="songResultsArea" class="song-results-area" hidden>
+      <section class="verified-song-card" aria-labelledby="verified-song-title">
+        <div class="section-heading compact-heading">
+          <p class="eyebrow">Song Snapshot</p>
+          <h2 id="verified-song-title">The essentials</h2>
+          <p>Verified song details stay untouched so the prep stays honest and useful.</p>
+        </div>
+
+        <div class="verified-grid">
+          <article class="verified-item">
+            <span>Song</span>
+            <strong id="verifiedSongName">Unable to verify</strong>
+          </article>
+
+          <article class="verified-item">
+            <span>Artist</span>
+            <strong id="verifiedArtist">Unable to verify</strong>
+          </article>
+
+          <article class="verified-item">
+            <span>BPM</span>
+            <strong id="verifiedBpm">Unable to verify</strong>
+          </article>
+
+          <article class="verified-item">
+            <span>Key</span>
+            <strong id="verifiedKey">Unable to verify</strong>
+          </article>
+
+          <article class="verified-item">
+            <span>Confidence</span>
+            <strong id="verifiedConfidence">Not detected</strong>
+          </article>
+        </div>
+      </section>
+
+      <section class="lookup-actions-card" aria-labelledby="lookup-actions-title">
+        <div class="section-heading compact-heading">
+          <p class="eyebrow">Quick Links</p>
+          <h2 id="lookup-actions-title">Lyrics, chords, and tutorial help</h2>
+          <p>Jump into the resources your team usually needs before the first run-through.</p>
+        </div>
+
+        <div class="lookup-actions">
+          <button id="lyricsLookupBtn" type="button" class="secondary-action">Find Lyrics</button>
+          <button id="chordsLookupBtn" type="button" class="secondary-action">Find Chords</button>
+          <button id="tutorialSearchBtn" type="button" class="secondary-action">Find Instrument Tutorial</button>
+        </div>
+
+        <div class="resource-results">
+          <article class="resource-panel">
+            <h3>Lyrics</h3>
+            <div id="lyricsResult" class="resource-output"></div>
+          </article>
+
+          <article class="resource-panel">
+            <h3>Chords</h3>
+            <div id="chordsResult" class="resource-output"></div>
+          </article>
+
+          <article class="resource-panel">
+            <h3>Instrument Tutorial</h3>
+            <div id="tutorialResult" class="resource-output"></div>
+          </article>
+        </div>
+      </section>
+
+      <section class="song-meaning-card" aria-labelledby="song-meaning-title">
+        <div class="section-heading compact-heading">
+          <p class="eyebrow">Heart Check</p>
+          <h2 id="song-meaning-title">What the song is saying</h2>
+          <p>A focused look at the message so your team leads with meaning, not just memory.</p>
+        </div>
+
+        <div id="songMeaningResult" class="meaning-output"></div>
+      </section>
+
+      <section class="prep-cards" aria-labelledby="prep-cards-title">
+        <div class="section-heading compact-heading">
+          <p class="eyebrow">Prep Cards</p>
+          <h2 id="prep-cards-title">Ready for rehearsal</h2>
+          <p>Short, useful cards for the heart, the sound, and the team moment.</p>
+        </div>
+
+        <details class="prep-card" open>
+          <summary>
+            <span>Faith Lens</span>
+            <small>Scripture connections, God-focus, and worship posture</small>
+          </summary>
+          <div id="faithLensResult" class="prep-card__body"></div>
+        </details>
+
+        <details class="prep-card">
+          <summary>
+            <span>Song Flow</span>
+            <small>How the moment may move from reflection to response</small>
+          </summary>
+          <div id="arrangementFeelResult" class="prep-card__body"></div>
+        </details>
+
+        <details class="prep-card">
+          <summary>
+            <span>Listen Closely</span>
+            <small>Dynamic lifts, repeated lines, and moments to leave space</small>
+          </summary>
+          <div id="listeningGuideResult" class="prep-card__body"></div>
+        </details>
+
+        <details class="prep-card">
+          <summary>
+            <span>Rehearsal Moves</span>
+            <small>Practical reminders for transitions, cues, and team unity</small>
+          </summary>
+          <div id="rehearsalPrepResult" class="prep-card__body"></div>
+        </details>
+
+        <details class="prep-card">
+          <summary>
+            <span>Before You Lead</span>
+            <small>A short reflection, prayer prompt, and worship mindset</small>
+          </summary>
+          <div id="spiritualReflectionResult" class="prep-card__body"></div>
+        </details>
+
+        <details class="prep-card">
+          <summary>
+            <span>Role Coaching</span>
+            <small>Guidance for your selected instrument or vocal role</small>
+          </summary>
+          <div id="instrumentGuidanceResult" class="prep-card__body"></div>
+        </details>
+      </section>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-shell">
+      <p>&copy; 2026 RootedByte. Built for thoughtful tools, creative learning, and faith-rooted preparation.</p>
+    </div>
+  </footer>
+
   <script src="tone.js"></script>
 </body>
 </html>
