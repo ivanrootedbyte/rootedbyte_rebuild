@@ -358,15 +358,26 @@
 .hero-panel {
   position: relative;
   display: block;
-  border: 1px solid rgba(23, 32, 27, 0.10);
+  width: min(100%, 390px);
+  margin-left: auto;
+  border: 2px solid transparent;
   border-radius: var(--radius-xl);
-  background: rgba(255, 252, 245, 0.58);
-  padding: 24px;
+  background:
+    linear-gradient(rgba(255, 252, 245, 0.58), rgba(255, 252, 245, 0.58)) padding-box,
+    linear-gradient(
+      135deg,
+      #ff6b6b,
+      #f7b267,
+      #ffe66d,
+      #4ecdc4,
+      #5b8def,
+      #b388ff
+    ) border-box;
+  padding: 18px;
   box-shadow: var(--shadow);
   backdrop-filter: blur(18px);
   overflow: hidden;
 }
-
 .hero-panel-link {
   cursor: pointer;
   transition:
