@@ -626,53 +626,43 @@
       </div>
     </section>
 
-    <section class="song-search-card" aria-labelledby="song-search-title">
-      <div class="section-heading">
-        <p class="eyebrow">Song Lookup</p>
-        <h2 id="song-search-title">What are you preparing?</h2>
-        <p>Paste a YouTube link, or type the song title and artist in one line.</p>
-      </div>
+   <section class="song-search-card song-start-card" aria-labelledby="song-search-title">
+  <div class="section-heading">
+    <p class="eyebrow">Song Lookup</p>
+    <h2 id="song-search-title">What are you preparing?</h2>
+    <p>Paste a YouTube link, or type the song title and artist. Then pick your role so Song DiveIn shapes the prep around how you serve the song.</p>
+  </div>
 
-      <form id="songSearchForm" class="song-search-form">
-        <div class="field-group song-input-wide">
-          <label for="songInput">Song title, artist, or YouTube link</label>
-          <input
-            id="songInput"
-            name="songInput"
-            type="text"
-            placeholder="Goodness of God - Bethel Music or paste a YouTube link"
-            autocomplete="off"
-            required
-          />
-        </div>
+  <form id="songSearchForm" class="song-start-form">
+    <div class="field-group song-input-wide">
+      <label for="songInput">Song title, artist, or YouTube link</label>
+      <input
+        id="songInput"
+        name="songInput"
+        type="text"
+        placeholder="Goodness of God - Bethel Music or paste a YouTube link"
+        autocomplete="off"
+        required
+      />
+    </div>
 
-        <button type="submit" class="primary-action">Generate Song Prep</button>
+    <div class="field-group">
+      <label for="instrumentSelect">Your role</label>
+      <select id="instrumentSelect" name="instrument">
+        <option value="acoustic-guitar">Acoustic Guitar</option>
+        <option value="electric-guitar">Electric Guitar</option>
+        <option value="bass">Bass</option>
+        <option value="drums">Drums</option>
+        <option value="keys-piano">Keys / Piano</option>
+        <option value="vocals">Vocals</option>
+      </select>
+    </div>
 
-        <div class="status" id="toneStatus" role="status" aria-live="polite"></div>
-      </form>
-    </section>
+    <button type="submit" class="primary-action">Generate Song Prep</button>
 
-    <section class="instrument-card" aria-labelledby="instrument-title">
-      <div class="section-heading compact-heading">
-        <p class="eyebrow">Your Role</p>
-        <h2 id="instrument-title">Pick your lane</h2>
-        <p>Choose how you serve the song so the tutorial search and coaching fit your role.</p>
-      </div>
-
-      <div class="instrument-select-row">
-        <div class="field-group">
-          <label for="instrumentSelect">Instrument</label>
-          <select id="instrumentSelect" name="instrument">
-            <option value="acoustic-guitar">Acoustic Guitar</option>
-            <option value="electric-guitar">Electric Guitar</option>
-            <option value="bass">Bass</option>
-            <option value="drums">Drums</option>
-            <option value="keys-piano">Keys / Piano</option>
-            <option value="vocals">Vocals</option>
-          </select>
-        </div>
-      </div>
-    </section>
+    <div class="status" id="toneStatus" role="status" aria-live="polite"></div>
+  </form>
+</section>
 
     <section id="songResultsArea" class="song-results-area" hidden>
       <section class="verified-song-card" aria-labelledby="verified-song-title">
