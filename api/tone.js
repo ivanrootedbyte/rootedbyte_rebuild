@@ -278,14 +278,13 @@ module.exports = async function handler(req, res) {
   }
 
   try {
-    const { songInput, gear } = req.body || {};
+ const { songInput, instrument } = req.body || {};
 
-    if (!songInput || !gear) {
-      return res.status(400).json({
-        error: 'Song input and gear are required.'
-      });
-    }
-
+if (!songInput || !instrument) {
+  return res.status(400).json({
+    error: 'Song input and instrument are required.'
+  });
+}
     if (isSpotifyUrl(songInput)) {
       return res.status(400).json({
         error: 'Spotify links are not supported. Please type the song name and artist, or paste a YouTube link.'
@@ -303,23 +302,30 @@ module.exports = async function handler(req, res) {
 Song input:
 ${resolvedSong}
 
-Selected guitar gear:
-${gear}
+Selected instrument:
+${instrument}
 
 Return:
 - song identity
-- BPM and key
+- BPM and key when verifiable
 - concise song meaning
 - a search query for lyrics
 - a search query for chords or tabs
-- a search query for a guitar tutorial
-- practical starting guitar tone settings for the selected gear
+- a search query for a tutorial for the selected instrument
+- Faith Lens guidance
+- high-level song flow guidance
+- intentional listening guidance
+- rehearsal preparation
+- spiritual reflection
+- role-specific coaching for the selected instrument
 
 Important:
 - Do not quote full lyrics.
 - Do not include chord charts.
 - Do not provide exact lyrics, chord, or tutorial URLs.
-- Provide search queries only for lyrics, chords, and tutorial resources.`);
+- Provide search queries only for lyrics, chords, and tutorial resources.
+- Do not create guitar tone settings, gear presets, amp settings, cab settings, or pedal settings.
+- Keep all worship preparation guidance concise and practical.`;
 
     return res.status(200).json(clampToneData(diveIn));
   } catch (error) {
