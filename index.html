@@ -118,10 +118,10 @@
 }
 
 .brand-mark img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  border-radius: 13px;
+  width: 118%;
+  height: 118%;
+  object-fit: cover;
+  object-position: center;
 }
 
     .brand-text span {
@@ -589,6 +589,22 @@ border-radius: 50%;
   line-height: 1.25;
 }
 
+    .hero-logo-content {
+  display: grid;
+  place-items: center;
+  text-align: center;
+}
+
+.hero-logo-image {
+  width: 72px;
+  height: 72px;
+  object-fit: cover;
+  object-position: center;
+  border-radius: 22px;
+  margin-bottom: 12px;
+  box-shadow: 0 12px 28px rgba(29, 36, 31, 0.10);
+}
+    
 .hero-panel-caption {
   position: relative;
   z-index: 1;
@@ -1135,15 +1151,19 @@ border-radius: 50%;
 
 <a href="#apps" class="hero-panel hero-panel-link" aria-label="Go to apps section">
   <div class="focus-orb">
-    <div class="orb-content">
-  <div>
-    <span class="orb-ring" aria-hidden="true"></span>
-   <p class="orb-message">
-  <span>TAP</span>
-  <small>(stay Rooted)</small>
-</p>
+<div class="orb-content">
+  <div class="hero-logo-content">
+    <img
+      class="hero-logo-image"
+      src="images/rootedbyte-icon.png"
+      alt="RootedByte logo"
+    />
+    <p class="orb-message">
+      <span>TAP</span>
+      <small>Stay Rooted</small>
+    </p>
   </div>
-    </div>
+</div>
   </div>
 </a>
         </div>
