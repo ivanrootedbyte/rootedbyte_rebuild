@@ -114,7 +114,8 @@ async function getYouTubeTitle(url) {
   } catch {
     // Continue to fallback below.
   }
-
+// Backend fallback: reads the YouTube page title if oEmbed does not return a title.
+// Do not replace this with the Song DiveIn submit fetch.
   const response = await fetch(url, {
     headers: {
       'User-Agent': 'Mozilla/5.0 (compatible; RootedByteBot/1.0; +https://rootedbyte.vercel.app)'
@@ -204,16 +205,9 @@ function clampNumber(value, min, max, fallback = 0) {
   return Number.isFinite(number) ? Math.min(max, Math.max(min, number)) : fallback;
 }
 
-function clampToneData(data) {
-  const knobKeys = ['gain', 'bass', 'mid', 'treble', 'presence', 'reverb_mix', 'delay_mix'];
-
-  knobKeys.forEach((key) => {
-    data[key] = clampNumber(data[key], 0, 10, 0);
-  });
-
-  data.delay_time_ms = Math.round(clampNumber(data.delay_time_ms, 0, 800, 0));
-
+function normalizeSongDiveInData(data, instrument) {
   const bpm = Number(data.bpm);
+
   data.bpm = Number.isFinite(bpm)
     ? Math.min(260, Math.max(40, Math.round(bpm)))
     : 0;
@@ -224,7 +218,7 @@ function clampToneData(data) {
   data.key =
     typeof data.key === 'string' && data.key.trim()
       ? data.key.trim()
-      : 'Unknown';
+      : 'Unable to verify';
 
   data.metadata_confidence =
     typeof data.metadata_confidence === 'string' && data.metadata_confidence.trim()
@@ -238,6 +232,7 @@ function clampToneData(data) {
   );
 
   const songArtist = `${data.song || ''} ${data.artist || ''}`.trim() || 'song';
+  const selectedInstrument = String(instrument || '').trim() || 'instrument';
 
   data.lyrics_search_query = String(
     data.lyrics_search_query || `${songArtist} lyrics`
@@ -248,7 +243,7 @@ function clampToneData(data) {
   ).trim();
 
   data.tutorial_search_query = String(
-    data.tutorial_search_query || `${songArtist} guitar tutorial`
+    data.tutorial_search_query || `${songArtist} ${selectedInstrument} tutorial`
   ).trim();
 
   data.source_links = Array.isArray(data.source_links)
@@ -257,9 +252,12 @@ function clampToneData(data) {
         .slice(0, 3)
     : [];
 
-  data.amp_model = String(data.amp_model || 'Not available');
-  data.cab = String(data.cab || 'Not available');
-  data.notes = String(data.notes || '');
+  data.faith_lens = String(data.faith_lens || 'Faith Lens is not available yet.');
+  data.arrangement_feel = String(data.arrangement_feel || 'Song flow guidance is not available yet.');
+  data.listening_guide = String(data.listening_guide || 'Listening guidance is not available yet.');
+  data.rehearsal_prep = String(data.rehearsal_prep || 'Rehearsal preparation is not available yet.');
+  data.spiritual_reflection = String(data.spiritual_reflection || 'Spiritual reflection is not available yet.');
+  data.instrument_guidance = String(data.instrument_guidance || `${selectedInstrument} guidance is not available yet.`);
 
   return data;
 }
@@ -297,7 +295,7 @@ if (!songInput || !instrument) {
       resolvedSong = await getYouTubeTitle(resolvedSong);
     }
 
-    const diveIn = await callGemini(`Research and create a Song DiveIn result.
+   const diveIn = await callGemini(`Research and create a Song DiveIn worship preparation result.
 
 Song input:
 ${resolvedSong}
@@ -307,27 +305,33 @@ ${instrument}
 
 Return:
 - song identity
-- BPM and key when verifiable
+- BPM and key only when verifiable through public sources
+- metadata confidence as "high", "medium", or "low"
 - concise song meaning
 - a search query for lyrics
 - a search query for chords or tabs
 - a search query for a tutorial for the selected instrument
-- Faith Lens guidance
-- high-level song flow guidance
-- intentional listening guidance
-- rehearsal preparation
-- spiritual reflection
-- role-specific coaching for the selected instrument
+- Faith Lens: Scripture connections, God-focus, and worship posture
+- Song Flow: high-level emotional and congregational movement
+- Listen Closely: dynamic lifts, repeated phrases, and places to leave space
+- Rehearsal Moves: practical team preparation, transitions, cues, and restraint
+- Before You Lead: short reflection, prayer prompt, and worship mindset
+- Role Coaching: concise guidance for the selected instrument
 
 Important:
 - Do not quote full lyrics.
 - Do not include chord charts.
 - Do not provide exact lyrics, chord, or tutorial URLs.
 - Provide search queries only for lyrics, chords, and tutorial resources.
-- Do not create guitar tone settings, gear presets, amp settings, cab settings, or pedal settings.
-- Keep all worship preparation guidance concise and practical.`;
+- Do not create guitar tone settings, gear presets, amp settings, cab settings, pedal settings, or downloadable presets.
+- Do not invent chords, BPM, key, timestamps, arrangement details, instrument layers, or live worship moments.
+- If a value cannot be verified, say "Unable to verify", "Estimated", or "Not detected".
+- Keep the language worship-aware, practical, concise, and modern.
+- Avoid denominational bias.
+- Do not use the heading or wording "Theology".`);
 
-    return res.status(200).json(clampToneData(diveIn));
+  
+    return res.status(200).json(normalizeSongDiveInData(diveIn, instrument));
   } catch (error) {
     return res.status(500).json({
       error: error.message || 'Unable to build that Song DiveIn result right now.'
