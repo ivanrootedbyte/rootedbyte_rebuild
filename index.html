@@ -359,7 +359,7 @@
   position: relative;
   display: grid;
   place-items: center;
-  width: min(100%, 390px);
+  width: min(100%, 310px);
   aspect-ratio: 1 / 1;
   margin-left: auto;
   border: 1px solid rgba(29, 36, 31, 0.08);
@@ -369,8 +369,8 @@
     rgba(255, 252, 245, 0.58);
   padding: 12px;
   box-shadow:
-    0 28px 80px rgba(29, 36, 31, 0.12),
-    0 0 70px rgba(33, 77, 53, 0.10);
+    0 24px 70px rgba(29, 36, 31, 0.11),
+    0 0 58px rgba(33, 77, 53, 0.10);
   backdrop-filter: blur(18px);
   overflow: hidden;
 }
@@ -467,17 +467,16 @@
 
 .focus-orb {
   position: relative;
-  z-index: 1;
   display: grid;
   place-items: center;
-width: 100%;
-height: 100%;
-min-height: auto;
-border-radius: 50%;
+  width: 100%;
+  height: 100%;
+  min-height: auto;
+  border-radius: 50%;
   background:
-    linear-gradient(145deg, rgba(255, 252, 245, 0.96), rgba(220, 232, 216, 0.52)),
-    radial-gradient(circle, rgba(41, 75, 53, 0.12), transparent 54%);
-  border: 1px solid rgba(29, 36, 31, 0.08);
+    linear-gradient(145deg, rgba(255, 252, 245, 0.94), rgba(220, 232, 216, 0.50)),
+    radial-gradient(circle, rgba(41, 75, 53, 0.10), transparent 54%);
+  border: 1px solid rgba(29, 36, 31, 0.06);
   overflow: hidden;
 }
 
@@ -495,36 +494,42 @@ border-radius: 50%;
 .orb-content {
   position: relative;
   z-index: 1;
-  width: 210px;
-  height: 210px;
-  border: 1px solid rgba(41, 75, 53, 0.14);
+  width: 72%;
+  height: 72%;
   border-radius: 50%;
   display: grid;
   place-items: center;
-  text-align: center;
-  color: var(--forest);
   background:
-    radial-gradient(circle at 30% 30%, rgba(255,255,255,0.72), rgba(247,243,234,0.78));
+    linear-gradient(rgba(255, 252, 245, 0.76), rgba(255, 252, 245, 0.76)) padding-box,
+    linear-gradient(
+      135deg,
+      #ff6b6b,
+      #f7b267,
+      #ffe66d,
+      #4ecdc4,
+      #5b8def,
+      #b388ff
+    ) border-box;
+  border: 1px solid transparent;
   box-shadow:
-    inset 0 0 50px rgba(41, 75, 53, 0.06),
-    0 10px 28px rgba(23, 32, 27, 0.06);
-  transition: transform 240ms ease, box-shadow 240ms ease;
+    inset 0 0 42px rgba(41, 75, 53, 0.06),
+    0 10px 26px rgba(23, 32, 27, 0.06);
   overflow: hidden;
 }
 
 .orb-content::before {
   content: "";
   position: absolute;
-  inset: 24px;
+  inset: 18px;
   background-image: url("images/rootedbyte-icon.png");
   background-repeat: no-repeat;
   background-position: center;
   background-size: contain;
-  opacity: 0.12;
-  filter: saturate(0.65);
-  z-index: -1;
+  opacity: 0.48;
+  filter: saturate(0.95) contrast(1.05);
   pointer-events: none;
 }
+
 
 .hero-panel-link:hover .orb-content,
 .hero-panel-link:focus-visible .orb-content {
@@ -1166,14 +1171,7 @@ border-radius: 50%;
 
 <a href="#apps" class="hero-panel hero-panel-link" aria-label="Go to apps section">
   <div class="focus-orb">
-<div class="orb-content">
-  <div>
-    <span class="orb-ring" aria-hidden="true"></span>
-    <p class="orb-message">
-      <span>✟</span>
-    </p>
-  </div>
-</div>
+<div class="orb-content" aria-label="RootedByte logo visual"></div>
   </div>
 </a>
         </div>
