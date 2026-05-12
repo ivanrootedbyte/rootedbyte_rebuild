@@ -43,43 +43,20 @@
     </div>
 
     <form id="songSearchForm" class="song-search-form">
-  <div class="field-group">
-  <label for="youtubeUrlInput">YouTube link</label>
-  <input
-    id="youtubeUrlInput"
-    name="youtubeUrl"
-    type="url"
-    placeholder="https://www.youtube.com/watch?v=..."
-    autocomplete="off"
-    required
-  />
-</div>
-      
-      <div class="field-group">
-        <label for="songNameInput">Song name</label>
-        <input
-          id="songNameInput"
-          name="songName"
-          type="text"
-          placeholder="Goodness of God"
-          autocomplete="off"
-          required
-        />
-      </div>
+  <div class="field-group song-input-wide">
+    <label for="songInput">Song link or song name</label>
+    <input
+      id="songInput"
+      name="songInput"
+      type="text"
+      placeholder="Paste a YouTube link or type: Goodness of God - Bethel Music"
+      autocomplete="off"
+      required
+    />
+  </div>
 
-      <div class="field-group">
-        <label for="artistInput">Artist</label>
-        <input
-          id="artistInput"
-          name="artist"
-          type="text"
-          placeholder="Bethel Music"
-          autocomplete="off"
-        />
-      </div>
-
-      <button type="submit" class="primary-action">Dive In</button>
-    </form>
+  <button type="submit" class="primary-action">Generate Song Prep</button>
+</form>
   </section>
 
 <section id="songResultsArea" class="song-results-area" hidden>
@@ -419,10 +396,16 @@
     gap: 0.8rem;
   }
 
-  .song-search-form {
-    grid-template-columns: repeat(2, minmax(0, 1fr)) auto;
-    align-items: end;
-  }
+.song-search-form {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 0.8rem;
+  align-items: end;
+}
+
+.song-input-wide {
+  min-width: 0;
+}
 
   .field-group {
     display: grid;
@@ -636,13 +619,11 @@
     }
   }
 
-  @media (max-width: 900px) {
-    .song-hero,
-    .song-search-form,
-    .verified-grid,
-    .resource-results {
-      grid-template-columns: 1fr;
-    }
+@media (max-width: 900px) {
+  .song-search-form {
+    grid-template-columns: 1fr;
+  }
+}
 
     .song-hero {
       min-height: auto;
