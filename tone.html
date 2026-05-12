@@ -257,6 +257,129 @@
       gap: 0.45rem;
     }
 
+    .song-start-card {
+  position: relative;
+  overflow: hidden;
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.88), rgba(248, 251, 255, 0.68)),
+    radial-gradient(circle at top right, rgba(124, 58, 237, 0.12), transparent 18rem),
+    radial-gradient(circle at bottom left, rgba(14, 165, 233, 0.12), transparent 18rem);
+}
+
+.song-start-card::before {
+  content: "";
+  position: absolute;
+  top: -80px;
+  right: -70px;
+  width: 220px;
+  height: 220px;
+  border-radius: 999px;
+  background: radial-gradient(circle, rgba(245, 158, 11, 0.24), transparent 66%);
+  pointer-events: none;
+}
+
+.song-start-card::after {
+  content: "";
+  position: absolute;
+  left: 2rem;
+  bottom: -90px;
+  width: 210px;
+  height: 210px;
+  border-radius: 999px;
+  background: radial-gradient(circle, rgba(14, 165, 233, 0.16), transparent 68%);
+  pointer-events: none;
+}
+
+.song-start-heading,
+.song-start-form {
+  position: relative;
+  z-index: 1;
+}
+
+.song-start-form {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(220px, 0.6fr) auto;
+  gap: 0.9rem;
+  align-items: end;
+}
+
+.input-shell {
+  min-height: 56px;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: 0.65rem;
+  border: 1px solid var(--song-border);
+  border-radius: 20px;
+  padding: 0 0.95rem;
+  color: var(--song-text);
+  background: rgba(255, 255, 255, 0.86);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7);
+  transition: border-color 160ms ease, box-shadow 160ms ease, transform 160ms ease;
+}
+
+.input-shell:focus-within {
+  border-color: var(--song-primary);
+  box-shadow:
+    0 0 0 4px var(--song-primary-soft),
+    0 14px 30px rgba(124, 58, 237, 0.1);
+  transform: translateY(-1px);
+}
+
+.input-icon {
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  border-radius: 13px;
+  color: #ffffff;
+  background: linear-gradient(135deg, var(--song-primary), var(--song-accent));
+  font-size: 0.95rem;
+  font-weight: 900;
+  flex: 0 0 auto;
+}
+
+.input-shell input,
+.input-shell select {
+  width: 100%;
+  min-height: 54px;
+  border: 0;
+  padding: 0;
+  color: var(--song-text);
+  background: transparent;
+  outline: none;
+}
+
+.input-shell input::placeholder {
+  color: rgba(97, 112, 138, 0.78);
+}
+
+.select-shell {
+  position: relative;
+}
+
+.select-shell select {
+  cursor: pointer;
+  appearance: none;
+  padding-right: 1.6rem;
+}
+
+.select-shell::after {
+  content: "⌄";
+  position: absolute;
+  right: 1rem;
+  top: 50%;
+  transform: translateY(-54%);
+  color: var(--song-muted);
+  font-size: 1.1rem;
+  pointer-events: none;
+}
+
+.generate-action {
+  min-height: 56px;
+  padding-inline: 1.35rem;
+  white-space: nowrap;
+}
     .song-search-form label,
     .instrument-card label {
       color: var(--song-muted);
@@ -264,22 +387,12 @@
       font-weight: 800;
     }
 
-    .song-search-form input,
-    .instrument-card select {
-      min-height: 52px;
-      border: 1px solid var(--song-border);
-      border-radius: 18px;
-      padding: 0 1rem;
-      color: var(--song-text);
-      background: rgba(255, 255, 255, 0.82);
-      outline: none;
-    }
-
-    .song-search-form input:focus,
-    .instrument-card select:focus {
-      border-color: var(--song-primary);
-      box-shadow: 0 0 0 4px var(--song-primary-soft);
-    }
+.song-search-form input,
+.song-search-form select,
+.song-start-form input,
+.song-start-form select {
+  font: inherit;
+}
 
     .primary-action,
     .secondary-action {
@@ -512,43 +625,60 @@
       border-top: 1px solid var(--song-border);
     }
 
-    @media (prefers-color-scheme: dark) {
-      :root {
-        --song-bg: #151a2f;
-        --song-card: rgba(26, 32, 54, 0.76);
-        --song-card-strong: rgba(31, 38, 63, 0.92);
-        --song-text: #f8fafc;
-        --song-muted: #cbd5e1;
-        --song-border: rgba(255, 255, 255, 0.12);
-      }
+   @media (prefers-color-scheme: dark) {
+  :root {
+    --song-bg: #151a2f;
+    --song-card: rgba(26, 32, 54, 0.76);
+    --song-card-strong: rgba(31, 38, 63, 0.92);
+    --song-text: #f8fafc;
+    --song-muted: #cbd5e1;
+    --song-border: rgba(255, 255, 255, 0.12);
+  }
 
-      body {
-        background:
-          radial-gradient(circle at top left, rgba(14, 165, 233, 0.18), transparent 32rem),
-          radial-gradient(circle at 80% 10%, rgba(124, 58, 237, 0.2), transparent 32rem),
-          linear-gradient(180deg, #111827 0%, var(--song-bg) 56%, #241b35 100%);
-      }
+  body {
+    background:
+      radial-gradient(circle at top left, rgba(14, 165, 233, 0.18), transparent 32rem),
+      radial-gradient(circle at 80% 10%, rgba(124, 58, 237, 0.2), transparent 32rem),
+      linear-gradient(180deg, #111827 0%, var(--song-bg) 56%, #241b35 100%);
+  }
 
-      .site-header {
-        background: rgba(17, 24, 39, 0.74);
-      }
+  .site-header {
+    background: rgba(17, 24, 39, 0.74);
+  }
 
-      .song-search-form input,
-      .instrument-card select,
-      .secondary-action {
-        color: var(--song-text);
-        background: rgba(255, 255, 255, 0.08);
-      }
+  .song-search-form input,
+  .instrument-card select,
+  .secondary-action {
+    color: var(--song-text);
+    background: rgba(255, 255, 255, 0.08);
+  }
 
-      .prep-card__body {
-        background: rgba(255, 255, 255, 0.04);
-      }
+  .prep-card__body {
+    background: rgba(255, 255, 255, 0.04);
+  }
 
-      .spinner {
-        border-color: rgba(255, 255, 255, 0.18);
-        border-top-color: var(--song-primary);
-      }
-    }
+  .spinner {
+    border-color: rgba(255, 255, 255, 0.18);
+    border-top-color: var(--song-primary);
+  }
+
+  .song-start-card {
+    background:
+      linear-gradient(135deg, rgba(26, 32, 54, 0.88), rgba(31, 38, 63, 0.72)),
+      radial-gradient(circle at top right, rgba(124, 58, 237, 0.2), transparent 18rem),
+      radial-gradient(circle at bottom left, rgba(14, 165, 233, 0.18), transparent 18rem);
+  }
+
+  .input-shell {
+    background: rgba(255, 255, 255, 0.08);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  }
+
+  .input-shell input,
+  .input-shell select {
+    color: var(--song-text);
+  }
+}
 
     @media (max-width: 900px) {
       .nav-shell {
@@ -626,39 +756,49 @@
       </div>
     </section>
 
-   <section class="song-search-card song-start-card" aria-labelledby="song-search-title">
-  <div class="section-heading">
-    <p class="eyebrow">Song Lookup</p>
-    <h2 id="song-search-title">What are you preparing?</h2>
-    <p>Paste a YouTube link, or type the song title and artist. Then pick your role so Song DiveIn shapes the prep around how you serve the song.</p>
+<section class="song-search-card song-start-card" aria-labelledby="song-search-title">
+  <div class="section-heading song-start-heading">
+    <p class="eyebrow">Let’s Dive-in</p>
+    <h2 id="song-search-title">Start with the song</h2>
+    <p>
+      Paste a YouTube link, or type the song title and artist. Pick your role so Song DiveIn shapes the prep around how you serve the moment.
+    </p>
   </div>
 
   <form id="songSearchForm" class="song-start-form">
     <div class="field-group song-input-wide">
       <label for="songInput">Song title, artist, or YouTube link</label>
-      <input
-        id="songInput"
-        name="songInput"
-        type="text"
-        placeholder="Goodness of God - Bethel Music or paste a YouTube link"
-        autocomplete="off"
-        required
-      />
+      <div class="input-shell">
+        <span class="input-icon" aria-hidden="true">♪</span>
+        <input
+          id="songInput"
+          name="songInput"
+          type="text"
+          placeholder="Goodness of God - Bethel Music"
+          autocomplete="off"
+          required
+        />
+      </div>
     </div>
 
     <div class="field-group">
       <label for="instrumentSelect">Your role</label>
-      <select id="instrumentSelect" name="instrument">
-        <option value="acoustic-guitar">Acoustic Guitar</option>
-        <option value="electric-guitar">Electric Guitar</option>
-        <option value="bass">Bass</option>
-        <option value="drums">Drums</option>
-        <option value="keys-piano">Keys / Piano</option>
-        <option value="vocals">Vocals</option>
-      </select>
+      <div class="input-shell select-shell">
+        <span class="input-icon" aria-hidden="true">✦</span>
+        <select id="instrumentSelect" name="instrument">
+          <option value="acoustic-guitar">Acoustic Guitar</option>
+          <option value="electric-guitar">Electric Guitar</option>
+          <option value="bass">Bass</option>
+          <option value="drums">Drums</option>
+          <option value="keys-piano">Keys / Piano</option>
+          <option value="vocals">Vocals</option>
+        </select>
+      </div>
     </div>
 
-    <button type="submit" class="primary-action">Generate Song Prep</button>
+    <button type="submit" class="primary-action generate-action">
+      Dive-in
+    </button>
 
     <div class="status" id="toneStatus" role="status" aria-live="polite"></div>
   </form>
