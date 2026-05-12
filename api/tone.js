@@ -1,7 +1,12 @@
-const GEMINI_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent';
+const GEMINI_URL =
+  'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent';
 
 const SONG_DIVEIN_SYSTEM_PROMPT = `You are Song DiveIn, a careful worship song research and musician preparation assistant.
-Return ONLY raw JSON with no markdown, no code fences, and no explanation text.
+
+Return ONLY raw JSON.
+Do not use markdown.
+Do not use code fences.
+Do not add explanation text outside the JSON.
 
 Use Google Search grounding when available to research public sources for:
 - song identity
@@ -9,7 +14,7 @@ Use Google Search grounding when available to research public sources for:
 - general song meaning
 - useful search queries for lyrics, chords, and instrument tutorials
 
-Structure:
+Return this exact JSON structure:
 {
   "song": "",
   "artist": "",
@@ -49,8 +54,25 @@ Rules:
 - Keep all preparation guidance concise, worship-aware, Scripture-connected, practical, and musician-focused.
 - Avoid denominational bias.
 - Avoid generic phrases like "This song is emotional" or "This song is uplifting".
-- The selected instrument should shape instrument_guidance only.
-- Do not provide guitar gear, amp, pedal, cab, preset, EQ, or tone settings.`;
+- The selected instrument should shape instrument_guidance.
+- Do not provide guitar gear, amp, pedal, cab, preset, EQ, downloadable preset, or tone settings.
+
+Instrument guidance rules:
+- Acoustic Guitar: strumming dynamics, rhythmic support, simplicity, restraint.
+- Electric Guitar: ambient support, rhythmic pocket awareness, avoid overplaying.
+- Bass: groove stability, root-note emphasis, dynamic consistency.
+- Drums: cymbal restraint, groove consistency, transition control.
+- Keys / Piano: pad layering ideas, spacing awareness, atmosphere support.
+- Vocals: phrasing, emotional emphasis, harmony opportunities, clear lyrical delivery.`;
+
+const VALID_INSTRUMENTS = {
+  'acoustic-guitar': 'Acoustic Guitar',
+  'electric-guitar': 'Electric Guitar',
+  bass: 'Bass',
+  drums: 'Drums',
+  'keys-piano': 'Keys / Piano',
+  vocals: 'Vocals'
+};
 
 function setCors(res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -59,12 +81,22 @@ function setCors(res) {
 }
 
 function safeParse(raw) {
+  const text = String(raw || '').trim();
+
   try {
-    return JSON.parse(raw);
+    return JSON.parse(text);
   } catch {
-    const cleaned = String(raw || '')
-      .replace(/```json|```/g, '')
+    const cleaned = text
+      .replace(/```json/gi, '')
+      .replace(/```/g, '')
       .trim();
+
+    const firstBrace = cleaned.indexOf('{');
+    const lastBrace = cleaned.lastIndexOf('}');
+
+    if (firstBrace !== -1 && lastBrace !== -1) {
+      return JSON.parse(cleaned.slice(firstBrace, lastBrace + 1));
+    }
 
     return JSON.parse(cleaned);
   }
@@ -90,17 +122,22 @@ function cleanYouTubeTitle(title) {
     .replace(/\s*\[Official\s*Audio\]\s*/gi, ' ')
     .replace(/\s*\(Lyrics?\)\s*/gi, ' ')
     .replace(/\s*\[Lyrics?\]\s*/gi, ' ')
+    .replace(/\s*\(Live\)\s*/gi, ' ')
+    .replace(/\s*\[Live\]\s*/gi, ' ')
     .replace(/\s+/g, ' ')
     .trim();
 }
 
 async function getYouTubeTitle(url) {
-  const oembedUrl = `https://www.youtube.com/oembed?url=${encodeURIComponent(url)}&format=json`;
+  const oembedUrl = `https://www.youtube.com/oembed?url=${encodeURIComponent(
+    url
+  )}&format=json`;
 
   try {
     const oembedResponse = await fetch(oembedUrl, {
       headers: {
-        'User-Agent': 'Mozilla/5.0 (compatible; RootedByteBot/1.0; +https://rootedbyte.vercel.app)'
+        'User-Agent':
+          'Mozilla/5.0 (compatible; RootedByteBot/1.0; +https://rootedbyte.vercel.app)'
       }
     });
 
@@ -112,32 +149,38 @@ async function getYouTubeTitle(url) {
       }
     }
   } catch {
-    // Continue to fallback below.
+    // Continue to fallback.
   }
-// Backend fallback: reads the YouTube page title if oEmbed does not return a title.
-// Do not replace this with the Song DiveIn submit fetch.
+
   const response = await fetch(url, {
     headers: {
-      'User-Agent': 'Mozilla/5.0 (compatible; RootedByteBot/1.0; +https://rootedbyte.vercel.app)'
+      'User-Agent':
+        'Mozilla/5.0 (compatible; RootedByteBot/1.0; +https://rootedbyte.vercel.app)'
     }
   });
 
   if (!response.ok) {
-    throw new Error('Could not read that YouTube page. Please type the song name and artist instead.');
+    throw new Error(
+      'Could not read that YouTube page. Please type the song name and artist instead.'
+    );
   }
 
   const html = await response.text();
   const titleMatch = html.match(/<title[^>]*>([^<]+)<\/title>/i);
 
   if (!titleMatch) {
-    throw new Error('Could not find the YouTube video title. Please type the song name and artist instead.');
+    throw new Error(
+      'Could not find the YouTube video title. Please type the song name and artist instead.'
+    );
   }
 
   return cleanYouTubeTitle(titleMatch[1]);
 }
 
 function normalizeSourceLinks(parsed, data) {
-  const modelLinks = Array.isArray(parsed.source_links) ? parsed.source_links : [];
+  const modelLinks = Array.isArray(parsed.source_links)
+    ? parsed.source_links
+    : [];
 
   const groundingLinks =
     data?.candidates?.[0]?.groundingMetadata?.groundingChunks
@@ -162,6 +205,7 @@ async function callGemini(userPrompt) {
     },
     contents: [
       {
+        role: 'user',
         parts: [{ text: userPrompt }]
       }
     ],
@@ -179,7 +223,10 @@ async function callGemini(userPrompt) {
   if (!response.ok) {
     const errorText = await response.text().catch(() => '');
 
-    if (response.status === 503 || /high demand|overloaded|try again later/i.test(errorText)) {
+    if (
+      response.status === 503 ||
+      /high demand|overloaded|try again later/i.test(errorText)
+    ) {
       throw new Error('The AI Engine is busy right now. Please try again in a minute.');
     }
 
@@ -187,7 +234,9 @@ async function callGemini(userPrompt) {
       throw new Error('The AI Engine is temporarily limited. Please try again later.');
     }
 
-    throw new Error('The AI Engine could not create this Song DiveIn result right now. Please try again.');
+    throw new Error(
+      'The AI Engine could not create this Song DiveIn result right now. Please try again.'
+    );
   }
 
   const data = await response.json();
@@ -200,108 +249,109 @@ async function callGemini(userPrompt) {
   return normalizeSourceLinks(safeParse(raw), data);
 }
 
-function clampNumber(value, min, max, fallback = 0) {
+function normalizeConfidence(value) {
+  const confidence = String(value || '').trim().toLowerCase();
+
+  if (['high', 'medium', 'low'].includes(confidence)) {
+    return confidence;
+  }
+
+  return 'low';
+}
+
+function normalizeBpm(value) {
   const number = Number(value);
-  return Number.isFinite(number) ? Math.min(max, Math.max(min, number)) : fallback;
-}
 
-function normalizeSongDiveInData(data, instrument) {
-  const bpm = Number(data.bpm);
-
-  data.bpm = Number.isFinite(bpm)
-    ? Math.min(260, Math.max(40, Math.round(bpm)))
-    : 0;
-
-  data.song = String(data.song || '');
-  data.artist = String(data.artist || '');
-
-  data.key =
-    typeof data.key === 'string' && data.key.trim()
-      ? data.key.trim()
-      : 'Unable to verify';
-
-  data.metadata_confidence =
-    typeof data.metadata_confidence === 'string' && data.metadata_confidence.trim()
-      ? data.metadata_confidence.trim()
-      : 'low';
-
-  data.song_meaning = String(
-    data.song_meaning ||
-    data.meaning_summary ||
-    'Song meaning is not available yet.'
-  );
-
-  const songArtist = `${data.song || ''} ${data.artist || ''}`.trim() || 'song';
-  const selectedInstrument = String(instrument || '').trim() || 'instrument';
-
-  data.lyrics_search_query = String(
-    data.lyrics_search_query || `${songArtist} lyrics`
-  ).trim();
-
-  data.chord_search_query = String(
-    data.chord_search_query || `${songArtist} chords`
-  ).trim();
-
-  data.tutorial_search_query = String(
-    data.tutorial_search_query || `${songArtist} ${selectedInstrument} tutorial`
-  ).trim();
-
-  data.source_links = Array.isArray(data.source_links)
-    ? data.source_links
-        .filter((url) => /^https?:\/\//i.test(String(url || '')))
-        .slice(0, 3)
-    : [];
-
-  data.faith_lens = String(data.faith_lens || 'Faith Lens is not available yet.');
-  data.arrangement_feel = String(data.arrangement_feel || 'Song flow guidance is not available yet.');
-  data.listening_guide = String(data.listening_guide || 'Listening guidance is not available yet.');
-  data.rehearsal_prep = String(data.rehearsal_prep || 'Rehearsal preparation is not available yet.');
-  data.spiritual_reflection = String(data.spiritual_reflection || 'Spiritual reflection is not available yet.');
-  data.instrument_guidance = String(data.instrument_guidance || `${selectedInstrument} guidance is not available yet.`);
-
-  return data;
-}
-
-module.exports = async function handler(req, res) {
-  setCors(res);
-
-  if (req.method === 'OPTIONS') {
-    return res.status(204).end();
+  if (!Number.isFinite(number)) {
+    return 0;
   }
 
-  if (req.method !== 'POST') {
-    return res.status(405).json({
-      error: 'Use POST for this endpoint.'
-    });
+  if (number < 40 || number > 260) {
+    return 0;
   }
 
-  try {
- const { songInput, instrument } = req.body || {};
-
-if (!songInput || !instrument) {
-  return res.status(400).json({
-    error: 'Song input and instrument are required.'
-  });
+  return Math.round(number);
 }
-    if (isSpotifyUrl(songInput)) {
-      return res.status(400).json({
-        error: 'Spotify links are not supported. Please type the song name and artist, or paste a YouTube link.'
-      });
-    }
 
-    let resolvedSong = String(songInput).trim();
+function normalizeSongDiveInData(data, instrumentLabel) {
+  const safeData = data && typeof data === 'object' ? data : {};
 
-    if (isYouTubeUrl(resolvedSong)) {
-      resolvedSong = await getYouTubeTitle(resolvedSong);
-    }
+  const song = String(safeData.song || '').trim();
+  const artist = String(safeData.artist || '').trim();
+  const songArtist = `${song} ${artist}`.trim() || 'song';
 
-   const diveIn = await callGemini(`Research and create a Song DiveIn worship preparation result.
+  return {
+    song: song || 'Unable to verify',
+    artist: artist || 'Unable to verify',
+    bpm: normalizeBpm(safeData.bpm),
+    key:
+      typeof safeData.key === 'string' && safeData.key.trim()
+        ? safeData.key.trim()
+        : 'Unable to verify',
+    metadata_confidence: normalizeConfidence(safeData.metadata_confidence),
 
-Song input:
+    song_meaning: String(
+      safeData.song_meaning ||
+        safeData.meaning_summary ||
+        'Song meaning is not available yet.'
+    ).trim(),
+
+    lyrics_search_query: String(
+      safeData.lyrics_search_query || `${songArtist} lyrics`
+    ).trim(),
+
+    chord_search_query: String(
+      safeData.chord_search_query || `${songArtist} chords`
+    ).trim(),
+
+    tutorial_search_query: String(
+      safeData.tutorial_search_query || `${songArtist} ${instrumentLabel} tutorial`
+    ).trim(),
+
+    source_links: Array.isArray(safeData.source_links)
+      ? safeData.source_links
+          .filter((url) => /^https?:\/\//i.test(String(url || '')))
+          .slice(0, 3)
+      : [],
+
+    faith_lens: String(
+      safeData.faith_lens || 'Faith Lens is not available yet.'
+    ).trim(),
+
+    arrangement_feel: String(
+      safeData.arrangement_feel || 'Song Flow guidance is not available yet.'
+    ).trim(),
+
+    listening_guide: String(
+      safeData.listening_guide || 'Listening guidance is not available yet.'
+    ).trim(),
+
+    rehearsal_prep: String(
+      safeData.rehearsal_prep || 'Rehearsal preparation is not available yet.'
+    ).trim(),
+
+    spiritual_reflection: String(
+      safeData.spiritual_reflection || 'Spiritual reflection is not available yet.'
+    ).trim(),
+
+    instrument_guidance: String(
+      safeData.instrument_guidance ||
+        `${instrumentLabel} guidance is not available yet.`
+    ).trim()
+  };
+}
+
+function buildSongDiveInPrompt({ resolvedSong, originalSongInput, instrumentLabel }) {
+  return `Research and create a Song DiveIn worship preparation result.
+
+Original user input:
+${originalSongInput}
+
+Resolved song input:
 ${resolvedSong}
 
 Selected instrument:
-${instrument}
+${instrumentLabel}
 
 Return:
 - song identity
@@ -328,10 +378,65 @@ Important:
 - If a value cannot be verified, say "Unable to verify", "Estimated", or "Not detected".
 - Keep the language worship-aware, practical, concise, and modern.
 - Avoid denominational bias.
-- Do not use the heading or wording "Theology".`);
+- Do not use the heading or wording "Theology".
+- Return only the required JSON object.`;
+}
 
-  
-    return res.status(200).json(normalizeSongDiveInData(diveIn, instrument));
+module.exports = async function handler(req, res) {
+  setCors(res);
+
+  if (req.method === 'OPTIONS') {
+    return res.status(204).end();
+  }
+
+  if (req.method !== 'POST') {
+    return res.status(405).json({
+      error: 'Use POST for this endpoint.'
+    });
+  }
+
+  try {
+    const { songInput, instrument } = req.body || {};
+
+    if (!songInput || !instrument) {
+      return res.status(400).json({
+        error: 'Song input and instrument are required.'
+      });
+    }
+
+    if (isSpotifyUrl(songInput)) {
+      return res.status(400).json({
+        error:
+          'Spotify links are not supported. Please type the song name and artist, or paste a YouTube link.'
+      });
+    }
+
+    const instrumentLabel = VALID_INSTRUMENTS[instrument] || String(instrument).trim();
+
+    if (!instrumentLabel) {
+      return res.status(400).json({
+        error: 'Please choose an instrument.'
+      });
+    }
+
+    const originalSongInput = String(songInput).trim();
+    let resolvedSong = originalSongInput;
+
+    if (isYouTubeUrl(resolvedSong)) {
+      resolvedSong = await getYouTubeTitle(resolvedSong);
+    }
+
+    const diveIn = await callGemini(
+      buildSongDiveInPrompt({
+        resolvedSong,
+        originalSongInput,
+        instrumentLabel
+      })
+    );
+
+    return res
+      .status(200)
+      .json(normalizeSongDiveInData(diveIn, instrumentLabel));
   } catch (error) {
     return res.status(500).json({
       error: error.message || 'Unable to build that Song DiveIn result right now.'
