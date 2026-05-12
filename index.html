@@ -131,22 +131,35 @@
       letter-spacing: 0;
     }
 
-    .desktop-nav {
-      display: flex;
-      align-items: center;
-      gap: 28px;
-      color: var(--charcoal-soft);
-      font-size: 0.92rem;
-      font-weight: 700;
-    }
+.desktop-nav {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--charcoal-soft);
+  font-size: 0.78rem;
+  font-weight: 900;
+}
 
-    .desktop-nav a {
-      transition: color 180ms ease;
-    }
+.desktop-nav a {
+  display: grid;
+  place-items: center;
+  min-height: 42px;
+  padding: 0 16px;
+  border-radius: 17px;
+  color: var(--charcoal-soft);
+  background: rgba(255, 252, 245, 0.66);
+  border: 1px solid rgba(23, 32, 27, 0.08);
+  transition: transform 180ms ease, background 180ms ease, color 180ms ease, box-shadow 180ms ease;
+}
 
-    .desktop-nav a:hover {
-      color: var(--charcoal);
-    }
+.desktop-nav a:hover,
+.desktop-nav a:focus-visible {
+  color: var(--cream-soft);
+  background: var(--charcoal);
+  transform: translateY(-1px);
+  box-shadow: 0 12px 28px rgba(29, 36, 31, 0.12);
+  outline: none;
+}
 
     .header-cta,
     .button {
@@ -277,54 +290,37 @@
 .teams-status-pill {
   display: inline-flex;
   align-items: center;
-  gap: 10px;
-  margin-bottom: 28px;
-  padding: 8px 16px;
+  gap: 9px;
   min-height: 42px;
-  border: 1.5px solid rgba(33, 77, 53, 0.16);
+  padding: 0 15px;
+  border: 1px solid rgba(33, 77, 53, 0.16);
   border-radius: 999px;
   background: rgba(255, 252, 245, 0.82);
   color: var(--forest);
   font-family: "Segoe UI", "Segoe UI Variable", Inter, ui-sans-serif, system-ui, sans-serif;
-  font-size: 0.96rem;
-  font-weight: 600;
+  font-size: 0.78rem;
+  font-weight: 800;
   line-height: 1;
   box-shadow: 0 8px 24px rgba(29, 36, 31, 0.06);
+  white-space: nowrap;
 }
 
 .teams-status-dot {
   display: inline-grid;
   place-items: center;
-  width: 20px;
-  height: 20px;
+  width: 18px;
+  height: 18px;
   flex: 0 0 auto;
   border-radius: 999px;
   background: #31c64f;
   color: #1f3b22;
-  font-size: 0.78rem;
+  font-size: 0.7rem;
   font-weight: 900;
   line-height: 1;
 }
-    
-  .status-dot::after {
-  content: "";
-  position: absolute;
-  inset: -5px;
-  border-radius: inherit;
-  border: 1px solid rgba(45, 191, 100, 0.35);
-  animation: statusPulse 1.8s ease-out infinite;
-}
 
-@keyframes statusPulse {
-  0% {
-    transform: scale(0.75);
-    opacity: 0.8;
-  }
-
-  100% {
-    transform: scale(1.8);
-    opacity: 0;
-  }
+.nav-status {
+  margin: 0;
 }
     
     h1 {
@@ -1005,13 +1001,11 @@
 }
 
 @media (max-width: 900px) {
-  .desktop-nav,
-  .header-cta {
+  .desktop-nav {
     display: none;
   }
 
-  .button::before,
-  .header-cta::before {
+  .button::before {
     opacity: 1;
   }
 
@@ -1107,13 +1101,17 @@
           </span>
         </a>
 
-        <nav class="desktop-nav" aria-label="Primary navigation">
-          <a href="#apps">Apps</a>
-          <a href="#purpose">Purpose</a>
-          <a href="#contact">Contact</a>
-        </nav>
+<nav class="desktop-nav" aria-label="Primary navigation">
+ <div class="teams-status-pill nav-status">
+    <span class="teams-status-dot" aria-hidden="true">✓</span>
+    <span>Tools are Online</span>
+  </div>
+  <a href="#apps">Apps</a>
+  <a href="#purpose">Purpose</a>
+  <a href="#contact">Contact</a>
+</nav>
 
-        <a href="#apps" class="header-cta">Get Started</a>
+
       </div>
     </header>
 
