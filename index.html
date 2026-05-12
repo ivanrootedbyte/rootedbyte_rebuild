@@ -115,21 +115,14 @@
       display: block;
     }
 
-    .brand-name {
-      font-size: 1.15rem;
-      font-weight: 900;
-      color: var(--charcoal);
-      letter-spacing: -0.035em;
-      line-height: 1;
-    }
-
-    .brand-kicker {
-      margin-top: 4px;
-      color: var(--charcoal-soft);
-      font-size: 0.74rem;
-      font-weight: 600;
-      letter-spacing: 0;
-    }
+.brand-name {
+  display: block;
+  color: var(--charcoal);
+  font-size: 1.45rem;
+  font-weight: 900;
+  letter-spacing: -0.045em;
+  line-height: 1;
+}
 
 .nav-cluster {
   display: flex;
@@ -140,7 +133,7 @@
 
 .desktop-nav {
   display: grid;
-  grid-template-columns: repeat(3, auto);
+  grid-template-columns: repeat(4, auto);
   align-items: center;
   gap: 6px;
   padding: 6px;
@@ -154,7 +147,7 @@
   display: grid;
   place-items: center;
   min-height: 42px;
-  padding: 0 18px;
+  padding: 0 16px;
   border-radius: 999px;
   color: var(--sage);
   background: transparent;
@@ -302,43 +295,6 @@
       border-radius: 999px;
       background: var(--forest);
     }
-
-.teams-status-pill {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 7px;
-  min-height: 34px;
-  padding: 0 11px;
-  border: 1px solid rgba(33, 77, 53, 0.16);
-  border-radius: 999px;
-  background: rgba(255, 252, 245, 0.82);
-  color: var(--forest);
-  font-family: "Segoe UI", "Segoe UI Variable", Inter, ui-sans-serif, system-ui, sans-serif;
-  font-size: 0.66rem;
-  font-weight: 800;
-  line-height: 1;
-  box-shadow: 0 8px 20px rgba(29, 36, 31, 0.05);
-  white-space: nowrap;
-}
-
-.teams-status-dot {
-  display: inline-grid;
-  place-items: center;
-  width: 15px;
-  height: 15px;
-  flex: 0 0 auto;
-  border-radius: 999px;
-  background: #31c64f;
-  color: #1f3b22;
-  font-size: 0.58rem;
-  font-weight: 900;
-  line-height: 1;
-}
-
-.nav-status {
-  margin: 0;
-}
     
     h1 {
       max-width: 880px;
@@ -988,7 +944,7 @@
       left: 16px;
       z-index: 60;
       display: none;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(4, 1fr);
       gap: 8px;
       padding: 8px;
       border: 1px solid var(--line);
@@ -1114,7 +1070,6 @@
 
           <span class="brand-text">
             <span class="brand-name">RootedByte</span>
-            <span class="brand-kicker">Intentional technology</span>
           </span>
         </a>
 
@@ -1124,11 +1079,6 @@
     <a href="#purpose" class="nav-tab">Purpose</a>
     <a href="#contact" class="nav-tab">Contact</a>
   </nav>
-
-  <div class="teams-status-pill nav-status">
-    <span class="teams-status-dot" aria-hidden="true">✓</span>
-    <span>Tools are Online</span>
-  </div>
 </div>
 
 
@@ -1182,8 +1132,8 @@
             <article class="app-card">
               <a class="app-image" href="tone.html" aria-label="Open Song DiveIn">
                 <img
-                      src="https://images.unsplash.com/photo-1501386761578-eac5c94b800a?auto=format&fit=crop&w=1200&q=80"
-                      alt="Worship band performing on stage with instruments and lights"
+    src="https://images.unsplash.com/photo-tKEV3aixY8c?auto=format&fit=crop&w=1200&q=80"
+    alt="Band performing live on stage with instruments"
                 />
               </a>
 
@@ -1334,12 +1284,12 @@
     </main>
   </div>
 
-  <nav class="bottom-nav" aria-label="Mobile quick navigation">
-    <a href="#apps">Apps</a>
-    <a href="#purpose">Purpose</a>
-    <a href="#contact">Contact</a>
-  </nav>
-  <script>
+<nav class="bottom-nav" aria-label="Mobile quick navigation">
+  <a href="#top">Home</a>
+  <a href="#apps">Apps</a>
+  <a href="#purpose">Purpose</a>
+  <a href="#contact">Contact</a>
+</nav>
   const heroPanelLink = document.querySelector('.hero-panel-link');
 
   if (heroPanelLink) {
