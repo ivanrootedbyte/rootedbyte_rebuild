@@ -51,6 +51,12 @@
       color: inherit;
     }
 
+    button,
+    input,
+    select {
+      font: inherit;
+    }
+
     .site-header {
       position: sticky;
       top: 0;
@@ -105,6 +111,7 @@
       font-size: 0.92rem;
       font-weight: 800;
       text-decoration: none;
+      transition: background 160ms ease, color 160ms ease, transform 160ms ease;
     }
 
     .site-nav a:hover,
@@ -302,6 +309,37 @@
       background: linear-gradient(180deg, rgba(255, 255, 255, 0.9), rgba(248, 251, 255, 0.68));
     }
 
+    .status {
+      min-height: 24px;
+      margin-top: 0.4rem;
+      color: var(--song-primary);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      grid-column: 1 / -1;
+      font-weight: 800;
+    }
+
+    .status.error {
+      color: #ef4444;
+    }
+
+    .spinner {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      border: 2px solid rgba(124, 58, 237, 0.22);
+      border-top-color: var(--song-primary);
+      animation: spin 0.8s linear infinite;
+      flex: 0 0 auto;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
     .song-results-area {
       display: grid;
       gap: 1.25rem;
@@ -439,6 +477,7 @@
       color: var(--song-primary);
       font-weight: 850;
       text-decoration: none;
+      overflow-wrap: anywhere;
     }
 
     .resource-link:hover {
@@ -449,6 +488,7 @@
       margin-bottom: 0;
       color: var(--song-muted);
       font-size: 0.92rem;
+      overflow-wrap: anywhere;
     }
 
     .loading-text {
@@ -503,6 +543,11 @@
       .prep-card__body {
         background: rgba(255, 255, 255, 0.04);
       }
+
+      .spinner {
+        border-color: rgba(255, 255, 255, 0.18);
+        border-top-color: var(--song-primary);
+      }
     }
 
     @media (max-width: 900px) {
@@ -554,7 +599,7 @@
         <a href="index.html">Home</a>
         <a href="tone.html" aria-current="page">Song DiveIn</a>
         <a href="newsverse.html">NewsVerse</a>
-        <a href="rooted-os.html">Rooted OS</a>
+        <a href="rootedos.html">Rooted OS</a>
       </nav>
     </div>
   </header>
@@ -565,7 +610,7 @@
         <p class="eyebrow">Worship Team Ready</p>
         <h1>Song DiveIn</h1>
         <p class="song-hero__subtitle">
-          Drop in a YouTube link or type the song and artist. Song DiveIn turns it into a focused rehearsal-ready worship prep.
+          Drop in a YouTube link or type the song and artist. Song DiveIn turns it into focused, rehearsal-ready worship prep.
         </p>
         <div class="hero-actions">
           <a href="#songSearchForm" class="primary-action hero-link">Start a Song Dive</a>
@@ -602,6 +647,8 @@
         </div>
 
         <button type="submit" class="primary-action">Generate Song Prep</button>
+
+        <div class="status" id="toneStatus" role="status" aria-live="polite"></div>
       </form>
     </section>
 
@@ -632,7 +679,7 @@
         <div class="section-heading compact-heading">
           <p class="eyebrow">Song Snapshot</p>
           <h2 id="verified-song-title">The essentials</h2>
-          <p>Verified song details stay untouched so the prep stays honest and useful.</p>
+          <p>Verified song details stay separate from AI interpretation.</p>
         </div>
 
         <div class="verified-grid">
