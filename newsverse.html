@@ -119,15 +119,20 @@ button, input, select, textarea { font: inherit; }
 }
 
 .news-hero {
+  position: relative;
   width: min(1120px, 100%);
   margin: 0 auto 1.25rem;
-  padding: clamp(1.1rem, 3vw, 2rem);
+  padding: clamp(1.4rem, 4vw, 3rem);
   display: grid;
   grid-template-columns: minmax(0, 1.04fr) minmax(280px, 0.96fr);
   gap: clamp(1.2rem, 4vw, 3rem);
   align-items: center;
-  min-height: 480px;
+  min-height: 540px;
   overflow: hidden;
+  background:
+    linear-gradient(90deg, rgba(22, 36, 41, 0.88) 0%, rgba(22, 36, 41, 0.72) 42%, rgba(22, 36, 41, 0.28) 100%),
+    url("images/newsverse-digital-news.jpg") center / cover no-repeat;
+  color: #fffaf0;
 }
 
 .news-pill {
@@ -200,6 +205,31 @@ h3 {
   font-size: clamp(1.04rem, 2vw, 1.25rem);
 }
 
+.hero-title {
+  color: #fffaf0;
+  text-shadow: 0 18px 50px rgba(0, 0, 0, 0.32);
+}
+
+.hero-lead {
+  color: rgba(255, 250, 240, 0.88);
+}
+
+.news-hero .eyebrow {
+  color: #f2c67a;
+}
+
+.news-hero .news-pill {
+  color: #f2c67a;
+  border-color: rgba(255, 250, 240, 0.22);
+  background: rgba(255, 250, 240, 0.12);
+  backdrop-filter: blur(16px);
+}
+
+.news-hero .inline-try-link {
+  color: #f2c67a;
+  border-bottom-color: rgba(242, 198, 122, 0.55);
+}
+
 .hero-actions {
   display: flex;
   gap: 0.85rem;
@@ -259,8 +289,10 @@ h3 {
   min-height: 420px;
   overflow: hidden;
   border-radius: 34px;
-  background: rgba(255, 255, 255, 0.35);
-  box-shadow: 0 28px 70px rgba(36, 22, 17, 0.18);
+  background: rgba(255, 250, 240, 0.1);
+  border: 1px solid rgba(255, 250, 240, 0.18);
+  box-shadow: 0 28px 70px rgba(0, 0, 0, 0.18);
+  backdrop-filter: blur(14px);
 }
 
 .hero-editorial-card::before {
@@ -270,11 +302,6 @@ h3 {
   border: 1px solid rgba(255, 250, 240, 0.32);
   border-radius: 26px;
   pointer-events: none;
-  z-index: 2;
-}
-
-.hero-editorial-card--image {
-  background: #ddd;
 }
 
 .hero-editorial-image {
@@ -283,7 +310,11 @@ h3 {
   min-height: 420px;
   object-fit: cover;
   display: block;
-  filter: saturate(0.95) contrast(1.04);
+  filter: saturate(0.95) contrast(1.05);
+}
+
+.hero-editorial-card__copy .tag {
+  color: #f2c67a;
 }
 
 .section {
@@ -310,50 +341,6 @@ h3 {
     radial-gradient(circle at top right, rgba(15, 89, 96, 0.1), transparent 16rem);
 }
 
-  .news-ticker {
-  width: min(1120px, 100%);
-  margin: 0 auto 1rem;
-  border: 1px solid var(--news-line);
-  border-radius: 18px;
-  background: rgba(255, 255, 255, 0.72);
-  box-shadow: var(--news-shadow);
-  overflow: hidden;
-}
-
-.news-ticker__inner {
-  display: flex;
-  align-items: center;
-  gap: 0.85rem;
-  padding: 0.8rem 1rem;
-  white-space: nowrap;
-  overflow-x: auto;
-}
-
-.news-ticker__label {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 30px;
-  padding: 0 0.8rem;
-  border-radius: 999px;
-  background: var(--news-copper);
-  color: #fffaf0;
-  font-size: 0.78rem;
-  font-weight: 900;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
-.news-ticker__item {
-  color: var(--news-ink);
-  font-weight: 700;
-  font-size: 0.95rem;
-}
-
-.news-ticker__divider {
-  color: var(--news-muted);
-}
-    
 .field {
   display: grid;
   gap: 0.5rem;
@@ -591,26 +578,15 @@ textarea:focus {
     </div>
   </header>
 
-  <section class="news-ticker" aria-label="NewsVerse highlights">
-  <div class="news-ticker__inner">
-    <span class="news-ticker__label">Latest</span>
-    <span class="news-ticker__item">Reflect on headlines through Scripture</span>
-    <span class="news-ticker__divider">•</span>
-    <span class="news-ticker__item">Pause before reacting</span>
-    <span class="news-ticker__divider">•</span>
-    <span class="news-ticker__item">Prayer-centered response to current events</span>
-  </div>
-</section>
-  
   <main id="top" class="newsverse-page app-page" data-app="newsverse">
     <section class="news-hero news-card" aria-labelledby="newsverse-title">
       <div class="news-hero__content">
         <span class="news-pill">App 2 • Faith + News</span>
         <p class="eyebrow">Context before reaction</p>
-        <h1 id="newsverse-title">NewsVerse</h1>
-        <p class="lead">
- Paste a public news article URL and get a Scripture-rooted reflection, prayer points,
-  and a wiser response before reacting to the story.
+        <h1 id="newsverse-title" class="hero-title">NewsVerse</h1>
+        <p class="lead hero-lead">
+          Paste a public news article URL. NewsVerse helps you slow down, consider the story through Scripture,
+          and turn what you read into reflection, prayer, and wiser response.
           <a class="inline-try-link" href="#try-it">Try it!</a>
         </p>
         <div class="hero-actions">
@@ -619,20 +595,20 @@ textarea:focus {
         </div>
       </div>
 
-<aside class="hero-editorial-card hero-editorial-card--image" aria-label="NewsVerse digital news background">
-  <img
-    src="images/newsverse-digital-news.jpg"
-    alt="Digital news screens and modern newsroom style background"
-    class="hero-editorial-image"
-  />
-</aside>
+      <aside class="hero-editorial-card" aria-label="NewsVerse digital news image">
+        <img
+          src="images/newsverse-digital-news.jpg"
+          alt="Digital news article screens and newsroom-style headlines"
+          class="hero-editorial-image"
+        />
+      </aside>
     </section>
 
     <section class="section" id="try-it">
       <article class="news-shell" aria-labelledby="news-demo-title">
         <div class="app-top">
           <div class="news-copy">
-            <span class="tag">Let's Pause </span>
+            <span class="tag">Try it</span>
             <h2 id="news-demo-title">Reflect before you react</h2>
             <p>
               Paste a news article link and let NewsVerse help you slow down, consider the story through Scripture,
