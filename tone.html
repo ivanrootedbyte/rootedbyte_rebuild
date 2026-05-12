@@ -4,1113 +4,650 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <meta
-    name="description"
-    content="Song DiveIn helps users understand a song, find chord and lyric source links, discover a guitar tutorial link, and create practical guitar tone settings."
-  />
+<meta
+  name="description"
+  content="Song DiveIn helps worship musicians prepare songs with verified song details, lyrics and chord links, instrument tutorials, faith-centered reflections, rehearsal guidance, and role-specific coaching."
+/>
 
-  <title>Song DiveIn | RootedByte</title>
-
-  <style>
-    :root {
-      --bg: #07140f;
-      --card: rgba(255,255,255,.075);
-      --text: #f4fbf6;
-      --muted: #bfd2c7;
-      --line: rgba(255,255,255,.16);
-      --accent: #8fe3b0;
-      --gold: #f5d487;
-      --danger: #ffb4a8;
-      --shadow: 0 24px 80px rgba(0,0,0,.35);
-      --radius: 24px;
-      --max: 1180px;
-    }
-
-    * {
-      box-sizing: border-box;
-    }
-
-    html {
-      scroll-behavior: smooth;
-    }
-
-    body {
-      margin: 0;
-      min-height: 100vh;
-      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      color: var(--text);
-      background:
-        radial-gradient(circle at top left, rgba(82,201,137,.24), transparent 32rem),
-        radial-gradient(circle at 85% 15%, rgba(245,212,135,.12), transparent 28rem),
-        linear-gradient(135deg,#06110d 0%,#07140f 45%,#0d2118 100%);
-      line-height: 1.6;
-    }
-
-    a {
-      color: inherit;
-      text-decoration: none;
-    }
-
-    button,
-    input,
-    select {
-      font: inherit;
-    }
-
-    .site-header {
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      backdrop-filter: blur(18px);
-      background: rgba(7,20,15,.82);
-      border-bottom: 1px solid var(--line);
-    }
-
-    .nav {
-      max-width: var(--max);
-      margin: 0 auto;
-      padding: 16px 22px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 20px;
-    }
-
-    .brand {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      font-weight: 800;
-      letter-spacing: -.04em;
-      font-size: 1.15rem;
-    }
-
-    .brand-mark {
-      width: 38px;
-      height: 38px;
-      border-radius: 14px;
-      display: grid;
-      place-items: center;
-      color: #06110d;
-      background: linear-gradient(135deg,var(--accent),var(--gold));
-      font-weight: 900;
-      box-shadow: 0 14px 34px rgba(82,201,137,.25);
-    }
-
-    .nav-links {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      flex-wrap: wrap;
-      justify-content: flex-end;
-    }
-
-    .nav-links a {
-      color: var(--muted);
-      padding: 9px 12px;
-      border-radius: 999px;
-      transition: background .18s ease,color .18s ease;
-      font-size: .95rem;
-    }
-
-    .nav-links a:hover,
-    .nav-links a.active {
-      color: var(--text);
-      background: rgba(255,255,255,.09);
-    }
-
-    .section {
-      max-width: var(--max);
-      margin: 0 auto;
-      padding: 86px 22px;
-    }
-
-    .hero {
-      display: grid;
-      grid-template-columns: minmax(0,1.05fr) minmax(320px,.95fr);
-      align-items: center;
-      gap: 44px;
-      min-height: 72vh;
-    }
-
-    .eyebrow {
-      display: inline-flex;
-      gap: 8px;
-      align-items: center;
-      color: var(--accent);
-      background: rgba(143,227,176,.1);
-      border: 1px solid rgba(143,227,176,.22);
-      border-radius: 999px;
-      padding: 8px 12px;
-      font-size: .9rem;
-      font-weight: 700;
-    }
-
-    h1,
-    h2,
-    h3 {
-      line-height: 1.05;
-      margin: 0;
-      letter-spacing: -.05em;
-    }
-
-    h1 {
-      font-size: clamp(3.1rem,8vw,6.8rem);
-      max-width: 850px;
-      margin-top: 24px;
-    }
-
-    h2 {
-      font-size: clamp(2.1rem,5vw,4rem);
-    }
-
-    h3 {
-      font-size: clamp(1.35rem,3vw,2rem);
-    }
-
-    .lead {
-      color: var(--muted);
-      font-size: clamp(1.08rem,2vw,1.28rem);
-      max-width: 760px;
-      margin: 24px 0 0;
-    }
-
-    .inline-try-link {
-      display: inline-flex;
-      margin-left: 6px;
-      color: var(--accent);
-      font-weight: 900;
-      border-bottom: 1px solid rgba(143, 227, 176, 0.45);
-    }
-
-    .inline-try-link:hover,
-    .inline-try-link:focus-visible {
-      color: var(--gold);
-      border-bottom-color: var(--gold);
-      outline: none;
-    }
-
-    .hero-card,
-    .app-panel,
-    .form-card,
-    .result-card,
-    .tone-label,
-    .source-card {
-      border-radius: var(--radius);
-      background: var(--card);
-      border: 1px solid var(--line);
-      box-shadow: var(--shadow);
-    }
-
-    .hero-card {
-      padding: 0;
-      overflow: hidden;
-    }
-
-    .hero-card img {
-      width: 100%;
-      height: 360px;
-      object-fit: cover;
-      display: block;
-    }
-
-    .hero-card-content {
-      padding: 24px;
-    }
-
-    .tag {
-      display: inline-flex;
-      color: var(--gold);
-      font-weight: 800;
-      font-size: .82rem;
-      text-transform: uppercase;
-      letter-spacing: .08em;
-      margin-bottom: 12px;
-    }
-
-    .app-panel {
-      padding: 28px;
-      margin-top: 24px;
-    }
-
-    .app-top {
-      display: grid;
-      grid-template-columns: minmax(0,.95fr) minmax(300px,.8fr);
-      gap: 26px;
-      align-items: start;
-    }
-
-    .app-copy p,
-    .result-card p,
-    .source-card p {
-      color: var(--muted);
-      margin: 16px 0 0;
-      overflow-wrap: anywhere;
-    }
-
-    .form-card {
-      padding: 22px;
-      background: rgba(255,255,255,.07);
-    }
-
-    .field {
-      display: grid;
-      gap: 8px;
-      margin-bottom: 16px;
-    }
-
-    label {
-      color: var(--text);
-      font-weight: 800;
-    }
-
-    input,
-    select {
-      width: 100%;
-      color: var(--text);
-      background: rgba(0,0,0,.28);
-      border: 1px solid rgba(255,255,255,.14);
-      border-radius: 14px;
-      padding: 13px 14px;
-      outline: none;
-    }
-
-    input:focus,
-    select:focus {
-      border-color: var(--accent);
-      box-shadow: 0 0 0 4px rgba(143,227,176,.12);
-    }
-
-    .hint {
-      color: var(--muted);
-      font-size: .92rem;
-    }
-
-    .btn {
-      border: 0;
-      cursor: pointer;
-      border-radius: 999px;
-      padding: 13px 18px;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      min-height: 48px;
-      background: rgba(255,255,255,.1);
-      color: var(--text);
-      border: 1px solid rgba(255,255,255,.14);
-      font-weight: 800;
-    }
-
-    .btn:hover {
-      transform: translateY(-2px);
-      background: rgba(255,255,255,.15);
-    }
-
-    .btn.primary {
-      color: #05110b;
-      background: linear-gradient(135deg,var(--accent),var(--gold));
-      border: 0;
-    }
-
-    .status {
-      min-height: 24px;
-      margin-top: 14px;
-      color: var(--accent);
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .status.error {
-      color: var(--danger);
-    }
-
-    .spinner {
-      width: 18px;
-      height: 18px;
-      border-radius: 50%;
-      border: 2px solid rgba(255,255,255,.24);
-      border-top-color: var(--accent);
-      animation: spin .8s linear infinite;
-    }
-
-    @keyframes spin {
-      to {
-        transform: rotate(360deg);
-      }
-    }
-
-    .results {
-      margin-top: 24px;
-    }
-
-    .tone-labels {
-      display: grid;
-      grid-template-columns: repeat(2,minmax(0,1fr));
-      gap: 14px;
-      margin-bottom: 18px;
-    }
-
-    .tone-label {
-      padding: 18px;
-      background: rgba(0,0,0,.18);
-    }
-
-    .tone-label span {
-      color: var(--muted);
-      display: block;
-      font-size: .88rem;
-    }
-
-    .tone-label strong {
-      display: block;
-      font-size: 1.2rem;
-      margin-top: 4px;
-      overflow-wrap: anywhere;
-    }
-
-.knob-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(145px, 1fr));
-  gap: 16px;
-  margin-top: 20px;
-}
-
-    .knob {
-      display: grid;
-      place-items: center;
-      gap: 9px;
-      padding: 18px 12px;
-      border-radius: 20px;
-      background: rgba(0,0,0,.18);
-      border: 1px solid rgba(255,255,255,.1);
-      text-align: center;
-    }
-
-    .dial {
-      --value: 0;
-      width: 92px;
-      height: 92px;
-      border-radius: 50%;
-      background: conic-gradient(var(--accent) calc(var(--value)*1%),rgba(255,255,255,.12) 0);
-      display: grid;
-      place-items: center;
-      position: relative;
-    }
-
-    .dial::after {
-      content: '';
-      position: absolute;
-      inset: 10px;
-      border-radius: 50%;
-      background: #0a1711;
-      border: 1px solid rgba(255,255,255,.1);
-    }
-
-    .dial strong {
-      z-index: 1;
-      font-size: 1.25rem;
-    }
-
-    .knob small {
-      color: var(--muted);
-      font-weight: 800;
-    }
-
-    .preset-grid {
-      display: grid;
-      gap: 12px;
-      margin-top: 16px;
-    }
-
-    .preset-link {
-      display: grid;
-      gap: 6px;
-      padding: 16px;
-      border-radius: 16px;
-      background: rgba(143,227,176,.08);
-      border: 1px solid rgba(143,227,176,.22);
-      min-width: 0;
-      overflow-wrap: anywhere;
-      word-break: normal;
-    }
-
-    .preset-link strong {
-      color: var(--accent);
-      overflow-wrap: anywhere;
-    }
-
-    .preset-link span {
-      color: var(--muted);
-      overflow-wrap: anywhere;
-      word-break: break-word;
-    }
-
-    .song-deep-dive-grid {
-      display: grid;
-      gap: 16px;
-      margin-top: 18px;
-    }
-
-    .deep-dive-card,
-    .result-card,
-    .tone-label {
-      min-width: 0;
-      overflow-wrap: anywhere;
-      word-break: normal;
-    }
-
-    .deep-dive-card {
-      padding: 20px;
-      border-radius: 20px;
-      background: rgba(0, 0, 0, 0.18);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-    }
-
-    .deep-dive-card h3,
-    .result-card h3 {
-      margin-bottom: 10px;
-      overflow-wrap: anywhere;
-    }
-
-    .deep-dive-card p {
-      color: var(--muted);
-      margin: 8px 0 0;
-    }
-
-    .resource-links {
-      display: grid;
-      gap: 10px;
-      margin-top: 12px;
-    }
-
-    .resource-links a {
-      color: var(--accent);
-      font-weight: 800;
-      word-break: break-word;
-      overflow-wrap: anywhere;
-    }
-
-    .notice-box {
-      margin-top: 12px;
-      padding: 14px;
-      border-radius: 16px;
-      color: var(--muted);
-      background: rgba(245, 212, 135, 0.08);
-      border: 1px solid rgba(245, 212, 135, 0.18);
-    }
-
-    footer {
-      border-top: 1px solid var(--line);
-      text-align: center;
-      color: var(--muted);
-      padding: 28px 20px 40px;
-    }
-
-    @media(max-width: 920px) {
-      .hero,
-      .app-top {
-        grid-template-columns: 1fr;
-      }
-
-      .knob-grid {
-        grid-template-columns: repeat(2,minmax(120px,1fr));
-      }
-
-      .section {
-        padding: 62px 18px;
-      }
-    }
-
-    @media(max-width: 620px) {
-      .nav {
-        align-items: flex-start;
-        flex-direction: column;
-      }
-
-      .nav-links {
-        justify-content: flex-start;
-      }
-
-      .tone-labels,
-      .knob-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .hero {
-        min-height: auto;
-        padding-top: 54px;
-      }
-    }
-  .result-card,
-.deep-dive-card,
-.preset-link,
-.tone-label,
-.app-panel {
-  min-width: 0;
-  max-width: 100%;
-  overflow: hidden;
-  overflow-wrap: anywhere;
-  word-break: normal;
-}
-
-.result-card h3,
-.deep-dive-card h3,
-.preset-link strong,
-.preset-link span,
-.result-card p,
-.deep-dive-card p {
-  max-width: 100%;
-  overflow-wrap: anywhere;
-  word-break: break-word;
-}
-
-.knob-grid,
-.preset-grid,
-.song-deep-dive-grid {
-  min-width: 0;
-  max-width: 100%;
-  overflow: hidden;
-}
-
-.knob {
-  min-width: 0;
-}
-
-.resource-action-grid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 14px;
-  margin-top: 16px;
-}
-
-.resource-action {
-  display: grid;
-  gap: 10px;
-  padding: 18px;
-  border-radius: 18px;
-  color: var(--text);
-  background: rgba(143, 227, 176, 0.08);
-  border: 1px solid rgba(143, 227, 176, 0.18);
-  transition: transform 180ms ease, background 180ms ease, border 180ms ease;
-  min-width: 0;
-  overflow: hidden;
-}
-
-.resource-action:hover,
-.resource-action:focus-visible {
-  transform: translateY(-3px);
-  background: rgba(143, 227, 176, 0.13);
-  border-color: rgba(143, 227, 176, 0.32);
-  outline: none;
-}
-
-.resource-action-icon {
-  width: 46px;
-  height: 46px;
-  border-radius: 16px;
-  display: grid;
-  place-items: center;
-  color: #06110d;
-  background: linear-gradient(135deg, var(--accent), var(--gold));
-  font-size: 1.35rem;
-}
-
-.resource-action strong {
-  color: var(--accent);
-  font-size: 1.05rem;
-}
-
-.resource-action span {
-  color: var(--muted);
-  font-size: 0.92rem;
-  line-height: 1.45;
-  overflow-wrap: anywhere;
-}
-
-@media (max-width: 760px) {
-  .resource-action-grid {
-    grid-template-columns: 1fr;
-  }
-}
-    /* --- Song DiveIn result UI fixes --- */
-
-.results {
-  width: 100%;
-  max-width: 100%;
-  overflow: hidden;
-}
-
-.result-card,
-.deep-dive-card,
-.app-panel {
-  width: 100%;
-  max-width: 100%;
-  overflow: hidden;
-  padding: 22px;
-}
-
-.result-card + .result-card,
-.deep-dive-card + .deep-dive-card {
-  margin-top: 18px;
-}
-
-.result-card h3,
-.deep-dive-card h3 {
-  font-size: clamp(1.45rem, 4vw, 2.15rem);
-  line-height: 1.08;
-  overflow-wrap: anywhere;
-}
-
-.result-card p,
-.deep-dive-card p {
-  max-width: 100%;
-  overflow-wrap: anywhere;
-  word-break: normal;
-}
-
-/* Fix knob cards overflowing horizontally */
-.knob-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(145px, 1fr));
-  gap: 16px;
-  width: 100%;
-  max-width: 100%;
-  overflow: visible;
-  margin-top: 20px;
-}
-
-.knob {
-  min-width: 0;
-  width: 100%;
-  padding: 18px 12px;
-}
-
-/* Make knob circles responsive */
-.dial {
-  width: clamp(72px, 18vw, 92px);
-  height: clamp(72px, 18vw, 92px);
-}
-
-.dial strong {
-  font-size: clamp(1rem, 3vw, 1.25rem);
-}
-
-/* Fix tone notes spacing */
-.result-card .knob-grid + p {
-  margin-top: 22px;
-  padding-top: 4px;
-  line-height: 1.7;
-}
-
-/* Fix preset card overflow */
-.preset-grid {
-  width: 100%;
-  max-width: 100%;
-  overflow: visible;
-}
-
-.preset-link {
-  width: 100%;
-  max-width: 100%;
-  min-width: 0;
-  overflow: hidden;
-  overflow-wrap: anywhere;
-}
-
-.preset-link strong,
-.preset-link span {
-  overflow-wrap: anywhere;
-  word-break: break-word;
-}
-
-/* Phone polish */
-@media (max-width: 620px) {
-  .app-panel {
-    padding: 18px;
-  }
-
-  .result-card,
-  .deep-dive-card {
-    padding: 18px;
-  }
-
-  .knob-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .result-card h3,
-  .deep-dive-card h3 {
-    font-size: 1.55rem;
-  }
-}
-  </style>
 </head>
 
 <body>
-  <header class="site-header">
-    <nav class="nav" aria-label="Primary navigation">
-      <a class="brand" href="index.html" aria-label="RootedByte home">
-        <span class="brand-mark">R</span>
-        <span>RootedByte</span>
-      </a>
-
-      <div class="nav-links">
-        <a href="index.html">Home</a>
-        <a href="tone.html" class="active">Song DiveIn</a>
-        <a href="newsverse.html">NewsVerse</a>
-        <a href="rootedos.html">RootedOS</a>
-        <a href="index.html#contact">Contact</a>
+  <main class="song-divein-page app-page" data-app="song-divein">
+  <section class="song-hero">
+    <div class="song-hero__content">
+      <p class="eyebrow">Worship Team Ready</p>
+      <h1>Song DiveIn</h1>
+      <p class="song-hero__subtitle">
+        Go beyond the song link. Get the heart, flow, and practice notes your worship team needs before rehearsal.
+      </p>
+      <div class="hero-actions">
+        <a href="#songSearchForm" class="primary-action hero-link">Start a Song Dive</a>
+        <a href="#prep-cards-title" class="ghost-link">See Prep Cards</a>
       </div>
-    </nav>
-  </header>
+    </div>
 
-  <main id="top">
-    <section class="section hero" aria-labelledby="tone-title">
-      <div>
-        <span class="eyebrow">App 1 • Music Tech</span>
-        <h1 id="tone-title">Song DiveIn</h1>
-        <p class="lead">
-          <p class="lead">
-  Go deeper before you play a song. Search a song title or paste a YouTube link to explore meaning,
-  quick search buttons for lyrics, chords, and guitar tutorials, plus practical guitar tone settings
-  for your gear.
-  <a class="inline-try-link" href="#try-it">Try it!</a>
-</p>
-          <a class="inline-try-link" href="#try-it">Try it!</a>
-        </p>
-      </div>
+    <div class="song-hero__image-wrap" aria-label="Worship musician preparing a song">
+      <img
+        src="https://images.unsplash.com/photo-1660834772989-c15d049c35d7?auto=format&fit=crop&w=1200&q=80"
+        alt="Worship musician preparation with music and warm lighting"
+        class="song-hero__image"
+      />
+    </div>
+  </section>
 
-      <aside class="hero-card">
-        <img
-          src="https://images.unsplash.com/photo-1516924962500-2b4b3b99ea02?auto=format&fit=crop&w=1200&q=80"
-          alt="Electric guitar in a modern music setup"
+  <section class="song-search-card" aria-labelledby="song-search-title">
+    <div class="section-heading">
+      <p class="eyebrow">Song Lookup</p>
+      <h2 id="song-search-title">What are you preparing?</h2>
+      <p>Enter the song and artist so Song DiveIn can gather the essentials and shape the prep around the worship moment.</p>
+    </div>
+
+    <form id="songSearchForm" class="song-search-form">
+      <div class="field-group">
+        <label for="songNameInput">Song name</label>
+        <input
+          id="songNameInput"
+          name="songName"
+          type="text"
+          placeholder="Goodness of God"
+          autocomplete="off"
+          required
         />
+      </div>
 
-        <div class="hero-card-content">
-          <span class="tag">Song meaning + tone</span>
-          <h2>From listening to preparing.</h2>
-          <p class="lead">
-            Designed for worship teams, guitar learners, and musicians who want context, sources,
-            tutorials, and starting tones in one place.
-          </p>
-        </div>
-      </aside>
-    </section>
+      <div class="field-group">
+        <label for="artistInput">Artist</label>
+        <input
+          id="artistInput"
+          name="artist"
+          type="text"
+          placeholder="Bethel Music"
+          autocomplete="off"
+        />
+      </div>
 
-    <section class="section" id="try-it">
-      <article class="app-panel" aria-labelledby="tone-demo-title">
-        <div class="app-top">
-          <div class="app-copy">
-            <span class="tag">Try it</span>
-            <h2 id="tone-demo-title">Dive into a song</h2>
-            <p>
-                Use a plain song title and artist, or paste a YouTube URL. Full lyrics and chord charts are not copied
-  into the app; Song DiveIn creates quick search buttons to help you find public lyrics, chords,
-  and tutorial resources.
-            </p>
-          </div>
+      <button type="submit" class="primary-action">Dive In</button>
+    </form>
+  </section>
 
-          <form class="form-card" id="toneForm">
-            <div class="field">
-              <label for="songInput">Song name and artist, or YouTube link</label>
-              <input
-                id="songInput"
-                name="songInput"
-                type="text"
-                placeholder="Who Else - Gateway Worship feat. Abbie Gamboa"
-                required
-              />
-              <p class="hint">Example: song title + artist works best. YouTube links are used to read the video title.</p>
-            </div>
+  <section class="verified-song-card" aria-labelledby="verified-song-title">
+    <div class="section-heading compact-heading">
+      <p class="eyebrow">Song Snapshot</p>
+      <h2 id="verified-song-title">The essentials</h2>
+      <p>Verified song details stay untouched so the prep stays honest and useful.</p>
+    </div>
 
-            <div class="field">
-              <label for="gearSelect">Gear</label>
-              <select id="gearSelect" name="gear" required>
-                <option value="Line 6 HX Stomp">Line 6 HX Stomp</option>
-                <option value="Line 6 POD Go">Line 6 POD Go</option>
-                <option value="Boss GT-1000">Boss GT-1000</option>
-                <option value="Helix Floor">Helix Floor</option>
-                <option value="Fractal FM3">Fractal FM3</option>
-                <option value="Neural DSP Quad Cortex">Neural DSP Quad Cortex</option>
-              </select>
-            </div>
-
-            <button class="btn primary" type="submit">Dive in</button>
-            <div class="status" id="toneStatus" role="status" aria-live="polite"></div>
-          </form>
-        </div>
-
-        <div class="results" id="toneResult" aria-live="polite"></div>
+    <div class="verified-grid">
+      <article class="verified-item">
+        <span>Song</span>
+        <strong id="verifiedSongName">Search a song</strong>
       </article>
-    </section>
-  </main>
 
-  <footer>
-    <p>© <span id="year"></span> RootedByte. Built for digital wisdom rooted in truth.</p>
-  </footer>
+      <article class="verified-item">
+        <span>Artist</span>
+        <strong id="verifiedArtist">Add artist</strong>
+      </article>
 
-  <script>
-    const $ = (selector) => document.querySelector(selector);
+      <article class="verified-item">
+        <span>BPM</span>
+        <strong id="verifiedBpm">Unable to verify</strong>
+      </article>
 
-    const year = $('#year');
-    if (year) year.textContent = new Date().getFullYear();
+      <article class="verified-item">
+        <span>Key</span>
+        <strong id="verifiedKey">Unable to verify</strong>
+      </article>
 
-    function escapeHtml(value) {
-      return String(value ?? '')
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#039;');
-    }
-
-    function setStatus(element, message, type = 'info', loading = false) {
-      if (!element) return;
-
-      element.className = type === 'error' ? 'status error' : 'status';
-      element.innerHTML = loading
-        ? `<span class="spinner" aria-hidden="true"></span><span>${escapeHtml(message)}</span>`
-        : escapeHtml(message);
-    }
-
-    async function postJson(url, body) {
-      const response = await fetch(url, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body)
-      });
-
-      const data = await response.json().catch(() => ({}));
-
-      if (!response.ok) {
-        throw new Error(data.error || 'Something went wrong. Please try again.');
-      }
-
-      return data;
-    }
-
-    function renderKnob(label, value, max = 10) {
-      const number = Math.max(0, Math.min(max, Number(value) || 0));
-      const percent = max === 800 ? (number / 800) * 100 : (number / 10) * 100;
-      const display = max === 800 ? `${Math.round(number)}ms` : number.toFixed(1).replace('.0', '');
-
-      return `
-        <div class="knob">
-          <div class="dial" style="--value:${percent}">
-            <strong>${display}</strong>
-          </div>
-          <small>${escapeHtml(label)}</small>
-        </div>
-      `;
-    }
-
-function buildSearchUrl(query) {
-  return `https://www.google.com/search?q=${encodeURIComponent(query || '')}`;
-}
-
-function renderResourceActionButtons(data) {
-  const lyricsQuery = data.lyrics_search_query || `${data.song || ''} ${data.artist || ''} lyrics`;
-  const chordQuery = data.chord_search_query || `${data.song || ''} ${data.artist || ''} chords`;
-  const tutorialQuery = data.tutorial_search_query || `${data.song || ''} ${data.artist || ''} guitar tutorial`;
-
-  return `
-    <div class="resource-action-grid">
-      <a class="resource-action" href="${escapeHtml(buildSearchUrl(lyricsQuery))}" target="_blank" rel="noreferrer">
-        <div class="resource-action-icon" aria-hidden="true">♪</div>
-        <strong>Lyrics</strong>
-        <span>Search public lyrics sources. Full lyrics are not copied into Song DiveIn.</span>
-      </a>
-
-      <a class="resource-action" href="${escapeHtml(buildSearchUrl(chordQuery))}" target="_blank" rel="noreferrer">
-        <div class="resource-action-icon" aria-hidden="true">♬</div>
-        <strong>Chords</strong>
-        <span>Search chord or tab sources that can help you learn the song.</span>
-      </a>
-
-      <a class="resource-action" href="${escapeHtml(buildSearchUrl(tutorialQuery))}" target="_blank" rel="noreferrer">
-        <div class="resource-action-icon" aria-hidden="true">▶</div>
-        <strong>Guitar Tutorial</strong>
-        <span>Search walkthroughs, rhythm ideas, and guitar lessons for this song.</span>
-      </a>
+      <article class="verified-item">
+        <span>Confidence</span>
+        <strong id="verifiedConfidence">Not detected</strong>
+      </article>
     </div>
-  `;
-}
+  </section>
 
-    function buildPresetLinks(data, gear, originalInput = '') {
-      const song = data.song || '';
-      const artist = data.artist || '';
+  <section class="lookup-actions-card" aria-labelledby="lookup-actions-title">
+    <div class="section-heading compact-heading">
+      <p class="eyebrow">Quick Links</p>
+      <h2 id="lookup-actions-title">Lyrics, chords, and tutorial help</h2>
+      <p>Jump into the resources your team usually needs before the first run-through.</p>
+    </div>
 
-      const terms = `
-        ${originalInput && !/^https?:\/\//i.test(originalInput) ? originalInput : ''}
-        ${song}
-        ${artist}
-        ${gear}
-      `.replace(/\s+/g, ' ').trim();
+    <div class="lookup-actions">
+      <button id="lyricsLookupBtn" type="button" class="secondary-action">Find Lyrics</button>
+      <button id="chordsLookupBtn" type="button" class="secondary-action">Find Chords</button>
+      <button id="tutorialSearchBtn" type="button" class="secondary-action">Find Instrument Tutorial</button>
+    </div>
 
-      const searches = [
-        {
-          label: 'Official or vendor preset search',
-          note: 'Searches public results for presets related to this song and gear.',
-          query: `${terms} official guitar preset patch download`
-        },
-        {
-          label: 'Community preset search',
-          note: 'Searches public results for shared patches and community tone ideas.',
-          query: `${terms} community guitar preset patch download`
-        },
-        {
-          label: 'Worship tone search',
-          note: 'Searches worship-focused tone sources and preset vendors.',
-          query: `${terms} worship guitar tone preset`
-        }
-      ];
+    <div class="resource-results">
+      <article class="resource-panel">
+        <h3>Lyrics</h3>
+        <div id="lyricsResult" class="resource-output">Search a song to pull in lyrics for reflection and prep.</div>
+      </article>
 
-      return searches.map((item) => {
-        const url = `https://www.google.com/search?q=${encodeURIComponent(item.query)}`;
+      <article class="resource-panel">
+        <h3>Chords</h3>
+        <div id="chordsResult" class="resource-output">Chord links will appear here when available.</div>
+      </article>
 
-        return `
-          <a class="preset-link" href="${url}" target="_blank" rel="noreferrer">
-            <strong>${escapeHtml(item.label)}</strong>
-            <span>${escapeHtml(item.note)}</span>
-          </a>
-        `;
-      }).join('');
+      <article class="resource-panel">
+        <h3>Instrument Tutorial</h3>
+        <div id="tutorialResult" class="resource-output">Choose an instrument to find a tutorial that fits your role.</div>
+      </article>
+    </div>
+  </section>
+
+  <section class="song-meaning-card" aria-labelledby="song-meaning-title">
+    <div class="section-heading compact-heading">
+      <p class="eyebrow">Heart Check</p>
+      <h2 id="song-meaning-title">What the song is saying</h2>
+      <p>A focused look at the message so your team leads with meaning, not just memory.</p>
+    </div>
+
+    <div id="songMeaningResult" class="meaning-output">
+      Song meaning will appear here after the song is loaded.
+    </div>
+  </section>
+
+  <section class="instrument-card" aria-labelledby="instrument-title">
+    <div class="section-heading compact-heading">
+      <p class="eyebrow">Your Role</p>
+      <h2 id="instrument-title">Pick your lane</h2>
+      <p>Song DiveIn shapes the practice notes around how you serve the song.</p>
+    </div>
+
+    <div class="instrument-select-row">
+      <div class="field-group">
+        <label for="instrumentSelect">Instrument</label>
+        <select id="instrumentSelect" name="instrument">
+          <option value="acoustic-guitar">Acoustic Guitar</option>
+          <option value="electric-guitar">Electric Guitar</option>
+          <option value="bass">Bass</option>
+          <option value="drums">Drums</option>
+          <option value="keys-piano">Keys / Piano</option>
+          <option value="vocals">Vocals</option>
+        </select>
+      </div>
+      <p class="field-helper">Your tutorial search and coaching will shift with your selected role.</p>
+    </div>
+  </section>
+
+  <section class="prep-cards" aria-labelledby="prep-cards-title">
+    <div class="section-heading compact-heading">
+      <p class="eyebrow">Prep Cards</p>
+      <h2 id="prep-cards-title">Ready for rehearsal</h2>
+      <p>Short, useful cards for the heart, the sound, and the team moment.</p>
+    </div>
+
+    <details class="prep-card" open>
+      <summary>
+        <span>Faith Lens</span>
+        <small>Scripture connections, God-focus, and worship posture</small>
+      </summary>
+      <div id="faithLensResult" class="prep-card__body">
+        Search a song to connect the message with Scripture, prayer, and worship posture.
+      </div>
+    </details>
+
+    <details class="prep-card">
+      <summary>
+        <span>Song Flow</span>
+        <small>How the moment may move from reflection to response</small>
+      </summary>
+      <div id="arrangementFeelResult" class="prep-card__body">
+        Song flow notes will appear after the song is loaded.
+      </div>
+    </details>
+
+    <details class="prep-card">
+      <summary>
+        <span>Listen Closely</span>
+        <small>Dynamic lifts, repeated lines, and moments to leave space</small>
+      </summary>
+      <div id="listeningGuideResult" class="prep-card__body">
+        Listening cues will appear here before rehearsal.
+      </div>
+    </details>
+
+    <details class="prep-card">
+      <summary>
+        <span>Rehearsal Moves</span>
+        <small>Practical reminders for transitions, cues, and team unity</small>
+      </summary>
+      <div id="rehearsalPrepResult" class="prep-card__body">
+        Rehearsal moves will appear here once Song DiveIn has enough context.
+      </div>
+    </details>
+
+    <details class="prep-card">
+      <summary>
+        <span>Before You Lead</span>
+        <small>A short reflection, prayer prompt, and worship mindset</small>
+      </summary>
+      <div id="spiritualReflectionResult" class="prep-card__body">
+        A prayer prompt and reflection will appear here after the song is loaded.
+      </div>
+    </details>
+
+    <details class="prep-card">
+      <summary>
+        <span>Role Coaching</span>
+        <small>Guidance for your selected instrument or vocal role</small>
+      </summary>
+      <div id="instrumentGuidanceResult" class="prep-card__body">
+        Pick your lane above to get coaching that fits your role in the team.
+      </div>
+    </details>
+  </section>
+</main>
+
+<style>
+  :root {
+    --song-bg: #eef4ff;
+    --song-bg-soft: #f8fbff;
+    --song-card: rgba(255, 255, 255, 0.78);
+    --song-card-strong: rgba(255, 255, 255, 0.94);
+    --song-card-soft: rgba(248, 251, 255, 0.92);
+    --song-primary: #7c3aed;
+    --song-primary-soft: rgba(124, 58, 237, 0.12);
+    --song-secondary: #f59e0b;
+    --song-secondary-soft: rgba(245, 158, 11, 0.16);
+    --song-accent: #0ea5e9;
+    --song-text: #182033;
+    --song-muted: #61708a;
+    --song-border: rgba(52, 74, 108, 0.14);
+    --song-radius: 28px;
+    --song-shadow: 0 24px 70px rgba(68, 82, 115, 0.16);
+  }
+
+  .song-divein-page {
+    min-height: 100vh;
+    padding: clamp(1rem, 3vw, 3rem);
+    color: var(--song-text);
+    background:
+      radial-gradient(circle at top left, rgba(14, 165, 233, 0.2), transparent 32rem),
+      radial-gradient(circle at 80% 10%, rgba(124, 58, 237, 0.16), transparent 32rem),
+      linear-gradient(180deg, #f7fbff 0%, var(--song-bg) 52%, #fff7ed 100%);
+  }
+
+  .song-divein-page,
+  .song-divein-page input,
+  .song-divein-page select,
+  .song-divein-page button {
+    font-family: inherit;
+  }
+
+  .song-hero,
+  .song-search-card,
+  .verified-song-card,
+  .lookup-actions-card,
+  .song-meaning-card,
+  .instrument-card,
+  .prep-cards {
+    width: min(1120px, 100%);
+    margin: 0 auto 1.25rem;
+    padding: clamp(1.1rem, 3vw, 2rem);
+    border: 1px solid var(--song-border);
+    border-radius: var(--song-radius);
+    background: var(--song-card);
+    box-shadow: var(--song-shadow);
+    backdrop-filter: blur(22px);
+  }
+
+  .song-hero {
+    display: grid;
+    grid-template-columns: minmax(0, 1.05fr) minmax(280px, 0.95fr);
+    gap: clamp(1.2rem, 4vw, 3rem);
+    align-items: center;
+    min-height: 430px;
+    overflow: hidden;
+  }
+
+  .song-hero__content {
+    position: relative;
+    z-index: 2;
+  }
+
+  .song-hero__image-wrap {
+    position: relative;
+    min-height: 340px;
+    border-radius: 32px;
+    overflow: hidden;
+    box-shadow: 0 28px 60px rgba(33, 46, 79, 0.22);
+  }
+
+  .song-hero__image-wrap::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(124, 58, 237, 0.2)),
+      radial-gradient(circle at bottom left, rgba(245, 158, 11, 0.26), transparent 50%);
+  }
+
+  .song-hero__image {
+    width: 100%;
+    height: 100%;
+    min-height: 340px;
+    object-fit: cover;
+    transform: scale(1.02);
+  }
+
+  .eyebrow {
+    margin: 0 0 0.4rem;
+    color: var(--song-primary);
+    font-size: 0.76rem;
+    font-weight: 850;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .song-hero h1,
+  .section-heading h2 {
+    margin: 0;
+    line-height: 1.04;
+    letter-spacing: -0.045em;
+  }
+
+  .song-hero h1 {
+    font-size: clamp(3rem, 8vw, 6.7rem);
+  }
+
+  .section-heading h2 {
+    font-size: clamp(1.55rem, 3vw, 2.4rem);
+  }
+
+  .song-hero__subtitle,
+  .section-heading p,
+  .field-helper {
+    max-width: 720px;
+    color: var(--song-muted);
+    line-height: 1.7;
+  }
+
+  .song-hero__subtitle {
+    font-size: clamp(1rem, 2vw, 1.25rem);
+  }
+
+  .hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+    align-items: center;
+    margin-top: 1.4rem;
+  }
+
+  .hero-link,
+  .ghost-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+  }
+
+  .ghost-link {
+    min-height: 48px;
+    border: 1px solid var(--song-border);
+    border-radius: 999px;
+    padding: 0 1.15rem;
+    color: var(--song-text);
+    font-weight: 800;
+    background: rgba(255, 255, 255, 0.55);
+  }
+
+  .compact-heading {
+    margin-bottom: 1rem;
+  }
+
+  .song-search-form,
+  .instrument-card,
+  .instrument-select-row {
+    display: grid;
+    gap: 0.8rem;
+  }
+
+  .song-search-form {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) auto;
+    align-items: end;
+  }
+
+  .field-group {
+    display: grid;
+    gap: 0.45rem;
+  }
+
+  .song-search-form label,
+  .instrument-card label {
+    color: var(--song-muted);
+    font-size: 0.88rem;
+    font-weight: 800;
+  }
+
+  .song-search-form input,
+  .instrument-card select {
+    min-height: 50px;
+    border: 1px solid var(--song-border);
+    border-radius: 18px;
+    padding: 0 1rem;
+    color: var(--song-text);
+    background: rgba(255, 255, 255, 0.78);
+    outline: none;
+  }
+
+  .song-search-form input:focus,
+  .instrument-card select:focus {
+    border-color: var(--song-primary);
+    box-shadow: 0 0 0 4px var(--song-primary-soft);
+  }
+
+  .primary-action,
+  .secondary-action {
+    min-height: 50px;
+    border: 0;
+    border-radius: 999px;
+    padding: 0 1.2rem;
+    font-weight: 850;
+    cursor: pointer;
+    transition: transform 160ms ease, box-shadow 160ms ease, background 160ms ease;
+  }
+
+  .primary-action:hover,
+  .secondary-action:hover,
+  .ghost-link:hover {
+    transform: translateY(-2px);
+  }
+
+  .primary-action {
+    color: #ffffff;
+    background: linear-gradient(135deg, var(--song-primary), var(--song-accent));
+    box-shadow: 0 14px 28px rgba(124, 58, 237, 0.24);
+  }
+
+  .secondary-action {
+    color: var(--song-text);
+    border: 1px solid var(--song-border);
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.9), rgba(248, 251, 255, 0.68));
+  }
+
+  .verified-grid {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 0.85rem;
+  }
+
+  .verified-item,
+  .resource-panel,
+  .prep-card,
+  .meaning-output {
+    border: 1px solid var(--song-border);
+    border-radius: 22px;
+    background: var(--song-card-strong);
+  }
+
+  .verified-item {
+    position: relative;
+    padding: 1rem;
+    overflow: hidden;
+  }
+
+  .verified-item::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: linear-gradient(90deg, var(--song-primary), var(--song-secondary));
+    opacity: 0.75;
+  }
+
+  .verified-item span {
+    display: block;
+    margin-bottom: 0.35rem;
+    color: var(--song-muted);
+    font-size: 0.76rem;
+    font-weight: 850;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  .verified-item strong {
+    font-size: 1.02rem;
+  }
+
+  .lookup-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.7rem;
+    margin-bottom: 1rem;
+  }
+
+  .resource-results {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1rem;
+  }
+
+  .resource-panel {
+    padding: 1rem;
+  }
+
+  .resource-panel h3 {
+    margin-top: 0;
+  }
+
+  .resource-output,
+  .meaning-output,
+  .prep-card__body {
+    color: var(--song-muted);
+    line-height: 1.65;
+  }
+
+  .meaning-output {
+    padding: 1rem;
+  }
+
+  .prep-cards {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .prep-card {
+    overflow: hidden;
+    transition: transform 160ms ease, box-shadow 160ms ease;
+  }
+
+  .prep-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 18px 40px rgba(68, 82, 115, 0.12);
+  }
+
+  .prep-card summary {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1rem;
+    cursor: pointer;
+    list-style: none;
+  }
+
+  .prep-card summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .prep-card summary span {
+    font-weight: 900;
+  }
+
+  .prep-card summary small {
+    max-width: 430px;
+    color: var(--song-muted);
+    text-align: right;
+  }
+
+  .prep-card__body {
+    border-top: 1px solid var(--song-border);
+    padding: 1rem;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.54), rgba(248, 251, 255, 0.76));
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --song-bg: #151a2f;
+      --song-bg-soft: #1b2138;
+      --song-card: rgba(26, 32, 54, 0.76);
+      --song-card-strong: rgba(31, 38, 63, 0.92);
+      --song-card-soft: rgba(36, 44, 72, 0.9);
+      --song-text: #f8fafc;
+      --song-muted: #cbd5e1;
+      --song-border: rgba(255, 255, 255, 0.12);
     }
 
-   function renderSongDeepDive(data) {
-  const songMeaning =
-    data.song_meaning ||
-    data.meaning_summary ||
-    'Song meaning is not available yet.';
+    .song-divein-page {
+      background:
+        radial-gradient(circle at top left, rgba(14, 165, 233, 0.18), transparent 32rem),
+        radial-gradient(circle at 80% 10%, rgba(124, 58, 237, 0.2), transparent 32rem),
+        linear-gradient(180deg, #111827 0%, var(--song-bg) 56%, #241b35 100%);
+    }
 
-  return `
-    <div class="song-deep-dive-grid">
-      <div class="deep-dive-card">
-        <span class="tag">Song Meaning</span>
-        <h3>What the song is about</h3>
-        <p>${escapeHtml(songMeaning)}</p>
-        <p class="hint">
-          This is AI-generated from public context when available. If public context is limited,
-          it may be an interpretation and should be verified with official artist notes when possible.
-        </p>
-      </div>
+    .song-search-form input,
+    .instrument-card select,
+    .secondary-action,
+    .ghost-link {
+      color: var(--song-text);
+      background: rgba(255, 255, 255, 0.08);
+    }
 
-      <div class="deep-dive-card">
-        <span class="tag">Song Resources</span>
-        <h3>Find lyrics, chords, and tutorials</h3>
-        <p>
-          Use these buttons to search public sources for this song. Full lyrics and chord charts are not copied into Song DiveIn.
-        </p>
-        ${renderResourceActionButtons(data)}
-      </div>
-    </div>
-  `;
-}
+    .prep-card__body {
+      background: rgba(255, 255, 255, 0.04);
+    }
+  }
 
-    $('#toneForm').addEventListener('submit', async (event) => {
-      event.preventDefault();
+  @media (max-width: 900px) {
+    .song-hero,
+    .song-search-form,
+    .verified-grid,
+    .resource-results {
+      grid-template-columns: 1fr;
+    }
 
-      const songInput = $('#songInput').value.trim();
-      const gear = $('#gearSelect').value;
-      const status = $('#toneStatus');
-      const result = $('#toneResult');
+    .song-hero {
+      min-height: auto;
+    }
 
-      result.innerHTML = '';
+    .song-hero__image-wrap,
+    .song-hero__image {
+      min-height: 260px;
+    }
 
-      if (!songInput) {
-        setStatus(status, 'Please enter a song name or YouTube link.', 'error');
-        return;
-      }
+    .prep-card summary {
+      display: grid;
+    }
 
-      if (/open\.spotify\.com\/track\//i.test(songInput)) {
-        setStatus(status, 'Spotify links are not supported. Please type the song name and artist, or paste a YouTube link.', 'error');
-        return;
-      }
-
-      setStatus(status, 'Researching the song and building your Song DiveIn results...', 'info', true);
-
-      try {
-        const data = await postJson('/api/tone', { songInput, gear });
-
-        result.innerHTML = `
-          <div class="tone-labels">
-            <div class="tone-label">
-              <span>Song</span>
-              <strong>${escapeHtml(data.song)}${data.artist ? ' - ' + escapeHtml(data.artist) : ''}</strong>
-            </div>
-
-            <div class="tone-label">
-              <span>Gear</span>
-              <strong>${escapeHtml(gear)}</strong>
-            </div>
-
-            <div class="tone-label">
-              <span>BPM</span>
-              <strong>${data.bpm ? escapeHtml(data.bpm) : 'Unknown'}</strong>
-            </div>
-
-            <div class="tone-label">
-              <span>Key</span>
-              <strong>${escapeHtml(data.key || 'Unknown')}</strong>
-            </div>
-
-            <div class="tone-label">
-              <span>Confidence</span>
-              <strong>${escapeHtml(data.metadata_confidence || 'low')}</strong>
-            </div>
-
-            <div class="tone-label">
-              <span>Amp model</span>
-              <strong>${escapeHtml(data.amp_model || 'Not available')}</strong>
-            </div>
-
-            <div class="tone-label">
-              <span>Cab</span>
-              <strong>${escapeHtml(data.cab || 'Not available')}</strong>
-            </div>
-          </div>
-
-          ${renderSongDeepDive(data)}
-
-          <div class="result-card">
-            <span class="tag">Tone Settings</span>
-            <h3>Starting-point guitar tone</h3>
-
-            <div class="knob-grid">
-              ${renderKnob('Gain', data.gain)}
-              ${renderKnob('Bass', data.bass)}
-              ${renderKnob('Mid', data.mid)}
-              ${renderKnob('Treble', data.treble)}
-              ${renderKnob('Presence', data.presence)}
-              ${renderKnob('Reverb mix', data.reverb_mix)}
-              ${renderKnob('Delay mix', data.delay_mix)}
-              ${renderKnob('Delay time', data.delay_time_ms, 800)}
-            </div>
-
-            <p>${escapeHtml(data.notes || '')}</p>
-          </div>
-
-          <div class="result-card">
-            <span class="tag">Preset Finder</span>
-            <h3>Find downloadable presets</h3>
-            <p>
-              These public searches can help you find official, community, or worship-focused preset sources.
-              Some presets may be paid, account-required, or unavailable.
-            </p>
-
-            <div class="preset-grid">
-              ${buildPresetLinks(data, gear, songInput)}
-            </div>
-          </div>
-        `;
-
-        setStatus(status, 'Song DiveIn results ready.');
-      } catch (error) {
-        setStatus(status, error.message, 'error');
-      }
-    });
-  </script>
+    .prep-card summary small {
+      text-align: left;
+    }
+  }
+</style>
+  <script src="tone.js"></script>
 </body>
 </html>
