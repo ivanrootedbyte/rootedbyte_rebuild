@@ -820,10 +820,23 @@
       color: var(--cream-soft);
     }
 
-    .solution-card {
-      background: rgba(255, 252, 245, 0.74);
-      color: var(--charcoal);
-    }
+.solution-card {
+  position: relative;
+  overflow: hidden;
+  border: 2px solid transparent;
+  background:
+    linear-gradient(rgba(255, 252, 245, 0.88), rgba(255, 252, 245, 0.88)) padding-box,
+    linear-gradient(
+      135deg,
+      #ff6b6b,
+      #f7b267,
+      #ffe66d,
+      #4ecdc4,
+      #5b8def,
+      #b388ff
+    ) border-box;
+  color: var(--charcoal);
+}
 
     .purpose-icon {
       display: grid;
@@ -844,6 +857,17 @@
       color: var(--forest);
     }
 
+    .solution-card {
+  transition: transform 200ms ease, box-shadow 200ms ease;
+}
+
+.solution-card:hover {
+  transform: translateY(-4px);
+  box-shadow:
+    0 28px 80px rgba(29, 36, 31, 0.10),
+    0 0 28px rgba(201, 135, 63, 0.14);
+}
+  
     .purpose-card h3 {
       font-size: clamp(1.8rem, 3vw, 3rem);
       font-weight: 900;
