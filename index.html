@@ -362,7 +362,7 @@
   width: min(100%, 390px);
   aspect-ratio: 1 / 1;
   margin-left: auto;
-  border: 2px solid transparent;
+  border: 1px solid transparent;
   border-radius: 50%;
   background:
     linear-gradient(rgba(255, 252, 245, 0.58), rgba(255, 252, 245, 0.58)) padding-box,
@@ -375,7 +375,7 @@
       #5b8def,
       #b388ff
     ) border-box;
-  padding: 18px;
+  padding: 12px;
   box-shadow: var(--shadow);
   backdrop-filter: blur(18px);
   overflow: hidden;
@@ -484,16 +484,7 @@ border-radius: 50%;
     linear-gradient(145deg, rgba(255, 252, 245, 0.96), rgba(220, 232, 216, 0.52)),
     radial-gradient(circle, rgba(41, 75, 53, 0.12), transparent 54%);
   border: 1px solid rgba(29, 36, 31, 0.08);
-
-}
-
-.focus-orb::before {
-  content: "";
-  position: absolute;
-  inset: 18px;
-  border-radius: 24px;
-  border: 1px solid rgba(33, 77, 53, 0.10);
-  pointer-events: none;
+  overflow: hidden;
 }
 
 .focus-orb::after {
