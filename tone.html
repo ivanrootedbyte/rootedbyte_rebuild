@@ -43,6 +43,18 @@
     </div>
 
     <form id="songSearchForm" class="song-search-form">
+  <div class="field-group">
+  <label for="youtubeUrlInput">YouTube link</label>
+  <input
+    id="youtubeUrlInput"
+    name="youtubeUrl"
+    type="url"
+    placeholder="https://www.youtube.com/watch?v=..."
+    autocomplete="off"
+    required
+  />
+</div>
+      
       <div class="field-group">
         <label for="songNameInput">Song name</label>
         <input
@@ -70,6 +82,9 @@
     </form>
   </section>
 
+<section id="songResultsArea" class="song-results-area" hidden>
+
+  <!-- Song Snapshot -->
   <section class="verified-song-card" aria-labelledby="verified-song-title">
     <div class="section-heading compact-heading">
       <p class="eyebrow">Song Snapshot</p>
@@ -105,6 +120,7 @@
     </div>
   </section>
 
+  <!-- Quick Links -->
   <section class="lookup-actions-card" aria-labelledby="lookup-actions-title">
     <div class="section-heading compact-heading">
       <p class="eyebrow">Quick Links</p>
@@ -121,21 +137,22 @@
     <div class="resource-results">
       <article class="resource-panel">
         <h3>Lyrics</h3>
-        <div id="lyricsResult" class="resource-output">Search a song to pull in lyrics for reflection and prep.</div>
+        <div id="lyricsResult" class="resource-output"></div>
       </article>
 
       <article class="resource-panel">
         <h3>Chords</h3>
-        <div id="chordsResult" class="resource-output">Chord links will appear here when available.</div>
+        <div id="chordsResult" class="resource-output"></div>
       </article>
 
       <article class="resource-panel">
         <h3>Instrument Tutorial</h3>
-        <div id="tutorialResult" class="resource-output">Choose an instrument to find a tutorial that fits your role.</div>
+        <div id="tutorialResult" class="resource-output"></div>
       </article>
     </div>
   </section>
-
+  
+  <!-- Heart Check -->
   <section class="song-meaning-card" aria-labelledby="song-meaning-title">
     <div class="section-heading compact-heading">
       <p class="eyebrow">Heart Check</p>
@@ -143,9 +160,7 @@
       <p>A focused look at the message so your team leads with meaning, not just memory.</p>
     </div>
 
-    <div id="songMeaningResult" class="meaning-output">
-      Song meaning will appear here after the song is loaded.
-    </div>
+    <div id="songMeaningResult" class="meaning-output"></div>
   </section>
 
   <section class="instrument-card" aria-labelledby="instrument-title">
@@ -171,6 +186,7 @@
     </div>
   </section>
 
+   <!-- Prep Cards -->
   <section class="prep-cards" aria-labelledby="prep-cards-title">
     <div class="section-heading compact-heading">
       <p class="eyebrow">Prep Cards</p>
@@ -183,9 +199,7 @@
         <span>Faith Lens</span>
         <small>Scripture connections, God-focus, and worship posture</small>
       </summary>
-      <div id="faithLensResult" class="prep-card__body">
-        Search a song to connect the message with Scripture, prayer, and worship posture.
-      </div>
+      <div id="faithLensResult" class="prep-card__body"></div>
     </details>
 
     <details class="prep-card">
@@ -193,9 +207,7 @@
         <span>Song Flow</span>
         <small>How the moment may move from reflection to response</small>
       </summary>
-      <div id="arrangementFeelResult" class="prep-card__body">
-        Song flow notes will appear after the song is loaded.
-      </div>
+      <div id="arrangementFeelResult" class="prep-card__body"></div>
     </details>
 
     <details class="prep-card">
@@ -203,9 +215,7 @@
         <span>Listen Closely</span>
         <small>Dynamic lifts, repeated lines, and moments to leave space</small>
       </summary>
-      <div id="listeningGuideResult" class="prep-card__body">
-        Listening cues will appear here before rehearsal.
-      </div>
+      <div id="listeningGuideResult" class="prep-card__body"></div>
     </details>
 
     <details class="prep-card">
@@ -213,9 +223,7 @@
         <span>Rehearsal Moves</span>
         <small>Practical reminders for transitions, cues, and team unity</small>
       </summary>
-      <div id="rehearsalPrepResult" class="prep-card__body">
-        Rehearsal moves will appear here once Song DiveIn has enough context.
-      </div>
+      <div id="rehearsalPrepResult" class="prep-card__body"></div>
     </details>
 
     <details class="prep-card">
@@ -223,9 +231,7 @@
         <span>Before You Lead</span>
         <small>A short reflection, prayer prompt, and worship mindset</small>
       </summary>
-      <div id="spiritualReflectionResult" class="prep-card__body">
-        A prayer prompt and reflection will appear here after the song is loaded.
-      </div>
+      <div id="spiritualReflectionResult" class="prep-card__body"></div>
     </details>
 
     <details class="prep-card">
@@ -233,11 +239,12 @@
         <span>Role Coaching</span>
         <small>Guidance for your selected instrument or vocal role</small>
       </summary>
-      <div id="instrumentGuidanceResult" class="prep-card__body">
-        Pick your lane above to get coaching that fits your role in the team.
-      </div>
+      <div id="instrumentGuidanceResult" class="prep-card__body"></div>
     </details>
   </section>
+  
+</section>
+  
 </main>
 
 <style>
@@ -306,7 +313,14 @@
     position: relative;
     z-index: 2;
   }
+.song-results-area {
+  display: grid;
+  gap: 1.25rem;
+}
 
+.song-results-area[hidden] {
+  display: none;
+}
   .song-hero__image-wrap {
     position: relative;
     min-height: 340px;
