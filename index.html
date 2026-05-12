@@ -509,6 +509,21 @@ border-radius: 50%;
     inset 0 0 50px rgba(41, 75, 53, 0.06),
     0 10px 28px rgba(23, 32, 27, 0.06);
   transition: transform 240ms ease, box-shadow 240ms ease;
+  overflow: hidden;
+}
+
+.orb-content::before {
+  content: "";
+  position: absolute;
+  inset: 24px;
+  background-image: url("images/rootedbyte-icon.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  opacity: 0.12;
+  filter: saturate(0.85);
+  z-index: -1;
+  pointer-events: none;
 }
 
 .hero-panel-link:hover .orb-content,
@@ -1152,15 +1167,11 @@ border-radius: 50%;
 <a href="#apps" class="hero-panel hero-panel-link" aria-label="Go to apps section">
   <div class="focus-orb">
 <div class="orb-content">
-  <div class="hero-logo-content">
-    <img
-      class="hero-logo-image"
-      src="images/rootedbyte-icon.png"
-      alt="RootedByte logo"
-    />
+  <div>
+    <span class="orb-ring" aria-hidden="true"></span>
     <p class="orb-message">
       <span>TAP</span>
-      <small>Stay Rooted</small>
+      <small>to access RootedByte Apps</small>
     </p>
   </div>
 </div>
