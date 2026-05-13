@@ -12,38 +12,38 @@
   <title>NewsVerse | RootedByte</title>
 
   <style>
-    :root {
-      --news-bg: #f5f3ec;
-      --news-bg-soft: #fffdf7;
-      --news-card: rgba(255, 253, 247, 0.92);
-      --news-card-strong: rgba(255, 255, 255, 0.97);
+    
+:root {
+  --news-bg: #efe6d6;
+  --news-bg-soft: #fbf6ec;
+  --news-card: rgba(255, 250, 240, 0.92);
+  --news-card-strong: rgba(255, 253, 247, 0.97);
 
-      --news-ink: #17201d;
-      --news-muted: #5f6f69;
+  --news-ink: #1d2119;
+  --news-muted: #68715f;
 
-      --news-teal: #2f7d7b;
-      --news-teal-dark: #245f5d;
-      --news-blue: #3d6f8f;
+  --news-teal: #5d7f73;
+  --news-teal-dark: #405f53;
+  --news-blue: #6f8f83;
 
-      --news-sage: #dfe9dd;
-      --news-clay: #c56938;
-      --news-sand: #e8dcc8;
-      --news-gold: #d99a3d;
+  --news-sage: #dce8d5;
+  --news-clay: #b85c38;
+  --news-sand: #e8d7bd;
+  --news-gold: #d8a35d;
 
-      --news-danger: #a64032;
-      --news-line: rgba(23, 32, 29, 0.11);
-      --news-shadow: 0 22px 60px rgba(45, 55, 48, 0.11);
+  --news-rust: #c7663d;
+  --news-rust-dark: #934428;
+  --news-rust-light: #e08a5d;
+  --news-rust-soft: rgba(199, 102, 61, 0.14);
 
-      --news-radius: 28px;
-      --news-radius-sm: 16px;
-      --max: 1180px;
+  --news-danger: #a64032;
+  --news-line: rgba(29, 33, 25, 0.11);
+  --news-shadow: 0 22px 60px rgba(63, 56, 42, 0.12);
 
-      --news-rust: #c7663d;
---news-rust-dark: #934428;
---news-rust-light: #e08a5d;
---news-rust-soft: rgba(199, 102, 61, 0.14);
-      
-    }
+  --news-radius: 28px;
+  --news-radius-sm: 16px;
+  --max: 1180px;
+}
 
     * {
       box-sizing: border-box;
@@ -53,17 +53,18 @@
       scroll-behavior: smooth;
     }
 
-    body {
-      margin: 0;
-      min-height: 100vh;
-      color: var(--news-ink);
-      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background:
-        radial-gradient(circle at top left, rgba(47, 125, 123, 0.11), transparent 28rem),
-        radial-gradient(circle at 88% 10%, rgba(197, 105, 56, 0.08), transparent 30rem),
-        linear-gradient(180deg, #fffdf7 0%, var(--news-bg) 56%, #edf4ef 100%);
-      line-height: 1.6;
-    }
+body {
+  margin: 0;
+  min-height: 100vh;
+  color: var(--news-ink);
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background:
+    radial-gradient(circle at top left, rgba(168, 94, 62, 0.12), transparent 28rem),
+    radial-gradient(circle at 88% 10%, rgba(118, 139, 100, 0.13), transparent 30rem),
+    radial-gradient(circle at 50% 95%, rgba(213, 184, 133, 0.18), transparent 34rem),
+    linear-gradient(180deg, #fbf6ec 0%, #efe6d6 52%, #e4ecdf 100%);
+  line-height: 1.6;
+}
 
     a {
       color: inherit;
@@ -104,25 +105,38 @@
       letter-spacing: -0.045em;
     }
 
-    .brand-mark {
-      width: 42px;
-      height: 42px;
-      display: grid;
-      place-items: center;
-      border-radius: 16px;
-      overflow: hidden;
-      background: linear-gradient(135deg, #e7dcc8, #a9c7b8);
-      box-shadow: 0 10px 24px rgba(45, 55, 48, 0.16);
-      flex: 0 0 auto;
-    }
+.brand-mark {
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  padding: 3px;
+  border: 2px solid transparent;
+  border-radius: 17px;
+  background:
+    linear-gradient(var(--news-bg-soft), var(--news-bg-soft)) padding-box,
+    linear-gradient(
+      135deg,
+      #ff6b6b,
+      #f7b267,
+      #ffe66d,
+      #4ecdc4,
+      #5b8def,
+      #b388ff
+    ) border-box;
+  overflow: hidden;
+  flex: 0 0 auto;
+  box-shadow: 0 10px 24px rgba(45, 55, 48, 0.16);
+}
 
-    .brand-mark img {
-      width: 115%;
-      height: 115%;
-      object-fit: cover;
-      object-position: center;
-      display: block;
-    }
+.brand-mark img {
+  width: 118%;
+  height: 118%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+  border-radius: 14px;
+}
 
     .site-nav {
       display: flex;
@@ -167,22 +181,36 @@
       overflow: hidden;
     }
 
-    .news-ticker__label {
-      min-height: 34px;
-      padding: 0 0.95rem;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 999px;
-      color: #ffffff;
-      font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
-      font-size: 0.82rem;
-      font-weight: 900;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      background: linear-gradient(135deg, var(--news-rust-dark), var(--news-rust));
-      box-shadow: 0 10px 24px rgba(147, 68, 40, 0.24);
-    }
+.news-ticker__label {
+  min-height: 36px;
+  padding: 0 1rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  border-radius: 999px;
+  color: #ffffff;
+  background: linear-gradient(135deg, var(--news-rust-dark), var(--news-rust));
+  font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
+  font-size: 0.82rem;
+  font-weight: 900;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  box-shadow: 0 10px 24px rgba(147, 68, 40, 0.24);
+}
+
+.news-ticker__label::before {
+  content: "";
+  width: 0.55rem;
+  height: 0.55rem;
+  border-radius: 999px;
+  background: #ffd2a8;
+  box-shadow:
+    0 0 0 4px rgba(255, 210, 168, 0.18),
+    0 0 16px rgba(255, 210, 168, 0.82);
+  flex: 0 0 auto;
+}
 
     .news-ticker__viewport {
       overflow: hidden;
@@ -439,35 +467,43 @@ box-shadow:
       outline: none;
     }
 
-    .hero-editorial-card {
-      position: relative;
-      min-height: 320px;
-      overflow: hidden;
-      border-radius: 28px;
-      background: rgba(255, 253, 247, 0.12);
-      border: 1px solid rgba(255, 253, 247, 0.24);
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.18);
-      backdrop-filter: blur(12px);
-    }
+.hero-editorial-card {
+  position: relative;
+  min-height: 320px;
+  overflow: hidden;
+  border-radius: 28px;
+  background: rgba(255, 253, 247, 0.12);
+  border: 1px solid rgba(255, 253, 247, 0.22);
+  box-shadow:
+    0 24px 56px rgba(0, 0, 0, 0.22),
+    inset 0 1px 0 rgba(255, 255, 255, 0.16);
+  backdrop-filter: blur(12px);
+}
 
-    .hero-editorial-card::before {
-      content: "";
-      position: absolute;
-      inset: 0.8rem;
-      border: 1px solid rgba(255, 253, 247, 0.24);
-      border-radius: 22px;
-      pointer-events: none;
-      z-index: 2;
-    }
+.hero-editorial-card::after {
+  content: "NEWS PREVIEW";
+  position: absolute;
+  left: 1.15rem;
+  bottom: 1.15rem;
+  z-index: 3;
+  padding: 0.45rem 0.7rem;
+  border-radius: 999px;
+  color: #fff7ec;
+  background: rgba(15, 34, 34, 0.72);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  font-size: 0.72rem;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+}
 
-    .hero-editorial-image {
-      width: 100%;
-      height: 100%;
-      min-height: 320px;
-      object-fit: cover;
-      display: block;
-      filter: saturate(0.9) contrast(1.04);
-    }
+.hero-editorial-image {
+  width: 100%;
+  height: 100%;
+  min-height: 320px;
+  object-fit: cover;
+  display: block;
+  filter: saturate(0.82) contrast(0.98) brightness(0.88);
+}
 
     .section {
       width: min(1120px, calc(100% - 2rem));
@@ -487,56 +523,71 @@ box-shadow:
       align-items: start;
     }
 
-    .news-form-card {
-      padding: clamp(1.2rem, 3vw, 1.75rem);
-      border-radius: 28px;
-      background:
-        linear-gradient(135deg, rgba(255, 253, 247, 0.98), rgba(255, 255, 255, 0.94)),
-        radial-gradient(circle at top right, rgba(47, 125, 123, 0.08), transparent 16rem);
-      border: 1px solid var(--news-line);
-      box-shadow: 0 18px 44px rgba(45, 55, 48, 0.1);
-    }
+.news-form-card {
+  position: relative;
+  padding: clamp(1.25rem, 3vw, 2rem);
+  border-radius: 30px;
+  background:
+    linear-gradient(135deg, rgba(255, 253, 247, 0.98), rgba(255, 255, 255, 0.95)),
+    radial-gradient(circle at top right, rgba(197, 105, 56, 0.08), transparent 16rem);
+  border: 1px solid rgba(23, 32, 29, 0.12);
+  box-shadow:
+    0 22px 54px rgba(45, 55, 48, 0.11),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+}
 
-    .field {
-      display: grid;
-      gap: 0.5rem;
-      margin-bottom: 1rem;
-    }
+.news-form-card::before {
+  content: "Analyze a story";
+  display: inline-flex;
+  margin-bottom: 1rem;
+  padding: 0.42rem 0.7rem;
+  border-radius: 999px;
+  color: var(--news-clay);
+  background: rgba(197, 105, 56, 0.1);
+  font-size: 0.72rem;
+  font-weight: 950;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
 
-    label,
-    .news-form-card label {
-      color: var(--news-ink);
-      font-weight: 900;
-    }
+.news-form-card label {
+  display: block;
+  margin-bottom: 0.45rem;
+  color: var(--news-ink);
+  font-size: 1rem;
+  font-weight: 950;
+}
 
-    input,
-    select,
-    textarea {
-      width: 100%;
-      min-height: 54px;
-      color: var(--news-ink);
-      background: #ffffff;
-      border: 1px solid rgba(23, 32, 29, 0.12);
-      border-radius: 18px;
-      padding: 0.85rem 0.95rem;
-      outline: none;
-    }
+.news-form-card input {
+  min-height: 60px;
+  border-radius: 20px;
+  padding: 0 1.1rem;
+  color: var(--news-ink);
+  background: #ffffff;
+  border: 1px solid rgba(23, 32, 29, 0.12);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.9),
+    0 10px 26px rgba(45, 55, 48, 0.05);
+}
 
-    input::placeholder {
-      color: rgba(95, 111, 105, 0.72);
-    }
+.news-form-card input:focus {
+  border-color: rgba(197, 105, 56, 0.55);
+  box-shadow:
+    0 0 0 4px rgba(197, 105, 56, 0.12),
+    0 14px 30px rgba(45, 55, 48, 0.08);
+}
 
-    input:focus,
-    select:focus,
-    textarea:focus {
-      border-color: var(--news-teal);
-      box-shadow: 0 0 0 4px rgba(47, 125, 123, 0.12);
-    }
+.news-form-card .hint {
+  margin-top: 0.75rem;
+  color: var(--news-muted);
+  font-size: 0.95rem;
+}
 
-    .news-form-card .hint {
-      color: var(--news-muted);
-      font-weight: 500;
-    }
+.news-form-card .primary-action {
+  margin-top: 1rem;
+  min-height: 54px;
+  padding-inline: 1.45rem;
+}
 
     .status {
       min-height: 24px;
@@ -739,7 +790,7 @@ box-shadow:
 
   <main id="top" class="newsverse-page app-page" data-app="newsverse">
     <section class="news-ticker" aria-label="NewsVerse highlights">
-      <div class="news-ticker__label">Latest</div>
+      <div class="news-ticker__label">Reflect + Daily News</div>
 
       <div class="news-ticker__viewport">
         <div class="news-ticker__track">
@@ -758,8 +809,7 @@ box-shadow:
 
     <section class="news-hero news-card" aria-labelledby="newsverse-title">
       <div class="news-hero__content">
-        <span class="news-pill">Reflect + Daily News</span>
-        <p class="eyebrow">Context before reaction</p>
+        <p class="eyebrow">Pause before the post</p>
 
         <h1 id="newsverse-title" class="hero-title">NewsVerse</h1>
 
@@ -797,12 +847,12 @@ box-shadow:
 
           <form class="news-form-card" id="newsForm">
             <div class="field">
-              <label for="articleUrl">Article link</label>
+              <label for="articleUrl">Drop a news link</label>
               <input
                 id="articleUrl"
                 name="articleUrl"
                 type="url"
-                placeholder="https://example.com/news/article"
+                placeholder="Paste a headline or article URL..."
                 required
               />
             </div>
