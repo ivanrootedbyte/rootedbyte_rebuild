@@ -6,36 +6,37 @@
 
   <meta
     name="description"
-    content="A reflective Christian growth tool that creates a warm, personalized spiritual growth plan."
+    content="RootedOS is a minimalist Christian reflection tool for staying grounded with God while navigating pressure, comparison, digital habits, relationships, purpose, and life questions."
   />
 
   <title>RootedOS | RootedByte</title>
 
   <style>
     :root {
-      --bg: #f4f0e8;
-      --bg-soft: #fffaf2;
+      --bg: #eef3ea;
+      --bg-soft: #fbf8ef;
 
-      --card: rgba(255, 250, 242, 0.84);
+      --card: rgba(255, 252, 244, 0.86);
       --card-strong: rgba(255, 255, 255, 0.95);
 
-      --text: #1f241f;
-      --muted: #687066;
+      --text: #17231b;
+      --muted: #647363;
 
-      --line: rgba(31, 36, 31, 0.12);
+      --line: rgba(23, 35, 27, 0.12);
 
-      --accent: #6f7f63;
-      --accent-strong: #4f6248;
+      --forest: #254d35;
+      --forest-dark: #142a1e;
+      --forest-soft: rgba(37, 77, 53, 0.12);
 
-      --stone: #d9d1c2;
-      --mauve: #a9959b;
-      --mauve-dark: #75636a;
+      --moss: #6f7f4f;
+      --sage: #dfe8d9;
+      --cream: #fbf8ef;
       --gold: #c99a52;
 
       --danger: #a64032;
 
-      --shadow: 0 24px 70px rgba(60, 55, 45, 0.12);
-      --radius: 28px;
+      --shadow: 0 24px 70px rgba(34, 48, 37, 0.13);
+      --radius: 30px;
       --radius-sm: 18px;
       --max: 1180px;
     }
@@ -54,10 +55,10 @@
       font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       color: var(--text);
       background:
-        radial-gradient(circle at top left, rgba(111, 127, 99, 0.14), transparent 30rem),
-        radial-gradient(circle at 86% 12%, rgba(169, 149, 155, 0.16), transparent 30rem),
-        radial-gradient(circle at 50% 100%, rgba(201, 154, 82, 0.13), transparent 34rem),
-        linear-gradient(180deg, #fffaf2 0%, #f4f0e8 52%, #e8ece3 100%);
+        radial-gradient(circle at top left, rgba(37, 77, 53, 0.14), transparent 30rem),
+        radial-gradient(circle at 86% 12%, rgba(111, 127, 79, 0.15), transparent 30rem),
+        radial-gradient(circle at 50% 100%, rgba(201, 154, 82, 0.12), transparent 34rem),
+        linear-gradient(180deg, #fbf8ef 0%, #eef3ea 52%, #dfe8d9 100%);
       line-height: 1.6;
     }
 
@@ -78,7 +79,7 @@
       top: 0;
       z-index: 100;
       backdrop-filter: blur(18px);
-      background: rgba(255, 250, 242, 0.84);
+      background: rgba(251, 248, 239, 0.84);
       border-bottom: 1px solid var(--line);
     }
 
@@ -111,7 +112,7 @@
       border: 2px solid transparent;
       border-radius: 17px;
       background:
-        linear-gradient(var(--bg-soft), var(--bg-soft)) padding-box,
+        linear-gradient(var(--cream), var(--cream)) padding-box,
         linear-gradient(
           135deg,
           #ff6b6b,
@@ -123,7 +124,7 @@
         ) border-box;
       overflow: hidden;
       flex: 0 0 auto;
-      box-shadow: 0 10px 24px rgba(60, 55, 45, 0.14);
+      box-shadow: 0 10px 24px rgba(34, 48, 37, 0.14);
     }
 
     .brand-mark img {
@@ -155,46 +156,151 @@
     .nav-links a:hover,
     .nav-links a:focus-visible {
       color: var(--text);
-      background: rgba(111, 127, 99, 0.12);
+      background: rgba(37, 77, 53, 0.1);
       outline: none;
     }
 
     .nav-links a.active {
-      color: #fffaf2;
-      background: linear-gradient(135deg, var(--accent-strong), var(--mauve-dark));
-      box-shadow: 0 10px 24px rgba(79, 98, 72, 0.18);
+      color: var(--cream);
+      background: linear-gradient(135deg, var(--forest-dark), var(--forest));
+      box-shadow: 0 10px 24px rgba(37, 77, 53, 0.18);
+    }
+
+    .rootedos-launch {
+      min-height: calc(100vh - 78px);
+      display: grid;
+      place-items: center;
+      padding: clamp(2rem, 5vw, 5rem) 1.25rem;
+    }
+
+    .rootedos-update-card {
+      width: min(760px, 100%);
+      display: grid;
+      justify-items: center;
+      text-align: center;
+      padding: clamp(2rem, 5vw, 4rem);
+      border: 1px solid var(--line);
+      border-radius: 42px;
+      background:
+        linear-gradient(180deg, rgba(255, 252, 244, 0.92), rgba(255, 255, 255, 0.78)),
+        radial-gradient(circle at top, rgba(37, 77, 53, 0.12), transparent 22rem);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(22px);
+    }
+
+    .update-pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 38px;
+      padding: 0 1rem;
+      margin-bottom: 1.35rem;
+      border-radius: 999px;
+      color: var(--forest-dark);
+      background: rgba(37, 77, 53, 0.1);
+      border: 1px solid rgba(37, 77, 53, 0.16);
+      font-size: 0.86rem;
+      font-weight: 900;
+      letter-spacing: 0.02em;
+    }
+
+    .rootedos-update-card h1 {
+      margin: 0;
+      color: var(--forest-dark);
+      font-size: clamp(3.4rem, 10vw, 7rem);
+      font-weight: 950;
+      line-height: 0.95;
+      letter-spacing: -0.07em;
+    }
+
+    .rootedos-description {
+      max-width: 620px;
+      margin: 1.35rem auto 2.2rem;
+      color: var(--muted);
+      font-size: clamp(1.05rem, 2vw, 1.25rem);
+      line-height: 1.75;
+    }
+
+    .rootedos-start-button {
+      position: relative;
+      isolation: isolate;
+      min-height: 82px;
+      padding: 0.8rem 1.25rem 0.8rem 0.9rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 1rem;
+      border: 0;
+      border-radius: 999px;
+      color: var(--cream);
+      background: linear-gradient(135deg, var(--forest-dark), var(--forest));
+      box-shadow:
+        0 24px 54px rgba(37, 77, 53, 0.24),
+        inset 0 1px 0 rgba(255, 255, 255, 0.18);
+      font-size: clamp(1rem, 2vw, 1.15rem);
+      font-weight: 950;
+      cursor: pointer;
+      transition:
+        transform 180ms ease,
+        box-shadow 180ms ease,
+        background 180ms ease;
+    }
+
+    .rootedos-start-button::before {
+      content: "";
+      position: absolute;
+      inset: -2px;
+      z-index: -1;
+      border-radius: inherit;
+      background: linear-gradient(
+        135deg,
+        #ff6b6b,
+        #f7b267,
+        #ffe66d,
+        #4ecdc4,
+        #5b8def,
+        #b388ff
+      );
+      opacity: 0.65;
+    }
+
+    .rootedos-start-button:hover,
+    .rootedos-start-button:focus-visible {
+      transform: translateY(-3px);
+      box-shadow:
+        0 30px 70px rgba(37, 77, 53, 0.3),
+        0 0 34px rgba(111, 127, 79, 0.2);
+      outline: none;
+    }
+
+    .rootedos-start-icon {
+      width: 58px;
+      height: 58px;
+      display: grid;
+      place-items: center;
+      border-radius: 22px;
+      overflow: hidden;
+      background: var(--cream);
+      box-shadow: inset 0 0 0 1px rgba(23, 35, 27, 0.1);
+      flex: 0 0 auto;
+    }
+
+    .rootedos-start-icon img {
+      width: 120%;
+      height: 120%;
+      object-fit: cover;
+      object-position: center;
+      display: block;
+    }
+
+    .rootedos-reflection-section[hidden],
+    [hidden] {
+      display: none !important;
     }
 
     .section {
       max-width: var(--max);
       margin: 0 auto;
       padding: 72px 22px;
-    }
-
-    .hero {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) minmax(300px, 0.78fr);
-      align-items: center;
-      gap: clamp(2rem, 5vw, 4rem);
-      min-height: 68vh;
-    }
-
-    .hero > div:first-child {
-      padding: clamp(1rem, 2vw, 1.5rem) 0;
-    }
-
-    .eyebrow {
-      display: inline-flex;
-      gap: 8px;
-      align-items: center;
-      color: var(--accent-strong);
-      background: rgba(111, 127, 99, 0.12);
-      border: 1px solid rgba(111, 127, 99, 0.2);
-      border-radius: 999px;
-      padding: 9px 14px;
-      font-size: 0.86rem;
-      font-weight: 900;
-      letter-spacing: 0.04em;
     }
 
     h1,
@@ -204,13 +310,6 @@
       margin: 0;
       letter-spacing: -0.055em;
       color: var(--text);
-    }
-
-    h1 {
-      font-size: clamp(3.2rem, 8vw, 6.8rem);
-      max-width: 850px;
-      margin-top: 24px;
-      font-weight: 950;
     }
 
     h2 {
@@ -230,19 +329,60 @@
       margin: 24px 0 0;
     }
 
-    .inline-try-link {
+    .tag {
       display: inline-flex;
-      margin-left: 6px;
-      color: var(--accent-strong);
+      color: var(--forest);
       font-weight: 900;
-      border-bottom: 1px solid rgba(111, 127, 99, 0.42);
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 12px;
     }
 
-    .inline-try-link:hover,
-    .inline-try-link:focus-visible {
-      color: var(--mauve-dark);
-      border-bottom-color: var(--mauve-dark);
-      outline: none;
+    .app-panel {
+      padding: clamp(1.5rem, 4vw, 3rem);
+      margin-top: 24px;
+      border-radius: var(--radius);
+      background:
+        linear-gradient(135deg, rgba(255, 252, 244, 0.94), rgba(255, 255, 255, 0.86)),
+        radial-gradient(circle at top right, rgba(37, 77, 53, 0.1), transparent 18rem);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(22px);
+    }
+
+    .app-top {
+      display: grid;
+      grid-template-columns: minmax(0, 0.8fr) minmax(340px, 1fr);
+      gap: clamp(2rem, 5vw, 4rem);
+      align-items: start;
+    }
+
+    .app-copy p {
+      color: var(--muted);
+      margin: 16px 0 0;
+    }
+
+    .form-card {
+      padding: clamp(1.25rem, 3vw, 2rem);
+      border-radius: 30px;
+      background:
+        linear-gradient(135deg, rgba(255, 252, 244, 0.98), rgba(255, 255, 255, 0.94));
+      border: 1px solid var(--line);
+      box-shadow: 0 22px 54px rgba(34, 48, 37, 0.11);
+    }
+
+    .rootedos-step {
+      min-height: 210px;
+    }
+
+    .step-count {
+      color: var(--forest);
+      font-weight: 900;
+      margin-bottom: 8px;
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
     }
 
     .hero-actions,
@@ -262,7 +402,7 @@
       justify-content: center;
       gap: 8px;
       color: var(--text);
-      background: rgba(255, 255, 255, 0.74);
+      background: rgba(255, 255, 255, 0.78);
       border: 1px solid var(--line);
       cursor: pointer;
       font-weight: 900;
@@ -276,16 +416,16 @@
     .btn:hover {
       transform: translateY(-2px);
       background: #ffffff;
-      border-color: rgba(111, 127, 99, 0.28);
-      box-shadow: 0 14px 30px rgba(60, 55, 45, 0.11);
+      border-color: rgba(37, 77, 53, 0.28);
+      box-shadow: 0 14px 30px rgba(34, 48, 37, 0.11);
     }
 
     .btn.primary {
-      color: #fffaf2;
-      background: linear-gradient(135deg, var(--accent-strong), var(--mauve-dark));
+      color: var(--cream);
+      background: linear-gradient(135deg, var(--forest-dark), var(--forest));
       border: 0;
       box-shadow:
-        0 16px 34px rgba(79, 98, 72, 0.22),
+        0 16px 34px rgba(37, 77, 53, 0.22),
         inset 0 1px 0 rgba(255, 255, 255, 0.24);
     }
 
@@ -301,174 +441,31 @@
       transform: none;
     }
 
-    .hero-card,
-    .mini-card,
-    .app-panel,
-    .contact-card,
-    .form-card,
-    .result-card,
-    .verse-card,
-    .area-card {
-      border-radius: var(--radius);
-      background: var(--card);
-      border: 1px solid var(--line);
-      box-shadow: var(--shadow);
-      backdrop-filter: blur(22px);
-    }
-
-    .hero-card {
-      overflow: hidden;
-      background:
-        linear-gradient(180deg, rgba(255, 250, 242, 0.9), rgba(255, 255, 255, 0.78)),
-        radial-gradient(circle at top right, rgba(169, 149, 155, 0.16), transparent 16rem);
-    }
-
-    .hero-card img {
-      width: 100%;
-      height: 280px;
-      object-fit: cover;
-      display: block;
-      filter: saturate(0.9) contrast(1.02);
-    }
-
-    .hero-card-body {
-      padding: 26px;
-    }
-
-    .stats-grid {
+    .choice-grid {
       display: grid;
-      gap: 14px;
+      gap: 10px;
       margin-top: 18px;
     }
 
-    .stat {
-      padding: 18px;
-      border-radius: 18px;
-      background: rgba(255, 255, 255, 0.68);
-      border: 1px solid var(--line);
-    }
-
-    .stat strong {
-      display: block;
-      font-size: 2rem;
-      color: var(--accent-strong);
-      line-height: 1;
-    }
-
-    .stat span {
-      color: var(--muted);
-    }
-
-    .section-heading {
-      display: flex;
-      align-items: end;
-      justify-content: space-between;
-      gap: 24px;
-      margin-bottom: 28px;
-    }
-
-    .section-heading p {
-      max-width: 680px;
-      color: var(--muted);
-      margin: 12px 0 0;
-    }
-
-    .app-grid {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 18px;
-    }
-
-    .mini-card {
-      padding: 22px;
-    }
-
-    .mini-card p {
-      color: var(--muted);
-      margin: 12px 0 0;
-    }
-
-    .tag {
-      display: inline-flex;
-      color: var(--mauve-dark);
-      font-weight: 900;
-      font-size: 0.8rem;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      margin-bottom: 12px;
-    }
-
-    .app-panel {
-      padding: clamp(1.5rem, 4vw, 3rem);
-      margin-top: 24px;
-      background:
-        linear-gradient(135deg, rgba(255, 250, 242, 0.94), rgba(255, 255, 255, 0.86)),
-        radial-gradient(circle at top right, rgba(111, 127, 99, 0.1), transparent 18rem);
-    }
-
-    .app-top {
-      display: grid;
-      grid-template-columns: minmax(0, 0.95fr) minmax(320px, 0.8fr);
-      gap: clamp(2rem, 5vw, 4rem);
-      align-items: start;
-    }
-
-    .app-copy p {
-      color: var(--muted);
-      margin: 16px 0 0;
-    }
-
-    .form-card {
-      padding: clamp(1.25rem, 3vw, 2rem);
-      background:
-        linear-gradient(135deg, rgba(255, 250, 242, 0.98), rgba(255, 255, 255, 0.92));
-      border-radius: 30px;
-    }
-
-    .field {
-      display: grid;
-      gap: 8px;
-      margin-bottom: 16px;
-    }
-
-    label {
-      color: var(--text);
-      font-weight: 900;
-    }
-
-    input,
-    select,
-    textarea {
+    .choice-button {
       width: 100%;
-      color: var(--text);
-      background: #ffffff;
-      border: 1px solid var(--line);
-      border-radius: 16px;
-      padding: 13px 14px;
-      outline: none;
+      text-align: left;
+      justify-content: flex-start;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.72);
     }
 
-    textarea {
-      min-height: 120px;
-      resize: vertical;
-    }
-
-    input:focus,
-    select:focus,
-    textarea:focus {
-      border-color: var(--accent);
-      box-shadow: 0 0 0 4px rgba(111, 127, 99, 0.12);
-    }
-
-    .hint {
-      color: var(--muted);
-      font-size: 0.92rem;
+    .choice-button.selected {
+      color: var(--cream);
+      border-color: transparent;
+      background: linear-gradient(135deg, var(--forest-dark), var(--forest));
+      box-shadow: 0 12px 28px rgba(37, 77, 53, 0.18);
     }
 
     .status {
       min-height: 24px;
       margin-top: 14px;
-      color: var(--accent-strong);
+      color: var(--forest);
       display: flex;
       align-items: center;
       gap: 10px;
@@ -483,8 +480,8 @@
       width: 18px;
       height: 18px;
       border-radius: 50%;
-      border: 2px solid rgba(111, 127, 99, 0.22);
-      border-top-color: var(--accent-strong);
+      border: 2px solid rgba(37, 77, 53, 0.22);
+      border-top-color: var(--forest);
       animation: spin 800ms linear infinite;
     }
 
@@ -498,160 +495,28 @@
       margin-top: 24px;
     }
 
-    .tone-labels {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 14px;
-      margin-bottom: 18px;
-    }
-
-    .tone-label {
-      padding: 18px;
-      border-radius: 18px;
-      background: rgba(255, 255, 255, 0.72);
+    .result-card,
+    .area-card {
+      border-radius: var(--radius);
+      background: var(--card-strong);
       border: 1px solid var(--line);
-    }
-
-    .tone-label span {
-      color: var(--muted);
-      display: block;
-      font-size: 0.88rem;
-    }
-
-    .tone-label strong {
-      display: block;
-      font-size: 1.2rem;
-      margin-top: 4px;
-    }
-
-    .knob-grid {
-      display: grid;
-      grid-template-columns: repeat(4, minmax(120px, 1fr));
-      gap: 18px;
-    }
-
-    .knob {
-      display: grid;
-      place-items: center;
-      gap: 9px;
-      padding: 18px 12px;
-      border-radius: 20px;
-      background: rgba(255, 255, 255, 0.72);
-      border: 1px solid var(--line);
-      text-align: center;
-    }
-
-    .dial {
-      --value: 0;
-      width: 92px;
-      height: 92px;
-      border-radius: 50%;
-      background: conic-gradient(var(--accent-strong) calc(var(--value) * 1%), rgba(31, 36, 31, 0.1) 0);
-      display: grid;
-      place-items: center;
-      position: relative;
-    }
-
-    .dial::after {
-      content: "";
-      position: absolute;
-      inset: 10px;
-      border-radius: 50%;
-      background: #fffaf2;
-      border: 1px solid var(--line);
-    }
-
-    .dial strong {
-      z-index: 1;
-      font-size: 1.25rem;
-      color: var(--text);
-    }
-
-    .knob small {
-      color: var(--muted);
-      font-weight: 800;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(22px);
     }
 
     .result-card {
       padding: 22px;
       margin-top: 16px;
-      background: var(--card-strong);
     }
 
     .result-card p {
       color: var(--muted);
     }
 
-    .verse-grid {
-      display: grid;
-      gap: 16px;
-      margin-top: 16px;
-    }
-
-    .verse-card {
-      padding: 18px;
-      background: var(--card-strong);
-    }
-
-    .verse-card blockquote {
-      margin: 10px 0;
-      color: var(--text);
-      font-size: 1.05rem;
-    }
-
-    .progress {
-      height: 10px;
-      border-radius: 999px;
-      overflow: hidden;
-      background: rgba(31, 36, 31, 0.1);
-      margin: 10px 0;
-    }
-
-    .progress span {
-      display: block;
-      height: 100%;
-      width: var(--width);
-      background: linear-gradient(90deg, var(--accent-strong), var(--gold));
-    }
-
     .highlight {
       border-color: rgba(201, 154, 82, 0.32);
       background:
         linear-gradient(135deg, rgba(201, 154, 82, 0.12), rgba(255, 255, 255, 0.86));
-    }
-
-    .rootedos-step {
-      min-height: 210px;
-    }
-
-    .step-count {
-      color: var(--mauve-dark);
-      font-weight: 900;
-      margin-bottom: 8px;
-      font-size: 0.9rem;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-    }
-
-    .choice-grid {
-      display: grid;
-      gap: 10px;
-      margin-top: 18px;
-    }
-
-    .choice-button {
-      width: 100%;
-      text-align: left;
-      justify-content: flex-start;
-      border-radius: 18px;
-      background: rgba(255, 255, 255, 0.68);
-    }
-
-    .choice-button.selected {
-      color: #fffaf2;
-      border-color: transparent;
-      background: linear-gradient(135deg, var(--accent-strong), var(--mauve-dark));
-      box-shadow: 0 12px 28px rgba(79, 98, 72, 0.18);
     }
 
     .score-wrap {
@@ -667,7 +532,7 @@
       border-radius: 50%;
       display: grid;
       place-items: center;
-      background: conic-gradient(var(--accent-strong) calc(var(--score) * 1%), rgba(31, 36, 31, 0.1) 0);
+      background: conic-gradient(var(--forest) calc(var(--score) * 1%), rgba(23, 35, 27, 0.1) 0);
       margin: 0 auto;
       position: relative;
     }
@@ -677,7 +542,7 @@
       position: absolute;
       inset: 14px;
       border-radius: 50%;
-      background: #fffaf2;
+      background: var(--cream);
       border: 1px solid var(--line);
     }
 
@@ -720,8 +585,8 @@
     }
 
     .badge {
-      color: #fffaf2;
-      background: linear-gradient(135deg, var(--mauve-dark), var(--accent-strong));
+      color: var(--cream);
+      background: linear-gradient(135deg, var(--forest-dark), var(--forest));
       border-radius: 999px;
       padding: 6px 10px;
       font-size: 0.78rem;
@@ -752,34 +617,9 @@
 
     .quote {
       font-size: 1.2rem;
-      border-left: 4px solid var(--accent-strong);
+      border-left: 4px solid var(--forest);
       padding-left: 18px;
       color: var(--text);
-    }
-
-    .mission {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 18px;
-    }
-
-    .contact-card {
-      padding: 26px;
-    }
-
-    .contact-links {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-      margin-top: 18px;
-    }
-
-    .contact-links a {
-      color: var(--accent-strong);
-      padding: 10px 12px;
-      border: 1px solid rgba(111, 127, 99, 0.22);
-      border-radius: 999px;
-      background: rgba(111, 127, 99, 0.08);
     }
 
     footer {
@@ -789,32 +629,10 @@
       padding: 28px 20px 40px;
     }
 
-    .sr-only {
-      position: absolute;
-      width: 1px;
-      height: 1px;
-      padding: 0;
-      margin: -1px;
-      overflow: hidden;
-      clip: rect(0, 0, 0, 0);
-      white-space: nowrap;
-      border: 0;
-    }
-
     @media (max-width: 920px) {
-      .hero,
       .app-top,
-      .mission,
       .score-wrap {
         grid-template-columns: 1fr;
-      }
-
-      .app-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .knob-grid {
-        grid-template-columns: repeat(2, minmax(120px, 1fr));
       }
 
       .section {
@@ -823,6 +641,32 @@
 
       .plan-grid {
         grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 760px) {
+      .rootedos-launch {
+        min-height: calc(100vh - 92px);
+        padding: 1.25rem;
+      }
+
+      .rootedos-update-card {
+        border-radius: 32px;
+        padding: 2rem 1.25rem;
+      }
+
+      .rootedos-start-button {
+        width: 100%;
+        justify-content: flex-start;
+      }
+
+      .button-row {
+        display: grid;
+        grid-template-columns: 1fr;
+      }
+
+      .btn {
+        width: 100%;
       }
     }
 
@@ -836,28 +680,9 @@
         justify-content: flex-start;
       }
 
-      .hero {
-        min-height: auto;
-        padding-top: 34px;
-      }
-
-      .tone-labels,
-      .knob-grid {
-        grid-template-columns: 1fr;
-      }
-
       .score-circle {
         width: 150px;
         height: 150px;
-      }
-
-      .button-row {
-        display: grid;
-        grid-template-columns: 1fr;
-      }
-
-      .btn {
-        width: 100%;
       }
     }
   </style>
@@ -884,42 +709,35 @@
   </header>
 
   <main id="top">
-    <section class="section hero" aria-labelledby="rootedos-title">
-      <div>
-        <span class="eyebrow">App 3 • Spiritual Growth</span>
-        <h1 id="rootedos-title">RootedOS</h1>
-        <p class="lead">
-          RootedOS is a reflection tool for anyone trying to stay grounded while navigating pressure,
-          comparison, digital habits, relationships, purpose, and big life questions.
-          <a class="inline-try-link" href="#try-it">Try it!</a>
-        </p>
-      </div>
+    <section class="rootedos-launch" id="rootedosIntro" aria-labelledby="rootedos-title">
+      <div class="rootedos-update-card">
+        <div class="update-pill">RootedOS Update is Available</div>
 
-      <aside class="hero-card">
-        <img
-          src="https://images.unsplash.com/photo-1499750310107-5fef28a66643?auto=format&fit=crop&w=1200&q=80"
-          alt="Notebook and laptop used for personal reflection"
-        />
-        <div class="hero-card-body">
-          <span class="tag">Designed for real life</span>
-          <h2>Reflect first. Grow next.</h2>
-          <p class="lead">
-            The questions are framed around real life instead of interrogation. The plan stays warm,
-            Scripture-referenced, and never condemning.
-          </p>
-        </div>
-      </aside>
+        <h1 id="rootedos-title">RootedOS</h1>
+
+        <p class="rootedos-description">
+          A quiet reflection tool for staying grounded with God while navigating pressure,
+          comparison, digital habits, relationships, purpose, and the questions that shape your life.
+        </p>
+
+        <button class="rootedos-start-button" id="startRootedOS" type="button">
+          <span class="rootedos-start-icon">
+            <img src="images/rootedbyte-icon.png" alt="" />
+          </span>
+          <span>Take the Reflection</span>
+        </button>
+      </div>
     </section>
 
-    <section class="section" id="try-it">
+    <section class="section rootedos-reflection-section" id="try-it" hidden>
       <article class="app-panel" aria-labelledby="rooted-demo-title">
         <div class="app-top">
           <div class="app-copy">
-            <span class="tag">Try it</span>
+            <span class="tag">RootedOS Reflection</span>
             <h2 id="rooted-demo-title">Take the reflection</h2>
             <p>
-              Answer one question at a time. RootedOS bundles the answers into one request and creates
-              a personalized Christian growth plan.
+              Answer one question at a time. RootedOS bundles your answers into one request
+              and creates a personalized Christian growth plan.
             </p>
           </div>
 
@@ -1196,6 +1014,20 @@
       }
     }
 
+    const rootedIntro = document.querySelector('#rootedosIntro');
+    const rootedReflectionSection = document.querySelector('#try-it');
+    const startRootedOSButton = document.querySelector('#startRootedOS');
+
+    if (startRootedOSButton && rootedIntro && rootedReflectionSection) {
+      startRootedOSButton.addEventListener('click', () => {
+        rootedIntro.hidden = true;
+        rootedReflectionSection.hidden = false;
+        rootedIndex = 0;
+        renderRootedStep();
+        rootedReflectionSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    }
+
     $('#rootedNext').addEventListener('click', async () => {
       const question = rootedQuestions[rootedIndex];
 
@@ -1225,8 +1057,6 @@
       $('#rootedResult').innerHTML = '';
       renderRootedStep();
     });
-
-    renderRootedStep();
   </script>
 </body>
 </html>
