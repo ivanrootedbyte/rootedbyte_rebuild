@@ -37,6 +37,12 @@
       --news-radius: 28px;
       --news-radius-sm: 16px;
       --max: 1180px;
+
+      --news-rust: #c7663d;
+--news-rust-dark: #934428;
+--news-rust-light: #e08a5d;
+--news-rust-soft: rgba(199, 102, 61, 0.14);
+      
     }
 
     * {
@@ -169,13 +175,13 @@
       justify-content: center;
       border-radius: 999px;
       color: #ffffff;
-      background: linear-gradient(135deg, var(--news-teal), var(--news-blue));
       font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
       font-size: 0.82rem;
       font-weight: 900;
       letter-spacing: 0.08em;
       text-transform: uppercase;
-      box-shadow: 0 10px 24px rgba(47, 125, 123, 0.22);
+      background: linear-gradient(135deg, var(--news-rust-dark), var(--news-rust));
+      box-shadow: 0 10px 24px rgba(147, 68, 40, 0.24);
     }
 
     .news-ticker__viewport {
@@ -279,7 +285,7 @@
       border: 1px solid rgba(255, 255, 255, 0.28);
       border-radius: 999px;
       color: #ffffff;
-      background: linear-gradient(135deg, var(--news-teal), #2563eb);
+     background: linear-gradient(135deg, var(--news-rust-dark), var(--news-rust));
       box-shadow:
         0 14px 28px rgba(0, 0, 0, 0.22),
         inset 0 1px 0 rgba(255, 255, 255, 0.24);
@@ -296,10 +302,10 @@
       width: 0.55rem;
       height: 0.55rem;
       border-radius: 999px;
-      background: var(--news-gold);
-      box-shadow:
-        0 0 0 4px rgba(217, 154, 61, 0.18),
-        0 0 16px rgba(217, 154, 61, 0.85);
+      background: #ffd2a8;
+box-shadow:
+  0 0 0 4px rgba(255, 210, 168, 0.18),
+  0 0 16px rgba(255, 210, 168, 0.82);
     }
 
     .eyebrow {
@@ -400,21 +406,24 @@
     .primary-action {
       color: #ffffff;
       border: 0;
-      background: linear-gradient(135deg, var(--news-teal), var(--news-blue));
-      box-shadow:
-        0 16px 34px rgba(47, 125, 123, 0.28),
-        inset 0 1px 0 rgba(255, 255, 255, 0.24);
+background: linear-gradient(135deg, var(--news-rust-dark), var(--news-rust));
+box-shadow:
+  0 16px 34px rgba(147, 68, 40, 0.24),
+  inset 0 1px 0 rgba(255, 255, 255, 0.24);
     }
 
     .primary-action:hover,
     .primary-action:focus-visible {
       transform: translateY(-2px);
-      box-shadow:
-        0 20px 42px rgba(47, 125, 123, 0.34),
-        inset 0 1px 0 rgba(255, 255, 255, 0.28);
+ box-shadow:
+  0 20px 42px rgba(147, 68, 40, 0.32),
+  inset 0 1px 0 rgba(255, 255, 255, 0.28);
       outline: none;
     }
-
+    
+.news-pill:hover {
+  background: linear-gradient(135deg, var(--news-rust), var(--news-rust-light));
+}
     .secondary-action {
       color: var(--news-ink);
       border: 1px solid var(--news-line);
@@ -766,9 +775,9 @@
 
       <aside class="hero-editorial-card" aria-label="NewsVerse digital news image">
         <img
-          src="images/newsverse-digital-news.jpg"
-          alt="Digital news article screens and newsroom-style headlines"
-          class="hero-editorial-image"
+  src="images/newsverse-small.jpg"
+  alt="Digital newsroom and online news background"
+  class="hero-editorial-image"
         />
       </aside>
     </section>
