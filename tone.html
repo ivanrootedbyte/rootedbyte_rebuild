@@ -86,15 +86,37 @@
     }
 
     .brand-mark {
-      width: 38px;
-      height: 38px;
-      display: grid;
-      place-items: center;
-      border-radius: 14px;
-      color: #ffffff;
-      background: linear-gradient(135deg, var(--song-primary), var(--song-accent));
-      box-shadow: 0 12px 26px rgba(124, 58, 237, 0.22);
-    }
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  padding: 3px;
+  border: 2px solid transparent;
+  border-radius: 17px;
+  background:
+    linear-gradient(var(--song-card-strong), var(--song-card-strong)) padding-box,
+    linear-gradient(
+      135deg,
+      #ff6b6b,
+      #f7b267,
+      #ffe66d,
+      #4ecdc4,
+      #5b8def,
+      #b388ff
+    ) border-box;
+  overflow: hidden;
+  flex: 0 0 auto;
+  box-shadow: 0 12px 26px rgba(124, 58, 237, 0.18);
+}
+
+.brand-mark img {
+  width: 118%;
+  height: 118%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+  border-radius: 14px;
+}
 
     .site-nav {
       display: flex;
@@ -714,6 +736,97 @@
         text-align: left;
       }
     }
+
+    @media (max-width: 760px) {
+  .song-start-card {
+    padding: 1.15rem;
+    border-radius: 24px;
+  }
+
+  .song-start-form {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    align-items: stretch;
+  }
+
+  .song-input-wide,
+  .field-group {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .input-shell {
+    width: 100%;
+    min-height: 58px;
+    grid-template-columns: 38px minmax(0, 1fr);
+    gap: 0.75rem;
+    padding: 0 1rem;
+    border-radius: 18px;
+  }
+
+  .input-icon {
+    width: 34px;
+    height: 34px;
+    border-radius: 13px;
+    font-size: 0.92rem;
+  }
+
+  .input-shell input,
+  .input-shell select {
+    width: 100%;
+    min-width: 0;
+    min-height: 56px;
+    font-size: 1rem;
+  }
+
+  .select-shell {
+    width: 100%;
+  }
+
+  .select-shell select {
+    padding-right: 2rem;
+  }
+
+  .select-shell::after {
+    right: 1rem;
+  }
+
+  .generate-action {
+    width: 100%;
+    min-height: 56px;
+    margin-top: 0.15rem;
+  }
+
+  .status {
+    grid-column: auto;
+    width: 100%;
+    margin-top: 0.25rem;
+  }
+}
+
+    @media (max-width: 520px) {
+  .song-divein-page {
+    padding: 0.85rem;
+  }
+
+  .song-search-card,
+  .song-start-card {
+    width: 100%;
+  }
+
+  .song-start-heading {
+    margin-bottom: 1.25rem;
+  }
+
+  .song-start-heading h2 {
+    font-size: clamp(1.65rem, 9vw, 2.4rem);
+  }
+
+  .song-start-heading p {
+    font-size: 0.96rem;
+  }
+}
+    
   </style>
 </head>
 
@@ -721,7 +834,9 @@
   <header class="site-header">
     <div class="nav-shell">
       <a class="brand" href="index.html" aria-label="RootedByte home">
-        <span class="brand-mark">RB</span>
+       <span class="brand-mark">
+  <img src="images/rootedbyte-icon.png" alt="" />
+</span>
         <span>RootedByte</span>
       </a>
 
