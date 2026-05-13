@@ -69,14 +69,22 @@ button, input, select, textarea { font: inherit; }
 }
 
 .brand-mark {
-  width: 40px;
-  height: 40px;
+  width: 42px;
+  height: 42px;
   display: grid;
   place-items: center;
-  border-radius: 15px;
-  color: #fffaf0;
-  background: linear-gradient(135deg, var(--news-teal), var(--news-copper));
-  box-shadow: 0 12px 26px rgba(15, 89, 96, 0.2);
+  border-radius: 16px;
+  overflow: hidden;
+  background: linear-gradient(135deg, var(--news-teal), var(--news-blue));
+  box-shadow: 0 12px 26px rgba(15, 123, 138, 0.22);
+  flex: 0 0 auto;
+}
+
+.brand-mark img {
+  width: 120%;
+  height: 120%;
+  object-fit: cover;
+  object-position: center;
 }
 
 .site-nav {
@@ -119,30 +127,48 @@ button, input, select, textarea { font: inherit; }
 }
 
 .news-hero {
-  width: min(1120px, 100%);
-  margin: 0 auto 1.25rem;
-  padding: clamp(1.1rem, 3vw, 2rem);
-  display: grid;
-  grid-template-columns: minmax(0, 1.04fr) minmax(280px, 0.96fr);
-  gap: clamp(1.2rem, 4vw, 3rem);
-  align-items: center;
-  min-height: 480px;
-  overflow: hidden;
+  position: relative;
+  isolation: isolate;
+}
 
+.news-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
   background:
     linear-gradient(
       90deg,
-      rgba(7, 35, 44, 0.86) 0%,
-      rgba(7, 35, 44, 0.68) 48%,
-      rgba(7, 35, 44, 0.28) 100%
-    ),
-    url("images/newsverse-digital-news.jpg") center / cover no-repeat;
+      rgba(4, 21, 28, 0.92) 0%,
+      rgba(4, 21, 28, 0.78) 46%,
+      rgba(4, 21, 28, 0.48) 100%
+    );
+  pointer-events: none;
 }
 
-.news-hero h1,
-.news-hero .lead,
+.news-hero__content,
+.hero-editorial-card {
+  position: relative;
+  z-index: 1;
+}
+
+.hero-title,
+.news-hero h1 {
+  color: #ffffff;
+  text-shadow: 0 16px 46px rgba(0, 0, 0, 0.5);
+}
+
+.hero-lead,
+.news-hero .lead {
+  max-width: 650px;
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: 550;
+  text-shadow: 0 8px 28px rgba(0, 0, 0, 0.35);
+}
+
 .news-hero .eyebrow {
   color: #ffffff;
+  text-shadow: 0 8px 22px rgba(0, 0, 0, 0.45);
 }
 
 .news-hero .lead {
@@ -241,41 +267,56 @@ h3 {
 }
 
 .primary-action,
-.btn.primary {
-  color: #ffffff;
-  background: linear-gradient(135deg, var(--news-teal), var(--news-blue));
-  box-shadow: 0 16px 30px rgba(15, 123, 138, 0.22);
-}
-    
 .secondary-action {
-  min-height: 52px;
-  border: 0;
+  min-height: 50px;
   border-radius: 999px;
-  padding: 0 1.2rem;
+  padding: 0 1.25rem;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 0.55rem;
   font-weight: 900;
+  font-size: 0.95rem;
+  text-decoration: none;
   cursor: pointer;
-  transition: transform 160ms ease, box-shadow 160ms ease, background 160ms ease;
-}
-
-.primary-action:hover,
-.secondary-action:hover {
-  transform: translateY(-2px);
+  transition:
+    transform 180ms ease,
+    box-shadow 180ms ease,
+    background 180ms ease,
+    border-color 180ms ease;
 }
 
 .primary-action {
-  color: #fffaf0;
-  background: linear-gradient(135deg, var(--news-teal), var(--news-copper));
-  box-shadow: 0 16px 30px rgba(15, 89, 96, 0.2);
+  color: #ffffff;
+  border: 0;
+  background: linear-gradient(135deg, #0f7b8a, #2563eb);
+  box-shadow:
+    0 16px 34px rgba(15, 123, 138, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.24);
+}
+
+.primary-action:hover,
+.primary-action:focus-visible {
+  transform: translateY(-2px);
+  box-shadow:
+    0 20px 42px rgba(15, 123, 138, 0.38),
+    inset 0 1px 0 rgba(255, 255, 255, 0.28);
+  outline: none;
 }
 
 .secondary-action {
   color: var(--news-ink);
   border: 1px solid var(--news-line);
-  background: rgba(255, 250, 240, 0.75);
+  background: rgba(255, 255, 255, 0.86);
+}
+
+.secondary-action:hover,
+.secondary-action:focus-visible {
+  transform: translateY(-2px);
+  background: #ffffff;
+  border-color: rgba(15, 123, 138, 0.28);
+  box-shadow: 0 14px 30px rgba(30, 48, 64, 0.12);
+  outline: none;
 }
 
 .inline-try-link {
@@ -348,49 +389,82 @@ h3 {
     linear-gradient(135deg, rgba(255, 250, 240, 0.88), rgba(255, 255, 255, 0.75)),
     radial-gradient(circle at top right, rgba(15, 89, 96, 0.1), transparent 16rem);
 }
-
-  .news-ticker {
-  width: min(1120px, 100%);
-  margin: 0 auto 1rem;
+    
+.news-ticker {
+  width: min(1120px, calc(100% - 2rem));
+  min-height: 56px;
+  margin: 0 auto 3.5rem;
+  padding: 0.5rem;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: 0.85rem;
   border: 1px solid var(--news-line);
-  border-radius: 18px;
-  background: rgba(255, 255, 255, 0.72);
-  box-shadow: var(--news-shadow);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 18px 46px rgba(30, 48, 64, 0.1);
   overflow: hidden;
 }
 
-.news-ticker__inner {
-  display: flex;
-  align-items: center;
-  gap: 0.85rem;
-  padding: 0.8rem 1rem;
-  white-space: nowrap;
-  overflow-x: auto;
-}
-
 .news-ticker__label {
+  min-height: 34px;
+  padding: 0 0.95rem;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-height: 30px;
-  padding: 0 0.8rem;
   border-radius: 999px;
-  background: var(--news-copper);
-  color: #fffaf0;
-  font-size: 0.78rem;
+  color: #ffffff;
+  background: linear-gradient(135deg, var(--news-teal), var(--news-blue));
+  font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
+  font-size: 0.82rem;
   font-weight: 900;
   letter-spacing: 0.08em;
   text-transform: uppercase;
+  box-shadow: 0 10px 24px rgba(15, 123, 138, 0.22);
 }
 
-.news-ticker__item {
+.news-ticker__viewport {
+  overflow: hidden;
+  mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+}
+
+.news-ticker__track {
+  width: max-content;
+  display: flex;
+  align-items: center;
+  gap: 1.4rem;
   color: var(--news-ink);
-  font-weight: 700;
   font-size: 0.95rem;
+  font-weight: 850;
+  white-space: nowrap;
+  animation: newsTicker 18s ease-in-out infinite alternate;
 }
 
-.news-ticker__divider {
-  color: var(--news-muted);
+.news-ticker__track span {
+  position: relative;
+}
+
+.news-ticker__track span:not(:last-child)::after {
+  content: "•";
+  margin-left: 1.4rem;
+  color: var(--news-teal);
+}
+
+@keyframes newsTicker {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .news-ticker__track {
+    animation: none;
+  }
 }
     
 .field {
@@ -641,7 +715,9 @@ body {
   <header class="site-header">
     <div class="nav-shell">
       <a class="brand" href="index.html" aria-label="RootedByte home">
-        <span class="brand-mark">RB</span>
+        <span class="brand-mark">
+  <img src="images/rootedbyte-icon.png" alt="" />
+</span>
         <span>RootedByte</span>
       </a>
 
@@ -654,14 +730,21 @@ body {
     </div>
   </header>
 
-  <section class="news-ticker" aria-label="NewsVerse highlights">
-  <div class="news-ticker__inner">
-    <span class="news-ticker__label">Latest</span>
-    <span class="news-ticker__item">Reflect on headlines through Scripture</span>
-    <span class="news-ticker__divider">•</span>
-    <span class="news-ticker__item">Pause before reacting</span>
-    <span class="news-ticker__divider">•</span>
-    <span class="news-ticker__item">Prayer-centered response to current events</span>
+<section class="news-ticker" aria-label="NewsVerse highlights">
+  <div class="news-ticker__label">Latest</div>
+
+  <div class="news-ticker__viewport">
+    <div class="news-ticker__track">
+      <span>Reflect on headlines through Scripture</span>
+      <span>Pause before reacting</span>
+      <span>Prayer-centered response to current events</span>
+      <span>Read the news with wisdom</span>
+
+      <span>Reflect on headlines through Scripture</span>
+      <span>Pause before reacting</span>
+      <span>Prayer-centered response to current events</span>
+      <span>Read the news with wisdom</span>
+    </div>
   </div>
 </section>
   
@@ -674,7 +757,6 @@ body {
         <p class="lead">
  Paste a public news article URL and get a Scripture-rooted reflection, prayer points,
   and a wiser response before reacting to the story.
-          <a class="inline-try-link" href="#try-it">Try it!</a>
         </p>
         <div class="hero-actions">
           <a href="#try-it" class="primary-action">Reflect on a headline</a>
