@@ -50,6 +50,7 @@
 
     a {
       color: inherit;
+      text-decoration: none;
     }
 
     button,
@@ -61,85 +62,103 @@
     .site-header {
       position: sticky;
       top: 0;
-      z-index: 50;
-      padding: 0.85rem clamp(1rem, 3vw, 2rem);
-      border-bottom: 1px solid var(--song-border);
-      background: rgba(248, 251, 255, 0.76);
+      z-index: 100;
       backdrop-filter: blur(18px);
+      background: rgba(248, 251, 255, 0.84);
+      border-bottom: 1px solid var(--song-border);
     }
 
-    .nav-shell {
-      width: min(var(--max), 100%);
+    .nav {
+      max-width: var(--max);
       margin: 0 auto;
+      padding: 16px 22px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 1rem;
+      gap: 20px;
     }
 
     .brand {
       display: inline-flex;
       align-items: center;
-      gap: 0.65rem;
-      text-decoration: none;
-      font-weight: 950;
+      gap: 10px;
+      color: var(--song-text);
+      font-weight: 900;
       letter-spacing: -0.04em;
+      font-size: 1.15rem;
+      text-decoration: none;
       white-space: nowrap;
     }
 
     .brand-mark {
-      width: 38px;
-      height: 38px;
       display: grid;
       place-items: center;
-      border-radius: 14px;
+      width: 46px;
+      height: 46px;
+      padding: 3px;
+      border: 2px solid transparent;
+      border-radius: 17px;
+      background:
+        linear-gradient(#ffffff, #ffffff) padding-box,
+        linear-gradient(
+          135deg,
+          #ff6b6b,
+          #f7b267,
+          #ffe66d,
+          #4ecdc4,
+          #5b8def,
+          #b388ff
+        ) border-box;
       overflow: hidden;
-      background: linear-gradient(135deg, var(--song-primary), var(--song-accent));
-      box-shadow: 0 12px 26px rgba(124, 58, 237, 0.22);
+      flex: 0 0 auto;
+      box-shadow: 0 10px 24px rgba(68, 82, 115, 0.14);
     }
 
     .brand-mark img {
-      width: 100%;
-      height: 100%;
-      display: block;
+      width: 118%;
+      height: 118%;
       object-fit: cover;
+      object-position: center;
+      display: block;
+      border-radius: 14px;
     }
 
-.nav-scroll-wrap {
-  display: flex;
-  justify-content: flex-end;
-  min-width: 0;
-  padding: 0.22rem;
-  border: 0;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.05);
-  box-shadow: none;
-}
+    .nav-scroll-wrap {
+      display: flex;
+      justify-content: flex-end;
+      min-width: 0;
+    }
 
-.site-nav {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  justify-content: flex-end;
-  gap: 0.25rem;
-}
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
 
-.site-nav a {
-  padding: 0.62rem 0.88rem;
-  border-radius: 999px;
-  color: var(--song-muted);
-  font-size: 0.92rem;
-  font-weight: 800;
-  text-decoration: none;
-  transition: background 160ms ease, color 160ms ease, transform 160ms ease;
-}
+    .nav-links a {
+      color: var(--song-muted);
+      padding: 9px 13px;
+      border-radius: 999px;
+      transition: background 180ms ease, color 180ms ease, transform 180ms ease;
+      font-size: 0.95rem;
+      font-weight: 850;
+      text-decoration: none;
+    }
 
-.site-nav a:hover,
-.site-nav a[aria-current="page"] {
-  color: var(--song-text);
-  background: rgba(124, 58, 237, 0.12);
-  box-shadow: 0 8px 18px rgba(124, 58, 237, 0.1);
-}
+    .nav-links a:hover,
+    .nav-links a:focus-visible {
+      color: var(--song-text);
+      background: rgba(124, 58, 237, 0.1);
+      outline: none;
+    }
+
+    .nav-links a.active {
+      color: #ffffff;
+      background: linear-gradient(135deg, var(--song-primary), var(--song-accent));
+      box-shadow: 0 10px 24px rgba(124, 58, 237, 0.18);
+    }
 
     .song-divein-page {
       padding: clamp(1rem, 3vw, 3rem);
@@ -668,7 +687,36 @@
       .site-header {
         background: rgba(17, 24, 39, 0.74);
       }
-    
+
+      .brand {
+        color: var(--song-text);
+      }
+
+      .brand-mark {
+        background:
+          linear-gradient(#111827, #111827) padding-box,
+          linear-gradient(
+            135deg,
+            #ff6b6b,
+            #f7b267,
+            #ffe66d,
+            #4ecdc4,
+            #5b8def,
+            #b388ff
+          ) border-box;
+      }
+
+      .nav-links a:hover,
+      .nav-links a:focus-visible {
+        color: var(--song-text);
+        background: rgba(255, 255, 255, 0.08);
+      }
+
+      .nav-links a.active {
+        color: #ffffff;
+        background: linear-gradient(135deg, var(--song-primary), var(--song-accent));
+      }
+
       .song-start-card {
         background:
           linear-gradient(135deg, rgba(26, 32, 54, 0.88), rgba(31, 38, 63, 0.72)),
@@ -705,21 +753,17 @@
         border-color: rgba(255, 255, 255, 0.18);
         border-top-color: var(--song-primary);
       }
+    }
 
-      .site-nav {
-        background: rgba(255, 255, 255, 0.07);
-      }
-
-   .nav-scroll-wrap {
-  background: rgba(255, 255, 255, 0.05);
-  border-color: transparent;
-  box-shadow: none;
-}
+    @media (prefers-color-scheme: dark) and (max-width: 900px) {
       .nav-scroll-wrap::after {
         color: var(--song-text);
         background: rgba(255, 255, 255, 0.12);
       }
-      
+
+      .nav-links {
+        background: rgba(255, 255, 255, 0.07);
+      }
     }
 
     @media (max-width: 900px) {
@@ -735,13 +779,14 @@
         padding: 0.7rem 0.85rem;
       }
 
-      .nav-shell {
+      .nav {
         display: flex;
         flex-direction: row;
         align-items: center;
         justify-content: flex-start;
         gap: 0.7rem;
         width: 100%;
+        padding: 0;
         overflow: hidden;
       }
 
@@ -787,7 +832,7 @@
         font-weight: 900;
       }
 
-      .site-nav {
+      .nav-links {
         display: flex;
         flex-direction: row;
         flex-wrap: nowrap;
@@ -805,11 +850,11 @@
         scrollbar-width: none;
       }
 
-      .site-nav::-webkit-scrollbar {
+      .nav-links::-webkit-scrollbar {
         display: none;
       }
 
-      .site-nav a {
+      .nav-links a {
         flex: 0 0 auto;
         white-space: nowrap;
         padding: 0.5rem 0.68rem;
@@ -846,7 +891,7 @@
 
 <body>
   <header class="site-header">
-    <div class="nav-shell">
+    <nav class="nav" aria-label="Primary navigation">
       <a class="brand" href="index.html" aria-label="RootedByte home">
         <span class="brand-mark">
           <img src="images/rootedbyte-icon.png" alt="" />
@@ -855,20 +900,20 @@
       </a>
 
       <div class="nav-scroll-wrap">
-        <nav class="site-nav" aria-label="Primary navigation">
+        <div class="nav-links">
           <a href="index.html">Home</a>
-          <a href="tone.html" aria-current="page">Song DiveIn</a>
+          <a href="tone.html" class="active">Song DiveIn</a>
           <a href="newsverse.html">NewsVerse</a>
           <a href="rootedos.html">Rooted OS</a>
-        </nav>
+        </div>
       </div>
-    </div>
+    </nav>
   </header>
 
   <main class="song-divein-page app-page" data-app="song-divein">
     <section class="song-hero">
       <div class="song-hero__content">
-        <p class="eyebrow">Song Prep Made Clear</p>
+        <p class="eyebrow">Song Prep Ready</p>
         <h1>Song DiveIn</h1>
         <p class="song-hero__subtitle">
           Drop in a YouTube link or type the song and artist. Song DiveIn turns it into focused, rehearsal-ready worship prep.
