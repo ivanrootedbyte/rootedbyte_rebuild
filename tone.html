@@ -685,8 +685,14 @@
   color: #182033;
   background: #ffffff;
 }
-     .site-nav {
+     .nav-scroll-wrap::after {
+  color: var(--song-text);
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.site-nav {
   background: rgba(255, 255, 255, 0.07);
+}
 }
      
   body {
@@ -741,18 +747,89 @@
 }
 
     @media (max-width: 900px) {
-      .site-header {
+    .site-header {
   padding: 0.7rem 0.85rem;
 }
 
 .nav-shell {
+  display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start;
   gap: 0.7rem;
+  width: 100%;
   overflow: hidden;
 }
 
+.brand {
+  flex: 0 0 auto;
+  white-space: nowrap;
+}
+
+.brand-mark {
+  width: 34px;
+  height: 34px;
+  border-radius: 12px;
+  font-size: 0.82rem;
+}
+
+.brand span:last-child {
+  font-size: 0.95rem;
+}
+
+.nav-scroll-wrap {
+  position: relative;
+  flex: 1 1 auto;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.nav-scroll-wrap::after {
+  content: "›";
+  position: absolute;
+  right: 0.25rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 1.6rem;
+  height: 1.6rem;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  color: var(--song-text);
+  background: rgba(255, 255, 255, 0.7);
+  pointer-events: none;
+  font-size: 1.2rem;
+  font-weight: 900;
+}
+
+.site-nav {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 0.35rem;
+  overflow-x: auto;
+  overflow-y: hidden;
+  white-space: nowrap;
+  max-width: 100%;
+  padding: 0.28rem 2rem 0.28rem 0.28rem;
+  border: 1px solid var(--song-border);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.48);
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.site-nav::-webkit-scrollbar {
+  display: none;
+}
+
+.site-nav a {
+  flex: 0 0 auto;
+  white-space: nowrap;
+  padding: 0.5rem 0.68rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+}
+    
 .brand {
   flex: 0 0 auto;
   white-space: nowrap;
@@ -937,24 +1014,23 @@
 </head>
 
 <body>
-  <header class="site-header">
-    <div class="nav-shell">
-      <a class="brand" href="index.html" aria-label="RootedByte home">
-       <span class="brand-mark">
-  <img src="images/rootedbyte-icon.png" alt="" />
-</span>
-        <span>RootedByte</span>
-      </a>
+ <header class="site-header">
+  <div class="nav-shell">
+    <a class="brand" href="index.html" aria-label="RootedByte home">
+      <span class="brand-mark">RB</span>
+      <span>RootedByte</span>
+    </a>
 
+    <div class="nav-scroll-wrap">
       <nav class="site-nav" aria-label="Primary navigation">
         <a href="index.html">Home</a>
         <a href="tone.html" aria-current="page">Song DiveIn</a>
         <a href="newsverse.html">NewsVerse</a>
-        <a href="rootedos.html">RootedOS</a>
-        <a href="index.html#contact">Contact</a>
+        <a href="rootedos.html">Rooted OS</a>
       </nav>
     </div>
-  </header>
+  </div>
+</header>
 
   <main class="song-divein-page app-page" data-app="song-divein">
     <section class="song-hero">
