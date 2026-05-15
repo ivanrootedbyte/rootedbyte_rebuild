@@ -6,7 +6,7 @@
 
   <meta
     name="description"
-    content="Song DiveIn helps musicians prepare songs with verified song details, lyrics and chord links, instrument tutorials, faith-centered reflections, rehearsal guidance, and role-specific coaching."
+    content="Song DiveIn helps worship musicians prepare songs with verified song details, lyrics and chord links, instrument tutorials, faith-centered reflections, rehearsal guidance, and role-specific coaching."
   />
 
   <title>Song DiveIn | RootedByte</title>
@@ -33,9 +33,9 @@
     }
 
     html {
-  scroll-behavior: smooth;
-  scroll-padding-top: 110px;
-}
+      scroll-behavior: smooth;
+      scroll-padding-top: 110px;
+    }
 
     body {
       margin: 0;
@@ -84,40 +84,32 @@
       text-decoration: none;
       font-weight: 950;
       letter-spacing: -0.04em;
+      white-space: nowrap;
     }
 
     .brand-mark {
-  display: grid;
-  place-items: center;
-  width: 46px;
-  height: 46px;
-  padding: 3px;
-  border: 2px solid transparent;
-  border-radius: 17px;
-  background:
-    linear-gradient(var(--song-card-strong), var(--song-card-strong)) padding-box,
-    linear-gradient(
-      135deg,
-      #ff6b6b,
-      #f7b267,
-      #ffe66d,
-      #4ecdc4,
-      #5b8def,
-      #b388ff
-    ) border-box;
-  overflow: hidden;
-  flex: 0 0 auto;
-  box-shadow: 0 12px 26px rgba(124, 58, 237, 0.18);
-}
+      width: 38px;
+      height: 38px;
+      display: grid;
+      place-items: center;
+      border-radius: 14px;
+      overflow: hidden;
+      background: linear-gradient(135deg, var(--song-primary), var(--song-accent));
+      box-shadow: 0 12px 26px rgba(124, 58, 237, 0.22);
+    }
 
-.brand-mark img {
-  width: 118%;
-  height: 118%;
-  object-fit: cover;
-  object-position: center;
-  display: block;
-  border-radius: 14px;
-}
+    .brand-mark img {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: cover;
+    }
+
+    .nav-scroll-wrap {
+      display: flex;
+      justify-content: flex-end;
+      min-width: 0;
+    }
 
     .site-nav {
       display: flex;
@@ -152,7 +144,6 @@
     .verified-song-card,
     .lookup-actions-card,
     .song-meaning-card,
-    .instrument-card,
     .prep-cards {
       width: min(1120px, 100%);
       margin: 0 auto 1.25rem;
@@ -228,8 +219,7 @@
     }
 
     .song-hero__subtitle,
-    .section-heading p,
-    .field-helper {
+    .section-heading p {
       max-width: 720px;
       color: var(--song-muted);
       line-height: 1.7;
@@ -258,21 +248,54 @@
       margin-bottom: 1rem;
     }
 
-    .song-search-form,
-    .instrument-card,
-    .instrument-select-row {
+    #start-song-dive {
+      scroll-margin-top: 110px;
+    }
+
+    .song-start-card {
+      position: relative;
+      overflow: hidden;
+      background:
+        linear-gradient(135deg, rgba(255, 255, 255, 0.88), rgba(248, 251, 255, 0.68)),
+        radial-gradient(circle at top right, rgba(124, 58, 237, 0.12), transparent 18rem),
+        radial-gradient(circle at bottom left, rgba(14, 165, 233, 0.12), transparent 18rem);
+    }
+
+    .song-start-card::before {
+      content: "";
+      position: absolute;
+      top: -80px;
+      right: -70px;
+      width: 220px;
+      height: 220px;
+      border-radius: 999px;
+      background: radial-gradient(circle, rgba(245, 158, 11, 0.24), transparent 66%);
+      pointer-events: none;
+    }
+
+    .song-start-card::after {
+      content: "";
+      position: absolute;
+      left: 2rem;
+      bottom: -90px;
+      width: 210px;
+      height: 210px;
+      border-radius: 999px;
+      background: radial-gradient(circle, rgba(14, 165, 233, 0.16), transparent 68%);
+      pointer-events: none;
+    }
+
+    .song-start-heading,
+    .song-start-form {
+      position: relative;
+      z-index: 1;
+    }
+
+    .song-start-form {
       display: grid;
-      gap: 0.8rem;
-    }
-
-    .song-search-form {
-      grid-template-columns: minmax(0, 1fr) auto;
-      gap: 0.8rem;
+      grid-template-columns: minmax(0, 1.4fr) minmax(220px, 0.6fr) auto;
+      gap: 0.9rem;
       align-items: end;
-    }
-
-    .song-input-wide {
-      min-width: 0;
     }
 
     .field-group {
@@ -280,142 +303,93 @@
       gap: 0.45rem;
     }
 
-    .song-start-card {
-  position: relative;
-  overflow: hidden;
-  background:
-    linear-gradient(135deg, rgba(255, 255, 255, 0.88), rgba(248, 251, 255, 0.68)),
-    radial-gradient(circle at top right, rgba(124, 58, 237, 0.12), transparent 18rem),
-    radial-gradient(circle at bottom left, rgba(14, 165, 233, 0.12), transparent 18rem);
-}
-
-.song-start-card::before {
-  content: "";
-  position: absolute;
-  top: -80px;
-  right: -70px;
-  width: 220px;
-  height: 220px;
-  border-radius: 999px;
-  background: radial-gradient(circle, rgba(245, 158, 11, 0.24), transparent 66%);
-  pointer-events: none;
-}
-
-.song-start-card::after {
-  content: "";
-  position: absolute;
-  left: 2rem;
-  bottom: -90px;
-  width: 210px;
-  height: 210px;
-  border-radius: 999px;
-  background: radial-gradient(circle, rgba(14, 165, 233, 0.16), transparent 68%);
-  pointer-events: none;
-}
-
-.song-start-heading,
-.song-start-form {
-  position: relative;
-  z-index: 1;
-}
-
-.song-start-form {
-  display: grid;
-  grid-template-columns: minmax(0, 1.4fr) minmax(220px, 0.6fr) auto;
-  gap: 0.9rem;
-  align-items: end;
-}
-
-.input-shell {
-  min-height: 56px;
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr);
-  align-items: center;
-  gap: 0.65rem;
-  border: 1px solid var(--song-border);
-  border-radius: 20px;
-  padding: 0 0.95rem;
-  color: var(--song-text);
-  background: rgba(255, 255, 255, 0.86);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7);
-  transition: border-color 160ms ease, box-shadow 160ms ease, transform 160ms ease;
-}
-
-.input-shell:focus-within {
-  border-color: var(--song-primary);
-  box-shadow:
-    0 0 0 4px var(--song-primary-soft),
-    0 14px 30px rgba(124, 58, 237, 0.1);
-  transform: translateY(-1px);
-}
-
-.input-icon {
-  width: 34px;
-  height: 34px;
-  display: grid;
-  place-items: center;
-  border-radius: 13px;
-  color: #ffffff;
-  background: linear-gradient(135deg, var(--song-primary), var(--song-accent));
-  font-size: 0.95rem;
-  font-weight: 900;
-  flex: 0 0 auto;
-}
-
-.input-shell input,
-.input-shell select {
-  width: 100%;
-  min-height: 54px;
-  border: 0;
-  padding: 0;
-  color: var(--song-text);
-  background: transparent;
-  outline: none;
-}
-
-.input-shell input::placeholder {
-  color: rgba(97, 112, 138, 0.78);
-}
-
-.select-shell {
-  position: relative;
-}
-
-.select-shell select {
-  cursor: pointer;
-  appearance: none;
-  padding-right: 1.6rem;
-}
-
-.select-shell::after {
-  content: "⌄";
-  position: absolute;
-  right: 1rem;
-  top: 50%;
-  transform: translateY(-54%);
-  color: var(--song-muted);
-  font-size: 1.1rem;
-  pointer-events: none;
-}
-
-.generate-action {
-  min-height: 56px;
-  padding-inline: 1.35rem;
-  white-space: nowrap;
-}
-    .song-search-form label,
-    .instrument-card label {
+    .song-start-form label {
       color: var(--song-muted);
       font-size: 0.88rem;
       font-weight: 800;
     }
 
-.song-search-form input,
-.song-search-form select,
-.song-start-form input,
-.song-start-form select {
-  font: inherit;
-}
+    .song-input-wide {
+      min-width: 0;
+    }
+
+    .input-shell {
+      min-height: 56px;
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr);
+      align-items: center;
+      gap: 0.65rem;
+      border: 1px solid var(--song-border);
+      border-radius: 20px;
+      padding: 0 0.95rem;
+      color: var(--song-text);
+      background: rgba(255, 255, 255, 0.86);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7);
+      transition: border-color 160ms ease, box-shadow 160ms ease, transform 160ms ease;
+    }
+
+    .input-shell:focus-within {
+      border-color: var(--song-primary);
+      box-shadow:
+        0 0 0 4px var(--song-primary-soft),
+        0 14px 30px rgba(124, 58, 237, 0.1);
+      transform: translateY(-1px);
+    }
+
+    .input-icon {
+      width: 34px;
+      height: 34px;
+      display: grid;
+      place-items: center;
+      border-radius: 13px;
+      color: #ffffff;
+      background: linear-gradient(135deg, var(--song-primary), var(--song-accent));
+      font-size: 0.95rem;
+      font-weight: 900;
+      flex: 0 0 auto;
+    }
+
+    .input-shell input,
+    .input-shell select {
+      width: 100%;
+      min-height: 54px;
+      border: 0;
+      padding: 0;
+      color: var(--song-text);
+      background: transparent;
+      outline: none;
+    }
+
+    .input-shell input::placeholder {
+      color: rgba(97, 112, 138, 0.78);
+    }
+
+    .select-shell {
+      position: relative;
+    }
+
+    .select-shell select {
+      cursor: pointer;
+      appearance: none;
+      padding-right: 1.6rem;
+    }
+
+    .select-shell select option,
+    .input-shell select option {
+      color: #182033;
+      background: #ffffff;
+    }
+
+    .select-shell::after {
+      content: "⌄";
+      position: absolute;
+      right: 1rem;
+      top: 50%;
+      transform: translateY(-54%);
+      color: var(--song-muted);
+      font-size: 1.1rem;
+      pointer-events: none;
+    }
 
     .primary-action,
     .secondary-action {
@@ -437,6 +411,12 @@
       color: #ffffff;
       background: linear-gradient(135deg, var(--song-primary), var(--song-accent));
       box-shadow: 0 14px 28px rgba(124, 58, 237, 0.24);
+    }
+
+    .generate-action {
+      min-height: 56px;
+      padding-inline: 1.35rem;
+      white-space: nowrap;
     }
 
     .secondary-action {
@@ -531,13 +511,6 @@
       font-size: 1.02rem;
     }
 
-    .lookup-actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.7rem;
-      margin-bottom: 1rem;
-    }
-
     .resource-results {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -545,11 +518,18 @@
     }
 
     .resource-panel {
-      padding: 1rem;
+      padding: 1.1rem;
+      min-width: 0;
+      transition: transform 160ms ease, box-shadow 160ms ease;
+    }
+
+    .resource-panel:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 18px 40px rgba(68, 82, 115, 0.12);
     }
 
     .resource-panel h3 {
-      margin-top: 0;
+      margin: 0;
     }
 
     .resource-output,
@@ -561,6 +541,40 @@
 
     .meaning-output {
       padding: 1rem;
+    }
+
+    .resource-title-link {
+      margin: 0;
+      font-size: clamp(1.15rem, 2vw, 1.45rem);
+    }
+
+    .resource-title-link a,
+    .resource-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      color: var(--song-primary);
+      font-weight: 900;
+      text-decoration: none;
+      overflow-wrap: anywhere;
+    }
+
+    .resource-title-link a:hover,
+    .resource-link:hover {
+      text-decoration: underline;
+    }
+
+    .resource-title-link a::after,
+    .resource-link::after {
+      content: "↗";
+      font-size: 0.9rem;
+    }
+
+    .resource-note {
+      margin-bottom: 0;
+      color: var(--song-muted);
+      font-size: 0.92rem;
+      overflow-wrap: anywhere;
     }
 
     .prep-cards {
@@ -607,49 +621,6 @@
       background: linear-gradient(180deg, rgba(255, 255, 255, 0.54), rgba(248, 251, 255, 0.76));
     }
 
-    .resource-title-link {
-  margin: 0;
-  font-size: clamp(1.15rem, 2vw, 1.45rem);
-}
-
-.resource-title-link a {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.45rem;
-  color: var(--song-primary);
-  font-weight: 900;
-  text-decoration: none;
-}
-
-.resource-title-link a:hover {
-  text-decoration: underline;
-}
-
-.resource-title-link a::after {
-  content: "↗";
-  font-size: 0.9rem;
-}
-    
-    .resource-link {
-      display: inline-flex;
-      align-items: center;
-      color: var(--song-primary);
-      font-weight: 850;
-      text-decoration: none;
-      overflow-wrap: anywhere;
-    }
-
-    .resource-link:hover {
-      text-decoration: underline;
-    }
-
-    .resource-note {
-      margin-bottom: 0;
-      color: var(--song-muted);
-      font-size: 0.92rem;
-      overflow-wrap: anywhere;
-    }
-
     .loading-text {
       color: var(--song-muted);
     }
@@ -671,167 +642,171 @@
       border-top: 1px solid var(--song-border);
     }
 
-   @media (prefers-color-scheme: dark) {
-  :root {
-    --song-bg: #151a2f;
-    --song-card: rgba(26, 32, 54, 0.76);
-    --song-card-strong: rgba(31, 38, 63, 0.92);
-    --song-text: #f8fafc;
-    --song-muted: #cbd5e1;
-    --song-border: rgba(255, 255, 255, 0.12);
-  }
-     
-      .input-shell select option {
-  color: #182033;
-  background: #ffffff;
-}
-     .nav-scroll-wrap::after {
-  color: var(--song-text);
-  background: rgba(255, 255, 255, 0.12);
-}
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --song-bg: #151a2f;
+        --song-card: rgba(26, 32, 54, 0.76);
+        --song-card-strong: rgba(31, 38, 63, 0.92);
+        --song-text: #f8fafc;
+        --song-muted: #cbd5e1;
+        --song-border: rgba(255, 255, 255, 0.12);
+      }
 
-.site-nav {
-  background: rgba(255, 255, 255, 0.07);
-}
-}
-     
-  body {
-    background:
-      radial-gradient(circle at top left, rgba(14, 165, 233, 0.18), transparent 32rem),
-      radial-gradient(circle at 80% 10%, rgba(124, 58, 237, 0.2), transparent 32rem),
-      linear-gradient(180deg, #111827 0%, var(--song-bg) 56%, #241b35 100%);
-  }
+      body {
+        background:
+          radial-gradient(circle at top left, rgba(14, 165, 233, 0.18), transparent 32rem),
+          radial-gradient(circle at 80% 10%, rgba(124, 58, 237, 0.2), transparent 32rem),
+          linear-gradient(180deg, #111827 0%, var(--song-bg) 56%, #241b35 100%);
+      }
 
-  .site-header {
-    background: rgba(17, 24, 39, 0.74);
-  }
+      .site-header {
+        background: rgba(17, 24, 39, 0.74);
+      }
 
-  .song-search-form input,
-  .instrument-card select,
-  .secondary-action {
-    color: var(--song-text);
-    background: rgba(255, 255, 255, 0.08);
-  }
+      .song-start-card {
+        background:
+          linear-gradient(135deg, rgba(26, 32, 54, 0.88), rgba(31, 38, 63, 0.72)),
+          radial-gradient(circle at top right, rgba(124, 58, 237, 0.2), transparent 18rem),
+          radial-gradient(circle at bottom left, rgba(14, 165, 233, 0.18), transparent 18rem);
+      }
 
-  .prep-card__body {
-    background: rgba(255, 255, 255, 0.04);
-  }
+      .input-shell {
+        background: rgba(255, 255, 255, 0.08);
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+      }
 
-  .spinner {
-    border-color: rgba(255, 255, 255, 0.18);
-    border-top-color: var(--song-primary);
-  }
+      .input-shell input,
+      .input-shell select {
+        color: var(--song-text);
+      }
 
-  .song-start-card {
-    background:
-      linear-gradient(135deg, rgba(26, 32, 54, 0.88), rgba(31, 38, 63, 0.72)),
-      radial-gradient(circle at top right, rgba(124, 58, 237, 0.2), transparent 18rem),
-      radial-gradient(circle at bottom left, rgba(14, 165, 233, 0.18), transparent 18rem);
-  }
+      .input-shell select option,
+      .select-shell select option {
+        color: #182033;
+        background: #ffffff;
+      }
 
-  .input-shell {
-    background: rgba(255, 255, 255, 0.08);
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
-  }
+      .secondary-action {
+        color: var(--song-text);
+        background: rgba(255, 255, 255, 0.08);
+      }
 
-  .input-shell input,
- .input-shell select {
-  color: var(--song-text);
-  background: transparent;
-  }
+      .prep-card__body {
+        background: rgba(255, 255, 255, 0.04);
+      }
 
-.input-shell select option {
-  color: #182033;
-  background: #ffffff;
-  }
-}
+      .spinner {
+        border-color: rgba(255, 255, 255, 0.18);
+        border-top-color: var(--song-primary);
+      }
+
+      .site-nav {
+        background: rgba(255, 255, 255, 0.07);
+      }
+
+      .nav-scroll-wrap::after {
+        color: var(--song-text);
+        background: rgba(255, 255, 255, 0.12);
+      }
+    }
 
     @media (max-width: 900px) {
-    .site-header {
-  padding: 0.7rem 0.85rem;
-}
+      html {
+        scroll-padding-top: 90px;
+      }
 
-.nav-shell {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: flex-start;
-  gap: 0.7rem;
-  width: 100%;
-  overflow: hidden;
-}
+      #start-song-dive {
+        scroll-margin-top: 90px;
+      }
 
-.brand {
-  flex: 0 0 auto;
-  white-space: nowrap;
-}
+      .site-header {
+        padding: 0.7rem 0.85rem;
+      }
 
-.brand-mark {
-  width: 34px;
-  height: 34px;
-  border-radius: 12px;
-  font-size: 0.82rem;
-}
+      .nav-shell {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 0.7rem;
+        width: 100%;
+        overflow: hidden;
+      }
 
-.brand span:last-child {
-  font-size: 0.95rem;
-}
+      .brand {
+        flex: 0 0 auto;
+        white-space: nowrap;
+      }
 
-.nav-scroll-wrap {
-  position: relative;
-  flex: 1 1 auto;
-  min-width: 0;
-  max-width: 100%;
-}
+      .brand-mark {
+        width: 34px;
+        height: 34px;
+        border-radius: 12px;
+        font-size: 0.82rem;
+      }
 
-.nav-scroll-wrap::after {
-  content: "›";
-  position: absolute;
-  right: 0.25rem;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 1.6rem;
-  height: 1.6rem;
-  display: grid;
-  place-items: center;
-  border-radius: 999px;
-  color: var(--song-text);
-  background: rgba(255, 255, 255, 0.7);
-  pointer-events: none;
-  font-size: 1.2rem;
-  font-weight: 900;
-}
+      .brand span:last-child {
+        font-size: 0.95rem;
+      }
 
-.site-nav {
-  display: flex;
-  flex-wrap: nowrap;
-  gap: 0.35rem;
-  overflow-x: auto;
-  overflow-y: hidden;
-  white-space: nowrap;
-  max-width: 100%;
-  padding: 0.28rem 2rem 0.28rem 0.28rem;
-  border: 1px solid var(--song-border);
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.48);
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: none;
-}
+      .nav-scroll-wrap {
+        position: relative;
+        flex: 1 1 auto;
+        min-width: 0;
+        max-width: 100%;
+        overflow: hidden;
+      }
 
-.site-nav::-webkit-scrollbar {
-  display: none;
-}
+      .nav-scroll-wrap::after {
+        content: "›";
+        position: absolute;
+        right: 0.25rem;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 1.6rem;
+        height: 1.6rem;
+        display: grid;
+        place-items: center;
+        border-radius: 999px;
+        color: var(--song-text);
+        background: rgba(255, 255, 255, 0.7);
+        pointer-events: none;
+        font-size: 1.2rem;
+        font-weight: 900;
+      }
 
-.site-nav a {
-  flex: 0 0 auto;
-  white-space: nowrap;
-  padding: 0.5rem 0.68rem;
-  border-radius: 999px;
-  font-size: 0.8rem;
-}
+      .site-nav {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        justify-content: flex-start;
+        gap: 0.35rem;
+        max-width: 100%;
+        overflow-x: auto;
+        overflow-y: hidden;
+        white-space: nowrap;
+        padding: 0.28rem 2rem 0.28rem 0.28rem;
+        border: 1px solid var(--song-border);
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.48);
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+      }
+
+      .site-nav::-webkit-scrollbar {
+        display: none;
+      }
+
+      .site-nav a {
+        flex: 0 0 auto;
+        white-space: nowrap;
+        padding: 0.5rem 0.68rem;
+        border-radius: 999px;
+        font-size: 0.8rem;
+      }
 
       .song-hero,
-      .song-search-form,
+      .song-start-form,
       .verified-grid,
       .resource-results {
         grid-template-columns: 1fr;
@@ -854,126 +829,37 @@
         text-align: left;
       }
     }
-
-    @media (max-width: 760px) {
-  .song-start-card {
-    padding: 1.15rem;
-    border-radius: 24px;
-  }
-
-  .song-start-form {
-    grid-template-columns: 1fr;
-    gap: 1rem;
-    align-items: stretch;
-  }
-
-  .song-input-wide,
-  .field-group {
-    width: 100%;
-    min-width: 0;
-  }
-
-  .input-shell {
-    width: 100%;
-    min-height: 58px;
-    grid-template-columns: 38px minmax(0, 1fr);
-    gap: 0.75rem;
-    padding: 0 1rem;
-    border-radius: 18px;
-  }
-
-  .input-icon {
-    width: 34px;
-    height: 34px;
-    border-radius: 13px;
-    font-size: 0.92rem;
-  }
-
-  .input-shell input,
-  .input-shell select {
-    width: 100%;
-    min-width: 0;
-    min-height: 56px;
-    font-size: 1rem;
-  }
-
-  .select-shell {
-    width: 100%;
-  }
-
-  .select-shell select {
-    padding-right: 2rem;
-  }
-
-  .select-shell::after {
-    right: 1rem;
-  }
-
-  .generate-action {
-    width: 100%;
-    min-height: 56px;
-    margin-top: 0.15rem;
-  }
-
-  .status {
-    grid-column: auto;
-    width: 100%;
-    margin-top: 0.25rem;
-  }
-}
-
-    @media (max-width: 520px) {
-  .song-divein-page {
-    padding: 0.85rem;
-  }
-
-  .song-search-card,
-  .song-start-card {
-    width: 100%;
-  }
-
-  .song-start-heading {
-    margin-bottom: 1.25rem;
-  }
-
-  .song-start-heading h2 {
-    font-size: clamp(1.65rem, 9vw, 2.4rem);
-  }
-
-  .song-start-heading p {
-    font-size: 0.96rem;
-  }
-}
-    
   </style>
 </head>
 
 <body>
- <header class="site-header">
-  <div class="nav-shell">
-    <a class="brand" href="index.html" aria-label="RootedByte home">
-      <span class="brand-mark">RB</span>
-      <span>RootedByte</span>
-    </a>
+  <header class="site-header">
+    <div class="nav-shell">
+      <a class="brand" href="index.html" aria-label="RootedByte home">
+        <span class="brand-mark">
+          <img src="images/rootedbyte-icon.png" alt="" />
+        </span>
+        <span>RootedByte</span>
+      </a>
 
-    <div class="nav-scroll-wrap">
-      <nav class="site-nav" aria-label="Primary navigation">
-        <a href="index.html">Home</a>
-        <a href="tone.html" aria-current="page">Song DiveIn</a>
-        <a href="newsverse.html">NewsVerse</a>
-        <a href="rootedos.html">Rooted OS</a>
-      </nav>
+      <div class="nav-scroll-wrap">
+        <nav class="site-nav" aria-label="Primary navigation">
+          <a href="index.html">Home</a>
+          <a href="tone.html" aria-current="page">Song DiveIn</a>
+          <a href="newsverse.html">NewsVerse</a>
+          <a href="rootedos.html">Rooted OS</a>
+        </nav>
+      </div>
     </div>
-  </div>
-</header>
+  </header>
 
   <main class="song-divein-page app-page" data-app="song-divein">
     <section class="song-hero">
       <div class="song-hero__content">
-        <p class="eyebrow">Song Prep Ready</p>
+        <p class="eyebrow">Song Prep Made Clear</p>
         <h1>Song DiveIn</h1>
         <p class="song-hero__subtitle">
-          Drop in a YouTube link or type the song and artist. Song DiveIn turns it into focused, rehearsal-ready prep.
+          Drop in a YouTube link or type the song and artist. Song DiveIn turns it into focused, rehearsal-ready worship prep.
         </p>
         <div class="hero-actions">
           <a href="#start-song-dive" class="primary-action hero-link">Start a Song Dive</a>
@@ -989,54 +875,54 @@
       </div>
     </section>
 
-<section id="start-song-dive" class="song-search-card song-start-card" aria-labelledby="song-search-title">
-  <div class="section-heading song-start-heading">
-    <p class="eyebrow">Let’s Dive-in</p>
-    <h2 id="song-search-title">Start with the song</h2>
-   <p>
-  Enter the song title with the artist, or paste a YouTube link. Pick your role so Song DiveIn shapes the prep around how you serve the moment.
-</p>
-  </div>
-
-  <form id="songSearchForm" class="song-start-form">
-    <div class="field-group song-input-wide">
-      <label for="songInput">Song title + Artist or YouTube link</label>
-      <div class="input-shell">
-        <span class="input-icon" aria-hidden="true">♪</span>
-        <input
-          id="songInput"
-          name="songInput"
-          type="text"
-          placeholder="Reckless Love - Cory Asbury, or paste a YouTube link"
-          autocomplete="off"
-          required
-        />
+    <section id="start-song-dive" class="song-search-card song-start-card" aria-labelledby="song-search-title">
+      <div class="section-heading song-start-heading">
+        <p class="eyebrow">Let’s Dive-in</p>
+        <h2 id="song-search-title">Start with the song</h2>
+        <p>
+          Enter the song title with the artist, or paste a YouTube link. Pick your role so Song DiveIn shapes the prep around how you serve the moment.
+        </p>
       </div>
-    </div>
 
-    <div class="field-group">
-      <label for="instrumentSelect">Your role</label>
-      <div class="input-shell select-shell">
-        <span class="input-icon" aria-hidden="true">✦</span>
-        <select id="instrumentSelect" name="instrument">
-          <option value="acoustic-guitar">Acoustic Guitar</option>
-          <option value="electric-guitar">Electric Guitar</option>
-          <option value="bass">Bass</option>
-          <option value="drums">Drums</option>
-          <option value="keys-piano">Keys / Piano</option>
-          <option value="vocals">Vocals</option>
-        </select>
-      </div>
-    </div>
+      <form id="songSearchForm" class="song-start-form">
+        <div class="field-group song-input-wide">
+          <label for="songInput">Song title + artist, or YouTube link</label>
+          <div class="input-shell">
+            <span class="input-icon" aria-hidden="true">♪</span>
+            <input
+              id="songInput"
+              name="songInput"
+              type="text"
+              placeholder="Goodness of God - Bethel Music, or paste a YouTube link"
+              autocomplete="off"
+              required
+            />
+          </div>
+        </div>
 
-    <button type="submit" class="primary-action generate-action">
-      Dive-in
-    </button>
+        <div class="field-group">
+          <label for="instrumentSelect">Your role</label>
+          <div class="input-shell select-shell">
+            <span class="input-icon" aria-hidden="true">✦</span>
+            <select id="instrumentSelect" name="instrument">
+              <option value="acoustic-guitar">Acoustic Guitar</option>
+              <option value="electric-guitar">Electric Guitar</option>
+              <option value="bass">Bass</option>
+              <option value="drums">Drums</option>
+              <option value="keys-piano">Keys / Piano</option>
+              <option value="vocals">Vocals</option>
+            </select>
+          </div>
+        </div>
 
-    <div class="status" id="toneStatus" role="status" aria-live="polite"></div>
-  </form>
-</section>
-   
+        <button type="submit" class="primary-action generate-action">
+          Generate Song Prep
+        </button>
+
+        <div class="status" id="toneStatus" role="status" aria-live="polite"></div>
+      </form>
+    </section>
+
     <section id="songResultsArea" class="song-results-area" hidden>
       <section class="verified-song-card" aria-labelledby="verified-song-title">
         <div class="section-heading compact-heading">
@@ -1077,7 +963,7 @@
         <div class="section-heading compact-heading">
           <p class="eyebrow">Quick Links</p>
           <h2 id="lookup-actions-title">Lyrics, chords, and tutorial help</h2>
-          <p>Jump into the resources you usually need before the first run-through.</p>
+          <p>Jump into the resources your team usually needs before the first run-through.</p>
         </div>
 
         <div class="resource-results">
@@ -1168,338 +1054,309 @@
       <p>&copy; 2026 RootedByte. Built for thoughtful tools, creative learning, and faith-rooted preparation.</p>
     </div>
   </footer>
-<script>
-  const $ = (selector) => document.querySelector(selector);
 
-  const songSearchForm = $('#songSearchForm');
-  const songInputEl = $('#songInput');
-  const instrumentSelect = $('#instrumentSelect');
-  const songResultsArea = $('#songResultsArea');
-  const toneStatus = $('#toneStatus');
+  <script>
+    const $ = (selector) => document.querySelector(selector);
 
-  const verifiedSongName = $('#verifiedSongName');
-  const verifiedArtist = $('#verifiedArtist');
-  const verifiedBpm = $('#verifiedBpm');
-  const verifiedKey = $('#verifiedKey');
-  const verifiedConfidence = $('#verifiedConfidence');
+    const songSearchForm = $('#songSearchForm');
+    const songInputEl = $('#songInput');
+    const instrumentSelect = $('#instrumentSelect');
+    const songResultsArea = $('#songResultsArea');
+    const toneStatus = $('#toneStatus');
 
-  const lyricsResult = $('#lyricsResult');
-  const chordsResult = $('#chordsResult');
-  const tutorialResult = $('#tutorialResult');
+    const verifiedSongName = $('#verifiedSongName');
+    const verifiedArtist = $('#verifiedArtist');
+    const verifiedBpm = $('#verifiedBpm');
+    const verifiedKey = $('#verifiedKey');
+    const verifiedConfidence = $('#verifiedConfidence');
 
-  const songMeaningResult = $('#songMeaningResult');
-  const faithLensResult = $('#faithLensResult');
-  const arrangementFeelResult = $('#arrangementFeelResult');
-  const listeningGuideResult = $('#listeningGuideResult');
-  const rehearsalPrepResult = $('#rehearsalPrepResult');
-  const spiritualReflectionResult = $('#spiritualReflectionResult');
-  const instrumentGuidanceResult = $('#instrumentGuidanceResult');
+    const lyricsResult = $('#lyricsResult');
+    const chordsResult = $('#chordsResult');
+    const tutorialResult = $('#tutorialResult');
 
+    const songMeaningResult = $('#songMeaningResult');
+    const faithLensResult = $('#faithLensResult');
+    const arrangementFeelResult = $('#arrangementFeelResult');
+    const listeningGuideResult = $('#listeningGuideResult');
+    const rehearsalPrepResult = $('#rehearsalPrepResult');
+    const spiritualReflectionResult = $('#spiritualReflectionResult');
+    const instrumentGuidanceResult = $('#instrumentGuidanceResult');
 
-  const INSTRUMENT_LABELS = {
-    'acoustic-guitar': 'Acoustic Guitar',
-    'electric-guitar': 'Electric Guitar',
-    bass: 'Bass',
-    drums: 'Drums',
-    'keys-piano': 'Keys / Piano',
-    vocals: 'Vocals'
-  };
+    const INSTRUMENT_LABELS = {
+      'acoustic-guitar': 'Acoustic Guitar',
+      'electric-guitar': 'Electric Guitar',
+      bass: 'Bass',
+      drums: 'Drums',
+      'keys-piano': 'Keys / Piano',
+      vocals: 'Vocals'
+    };
 
-  const TUTORIAL_TERMS = {
-    'acoustic-guitar': 'acoustic guitar tutorial',
-    'electric-guitar': 'electric guitar tutorial',
-    bass: 'bass tutorial',
-    drums: 'drum tutorial',
-    'keys-piano': 'piano keys tutorial',
-    vocals: 'vocal tutorial harmony'
-  };
+    const TUTORIAL_TERMS = {
+      'acoustic-guitar': 'acoustic guitar tutorial',
+      'electric-guitar': 'electric guitar tutorial',
+      bass: 'bass tutorial',
+      drums: 'drum tutorial',
+      'keys-piano': 'piano keys tutorial',
+      vocals: 'vocal tutorial harmony'
+    };
 
-  function escapeHtml(value) {
-    return String(value ?? '')
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;')
-      .replace(/'/g, '&#039;');
-  }
-
-  function setStatus(element, message, type = 'info', loading = false) {
-    if (!element) return;
-
-    element.className = type === 'error' ? 'status error' : 'status';
-    element.innerHTML = loading
-      ? `<span class="spinner" aria-hidden="true"></span><span>${escapeHtml(message)}</span>`
-      : escapeHtml(message);
-  }
-
-  async function postJson(url, body) {
-    const response = await fetch(url, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(body)
-    });
-
-    const data = await response.json().catch(() => ({}));
-
-    if (!response.ok) {
-      throw new Error(data.error || 'Something went wrong. Please try again.');
+    function escapeHtml(value) {
+      return String(value ?? '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
     }
 
-    return data;
-  }
+    function setStatus(element, message, type = 'info', loading = false) {
+      if (!element) return;
 
-  function buildSearchUrl(query) {
-    return `https://www.google.com/search?q=${encodeURIComponent(query || '')}`;
-  }
-
-  function getInstrumentLabel(instrument) {
-    return INSTRUMENT_LABELS[instrument] || 'Instrument';
-  }
-
-  function buildTutorialQuery(songInput, instrument) {
-    const tutorialTerm = TUTORIAL_TERMS[instrument] || 'instrument tutorial';
-    return `${songInput} ${tutorialTerm}`;
-  }
-
-function createSearchLink(label, query) {
-  return `
-    <a class="resource-link" href="${escapeHtml(buildSearchUrl(query))}" target="_blank" rel="noreferrer">
-      ${escapeHtml(label)}
-    </a>
-  `;
-}
-
-  function setText(element, value) {
-    if (!element) return;
-    element.textContent = value;
-  }
-
-  function setHtml(element, value) {
-    if (!element) return;
-    element.innerHTML = value;
-  }
-
-  function renderContent(value, fallback) {
-    const text = String(value || '').trim();
-
-    if (!text) {
-      return `<p>${escapeHtml(fallback)}</p>`;
+      element.className = type === 'error' ? 'status error' : 'status';
+      element.innerHTML = loading
+        ? `<span class="spinner" aria-hidden="true"></span><span>${escapeHtml(message)}</span>`
+        : escapeHtml(message);
     }
 
-    if (/<\/?[a-z][\s\S]*>/i.test(text)) {
-      return text;
-    }
-
-    const lines = text
-      .split('\n')
-      .map((line) => line.trim())
-      .filter(Boolean);
-
-    if (lines.length <= 1) {
-      return `<p>${escapeHtml(lines[0] || fallback)}</p>`;
-    }
-
-    return `
-      <ul>
-        ${lines
-          .map((line) => `<li>${escapeHtml(line.replace(/^[-•*]\s*/, ''))}</li>`)
-          .join('')}
-      </ul>
-    `;
-  }
-
-  function revealResultsArea() {
-    if (!songResultsArea) return;
-    songResultsArea.hidden = false;
-  }
-
-  function setLoadingState(songInput, instrument) {
-    const instrumentLabel = getInstrumentLabel(instrument);
-
-    revealResultsArea();
-
-    setText(verifiedSongName, 'Processing...');
-    setText(verifiedArtist, 'Processing...');
-    setText(verifiedBpm, 'Checking...');
-    setText(verifiedKey, 'Checking...');
-    setText(verifiedConfidence, 'Checking...');
-
-setHtml(lyricsResult, createSearchLink('Find Lyrics', `${songInput} lyrics`));
-setHtml(chordsResult, createSearchLink('Find Chords', `${songInput} chords`));
-setHtml(
-  tutorialResult,
-  createSearchLink(
-    'Find Instrument Tutorial',
-    buildTutorialQuery(songInput, instrument)
-  )
-);
-
-    setHtml(songMeaningResult, `<p class="loading-text">The AI Engine is processing the song message...</p>`);
-    setHtml(faithLensResult, `<p class="loading-text">The AI Engine is preparing the Faith Lens...</p>`);
-    setHtml(arrangementFeelResult, `<p class="loading-text">The AI Engine is mapping the song flow...</p>`);
-    setHtml(listeningGuideResult, `<p class="loading-text">The AI Engine is building listening cues...</p>`);
-    setHtml(rehearsalPrepResult, `<p class="loading-text">The AI Engine is preparing rehearsal moves...</p>`);
-    setHtml(spiritualReflectionResult, `<p class="loading-text">The AI Engine is shaping a reflection and prayer prompt...</p>`);
-    setHtml(instrumentGuidanceResult, `<p class="loading-text">The AI Engine is creating ${escapeHtml(instrumentLabel)} coaching...</p>`);
-  }
-
-  function getSongArtistText(data) {
-    return `${data.song || ''} ${data.artist || ''}`.trim() || songInputEl.value.trim() || 'song';
-  }
-
-  function renderSongDiveIn(data, instrument) {
-    const instrumentLabel = getInstrumentLabel(instrument);
-    const songArtist = getSongArtistText(data);
-
-    setText(verifiedSongName, data.song || 'Unable to verify');
-    setText(verifiedArtist, data.artist || 'Unable to verify');
-    setText(verifiedBpm, data.bpm && Number(data.bpm) > 0 ? data.bpm : 'Unable to verify');
-    setText(verifiedKey, data.key || 'Unable to verify');
-    setText(verifiedConfidence, data.metadata_confidence || 'Not detected');
-
-    setHtml(
-  lyricsResult,
-  createSearchLink('Find Lyrics', data.lyrics_search_query || `${songArtist} lyrics`)
-);
-
-setHtml(
-  chordsResult,
-  createSearchLink('Find Chords', data.chord_search_query || `${songArtist} chords`)
-);
-
-setHtml(
-  tutorialResult,
-  createSearchLink(
-    'Find Instrument Tutorial',
-    data.tutorial_search_query || buildTutorialQuery(songArtist, instrument)
-  )
-);
-
-    setHtml(songMeaningResult, renderContent(data.song_meaning, 'Song meaning is not available yet.'));
-    setHtml(faithLensResult, renderContent(data.faith_lens, 'Faith Lens is not available yet.'));
-    setHtml(arrangementFeelResult, renderContent(data.arrangement_feel, 'Song Flow guidance is not available yet.'));
-    setHtml(listeningGuideResult, renderContent(data.listening_guide, 'Listening guidance is not available yet.'));
-    setHtml(rehearsalPrepResult, renderContent(data.rehearsal_prep, 'Rehearsal preparation is not available yet.'));
-    setHtml(spiritualReflectionResult, renderContent(data.spiritual_reflection, 'Spiritual reflection is not available yet.'));
-    setHtml(instrumentGuidanceResult, renderContent(data.instrument_guidance, `${instrumentLabel} guidance is not available yet.`));
-  }
-
-  function renderErrorState(error) {
-    const message = error?.message || 'Unable to build that Song DiveIn result right now.';
-
-    setStatus(toneStatus, message, 'error');
-
-    setText(verifiedSongName, 'Unable to verify');
-    setText(verifiedArtist, 'Unable to verify');
-    setText(verifiedBpm, 'Unable to verify');
-    setText(verifiedKey, 'Unable to verify');
-    setText(verifiedConfidence, 'Not detected');
-
-    setHtml(songMeaningResult, `<p class="error-text">${escapeHtml(message)}</p>`);
-  }
-
-  function getCurrentSongSearchText() {
-    const song = verifiedSongName?.textContent?.trim();
-    const artist = verifiedArtist?.textContent?.trim();
-    const typedInput = songInputEl?.value?.trim();
-
-    const invalid = new Set([
-      '',
-      'Processing...',
-      'Loading...',
-      'Unable to verify',
-      'Checking...'
-    ]);
-
-    if (song && !invalid.has(song)) {
-      return artist && !invalid.has(artist) ? `${song} ${artist}` : song;
-    }
-
-    return typedInput || '';
-  }
-
-  function updateTutorialPreview() {
-    const songInput = getCurrentSongSearchText();
-    const instrument = instrumentSelect?.value;
-    const instrumentLabel = getInstrumentLabel(instrument);
-
-    if (!songInput || !instrument || !tutorialResult) return;
-
-    setHtml(
-  tutorialResult,
-  createSearchLink(
-    'Find Instrument Tutorial',
-    buildTutorialQuery(songInput, instrument)
-  )
-);
-  }
-
-  songSearchForm?.addEventListener('submit', async (event) => {
-    event.preventDefault();
-
-    const songInput = songInputEl.value.trim();
-    const instrument = instrumentSelect.value;
-
-    if (!songInput) {
-      setStatus(toneStatus, 'Please enter a song title, artist, or YouTube link.', 'error');
-      return;
-    }
-
-    if (/open\.spotify\.com\/track\//i.test(songInput)) {
-      setStatus(
-        toneStatus,
-        'Spotify links are not supported. Please type the song name and artist, or paste a YouTube link.',
-        'error'
-      );
-      return;
-    }
-
-    setStatus(toneStatus, 'The Song DiveIn AI Engine is processing the song...', 'info', true);
-    setLoadingState(songInput, instrument);
-
-    try {
-      const data = await postJson('/api/tone', {
-        songInput,
-        instrument
+    async function postJson(url, body) {
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(body)
       });
 
-      renderSongDiveIn(data, instrument);
-      setStatus(toneStatus, 'Song DiveIn prep is ready.');
-    } catch (error) {
-      renderErrorState(error);
-    }
-  });
+      const data = await response.json().catch(() => ({}));
 
-  instrumentSelect?.addEventListener('change', updateTutorialPreview);
-/*
-  lyricsLookupBtn?.addEventListener('click', () => {
-    const songInput = getCurrentSongSearchText();
+      if (!response.ok) {
+        throw new Error(data.error || 'Something went wrong. Please try again.');
+      }
 
-    if (!songInput) {
-      setStatus(toneStatus, 'Please enter a song first.', 'error');
-      return;
+      return data;
     }
 
-    setHtml(lyricsResult, createSearchLink('Open lyrics search', `${songInput} lyrics`));
-  });
-
-  chordsLookupBtn?.addEventListener('click', () => {
-    const songInput = getCurrentSongSearchText();
-
-    if (!songInput) {
-      setStatus(toneStatus, 'Please enter a song first.', 'error');
-      return;
+    function buildSearchUrl(query) {
+      return `https://www.google.com/search?q=${encodeURIComponent(query || '')}`;
     }
 
-    setHtml(chordsResult, createSearchLink('Open chord search', `${songInput} chords`));
-  });
+    function getInstrumentLabel(instrument) {
+      return INSTRUMENT_LABELS[instrument] || 'Instrument';
+    }
 
-  tutorialSearchBtn?.addEventListener('click', updateTutorialPreview);
-  */
-  
-</script>
+    function buildTutorialQuery(songInput, instrument) {
+      const tutorialTerm = TUTORIAL_TERMS[instrument] || 'instrument tutorial';
+      return `${songInput} ${tutorialTerm}`;
+    }
 
+    function createSearchLink(label, query) {
+      return `
+        <a class="resource-link" href="${escapeHtml(buildSearchUrl(query))}" target="_blank" rel="noreferrer">
+          ${escapeHtml(label)}
+        </a>
+      `;
+    }
+
+    function setText(element, value) {
+      if (!element) return;
+      element.textContent = value;
+    }
+
+    function setHtml(element, value) {
+      if (!element) return;
+      element.innerHTML = value;
+    }
+
+    function renderContent(value, fallback) {
+      const text = String(value || '').trim();
+
+      if (!text) {
+        return `<p>${escapeHtml(fallback)}</p>`;
+      }
+
+      if (/<\/?[a-z][\s\S]*>/i.test(text)) {
+        return text;
+      }
+
+      const lines = text
+        .split('\n')
+        .map((line) => line.trim())
+        .filter(Boolean);
+
+      if (lines.length <= 1) {
+        return `<p>${escapeHtml(lines[0] || fallback)}</p>`;
+      }
+
+      return `
+        <ul>
+          ${lines
+            .map((line) => `<li>${escapeHtml(line.replace(/^[-•*]\s*/, ''))}</li>`)
+            .join('')}
+        </ul>
+      `;
+    }
+
+    function revealResultsArea() {
+      if (!songResultsArea) return;
+      songResultsArea.hidden = false;
+    }
+
+    function setLoadingState(songInput, instrument) {
+      const instrumentLabel = getInstrumentLabel(instrument);
+
+      revealResultsArea();
+
+      setText(verifiedSongName, 'Processing...');
+      setText(verifiedArtist, 'Processing...');
+      setText(verifiedBpm, 'Checking...');
+      setText(verifiedKey, 'Checking...');
+      setText(verifiedConfidence, 'Checking...');
+
+      setHtml(lyricsResult, createSearchLink('Find Lyrics', `${songInput} lyrics`));
+      setHtml(chordsResult, createSearchLink('Find Chords', `${songInput} chords`));
+      setHtml(
+        tutorialResult,
+        createSearchLink(
+          'Find Instrument Tutorial',
+          buildTutorialQuery(songInput, instrument)
+        )
+      );
+
+      setHtml(songMeaningResult, `<p class="loading-text">The AI Engine is processing the song message...</p>`);
+      setHtml(faithLensResult, `<p class="loading-text">The AI Engine is preparing the Faith Lens...</p>`);
+      setHtml(arrangementFeelResult, `<p class="loading-text">The AI Engine is mapping the song flow...</p>`);
+      setHtml(listeningGuideResult, `<p class="loading-text">The AI Engine is building listening cues...</p>`);
+      setHtml(rehearsalPrepResult, `<p class="loading-text">The AI Engine is preparing rehearsal moves...</p>`);
+      setHtml(spiritualReflectionResult, `<p class="loading-text">The AI Engine is shaping a reflection and prayer prompt...</p>`);
+      setHtml(instrumentGuidanceResult, `<p class="loading-text">The AI Engine is creating ${escapeHtml(instrumentLabel)} coaching...</p>`);
+    }
+
+    function getSongArtistText(data) {
+      return `${data.song || ''} ${data.artist || ''}`.trim() || songInputEl.value.trim() || 'song';
+    }
+
+    function renderSongDiveIn(data, instrument) {
+      const songArtist = getSongArtistText(data);
+
+      setText(verifiedSongName, data.song || 'Unable to verify');
+      setText(verifiedArtist, data.artist || 'Unable to verify');
+      setText(verifiedBpm, data.bpm && Number(data.bpm) > 0 ? data.bpm : 'Unable to verify');
+      setText(verifiedKey, data.key || 'Unable to verify');
+      setText(verifiedConfidence, data.metadata_confidence || 'Not detected');
+
+      setHtml(
+        lyricsResult,
+        createSearchLink('Find Lyrics', data.lyrics_search_query || `${songArtist} lyrics`)
+      );
+
+      setHtml(
+        chordsResult,
+        createSearchLink('Find Chords', data.chord_search_query || `${songArtist} chords`)
+      );
+
+      setHtml(
+        tutorialResult,
+        createSearchLink(
+          'Find Instrument Tutorial',
+          data.tutorial_search_query || buildTutorialQuery(songArtist, instrument)
+        )
+      );
+
+      setHtml(songMeaningResult, renderContent(data.song_meaning, 'Song meaning is not available yet.'));
+      setHtml(faithLensResult, renderContent(data.faith_lens, 'Faith Lens is not available yet.'));
+      setHtml(arrangementFeelResult, renderContent(data.arrangement_feel, 'Song Flow guidance is not available yet.'));
+      setHtml(listeningGuideResult, renderContent(data.listening_guide, 'Listening guidance is not available yet.'));
+      setHtml(rehearsalPrepResult, renderContent(data.rehearsal_prep, 'Rehearsal preparation is not available yet.'));
+      setHtml(spiritualReflectionResult, renderContent(data.spiritual_reflection, 'Spiritual reflection is not available yet.'));
+      setHtml(instrumentGuidanceResult, renderContent(data.instrument_guidance, `${getInstrumentLabel(instrument)} guidance is not available yet.`));
+    }
+
+    function renderErrorState(error) {
+      const message = error?.message || 'Unable to build that Song DiveIn result right now.';
+
+      setStatus(toneStatus, message, 'error');
+
+      setText(verifiedSongName, 'Unable to verify');
+      setText(verifiedArtist, 'Unable to verify');
+      setText(verifiedBpm, 'Unable to verify');
+      setText(verifiedKey, 'Unable to verify');
+      setText(verifiedConfidence, 'Not detected');
+
+      setHtml(songMeaningResult, `<p class="error-text">${escapeHtml(message)}</p>`);
+    }
+
+    function getCurrentSongSearchText() {
+      const song = verifiedSongName?.textContent?.trim();
+      const artist = verifiedArtist?.textContent?.trim();
+      const typedInput = songInputEl?.value?.trim();
+
+      const invalid = new Set([
+        '',
+        'Processing...',
+        'Loading...',
+        'Unable to verify',
+        'Checking...'
+      ]);
+
+      if (song && !invalid.has(song)) {
+        return artist && !invalid.has(artist) ? `${song} ${artist}` : song;
+      }
+
+      return typedInput || '';
+    }
+
+    function updateTutorialPreview() {
+      const songInput = getCurrentSongSearchText();
+      const instrument = instrumentSelect?.value;
+
+      if (!songInput || !instrument || !tutorialResult) return;
+
+      setHtml(
+        tutorialResult,
+        createSearchLink(
+          'Find Instrument Tutorial',
+          buildTutorialQuery(songInput, instrument)
+        )
+      );
+    }
+
+    songSearchForm?.addEventListener('submit', async (event) => {
+      event.preventDefault();
+
+      const songInput = songInputEl.value.trim();
+      const instrument = instrumentSelect.value;
+
+      if (!songInput) {
+        setStatus(toneStatus, 'Please enter a song title + artist, or paste a YouTube link.', 'error');
+        return;
+      }
+
+      if (/open\.spotify\.com\/track\//i.test(songInput)) {
+        setStatus(
+          toneStatus,
+          'Spotify links are not supported. Please type the song name and artist, or paste a YouTube link.',
+          'error'
+        );
+        return;
+      }
+
+      setStatus(toneStatus, 'The AI Engine is processing the song...', 'info', true);
+      setLoadingState(songInput, instrument);
+
+      try {
+        const data = await postJson('/api/tone', {
+          songInput,
+          instrument
+        });
+
+        renderSongDiveIn(data, instrument);
+        setStatus(toneStatus, 'Song DiveIn prep is ready.');
+      } catch (error) {
+        renderErrorState(error);
+      }
+    });
+
+    instrumentSelect?.addEventListener('change', updateTutorialPreview);
+  </script>
 </body>
 </html>
