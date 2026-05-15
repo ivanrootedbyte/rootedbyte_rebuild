@@ -33,8 +33,9 @@
     }
 
     html {
-      scroll-behavior: smooth;
-    }
+  scroll-behavior: smooth;
+  scroll-padding-top: 110px;
+}
 
     body {
       margin: 0;
@@ -893,7 +894,7 @@
           Drop in a YouTube link or type the song and artist. Song DiveIn turns it into focused, rehearsal-ready worship prep.
         </p>
         <div class="hero-actions">
-          <a href="#songSearchForm" class="primary-action hero-link">Start a Song Dive</a>
+          <a href="#start-song-dive" class="primary-action hero-link">Start a Song Dive</a>
         </div>
       </div>
 
@@ -953,6 +954,8 @@
     <div class="status" id="toneStatus" role="status" aria-live="polite"></div>
   </form>
 </section>
+    
+    <section id="start-song-dive" class="song-search-card song-start-card" aria-labelledby="song-search-title">
 
     <section id="songResultsArea" class="song-results-area" hidden>
       <section class="verified-song-card" aria-labelledby="verified-song-title">
