@@ -671,20 +671,98 @@
     }
 
     @media (max-width: 620px) {
-      .nav {
-        align-items: flex-start;
-        flex-direction: column;
-      }
+  .site-header {
+    padding: 0.7rem 0.85rem;
+  }
 
-      .nav-links {
-        justify-content: flex-start;
-      }
+  .nav {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 0.7rem;
+    width: 100%;
+    padding: 0;
+    overflow: hidden;
+  }
 
-      .score-circle {
-        width: 150px;
-        height: 150px;
-      }
-    }
+  .brand {
+    flex: 0 0 auto;
+    white-space: nowrap;
+  }
+
+  .brand-mark {
+    width: 34px;
+    height: 34px;
+    border-radius: 12px;
+    font-size: 0.82rem;
+  }
+
+  .brand span:last-child {
+    font-size: 0.95rem;
+  }
+
+  .nav-scroll-wrap {
+    position: relative;
+    flex: 1 1 auto;
+    min-width: 0;
+    max-width: 100%;
+    overflow: hidden;
+  }
+
+  .nav-scroll-wrap::after {
+    content: "›";
+    position: absolute;
+    right: 0.25rem;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 1.6rem;
+    height: 1.6rem;
+    display: grid;
+    place-items: center;
+    border-radius: 999px;
+    color: var(--text);
+    background: rgba(255, 255, 255, 0.7);
+    pointer-events: none;
+    font-size: 1.2rem;
+    font-weight: 900;
+  }
+
+  .nav-links {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    gap: 0.35rem;
+    max-width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    white-space: nowrap;
+    padding: 0.28rem 2rem 0.28rem 0.28rem;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.48);
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .nav-links::-webkit-scrollbar {
+    display: none;
+  }
+
+  .nav-links a {
+    flex: 0 0 auto;
+    white-space: nowrap;
+    padding: 0.5rem 0.68rem;
+    border-radius: 999px;
+    font-size: 0.8rem;
+  }
+
+  .score-circle {
+    width: 150px;
+    height: 150px;
+  }
+}
   </style>
 </head>
 
@@ -698,13 +776,16 @@
         <span>RootedByte</span>
       </a>
 
-      <div class="nav-links">
-        <a href="index.html">Home</a>
-        <a href="tone.html">Song DiveIn</a>
-        <a href="newsverse.html">NewsVerse</a>
-        <a href="rootedos.html" class="active">RootedOS</a>
-        <a href="index.html#contact">Contact</a>
-      </div>
+      <div class="nav-scroll-wrap">
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="tone.html">Song DiveIn</a>
+    <a href="newsverse.html">NewsVerse</a>
+    <a href="rootedos.html" class="active">RootedOS</a>
+    <a href="index.html#contact">Contact</a>
+  </div>
+</div>
+
     </nav>
   </header>
 
