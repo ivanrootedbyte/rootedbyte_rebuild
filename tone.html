@@ -105,35 +105,41 @@
       object-fit: cover;
     }
 
-    .nav-scroll-wrap {
-      display: flex;
-      justify-content: flex-end;
-      min-width: 0;
-    }
+ .nav-scroll-wrap {
+  display: flex;
+  justify-content: flex-end;
+  min-width: 0;
+  padding: 0.28rem;
+  border: 1px solid var(--song-border);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.52);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.55);
+}
 
-    .site-nav {
-      display: flex;
-      align-items: center;
-      flex-wrap: wrap;
-      justify-content: flex-end;
-      gap: 0.35rem;
-    }
+.site-nav {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.25rem;
+}
 
-    .site-nav a {
-      padding: 0.65rem 0.85rem;
-      border-radius: 999px;
-      color: var(--song-muted);
-      font-size: 0.92rem;
-      font-weight: 800;
-      text-decoration: none;
-      transition: background 160ms ease, color 160ms ease, transform 160ms ease;
-    }
+.site-nav a {
+  padding: 0.62rem 0.88rem;
+  border-radius: 999px;
+  color: var(--song-muted);
+  font-size: 0.92rem;
+  font-weight: 800;
+  text-decoration: none;
+  transition: background 160ms ease, color 160ms ease, transform 160ms ease;
+}
 
-    .site-nav a:hover,
-    .site-nav a[aria-current="page"] {
-      color: var(--song-text);
-      background: rgba(124, 58, 237, 0.1);
-    }
+.site-nav a:hover,
+.site-nav a[aria-current="page"] {
+  color: var(--song-text);
+  background: rgba(124, 58, 237, 0.12);
+  box-shadow: 0 8px 18px rgba(124, 58, 237, 0.1);
+}
 
     .song-divein-page {
       padding: clamp(1rem, 3vw, 3rem);
@@ -662,7 +668,7 @@
       .site-header {
         background: rgba(17, 24, 39, 0.74);
       }
-
+    
       .song-start-card {
         background:
           linear-gradient(135deg, rgba(26, 32, 54, 0.88), rgba(31, 38, 63, 0.72)),
@@ -704,6 +710,10 @@
         background: rgba(255, 255, 255, 0.07);
       }
 
+      .nav-scroll-wrap {
+  background: rgba(255, 255, 255, 0.07);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
       .nav-scroll-wrap::after {
         color: var(--song-text);
         background: rgba(255, 255, 255, 0.12);
