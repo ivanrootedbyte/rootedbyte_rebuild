@@ -606,6 +606,29 @@
       background: linear-gradient(180deg, rgba(255, 255, 255, 0.54), rgba(248, 251, 255, 0.76));
     }
 
+    .resource-title-link {
+  margin: 0;
+  font-size: clamp(1.15rem, 2vw, 1.45rem);
+}
+
+.resource-title-link a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  color: var(--song-primary);
+  font-weight: 900;
+  text-decoration: none;
+}
+
+.resource-title-link a:hover {
+  text-decoration: underline;
+}
+
+.resource-title-link a::after {
+  content: "↗";
+  font-size: 0.9rem;
+}
+    
     .resource-link {
       display: inline-flex;
       align-items: center;
@@ -656,7 +679,12 @@
     --song-muted: #cbd5e1;
     --song-border: rgba(255, 255, 255, 0.12);
   }
-
+     
+.input-shell select option {
+  color: #182033;
+  background: #ffffff;
+}
+     
   body {
     background:
       radial-gradient(circle at top left, rgba(14, 165, 233, 0.18), transparent 32rem),
@@ -697,8 +725,14 @@
   }
 
   .input-shell input,
-  .input-shell select {
-    color: var(--song-text);
+ .input-shell select {
+  color: var(--song-text);
+  background: transparent;
+  }
+
+.input-shell select option {
+  color: #182033;
+  background: #ffffff;
   }
 }
 
@@ -853,7 +887,7 @@
   <main class="song-divein-page app-page" data-app="song-divein">
     <section class="song-hero">
       <div class="song-hero__content">
-        <p class="eyebrow">Worship Team Ready</p>
+        <p class="eyebrow">Song Prep Ready</p>
         <h1>Song DiveIn</h1>
         <p class="song-hero__subtitle">
           Drop in a YouTube link or type the song and artist. Song DiveIn turns it into focused, rehearsal-ready worship prep.
@@ -876,21 +910,21 @@
   <div class="section-heading song-start-heading">
     <p class="eyebrow">Let’s Dive-in</p>
     <h2 id="song-search-title">Start with the song</h2>
-    <p>
-      Paste a YouTube link, or type the song title and artist. Pick your role so Song DiveIn shapes the prep around how you serve the moment.
-    </p>
+   <p>
+  Enter the song title with the artist, or paste a YouTube link. Pick your role so Song DiveIn shapes the prep around how you serve the moment.
+</p>
   </div>
 
   <form id="songSearchForm" class="song-start-form">
     <div class="field-group song-input-wide">
-      <label for="songInput">Song title, artist, or YouTube link</label>
+      <label for="songInput">Song title + Artist or YouTube link</label>
       <div class="input-shell">
         <span class="input-icon" aria-hidden="true">♪</span>
         <input
           id="songInput"
           name="songInput"
           type="text"
-          placeholder="Goodness of God - Bethel Music"
+          placeholder="Reckless Love - Cory Asbury, or paste a YouTube link"
           autocomplete="off"
           required
         />
@@ -960,29 +994,20 @@
         <div class="section-heading compact-heading">
           <p class="eyebrow">Quick Links</p>
           <h2 id="lookup-actions-title">Lyrics, chords, and tutorial help</h2>
-          <p>Jump into the resources your team usually needs before the first run-through.</p>
-        </div>
-
-        <div class="lookup-actions">
-          <button id="lyricsLookupBtn" type="button" class="secondary-action">Find Lyrics</button>
-          <button id="chordsLookupBtn" type="button" class="secondary-action">Find Chords</button>
-          <button id="tutorialSearchBtn" type="button" class="secondary-action">Find Instrument Tutorial</button>
+          <p>Jump into the resources you usually need before the first run-through.</p>
         </div>
 
         <div class="resource-results">
           <article class="resource-panel">
-            <h3>Lyrics</h3>
-            <div id="lyricsResult" class="resource-output"></div>
+            <h3 id="lyricsResult" class="resource-output resource-title-link">Find Lyrics</h3>
           </article>
 
           <article class="resource-panel">
-            <h3>Chords</h3>
-            <div id="chordsResult" class="resource-output"></div>
+            <h3 id="chordsResult" class="resource-output resource-title-link">Find Chords</h3>
           </article>
 
           <article class="resource-panel">
-            <h3>Instrument Tutorial</h3>
-            <div id="tutorialResult" class="resource-output"></div>
+            <h3 id="tutorialResult" class="resource-output resource-title-link">Find Instrument Tutorial</h3>
           </article>
         </div>
       </section>
@@ -1087,9 +1112,6 @@
   const spiritualReflectionResult = $('#spiritualReflectionResult');
   const instrumentGuidanceResult = $('#instrumentGuidanceResult');
 
-  const lyricsLookupBtn = $('#lyricsLookupBtn');
-  const chordsLookupBtn = $('#chordsLookupBtn');
-  const tutorialSearchBtn = $('#tutorialSearchBtn');
 
   const INSTRUMENT_LABELS = {
     'acoustic-guitar': 'Acoustic Guitar',
@@ -1158,14 +1180,13 @@
     return `${songInput} ${tutorialTerm}`;
   }
 
-  function createSearchLink(label, query) {
-    return `
-      <a class="resource-link" href="${escapeHtml(buildSearchUrl(query))}" target="_blank" rel="noreferrer">
-        ${escapeHtml(label)}
-      </a>
-      <p class="resource-note">Search: ${escapeHtml(query)}</p>
-    `;
-  }
+function createSearchLink(label, query) {
+  return `
+    <a class="resource-link" href="${escapeHtml(buildSearchUrl(query))}" target="_blank" rel="noreferrer">
+      ${escapeHtml(label)}
+    </a>
+  `;
+}
 
   function setText(element, value) {
     if (!element) return;
@@ -1222,15 +1243,15 @@
     setText(verifiedKey, 'Checking...');
     setText(verifiedConfidence, 'Checking...');
 
-    setHtml(lyricsResult, createSearchLink('Open lyrics search', `${songInput} lyrics`));
-    setHtml(chordsResult, createSearchLink('Open chord search', `${songInput} chords`));
-    setHtml(
-      tutorialResult,
-      createSearchLink(
-        `Open ${instrumentLabel} tutorial search`,
-        buildTutorialQuery(songInput, instrument)
-      )
-    );
+setHtml(lyricsResult, createSearchLink('Find Lyrics', `${songInput} lyrics`));
+setHtml(chordsResult, createSearchLink('Find Chords', `${songInput} chords`));
+setHtml(
+  tutorialResult,
+  createSearchLink(
+    'Find Instrument Tutorial',
+    buildTutorialQuery(songInput, instrument)
+  )
+);
 
     setHtml(songMeaningResult, `<p class="loading-text">The AI Engine is processing the song message...</p>`);
     setHtml(faithLensResult, `<p class="loading-text">The AI Engine is preparing the Faith Lens...</p>`);
@@ -1256,22 +1277,22 @@
     setText(verifiedConfidence, data.metadata_confidence || 'Not detected');
 
     setHtml(
-      lyricsResult,
-      createSearchLink('Open lyrics search', data.lyrics_search_query || `${songArtist} lyrics`)
-    );
+  lyricsResult,
+  createSearchLink('Find Lyrics', data.lyrics_search_query || `${songArtist} lyrics`)
+);
 
-    setHtml(
-      chordsResult,
-      createSearchLink('Open chord search', data.chord_search_query || `${songArtist} chords`)
-    );
+setHtml(
+  chordsResult,
+  createSearchLink('Find Chords', data.chord_search_query || `${songArtist} chords`)
+);
 
-    setHtml(
-      tutorialResult,
-      createSearchLink(
-        `Open ${instrumentLabel} tutorial search`,
-        data.tutorial_search_query || buildTutorialQuery(songArtist, instrument)
-      )
-    );
+setHtml(
+  tutorialResult,
+  createSearchLink(
+    'Find Instrument Tutorial',
+    data.tutorial_search_query || buildTutorialQuery(songArtist, instrument)
+  )
+);
 
     setHtml(songMeaningResult, renderContent(data.song_meaning, 'Song meaning is not available yet.'));
     setHtml(faithLensResult, renderContent(data.faith_lens, 'Faith Lens is not available yet.'));
@@ -1324,12 +1345,12 @@
     if (!songInput || !instrument || !tutorialResult) return;
 
     setHtml(
-      tutorialResult,
-      createSearchLink(
-        `Open ${instrumentLabel} tutorial search`,
-        buildTutorialQuery(songInput, instrument)
-      )
-    );
+  tutorialResult,
+  createSearchLink(
+    'Find Instrument Tutorial',
+    buildTutorialQuery(songInput, instrument)
+  )
+);
   }
 
   songSearchForm?.addEventListener('submit', async (event) => {
@@ -1352,7 +1373,7 @@
       return;
     }
 
-    setStatus(toneStatus, 'The AI Engine is processing the song...', 'info', true);
+    setStatus(toneStatus, 'The Song DiveIn AI Engine is processing the song...', 'info', true);
     setLoadingState(songInput, instrument);
 
     try {
@@ -1369,7 +1390,7 @@
   });
 
   instrumentSelect?.addEventListener('change', updateTutorialPreview);
-
+/*
   lyricsLookupBtn?.addEventListener('click', () => {
     const songInput = getCurrentSongSearchText();
 
@@ -1393,6 +1414,8 @@
   });
 
   tutorialSearchBtn?.addEventListener('click', updateTutorialPreview);
+  */
+  
 </script>
 
 </body>
