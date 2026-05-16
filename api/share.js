@@ -65,11 +65,11 @@ module.exports = async function handler(req, res) {
     const inputSummary = String(body.inputSummary || "").trim();
     const output = body.output;
 
-    if (!["rootedos", "newsverse"].includes(appType)) {
-      return sendJson(res, 400, {
-        error: "Invalid appType. Use rootedos or newsverse."
-      });
-    }
+    if (!["rootedos", "newsverse", "tone"].includes(appType)) {
+  return sendJson(res, 400, {
+    error: "Invalid appType. Use rootedos, newsverse, or song_divein."
+  });
+}
 
     if (!output || typeof output !== "object") {
       return sendJson(res, 400, {
@@ -94,7 +94,12 @@ module.exports = async function handler(req, res) {
         body: JSON.stringify({
           share_slug: shareSlug,
           app_type: appType,
-          title: title || (appType === "rootedos" ? "RootedOS Reflection" : "NewsVerse Reflection"),
+          title: title ||
+  (appType === "rootedos"
+    ? "RootedOS Reflection"
+    : appType === "newsverse"
+      ? "NewsVerse Reflection"
+      : "Song DiveIn Reflection"),
           input_summary: inputSummary || null,
           output_json: output,
           is_public: true,
