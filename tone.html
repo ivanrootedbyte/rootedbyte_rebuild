@@ -1372,9 +1372,13 @@ function showToneSharePanel(outputData) {
   }
 }
 
-    function getInstrumentLabel(instrument) {
-      return INSTRUMENT_LABELS[instrument] || 'Instrument';
-    }
+function buildSearchUrl(query) {
+  return `https://www.google.com/search?q=${encodeURIComponent(query || '')}`;
+}
+
+function getInstrumentLabel(instrument) {
+  return INSTRUMENT_LABELS[instrument] || 'Instrument';
+}
 
     function buildTutorialQuery(songInput, instrument) {
       const tutorialTerm = TUTORIAL_TERMS[instrument] || 'instrument tutorial';
@@ -1599,25 +1603,24 @@ function showToneSharePanel(outputData) {
       }
 
       setStatus(toneStatus, 'The AI Engine is processing the song...', 'info', true);
-      setLoadingState(songInput, instrument);
 
-      try {
-        const data = await postJson('/api/tone', {
-          songInput,
-          instrument
-        });
+try {
+  setLoadingState(songInput, instrument);
 
-        renderSongDiveIn(data, instrument);
+  const data = await postJson('/api/tone', {
+    songInput,
+    instrument
+  });
 
-const toneShareOutput = buildToneShareOutput(data, instrument);
-showToneSharePanel(toneShareOutput);
+  renderSongDiveIn(data, instrument);
 
-setStatus(toneStatus, 'Song DiveIn prep is ready.');
-        
-      } catch (error) {
-        renderErrorState(error);
-      }
-    });
+  const toneShareOutput = buildToneShareOutput(data, instrument);
+  showToneSharePanel(toneShareOutput);
+
+  setStatus(toneStatus, 'Song DiveIn prep is ready.');
+} catch (error) {
+  renderErrorState(error);
+}
 
     instrumentSelect?.addEventListener('change', updateTutorialPreview);
   </script>
