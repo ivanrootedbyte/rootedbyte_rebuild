@@ -41,6 +41,14 @@ function getBaseUrl(req) {
   return `${protocol}://${host}`;
 }
 
+function getDefaultTitle(appType) {
+  if (appType === "rootedos") return "RootedOS Reflection";
+  if (appType === "newsverse") return "NewsVerse Reflection";
+  if (appType === "tone") return "Song DiveIn Reflection";
+
+  return "RootedByte Reflection";
+}
+
 module.exports = async function handler(req, res) {
   if (req.method !== "POST") {
     return sendJson(res, 405, {
@@ -48,7 +56,7 @@ module.exports = async function handler(req, res) {
     });
   }
 
-  const supabaseUrl = process.env.SUPABASE_URL;
+  const supabaseUrl = String(process.env.SUPABASE_URL || "").replace(/\/+$/, "");
   const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
   if (!supabaseUrl || !serviceRoleKey) {
@@ -66,12 +74,12 @@ module.exports = async function handler(req, res) {
     const output = body.output;
 
     if (!["rootedos", "newsverse", "tone"].includes(appType)) {
-  return sendJson(res, 400, {
-    error: "Invalid appType. Use rootedos, newsverse, or song_divein."
-  });
-}
+      return sendJson(res, 400, {
+        error: "Invalid appType. Use rootedos, newsverse, or tone."
+      });
+    }
 
-    if (!output || typeof output !== "object") {
+    if (!output || typeof output !== "object" || Array.isArray(output)) {
       return sendJson(res, 400, {
         error: "Missing output object."
       });
@@ -94,12 +102,7 @@ module.exports = async function handler(req, res) {
         body: JSON.stringify({
           share_slug: shareSlug,
           app_type: appType,
-          title: title ||
-  (appType === "rootedos"
-    ? "RootedOS Reflection"
-    : appType === "newsverse"
-      ? "NewsVerse Reflection"
-      : "Song DiveIn Reflection"),
+          title: title || getDefaultTitle(appType),
           input_summary: inputSummary || null,
           output_json: output,
           is_public: true,
