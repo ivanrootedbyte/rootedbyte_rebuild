@@ -1184,445 +1184,485 @@
     </div>
   </footer>
 
-  <script>
-    const $ = (selector) => document.querySelector(selector);
+ <script>
+  const $ = (selector) => document.querySelector(selector);
 
-    const songSearchForm = $('#songSearchForm');
-    const songInputEl = $('#songInput');
-    const instrumentSelect = $('#instrumentSelect');
-    const songResultsArea = $('#songResultsArea');
-    const toneStatus = $('#toneStatus');
+  const songSearchForm = $('#songSearchForm');
+  const songInputEl = $('#songInput');
+  const instrumentSelect = $('#instrumentSelect');
+  const songResultsArea = $('#songResultsArea');
+  const toneStatus = $('#toneStatus');
 
-    const verifiedSongName = $('#verifiedSongName');
-    const verifiedArtist = $('#verifiedArtist');
-    const verifiedBpm = $('#verifiedBpm');
-    const verifiedKey = $('#verifiedKey');
-    const verifiedConfidence = $('#verifiedConfidence');
+  const verifiedSongName = $('#verifiedSongName');
+  const verifiedArtist = $('#verifiedArtist');
+  const verifiedBpm = $('#verifiedBpm');
+  const verifiedKey = $('#verifiedKey');
+  const verifiedConfidence = $('#verifiedConfidence');
 
-    const lyricsResult = $('#lyricsResult');
-    const chordsResult = $('#chordsResult');
-    const tutorialResult = $('#tutorialResult');
+  const lyricsResult = $('#lyricsResult');
+  const chordsResult = $('#chordsResult');
+  const tutorialResult = $('#tutorialResult');
 
-    const songMeaningResult = $('#songMeaningResult');
-    const faithLensResult = $('#faithLensResult');
-    const arrangementFeelResult = $('#arrangementFeelResult');
-    const listeningGuideResult = $('#listeningGuideResult');
-    const rehearsalPrepResult = $('#rehearsalPrepResult');
-    const spiritualReflectionResult = $('#spiritualReflectionResult');
-    const instrumentGuidanceResult = $('#instrumentGuidanceResult');
-    const songSharePanel = $('#songSharePanel');
-const shareToneOutput = $('#shareToneOutput');
-const toneShareStatus = $('#toneShareStatus');
-const toneShareLink = $('#toneShareLink');
+  const songMeaningResult = $('#songMeaningResult');
+  const faithLensResult = $('#faithLensResult');
+  const arrangementFeelResult = $('#arrangementFeelResult');
+  const listeningGuideResult = $('#listeningGuideResult');
+  const rehearsalPrepResult = $('#rehearsalPrepResult');
+  const spiritualReflectionResult = $('#spiritualReflectionResult');
+  const instrumentGuidanceResult = $('#instrumentGuidanceResult');
 
-let latestToneOutput = null;
-    
+  const songSharePanel = $('#songSharePanel');
+  const shareToneOutput = $('#shareToneOutput');
+  const toneShareStatus = $('#toneShareStatus');
+  const toneShareLink = $('#toneShareLink');
 
-    const INSTRUMENT_LABELS = {
-      'acoustic-guitar': 'Acoustic Guitar',
-      'electric-guitar': 'Electric Guitar',
-      bass: 'Bass',
-      drums: 'Drums',
-      'keys-piano': 'Keys / Piano',
-      vocals: 'Vocals'
-    };
+  let latestToneOutput = null;
 
-    const TUTORIAL_TERMS = {
-      'acoustic-guitar': 'acoustic guitar tutorial',
-      'electric-guitar': 'electric guitar tutorial',
-      bass: 'bass tutorial',
-      drums: 'drum tutorial',
-      'keys-piano': 'piano keys tutorial',
-      vocals: 'vocal tutorial harmony'
-    };
-
-    function escapeHtml(value) {
-      return String(value ?? '')
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#039;');
-    }
-
-    function setStatus(element, message, type = 'info', loading = false) {
-      if (!element) return;
-
-      element.className = type === 'error' ? 'status error' : 'status';
-      element.innerHTML = loading
-        ? `<span class="spinner" aria-hidden="true"></span><span>${escapeHtml(message)}</span>`
-        : escapeHtml(message);
-    }
-
-    async function postJson(url, body) {
-  const response = await fetch(url, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(body)
-  });
-
-  const data = await response.json().catch(() => ({}));
-
-  if (!response.ok) {
-    throw new Error(data.error || 'Something went wrong. Please try again.');
-  }
-
-  return data;
-}
-
-async function createSharedOutput({ appType, title, inputSummary, output, statusElement, linkElement }) {
-  statusElement.textContent = 'Creating share link...';
-  statusElement.className = 'status';
-
-  const response = await fetch('/api/share', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-      appType,
-      title,
-      inputSummary,
-      output
-    })
-  });
-
-  const data = await response.json();
-
-  if (!response.ok) {
-    throw new Error(data.error || 'Could not create share link.');
-  }
-
-  linkElement.hidden = false;
-  linkElement.textContent = data.shareUrl;
-
-  try {
-    await navigator.clipboard.writeText(data.shareUrl);
-    statusElement.textContent = 'Share link created and copied.';
-  } catch {
-    statusElement.textContent = 'Share link created.';
-  }
-
-  if (navigator.share) {
-    try {
-      await navigator.share({
-        title,
-        text: `View this ${title} from RootedByte.`,
-        url: data.shareUrl
-      });
-    } catch {
-      // User cancelled native share. Link is still created.
-    }
-  }
-
-  return data;
-}
-
-function getToneShareTitle(output) {
-  const song = String(output?.song || '').trim();
-  const artist = String(output?.artist || '').trim();
-
-  if (song && artist) return `Song DiveIn: ${song} by ${artist}`;
-  if (song) return `Song DiveIn: ${song}`;
-
-  return 'Song DiveIn Reflection';
-}
-
-function buildToneShareOutput(data, instrument) {
-  return {
-    song: data.song || '',
-    artist: data.artist || '',
-    bpm: data.bpm || '',
-    key: data.key || '',
-    metadata_confidence: data.metadata_confidence || '',
-    instrument,
-    instrument_label: getInstrumentLabel(instrument),
-
-    lyrics_search_query: data.lyrics_search_query || '',
-    chord_search_query: data.chord_search_query || '',
-    tutorial_search_query: data.tutorial_search_query || '',
-
-    song_meaning: data.song_meaning || '',
-    faith_lens: data.faith_lens || '',
-    arrangement_feel: data.arrangement_feel || '',
-    listening_guide: data.listening_guide || '',
-    rehearsal_prep: data.rehearsal_prep || '',
-    spiritual_reflection: data.spiritual_reflection || '',
-    instrument_guidance: data.instrument_guidance || ''
+  const INSTRUMENT_LABELS = {
+    'acoustic-guitar': 'Acoustic Guitar',
+    'electric-guitar': 'Electric Guitar',
+    bass: 'Bass',
+    drums: 'Drums',
+    'keys-piano': 'Keys / Piano',
+    vocals: 'Vocals'
   };
-}
 
-function showToneSharePanel(outputData) {
-  latestToneOutput = outputData;
+  const TUTORIAL_TERMS = {
+    'acoustic-guitar': 'acoustic guitar tutorial',
+    'electric-guitar': 'electric guitar tutorial',
+    bass: 'bass tutorial',
+    drums: 'drum tutorial',
+    'keys-piano': 'piano keys tutorial',
+    vocals: 'vocal tutorial harmony'
+  };
 
-  if (songSharePanel) {
-    songSharePanel.hidden = false;
+  function escapeHtml(value) {
+    return String(value ?? '')
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
   }
 
-  if (toneShareStatus) {
-    toneShareStatus.className = 'status';
-    toneShareStatus.textContent = '';
+  function setStatus(element, message, type = 'info', loading = false) {
+    if (!element) return;
+
+    element.className = type === 'error' ? 'status error' : 'status';
+    element.innerHTML = loading
+      ? `<span class="spinner" aria-hidden="true"></span><span>${escapeHtml(message)}</span>`
+      : escapeHtml(message);
   }
 
-  if (toneShareLink) {
-    toneShareLink.hidden = true;
-    toneShareLink.textContent = '';
-  }
-}
+  async function postJson(url, body) {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 60000);
 
-function buildSearchUrl(query) {
-  return `https://www.google.com/search?q=${encodeURIComponent(query || '')}`;
-}
+    try {
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(body),
+        signal: controller.signal
+      });
 
-function getInstrumentLabel(instrument) {
-  return INSTRUMENT_LABELS[instrument] || 'Instrument';
-}
+      const data = await response.json().catch(() => ({}));
 
-    function buildTutorialQuery(songInput, instrument) {
-      const tutorialTerm = TUTORIAL_TERMS[instrument] || 'instrument tutorial';
-      return `${songInput} ${tutorialTerm}`;
-    }
-
-    function createSearchLink(label, query) {
-      return `
-        <a class="resource-link" href="${escapeHtml(buildSearchUrl(query))}" target="_blank" rel="noreferrer">
-          ${escapeHtml(label)}
-        </a>
-      `;
-    }
-
-    function setText(element, value) {
-      if (!element) return;
-      element.textContent = value;
-    }
-
-    function setHtml(element, value) {
-      if (!element) return;
-      element.innerHTML = value;
-    }
-
-    function renderContent(value, fallback) {
-      const text = String(value || '').trim();
-
-      if (!text) {
-        return `<p>${escapeHtml(fallback)}</p>`;
+      if (!response.ok) {
+        throw new Error(data.error || 'Something went wrong. Please try again.');
       }
 
-      if (/<\/?[a-z][\s\S]*>/i.test(text)) {
-        return text;
+      return data;
+    } catch (error) {
+      if (error.name === 'AbortError') {
+        throw new Error('Song DiveIn took too long to respond. Please try again.');
       }
 
-      const lines = text
-        .split('\n')
-        .map((line) => line.trim())
-        .filter(Boolean);
-
-      if (lines.length <= 1) {
-        return `<p>${escapeHtml(lines[0] || fallback)}</p>`;
-      }
-
-      return `
-        <ul>
-          ${lines
-            .map((line) => `<li>${escapeHtml(line.replace(/^[-•*]\s*/, ''))}</li>`)
-            .join('')}
-        </ul>
-      `;
+      throw error;
+    } finally {
+      clearTimeout(timeout);
     }
-
-    function revealResultsArea() {
-      if (!songResultsArea) return;
-      songResultsArea.hidden = false;
-    }
-
-    function setLoadingState(songInput, instrument) {
-      const instrumentLabel = getInstrumentLabel(instrument);
-
-      revealResultsArea();
-
-      setText(verifiedSongName, 'Processing...');
-      setText(verifiedArtist, 'Processing...');
-      setText(verifiedBpm, 'Checking...');
-      setText(verifiedKey, 'Checking...');
-      setText(verifiedConfidence, 'Checking...');
-
-      setHtml(lyricsResult, createSearchLink('Find Lyrics', `${songInput} lyrics`));
-      setHtml(chordsResult, createSearchLink('Find Chords', `${songInput} chords`));
-      setHtml(
-        tutorialResult,
-        createSearchLink(
-          'Find Instrument Tutorial',
-          buildTutorialQuery(songInput, instrument)
-        )
-      );
-
-      setHtml(songMeaningResult, `<p class="loading-text">The AI Engine is processing the song message...</p>`);
-      setHtml(faithLensResult, `<p class="loading-text">The AI Engine is preparing the Faith Lens...</p>`);
-      setHtml(arrangementFeelResult, `<p class="loading-text">The AI Engine is mapping the song flow...</p>`);
-      setHtml(listeningGuideResult, `<p class="loading-text">The AI Engine is building listening cues...</p>`);
-      setHtml(rehearsalPrepResult, `<p class="loading-text">The AI Engine is preparing rehearsal moves...</p>`);
-      setHtml(spiritualReflectionResult, `<p class="loading-text">The AI Engine is shaping a reflection and prayer prompt...</p>`);
-      setHtml(instrumentGuidanceResult, `<p class="loading-text">The AI Engine is creating ${escapeHtml(instrumentLabel)} coaching...</p>`);
-    }
-
-    function getSongArtistText(data) {
-      return `${data.song || ''} ${data.artist || ''}`.trim() || songInputEl.value.trim() || 'song';
-    }
-
-    function renderSongDiveIn(data, instrument) {
-      const songArtist = getSongArtistText(data);
-
-      setText(verifiedSongName, data.song || 'Unable to verify');
-      setText(verifiedArtist, data.artist || 'Unable to verify');
-      setText(verifiedBpm, data.bpm && Number(data.bpm) > 0 ? data.bpm : 'Unable to verify');
-      setText(verifiedKey, data.key || 'Unable to verify');
-      setText(verifiedConfidence, data.metadata_confidence || 'Not detected');
-
-      setHtml(
-        lyricsResult,
-        createSearchLink('Find Lyrics', data.lyrics_search_query || `${songArtist} lyrics`)
-      );
-
-      setHtml(
-        chordsResult,
-        createSearchLink('Find Chords', data.chord_search_query || `${songArtist} chords`)
-      );
-
-      setHtml(
-        tutorialResult,
-        createSearchLink(
-          'Find Instrument Tutorial',
-          data.tutorial_search_query || buildTutorialQuery(songArtist, instrument)
-        )
-      );
-
-      setHtml(songMeaningResult, renderContent(data.song_meaning, 'Song meaning is not available yet.'));
-      setHtml(faithLensResult, renderContent(data.faith_lens, 'Faith Lens is not available yet.'));
-      setHtml(arrangementFeelResult, renderContent(data.arrangement_feel, 'Song Flow guidance is not available yet.'));
-      setHtml(listeningGuideResult, renderContent(data.listening_guide, 'Listening guidance is not available yet.'));
-      setHtml(rehearsalPrepResult, renderContent(data.rehearsal_prep, 'Rehearsal preparation is not available yet.'));
-      setHtml(spiritualReflectionResult, renderContent(data.spiritual_reflection, 'Spiritual reflection is not available yet.'));
-      setHtml(instrumentGuidanceResult, renderContent(data.instrument_guidance, `${getInstrumentLabel(instrument)} guidance is not available yet.`));
-    }
-
-    function renderErrorState(error) {
-      const message = error?.message || 'Unable to build that Song DiveIn result right now.';
-
-      setStatus(toneStatus, message, 'error');
-
-      setText(verifiedSongName, 'Unable to verify');
-      setText(verifiedArtist, 'Unable to verify');
-      setText(verifiedBpm, 'Unable to verify');
-      setText(verifiedKey, 'Unable to verify');
-      setText(verifiedConfidence, 'Not detected');
-
-      setHtml(songMeaningResult, `<p class="error-text">${escapeHtml(message)}</p>`);
-    }
-
-    function getCurrentSongSearchText() {
-      const song = verifiedSongName?.textContent?.trim();
-      const artist = verifiedArtist?.textContent?.trim();
-      const typedInput = songInputEl?.value?.trim();
-
-      const invalid = new Set([
-        '',
-        'Processing...',
-        'Loading...',
-        'Unable to verify',
-        'Checking...'
-      ]);
-
-      if (song && !invalid.has(song)) {
-        return artist && !invalid.has(artist) ? `${song} ${artist}` : song;
-      }
-
-      return typedInput || '';
-    }
-
-    function updateTutorialPreview() {
-      const songInput = getCurrentSongSearchText();
-      const instrument = instrumentSelect?.value;
-
-      if (!songInput || !instrument || !tutorialResult) return;
-
-      setHtml(
-        tutorialResult,
-        createSearchLink(
-          'Find Instrument Tutorial',
-          buildTutorialQuery(songInput, instrument)
-        )
-      );
-    }
-
-    shareToneOutput?.addEventListener('click', async () => {
-  if (!latestToneOutput) {
-    setStatus(toneShareStatus, 'Generate a Song DiveIn prep first.', 'error');
-    return;
   }
 
-  shareToneOutput.disabled = true;
+  async function createSharedOutput({ appType, title, inputSummary, output, statusElement, linkElement }) {
+    if (!statusElement || !linkElement) return null;
 
-  try {
-    const title = getToneShareTitle(latestToneOutput);
+    statusElement.textContent = 'Creating share link...';
+    statusElement.className = 'status';
 
-    await createSharedOutput({
-      appType: 'tone',
-      title,
-      inputSummary: 'Shared Song DiveIn prep',
-      output: latestToneOutput,
-      statusElement: toneShareStatus,
-      linkElement: toneShareLink
+    const response = await fetch('/api/share', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        appType,
+        title,
+        inputSummary,
+        output
+      })
     });
-  } catch (error) {
-    setStatus(toneShareStatus, error.message, 'error');
-  } finally {
-    shareToneOutput.disabled = false;
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.error || 'Could not create share link.');
+    }
+
+    linkElement.hidden = false;
+    linkElement.textContent = data.shareUrl;
+
+    try {
+      await navigator.clipboard.writeText(data.shareUrl);
+      statusElement.textContent = 'Share link created and copied.';
+    } catch {
+      statusElement.textContent = 'Share link created.';
+    }
+
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title,
+          text: `View this ${title} from RootedByte.`,
+          url: data.shareUrl
+        });
+      } catch {
+        // User cancelled native share. Link is still created.
+      }
+    }
+
+    return data;
   }
-});
-    
-    songSearchForm?.addEventListener('submit', async (event) => {
-      event.preventDefault();
 
-      const songInput = songInputEl.value.trim();
-      const instrument = instrumentSelect.value;
+  function getToneShareTitle(output) {
+    const song = String(output?.song || '').trim();
+    const artist = String(output?.artist || '').trim();
 
-      if (!songInput) {
-        setStatus(toneStatus, 'Please enter a song title + artist, or paste a YouTube link.', 'error');
-        return;
-      }
+    if (song && artist) return `Song DiveIn: ${song} by ${artist}`;
+    if (song) return `Song DiveIn: ${song}`;
 
-      if (/open\.spotify\.com\/track\//i.test(songInput)) {
-        setStatus(
-          toneStatus,
-          'Spotify links are not supported. Please type the song name and artist, or paste a YouTube link.',
-          'error'
-        );
-        return;
-      }
+    return 'Song DiveIn Reflection';
+  }
 
-      setStatus(toneStatus, 'The AI Engine is processing the song...', 'info', true);
+  function buildToneShareOutput(data, instrument) {
+    return {
+      song: data.song || '',
+      artist: data.artist || '',
+      bpm: data.bpm || '',
+      key: data.key || '',
+      metadata_confidence: data.metadata_confidence || '',
+      instrument,
+      instrument_label: getInstrumentLabel(instrument),
 
-try {
-  setLoadingState(songInput, instrument);
+      lyrics_search_query: data.lyrics_search_query || '',
+      chord_search_query: data.chord_search_query || '',
+      tutorial_search_query: data.tutorial_search_query || '',
 
-  const data = await postJson('/api/tone', {
-    songInput,
-    instrument
+      song_meaning: data.song_meaning || '',
+      faith_lens: data.faith_lens || '',
+      arrangement_feel: data.arrangement_feel || '',
+      listening_guide: data.listening_guide || '',
+      rehearsal_prep: data.rehearsal_prep || '',
+      spiritual_reflection: data.spiritual_reflection || '',
+      instrument_guidance: data.instrument_guidance || ''
+    };
+  }
+
+  function resetToneSharePanel() {
+    latestToneOutput = null;
+
+    if (songSharePanel) {
+      songSharePanel.hidden = true;
+    }
+
+    if (toneShareStatus) {
+      toneShareStatus.className = 'status';
+      toneShareStatus.textContent = '';
+    }
+
+    if (toneShareLink) {
+      toneShareLink.hidden = true;
+      toneShareLink.textContent = '';
+    }
+  }
+
+  function showToneSharePanel(outputData) {
+    latestToneOutput = outputData;
+
+    if (songSharePanel) {
+      songSharePanel.hidden = false;
+    }
+
+    if (toneShareStatus) {
+      toneShareStatus.className = 'status';
+      toneShareStatus.textContent = '';
+    }
+
+    if (toneShareLink) {
+      toneShareLink.hidden = true;
+      toneShareLink.textContent = '';
+    }
+  }
+
+  function buildSearchUrl(query) {
+    return `https://www.google.com/search?q=${encodeURIComponent(query || '')}`;
+  }
+
+  function getInstrumentLabel(instrument) {
+    return INSTRUMENT_LABELS[instrument] || 'Instrument';
+  }
+
+  function buildTutorialQuery(songInput, instrument) {
+    const tutorialTerm = TUTORIAL_TERMS[instrument] || 'instrument tutorial';
+    return `${songInput} ${tutorialTerm}`;
+  }
+
+  function createSearchLink(label, query) {
+    return `
+      <a class="resource-link" href="${escapeHtml(buildSearchUrl(query))}" target="_blank" rel="noreferrer">
+        ${escapeHtml(label)}
+      </a>
+    `;
+  }
+
+  function setText(element, value) {
+    if (!element) return;
+    element.textContent = value;
+  }
+
+  function setHtml(element, value) {
+    if (!element) return;
+    element.innerHTML = value;
+  }
+
+  function renderContent(value, fallback) {
+    const text = String(value || '').trim();
+
+    if (!text) {
+      return `<p>${escapeHtml(fallback)}</p>`;
+    }
+
+    if (/<\/?[a-z][\s\S]*>/i.test(text)) {
+      return text;
+    }
+
+    const lines = text
+      .split('\n')
+      .map((line) => line.trim())
+      .filter(Boolean);
+
+    if (lines.length <= 1) {
+      return `<p>${escapeHtml(lines[0] || fallback)}</p>`;
+    }
+
+    return `
+      <ul>
+        ${lines
+          .map((line) => `<li>${escapeHtml(line.replace(/^[-•*]\s*/, ''))}</li>`)
+          .join('')}
+      </ul>
+    `;
+  }
+
+  function revealResultsArea() {
+    if (!songResultsArea) return;
+    songResultsArea.hidden = false;
+  }
+
+  function setLoadingState(songInput, instrument) {
+    const instrumentLabel = getInstrumentLabel(instrument);
+
+    revealResultsArea();
+    resetToneSharePanel();
+
+    setText(verifiedSongName, 'Processing...');
+    setText(verifiedArtist, 'Processing...');
+    setText(verifiedBpm, 'Checking...');
+    setText(verifiedKey, 'Checking...');
+    setText(verifiedConfidence, 'Checking...');
+
+    setHtml(lyricsResult, createSearchLink('Find Lyrics', `${songInput} lyrics`));
+    setHtml(chordsResult, createSearchLink('Find Chords', `${songInput} chords`));
+    setHtml(
+      tutorialResult,
+      createSearchLink(
+        'Find Instrument Tutorial',
+        buildTutorialQuery(songInput, instrument)
+      )
+    );
+
+    setHtml(songMeaningResult, `<p class="loading-text">The AI Engine is processing the song message...</p>`);
+    setHtml(faithLensResult, `<p class="loading-text">The AI Engine is preparing the Faith Lens...</p>`);
+    setHtml(arrangementFeelResult, `<p class="loading-text">The AI Engine is mapping the song flow...</p>`);
+    setHtml(listeningGuideResult, `<p class="loading-text">The AI Engine is building listening cues...</p>`);
+    setHtml(rehearsalPrepResult, `<p class="loading-text">The AI Engine is preparing rehearsal moves...</p>`);
+    setHtml(spiritualReflectionResult, `<p class="loading-text">The AI Engine is shaping a reflection and prayer prompt...</p>`);
+    setHtml(instrumentGuidanceResult, `<p class="loading-text">The AI Engine is creating ${escapeHtml(instrumentLabel)} coaching...</p>`);
+  }
+
+  function getSongArtistText(data) {
+    return `${data.song || ''} ${data.artist || ''}`.trim() || songInputEl.value.trim() || 'song';
+  }
+
+  function renderSongDiveIn(data, instrument) {
+    const songArtist = getSongArtistText(data);
+
+    setText(verifiedSongName, data.song || 'Unable to verify');
+    setText(verifiedArtist, data.artist || 'Unable to verify');
+    setText(verifiedBpm, data.bpm && Number(data.bpm) > 0 ? data.bpm : 'Unable to verify');
+    setText(verifiedKey, data.key || 'Unable to verify');
+    setText(verifiedConfidence, data.metadata_confidence || 'Not detected');
+
+    setHtml(
+      lyricsResult,
+      createSearchLink('Find Lyrics', data.lyrics_search_query || `${songArtist} lyrics`)
+    );
+
+    setHtml(
+      chordsResult,
+      createSearchLink('Find Chords', data.chord_search_query || `${songArtist} chords`)
+    );
+
+    setHtml(
+      tutorialResult,
+      createSearchLink(
+        'Find Instrument Tutorial',
+        data.tutorial_search_query || buildTutorialQuery(songArtist, instrument)
+      )
+    );
+
+    setHtml(songMeaningResult, renderContent(data.song_meaning, 'Song meaning is not available yet.'));
+    setHtml(faithLensResult, renderContent(data.faith_lens, 'Faith Lens is not available yet.'));
+    setHtml(arrangementFeelResult, renderContent(data.arrangement_feel, 'Song Flow guidance is not available yet.'));
+    setHtml(listeningGuideResult, renderContent(data.listening_guide, 'Listening guidance is not available yet.'));
+    setHtml(rehearsalPrepResult, renderContent(data.rehearsal_prep, 'Rehearsal preparation is not available yet.'));
+    setHtml(spiritualReflectionResult, renderContent(data.spiritual_reflection, 'Spiritual reflection is not available yet.'));
+    setHtml(instrumentGuidanceResult, renderContent(data.instrument_guidance, `${getInstrumentLabel(instrument)} guidance is not available yet.`));
+  }
+
+  function renderErrorState(error) {
+    const message = error?.message || 'Unable to build that Song DiveIn result right now.';
+
+    setStatus(toneStatus, message, 'error');
+
+    revealResultsArea();
+    resetToneSharePanel();
+
+    setText(verifiedSongName, 'Unable to verify');
+    setText(verifiedArtist, 'Unable to verify');
+    setText(verifiedBpm, 'Unable to verify');
+    setText(verifiedKey, 'Unable to verify');
+    setText(verifiedConfidence, 'Not detected');
+
+    setHtml(songMeaningResult, `<p class="error-text">${escapeHtml(message)}</p>`);
+  }
+
+  function getCurrentSongSearchText() {
+    const song = verifiedSongName?.textContent?.trim();
+    const artist = verifiedArtist?.textContent?.trim();
+    const typedInput = songInputEl?.value?.trim();
+
+    const invalid = new Set([
+      '',
+      'Processing...',
+      'Loading...',
+      'Unable to verify',
+      'Checking...'
+    ]);
+
+    if (song && !invalid.has(song)) {
+      return artist && !invalid.has(artist) ? `${song} ${artist}` : song;
+    }
+
+    return typedInput || '';
+  }
+
+  function updateTutorialPreview() {
+    const songInput = getCurrentSongSearchText();
+    const instrument = instrumentSelect?.value;
+
+    if (!songInput || !instrument || !tutorialResult) return;
+
+    setHtml(
+      tutorialResult,
+      createSearchLink(
+        'Find Instrument Tutorial',
+        buildTutorialQuery(songInput, instrument)
+      )
+    );
+  }
+
+  shareToneOutput?.addEventListener('click', async () => {
+    if (!latestToneOutput) {
+      setStatus(toneShareStatus, 'Generate a Song DiveIn prep first.', 'error');
+      return;
+    }
+
+    shareToneOutput.disabled = true;
+
+    try {
+      const title = getToneShareTitle(latestToneOutput);
+
+      await createSharedOutput({
+        appType: 'tone',
+        title,
+        inputSummary: 'Shared Song DiveIn prep',
+        output: latestToneOutput,
+        statusElement: toneShareStatus,
+        linkElement: toneShareLink
+      });
+    } catch (error) {
+      setStatus(toneShareStatus, error.message, 'error');
+    } finally {
+      shareToneOutput.disabled = false;
+    }
   });
 
-  renderSongDiveIn(data, instrument);
+  songSearchForm?.addEventListener('submit', async (event) => {
+    event.preventDefault();
 
-  const toneShareOutput = buildToneShareOutput(data, instrument);
-  showToneSharePanel(toneShareOutput);
+    const songInput = songInputEl.value.trim();
+    const instrument = instrumentSelect.value;
 
-  setStatus(toneStatus, 'Song DiveIn prep is ready.');
-} catch (error) {
-  renderErrorState(error);
-}
+    if (!songInput) {
+      setStatus(toneStatus, 'Please enter a song title + artist, or paste a YouTube link.', 'error');
+      return;
+    }
 
-    instrumentSelect?.addEventListener('change', updateTutorialPreview);
-  </script>
+    if (/open\.spotify\.com\/track\//i.test(songInput)) {
+      setStatus(
+        toneStatus,
+        'Spotify links are not supported. Please type the song name and artist, or paste a YouTube link.',
+        'error'
+      );
+      return;
+    }
+
+    setStatus(toneStatus, 'The AI Engine is processing the song...', 'info', true);
+
+    try {
+      setLoadingState(songInput, instrument);
+
+      const data = await postJson('/api/tone', {
+        songInput,
+        instrument
+      });
+
+      renderSongDiveIn(data, instrument);
+
+      const toneShareOutput = buildToneShareOutput(data, instrument);
+      showToneSharePanel(toneShareOutput);
+
+      setStatus(toneStatus, 'Song DiveIn prep is ready.');
+    } catch (error) {
+      renderErrorState(error);
+    }
+  });
+
+  instrumentSelect?.addEventListener('change', updateTutorialPreview);
+</script>
+  
 </body>
 </html>
