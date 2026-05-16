@@ -490,6 +490,68 @@
       `;
     }
 
+    function renderTone(output) {
+  const verses = Array.isArray(output.verses) ? output.verses : [];
+  const themes = Array.isArray(output.themes) ? output.themes : [];
+  const reflections = Array.isArray(output.reflections) ? output.reflections : [];
+
+  return `
+    <article class="result-card">
+      <span class="pill">Song DiveIn Summary</span>
+      <h2>${escapeHtml(output.song_title || output.title || "Shared Song DiveIn Reflection")}</h2>
+      <p class="lead">${escapeHtml(output.summary || output.overview || "Shared Song DiveIn reflection from RootedByte.")}</p>
+    </article>
+
+    ${
+      output.christian_lens || output.faith_reflection
+        ? `<article class="result-card highlight">
+            <span class="pill">Faith Reflection</span>
+            <p>${escapeHtml(output.christian_lens || output.faith_reflection)}</p>
+          </article>`
+        : ""
+    }
+
+    ${
+      themes.length
+        ? `<article class="result-card">
+            <span class="pill">Themes</span>
+            <ul>${themes.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}</ul>
+          </article>`
+        : ""
+    }
+
+    ${
+      verses.length
+        ? `<article class="result-card highlight">
+            <span class="pill">Scripture Connections</span>
+            ${verses.map((verse) => `
+              <blockquote>${escapeHtml(verse.text || verse.verse || "")}</blockquote>
+              <p><strong>${escapeHtml(verse.reference || "")}</strong>${verse.reflection ? " — " + escapeHtml(verse.reflection) : ""}</p>
+            `).join("")}
+          </article>`
+        : ""
+    }
+
+    ${
+      reflections.length
+        ? `<article class="result-card">
+            <span class="pill">Reflection Prompts</span>
+            <ol>${reflections.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}</ol>
+          </article>`
+        : ""
+    }
+
+    ${
+      output.encouragement
+        ? `<article class="result-card">
+            <span class="pill">Encouragement</span>
+            <p>${escapeHtml(output.encouragement)}</p>
+          </article>`
+        : ""
+    }
+  `;
+}
+    
     function renderNewsVerse(output) {
       const verses = Array.isArray(output.verses) ? output.verses : [];
       const prayers = Array.isArray(output.prayer_points) ? output.prayer_points : [];
@@ -567,8 +629,16 @@
         }
 
         const isRootedOS = data.appType === "rootedos";
-        const appName = isRootedOS ? "RootedOS" : "NewsVerse";
-        const createdDate = formatDate(data.createdAt);
+const isNewsVerse = data.appType === "newsverse";
+const isTone = data.appType === "tone";
+
+const appName = isRootedOS
+  ? "RootedOS"
+  : isNewsVerse
+    ? "NewsVerse"
+    : "Song DiveIn";
+
+const createdDate = formatDate(data.createdAt);
 
         $("#appPill").textContent = `Shared ${appName}`;
         $("#shareTitle").textContent = data.title || `Shared ${appName} Reflection`;
@@ -576,13 +646,25 @@
           ? `Created with ${appName} by RootedByte on ${createdDate}.`
           : `Created with ${appName} by RootedByte.`;
 
-        $("#tryAppLink").href = isRootedOS ? "rootedos.html" : "newsverse.html";
-        $("#tryAppLink").textContent = isRootedOS ? "Try RootedOS" : "Try NewsVerse";
-        $("#shareActions").hidden = false;
+        $("#tryAppLink").href = isRootedOS
+  ? "rootedos.html"
+  : isNewsVerse
+    ? "newsverse.html"
+    : "tone.html";
 
-        result.innerHTML = isRootedOS
-          ? renderRootedOS(data.output || {})
-          : renderNewsVerse(data.output || {});
+$("#tryAppLink").textContent = isRootedOS
+  ? "Try RootedOS"
+  : isNewsVerse
+    ? "Try NewsVerse"
+    : "Try Song DiveIn";
+
+$("#shareActions").hidden = false;
+
+result.innerHTML = isRootedOS
+  ? renderRootedOS(data.output || {})
+  : isNewsVerse
+    ? renderNewsVerse(data.output || {})
+    : renderTone(data.output || {});
 
         status.textContent = "";
       } catch (error) {
