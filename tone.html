@@ -677,6 +677,59 @@
         --song-border: rgba(255, 255, 255, 0.12);
       }
 
+      .share-panel {
+  width: min(1120px, 100%);
+  margin: 0 auto 1.25rem;
+  padding: clamp(1.1rem, 3vw, 2rem);
+  border: 1px solid var(--song-border);
+  border-radius: var(--song-radius);
+  background: var(--song-card);
+  box-shadow: var(--song-shadow);
+  backdrop-filter: blur(22px);
+}
+
+.share-panel h3 {
+  margin: 0;
+  color: var(--song-text);
+  font-size: clamp(1.25rem, 2.4vw, 1.75rem);
+  line-height: 1.08;
+  letter-spacing: -0.035em;
+}
+
+.share-panel p {
+  max-width: 720px;
+  margin: 0.65rem 0 0;
+  color: var(--song-muted);
+  line-height: 1.65;
+}
+
+.share-panel__actions {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-top: 1rem;
+}
+
+.share-link-box {
+  width: 100%;
+  min-height: 46px;
+  margin-top: 0.85rem;
+  padding: 0.75rem 0.9rem;
+  border: 1px solid var(--song-border);
+  border-radius: 16px;
+  color: var(--song-text);
+  background: rgba(255, 255, 255, 0.78);
+  overflow-wrap: anywhere;
+  font-size: 0.92rem;
+  font-weight: 800;
+}
+
+@media (prefers-color-scheme: dark) {
+  .share-link-box {
+    background: rgba(255, 255, 255, 0.08);
+  }
+}
+      
       body {
         background:
           radial-gradient(circle at top left, rgba(14, 165, 233, 0.18), transparent 32rem),
@@ -1103,6 +1156,24 @@
           <div id="instrumentGuidanceResult" class="prep-card__body"></div>
         </details>
       </section>
+
+            <section class="share-panel" id="songSharePanel" hidden>
+        <h3>Share this Song DiveIn prep</h3>
+        <p>
+          Create a public RootedByte link for this generated output.
+          Anyone with the link can view it.
+        </p>
+
+        <div class="share-panel__actions">
+          <button class="primary-action" type="button" id="shareToneOutput">
+            Share Song DiveIn
+          </button>
+        </div>
+
+        <div class="status" id="toneShareStatus" role="status" aria-live="polite"></div>
+        <div class="share-link-box" id="toneShareLink" hidden></div>
+      </section>
+      
     </section>
   </main>
 
@@ -1138,6 +1209,13 @@
     const rehearsalPrepResult = $('#rehearsalPrepResult');
     const spiritualReflectionResult = $('#spiritualReflectionResult');
     const instrumentGuidanceResult = $('#instrumentGuidanceResult');
+    const songSharePanel = $('#songSharePanel');
+const shareToneOutput = $('#shareToneOutput');
+const toneShareStatus = $('#toneShareStatus');
+const toneShareLink = $('#toneShareLink');
+
+let latestToneOutput = null;
+    
 
     const INSTRUMENT_LABELS = {
       'acoustic-guitar': 'Acoustic Guitar',
@@ -1184,6 +1262,106 @@
         body: JSON.stringify(body)
       });
 
+      async function createSharedOutput({ appType, title, inputSummary, output, statusElement, linkElement }) {
+  statusElement.textContent = 'Creating share link...';
+  statusElement.className = 'status';
+
+  const response = await fetch('/api/share', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      appType,
+      title,
+      inputSummary,
+      output
+    })
+  });
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(data.error || 'Could not create share link.');
+  }
+
+  linkElement.hidden = false;
+  linkElement.textContent = data.shareUrl;
+
+  try {
+    await navigator.clipboard.writeText(data.shareUrl);
+    statusElement.textContent = 'Share link created and copied.';
+  } catch {
+    statusElement.textContent = 'Share link created.';
+  }
+
+  if (navigator.share) {
+    try {
+      await navigator.share({
+        title,
+        text: `View this ${title} from RootedByte.`,
+        url: data.shareUrl
+      });
+    } catch {
+      // User cancelled native share. Link is still created.
+    }
+  }
+
+  return data;
+}
+
+function getToneShareTitle(output) {
+  const song = String(output?.song || '').trim();
+  const artist = String(output?.artist || '').trim();
+
+  if (song && artist) return `Song DiveIn: ${song} by ${artist}`;
+  if (song) return `Song DiveIn: ${song}`;
+
+  return 'Song DiveIn Reflection';
+}
+
+function buildToneShareOutput(data, instrument) {
+  return {
+    song: data.song || '',
+    artist: data.artist || '',
+    bpm: data.bpm || '',
+    key: data.key || '',
+    metadata_confidence: data.metadata_confidence || '',
+    instrument,
+    instrument_label: getInstrumentLabel(instrument),
+
+    lyrics_search_query: data.lyrics_search_query || '',
+    chord_search_query: data.chord_search_query || '',
+    tutorial_search_query: data.tutorial_search_query || '',
+
+    song_meaning: data.song_meaning || '',
+    faith_lens: data.faith_lens || '',
+    arrangement_feel: data.arrangement_feel || '',
+    listening_guide: data.listening_guide || '',
+    rehearsal_prep: data.rehearsal_prep || '',
+    spiritual_reflection: data.spiritual_reflection || '',
+    instrument_guidance: data.instrument_guidance || ''
+  };
+}
+
+function showToneSharePanel(outputData) {
+  latestToneOutput = outputData;
+
+  if (songSharePanel) {
+    songSharePanel.hidden = false;
+  }
+
+  if (toneShareStatus) {
+    toneShareStatus.className = 'status';
+    toneShareStatus.textContent = '';
+  }
+
+  if (toneShareLink) {
+    toneShareLink.hidden = true;
+    toneShareLink.textContent = '';
+  }
+}
+      
       const data = await response.json().catch(() => ({}));
 
       if (!response.ok) {
@@ -1377,6 +1555,32 @@
       );
     }
 
+    shareToneOutput?.addEventListener('click', async () => {
+  if (!latestToneOutput) {
+    setStatus(toneShareStatus, 'Generate a Song DiveIn prep first.', 'error');
+    return;
+  }
+
+  shareToneOutput.disabled = true;
+
+  try {
+    const title = getToneShareTitle(latestToneOutput);
+
+    await createSharedOutput({
+      appType: 'tone',
+      title,
+      inputSummary: 'Shared Song DiveIn prep',
+      output: latestToneOutput,
+      statusElement: toneShareStatus,
+      linkElement: toneShareLink
+    });
+  } catch (error) {
+    setStatus(toneShareStatus, error.message, 'error');
+  } finally {
+    shareToneOutput.disabled = false;
+  }
+});
+    
     songSearchForm?.addEventListener('submit', async (event) => {
       event.preventDefault();
 
@@ -1407,7 +1611,12 @@
         });
 
         renderSongDiveIn(data, instrument);
-        setStatus(toneStatus, 'Song DiveIn prep is ready.');
+
+const toneShareOutput = buildToneShareOutput(data, instrument);
+showToneSharePanel(toneShareOutput);
+
+setStatus(toneStatus, 'Song DiveIn prep is ready.');
+        
       } catch (error) {
         renderErrorState(error);
       }
