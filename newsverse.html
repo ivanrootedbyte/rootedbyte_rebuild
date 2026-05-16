@@ -684,6 +684,40 @@ box-shadow:
       border-top: 1px solid var(--news-line);
     }
 
+    .share-panel {
+  margin-top: 1rem;
+  padding: 1.1rem;
+  border: 1px solid var(--news-line);
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.72);
+}
+
+.share-panel p {
+  margin: 0.65rem 0 0;
+  color: var(--news-muted);
+}
+
+.share-panel__actions {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-top: 1rem;
+}
+
+.share-link-box {
+  width: 100%;
+  min-height: 46px;
+  margin-top: 0.85rem;
+  padding: 0.75rem 0.9rem;
+  border: 1px solid var(--news-line);
+  border-radius: 16px;
+  color: var(--news-ink);
+  background: rgba(255, 255, 255, 0.78);
+  overflow-wrap: anywhere;
+  font-size: 0.92rem;
+  font-weight: 800;
+}
+    
     @media (prefers-reduced-motion: reduce) {
       .news-ticker__track {
         animation: none;
@@ -1036,6 +1070,101 @@ box-shadow:
       `;
     }
 
+    function renderSharePanel() {
+  return `
+    <div class="share-panel">
+      <h3>Share this NewsVerse reflection</h3>
+      <p>
+        Create a public RootedByte link for this generated output.
+        Anyone with the link can view it.
+      </p>
+
+      <div class="share-panel__actions">
+        <button class="primary-action" type="button" id="shareNewsOutput">
+          Share reflection
+        </button>
+      </div>
+
+      <div class="status" id="newsShareStatus" role="status" aria-live="polite"></div>
+      <div class="share-link-box" id="newsShareLink" hidden></div>
+    </div>
+  `;
+}
+
+async function createSharedOutput({ appType, title, inputSummary, output, statusElement, linkElement }) {
+  statusElement.textContent = 'Creating share link...';
+
+  const response = await fetch('/api/share', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      appType,
+      title,
+      inputSummary,
+      output
+    })
+  });
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(data.error || 'Could not create share link.');
+  }
+
+  linkElement.hidden = false;
+  linkElement.textContent = data.shareUrl;
+
+  try {
+    await navigator.clipboard.writeText(data.shareUrl);
+    statusElement.textContent = 'Share link created and copied.';
+  } catch {
+    statusElement.textContent = 'Share link created.';
+  }
+
+  if (navigator.share) {
+    try {
+      await navigator.share({
+        title,
+        text: `View this ${title} from RootedByte.`,
+        url: data.shareUrl
+      });
+    } catch {
+      // User cancelled native share. Link is still created.
+    }
+  }
+
+  return data;
+}
+
+function attachNewsShareButton(outputData) {
+  const button = document.querySelector('#shareNewsOutput');
+  const statusElement = document.querySelector('#newsShareStatus');
+  const linkElement = document.querySelector('#newsShareLink');
+
+  if (!button || !statusElement || !linkElement) return;
+
+  button.addEventListener('click', async () => {
+    button.disabled = true;
+
+    try {
+      await createSharedOutput({
+        appType: 'newsverse',
+        title: 'NewsVerse Reflection',
+        inputSummary: 'Shared NewsVerse reflection',
+        output: outputData,
+        statusElement,
+        linkElement
+      });
+    } catch (error) {
+      statusElement.className = 'status error';
+      statusElement.textContent = error.message;
+    } finally {
+      button.disabled = false;
+    }
+  });
+}
     const newsForm = $('#newsForm');
 
     if (newsForm) {
@@ -1083,7 +1212,8 @@ box-shadow:
             fallbackReason: article.fallbackReason || ''
           });
 
-          result.innerHTML = renderNews(data);
+          result.innerHTML = renderNews(data) + renderSharePanel();
+attachNewsShareButton(data);
 
           setStatus(
             status,
