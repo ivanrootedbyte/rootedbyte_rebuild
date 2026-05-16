@@ -667,17 +667,7 @@
       border-top: 1px solid var(--song-border);
     }
 
-    @media (prefers-color-scheme: dark) {
-      :root {
-        --song-bg: #151a2f;
-        --song-card: rgba(26, 32, 54, 0.76);
-        --song-card-strong: rgba(31, 38, 63, 0.92);
-        --song-text: #f8fafc;
-        --song-muted: #cbd5e1;
-        --song-border: rgba(255, 255, 255, 0.12);
-      }
-
-      .share-panel {
+    .share-panel {
   width: min(1120px, 100%);
   margin: 0 auto 1.25rem;
   padding: clamp(1.1rem, 3vw, 2rem);
@@ -724,6 +714,17 @@
   font-weight: 800;
 }
 
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --song-bg: #151a2f;
+        --song-card: rgba(26, 32, 54, 0.76);
+        --song-card-strong: rgba(31, 38, 63, 0.92);
+        --song-text: #f8fafc;
+        --song-muted: #cbd5e1;
+        --song-border: rgba(255, 255, 255, 0.12);
+      }
+
+      
 @media (prefers-color-scheme: dark) {
   .share-link-box {
     background: rgba(255, 255, 255, 0.08);
@@ -1254,15 +1255,24 @@ let latestToneOutput = null;
     }
 
     async function postJson(url, body) {
-      const response = await fetch(url, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(body)
-      });
+  const response = await fetch(url, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(body)
+  });
 
-      async function createSharedOutput({ appType, title, inputSummary, output, statusElement, linkElement }) {
+  const data = await response.json().catch(() => ({}));
+
+  if (!response.ok) {
+    throw new Error(data.error || 'Something went wrong. Please try again.');
+  }
+
+  return data;
+}
+
+async function createSharedOutput({ appType, title, inputSummary, output, statusElement, linkElement }) {
   statusElement.textContent = 'Creating share link...';
   statusElement.className = 'status';
 
@@ -1278,58 +1288,6 @@ let latestToneOutput = null;
       output
     })
   });
-
-        function getToneShareTitle(output) {
-  const song = String(output?.song || '').trim();
-  const artist = String(output?.artist || '').trim();
-
-  if (song && artist) return `Song DiveIn: ${song} by ${artist}`;
-  if (song) return `Song DiveIn: ${song}`;
-
-  return 'Song DiveIn Reflection';
-}
-
-function buildToneShareOutput(data, instrument) {
-  return {
-    song: data.song || '',
-    artist: data.artist || '',
-    bpm: data.bpm || '',
-    key: data.key || '',
-    metadata_confidence: data.metadata_confidence || '',
-    instrument,
-    instrument_label: getInstrumentLabel(instrument),
-
-    lyrics_search_query: data.lyrics_search_query || '',
-    chord_search_query: data.chord_search_query || '',
-    tutorial_search_query: data.tutorial_search_query || '',
-
-    song_meaning: data.song_meaning || '',
-    faith_lens: data.faith_lens || '',
-    arrangement_feel: data.arrangement_feel || '',
-    listening_guide: data.listening_guide || '',
-    rehearsal_prep: data.rehearsal_prep || '',
-    spiritual_reflection: data.spiritual_reflection || '',
-    instrument_guidance: data.instrument_guidance || ''
-  };
-}
-
-function showToneSharePanel(outputData) {
-  latestToneOutput = outputData;
-
-  if (songSharePanel) {
-    songSharePanel.hidden = false;
-  }
-
-  if (toneShareStatus) {
-    toneShareStatus.className = 'status';
-    toneShareStatus.textContent = '';
-  }
-
-  if (toneShareLink) {
-    toneShareLink.hidden = true;
-    toneShareLink.textContent = '';
-  }
-}
 
   const data = await response.json();
 
@@ -1413,19 +1371,6 @@ function showToneSharePanel(outputData) {
     toneShareLink.textContent = '';
   }
 }
-      
-      const data = await response.json().catch(() => ({}));
-
-      if (!response.ok) {
-        throw new Error(data.error || 'Something went wrong. Please try again.');
-      }
-
-      return data;
-    }
-
-    function buildSearchUrl(query) {
-      return `https://www.google.com/search?q=${encodeURIComponent(query || '')}`;
-    }
 
     function getInstrumentLabel(instrument) {
       return INSTRUMENT_LABELS[instrument] || 'Instrument';
