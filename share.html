@@ -491,64 +491,78 @@
     }
 
     function renderTone(output) {
-  const verses = Array.isArray(output.verses) ? output.verses : [];
-  const themes = Array.isArray(output.themes) ? output.themes : [];
-  const reflections = Array.isArray(output.reflections) ? output.reflections : [];
+  const song = output.song || 'Shared Song DiveIn Prep';
+  const artist = output.artist || '';
+  const title = artist ? `${song} by ${artist}` : song;
+
+  const details = [
+    ['BPM', output.bpm],
+    ['Key', output.key],
+    ['Confidence', output.metadata_confidence],
+    ['Role', output.instrument_label]
+  ].filter((item) => item[1]);
+
+  const cards = [
+    ['Heart Check', output.song_meaning],
+    ['Faith Lens', output.faith_lens],
+    ['Song Flow', output.arrangement_feel],
+    ['Listen Closely', output.listening_guide],
+    ['Rehearsal Moves', output.rehearsal_prep],
+    ['Before You Lead', output.spiritual_reflection],
+    ['Role Coaching', output.instrument_guidance]
+  ].filter((item) => item[1]);
 
   return `
     <article class="result-card">
       <span class="pill">Song DiveIn Summary</span>
-      <h2>${escapeHtml(output.song_title || output.title || "Shared Song DiveIn Reflection")}</h2>
-      <p class="lead">${escapeHtml(output.summary || output.overview || "Shared Song DiveIn reflection from RootedByte.")}</p>
+      <h2>${escapeHtml(title)}</h2>
+      ${
+        details.length
+          ? `<div class="plan-grid">
+              ${details.map(([label, value]) => `
+                <div class="plan-item">
+                  <strong>${escapeHtml(label)}</strong>
+                  <p>${escapeHtml(value)}</p>
+                </div>
+              `).join('')}
+            </div>`
+          : ''
+      }
     </article>
 
-    ${
-      output.christian_lens || output.faith_reflection
-        ? `<article class="result-card highlight">
-            <span class="pill">Faith Reflection</span>
-            <p>${escapeHtml(output.christian_lens || output.faith_reflection)}</p>
-          </article>`
-        : ""
-    }
+    ${cards.map(([label, value], index) => `
+      <article class="result-card ${index === 1 ? 'highlight' : ''}">
+        <span class="pill">${escapeHtml(label)}</span>
+        ${renderSharedTextBlock(value)}
+      </article>
+    `).join('')}
+  `;
+}
 
-    ${
-      themes.length
-        ? `<article class="result-card">
-            <span class="pill">Themes</span>
-            <ul>${themes.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}</ul>
-          </article>`
-        : ""
-    }
+function renderSharedTextBlock(value) {
+  const text = String(value || '').trim();
 
-    ${
-      verses.length
-        ? `<article class="result-card highlight">
-            <span class="pill">Scripture Connections</span>
-            ${verses.map((verse) => `
-              <blockquote>${escapeHtml(verse.text || verse.verse || "")}</blockquote>
-              <p><strong>${escapeHtml(verse.reference || "")}</strong>${verse.reflection ? " — " + escapeHtml(verse.reflection) : ""}</p>
-            `).join("")}
-          </article>`
-        : ""
-    }
+  if (!text) return '<p>No details available.</p>';
 
-    ${
-      reflections.length
-        ? `<article class="result-card">
-            <span class="pill">Reflection Prompts</span>
-            <ol>${reflections.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}</ol>
-          </article>`
-        : ""
-    }
+  if (/<\/?[a-z][\s\S]*>/i.test(text)) {
+    return text;
+  }
 
-    ${
-      output.encouragement
-        ? `<article class="result-card">
-            <span class="pill">Encouragement</span>
-            <p>${escapeHtml(output.encouragement)}</p>
-          </article>`
-        : ""
-    }
+  const lines = text
+    .split('\n')
+    .map((line) => line.trim())
+    .filter(Boolean);
+
+  if (lines.length <= 1) {
+    return `<p>${escapeHtml(lines[0])}</p>`;
+  }
+
+  return `
+    <ul>
+      ${lines
+        .map((line) => `<li>${escapeHtml(line.replace(/^[-•*]\s*/, ''))}</li>`)
+        .join('')}
+    </ul>
   `;
 }
     
