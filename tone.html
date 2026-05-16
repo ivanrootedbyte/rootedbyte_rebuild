@@ -1279,6 +1279,58 @@ let latestToneOutput = null;
     })
   });
 
+        function getToneShareTitle(output) {
+  const song = String(output?.song || '').trim();
+  const artist = String(output?.artist || '').trim();
+
+  if (song && artist) return `Song DiveIn: ${song} by ${artist}`;
+  if (song) return `Song DiveIn: ${song}`;
+
+  return 'Song DiveIn Reflection';
+}
+
+function buildToneShareOutput(data, instrument) {
+  return {
+    song: data.song || '',
+    artist: data.artist || '',
+    bpm: data.bpm || '',
+    key: data.key || '',
+    metadata_confidence: data.metadata_confidence || '',
+    instrument,
+    instrument_label: getInstrumentLabel(instrument),
+
+    lyrics_search_query: data.lyrics_search_query || '',
+    chord_search_query: data.chord_search_query || '',
+    tutorial_search_query: data.tutorial_search_query || '',
+
+    song_meaning: data.song_meaning || '',
+    faith_lens: data.faith_lens || '',
+    arrangement_feel: data.arrangement_feel || '',
+    listening_guide: data.listening_guide || '',
+    rehearsal_prep: data.rehearsal_prep || '',
+    spiritual_reflection: data.spiritual_reflection || '',
+    instrument_guidance: data.instrument_guidance || ''
+  };
+}
+
+function showToneSharePanel(outputData) {
+  latestToneOutput = outputData;
+
+  if (songSharePanel) {
+    songSharePanel.hidden = false;
+  }
+
+  if (toneShareStatus) {
+    toneShareStatus.className = 'status';
+    toneShareStatus.textContent = '';
+  }
+
+  if (toneShareLink) {
+    toneShareLink.hidden = true;
+    toneShareLink.textContent = '';
+  }
+}
+
   const data = await response.json();
 
   if (!response.ok) {
