@@ -387,15 +387,26 @@
   }
 
   .nav-links a,
-  .nav-links button {
-    flex: 0 0 auto;
-    white-space: nowrap;
-    min-height: 36px;
-    padding: 0 0.68rem;
-    border-radius: 999px;
-    font-size: 0.8rem;
-  }
+.nav-links button {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  min-height: 36px;
+  padding: 0 0.68rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  line-height: 1;
+}
 
+  .nav-links button {
+  appearance: none;
+  -webkit-appearance: none;
+  margin: 0;
+  font-family: inherit;
+}
+      
   .account-grid {
     grid-template-columns: 1fr;
   }
