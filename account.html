@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <meta
+    name="description"
+    content="Your RootedByte account for saved reflections, shared outputs, and private journal entries."
+  />
+
+  <title>My Account | RootedByte</title>
+
+  <style>
+    :root {
+      --bg: #eef3ea;
+      --bg-soft: #fbf8ef;
+      --card: rgba(255, 252, 244, 0.9);
+      --card-strong: rgba(255, 255, 255, 0.96);
+      --text: #17231b;
+      --muted: #647363;
+      --line: rgba(23, 35, 27, 0.12);
+      --forest: #254d35;
+      --forest-dark: #142a1e;
+      --cream: #fbf8ef;
+      --danger: #a64032;
+      --shadow: 0 24px 70px rgba(34, 48, 37, 0.13);
+      --radius: 30px;
+      --max: 1100px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(37, 77, 53, 0.14), transparent 30rem),
+        radial-gradient(circle at 86% 12%, rgba(111, 127, 79, 0.15), transparent 30rem),
+        linear-gradient(180deg, #fbf8ef 0%, #eef3ea 52%, #dfe8d9 100%);
+      line-height: 1.6;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button,
+    textarea {
+      font: inherit;
+    }
+
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(18px);
+      background: rgba(251, 248, 239, 0.84);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .nav {
+      width: min(var(--max), 100%);
+      margin: 0 auto;
+      padding: 16px 22px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--text);
+      font-weight: 900;
+      letter-spacing: -0.04em;
+      font-size: 1.15rem;
+    }
+
+    .brand-mark {
+      display: grid;
+      place-items: center;
+      width: 46px;
+      height: 46px;
+      padding: 3px;
+      border: 2px solid transparent;
+      border-radius: 17px;
+      background:
+        linear-gradient(var(--cream), var(--cream)) padding-box,
+        linear-gradient(135deg, #ff6b6b, #f7b267, #ffe66d, #4ecdc4, #5b8def, #b388ff) border-box;
+      overflow: hidden;
+      flex: 0 0 auto;
+      box-shadow: 0 10px 24px rgba(34, 48, 37, 0.14);
+    }
+
+    .brand-mark img {
+      width: 118%;
+      height: 118%;
+      object-fit: cover;
+      object-position: center;
+      display: block;
+      border-radius: 14px;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .nav-links a,
+    .nav-links button {
+      color: var(--muted);
+      padding: 9px 13px;
+      border-radius: 999px;
+      border: 0;
+      background: transparent;
+      transition: background 180ms ease, color 180ms ease;
+      font-size: 0.95rem;
+      font-weight: 850;
+      cursor: pointer;
+    }
+
+    .nav-links a:hover,
+    .nav-links a.active,
+    .nav-links button:hover {
+      color: var(--text);
+      background: rgba(37, 77, 53, 0.1);
+    }
+
+    .page {
+      width: min(var(--max), calc(100% - 2rem));
+      margin: 0 auto;
+      padding: clamp(2rem, 5vw, 4rem) 0;
+    }
+
+    .hero-card,
+    .panel,
+    .saved-card {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--card);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(22px);
+    }
+
+    .hero-card {
+      padding: clamp(1.5rem, 4vw, 3rem);
+      margin-bottom: 1rem;
+      background:
+        linear-gradient(135deg, rgba(255, 252, 244, 0.94), rgba(255, 255, 255, 0.86)),
+        radial-gradient(circle at top right, rgba(37, 77, 53, 0.1), transparent 18rem);
+    }
+
+    .pill {
+      display: inline-flex;
+      margin-bottom: 1rem;
+      padding: 0.5rem 0.85rem;
+      border-radius: 999px;
+      color: var(--forest-dark);
+      background: rgba(37, 77, 53, 0.1);
+      border: 1px solid rgba(37, 77, 53, 0.16);
+      font-size: 0.82rem;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    h1,
+    h2,
+    h3 {
+      margin: 0;
+      color: var(--text);
+      line-height: 1.05;
+      letter-spacing: -0.055em;
+    }
+
+    h1 {
+      font-size: clamp(2.6rem, 7vw, 5.3rem);
+      font-weight: 950;
+    }
+
+    h2 {
+      font-size: clamp(1.55rem, 4vw, 2.7rem);
+      font-weight: 950;
+    }
+
+    h3 {
+      font-size: 1.35rem;
+      font-weight: 920;
+    }
+
+    .lead,
+    .muted,
+    .status {
+      color: var(--muted);
+    }
+
+    .lead {
+      max-width: 760px;
+      margin: 1rem 0 0;
+      font-size: clamp(1.04rem, 2vw, 1.22rem);
+    }
+
+    .account-grid {
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      gap: 1rem;
+      align-items: start;
+    }
+
+    .panel {
+      padding: 1.25rem;
+    }
+
+    .account-tabs {
+      display: grid;
+      gap: 0.65rem;
+    }
+
+    .tab-button,
+    .btn {
+      min-height: 46px;
+      border-radius: 999px;
+      padding: 0 1rem;
+      border: 1px solid var(--line);
+      color: var(--text);
+      background: rgba(255, 255, 255, 0.72);
+      font-weight: 900;
+      cursor: pointer;
+    }
+
+    .tab-button.active,
+    .btn.primary {
+      color: var(--cream);
+      background: linear-gradient(135deg, var(--forest-dark), var(--forest));
+      border: 0;
+    }
+
+    .saved-list {
+      display: grid;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .saved-card {
+      padding: 1.15rem;
+      background: var(--card-strong);
+    }
+
+    .saved-card__meta {
+      margin: 0.35rem 0 0;
+      color: var(--muted);
+      font-size: 0.92rem;
+      font-weight: 750;
+    }
+
+    .saved-card__actions {
+      display: flex;
+      gap: 0.65rem;
+      flex-wrap: wrap;
+      margin-top: 1rem;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 120px;
+      margin-top: 0.9rem;
+      padding: 1rem;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      color: var(--text);
+      background: rgba(255, 255, 255, 0.86);
+      resize: vertical;
+      outline: none;
+    }
+
+    textarea:focus {
+      border-color: rgba(37, 77, 53, 0.38);
+      box-shadow: 0 0 0 4px rgba(37, 77, 53, 0.1);
+    }
+
+    .empty-state {
+      padding: 1.25rem;
+      border: 1px dashed var(--line);
+      border-radius: 24px;
+      color: var(--muted);
+      background: rgba(255, 255, 255, 0.45);
+    }
+
+    .status.error {
+      color: var(--danger);
+    }
+
+    @media (max-width: 820px) {
+      .nav {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .nav-links {
+        justify-content: flex-start;
+      }
+
+      .account-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header class="site-header">
+    <nav class="nav" aria-label="Primary navigation">
+      <a class="brand" href="index.html" aria-label="RootedByte home">
+        <span class="brand-mark">
+          <img src="images/rootedbyte-icon.png" alt="" />
+        </span>
+        <span>RootedByte</span>
+      </a>
+
+      <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="tone.html">Song DiveIn</a>
+        <a href="newsverse.html">NewsVerse</a>
+        <a href="rootedos.html">RootedOS</a>
+        <a href="account.html" class="active">My Account</a>
+        <button type="button" id="signOutButton">Sign Out</button>
+      </div>
+    </nav>
+  </header>
+
+  <main class="page">
+    <section class="hero-card">
+      <span class="pill">Private Account</span>
+      <h1>My Account</h1>
+      <p class="lead" id="accountLead">
+        Loading your saved outputs and journal space...
+      </p>
+    </section>
+
+    <section class="account-grid">
+      <aside class="panel">
+        <div class="account-tabs">
+          <button class="tab-button active" type="button" data-tab="saved">Saved Outputs</button>
+          <button class="tab-button" type="button" data-tab="shared">Shared Links</button>
+          <button class="tab-button" type="button" data-tab="journal">Journal</button>
+        </div>
+      </aside>
+
+      <section class="panel">
+        <div id="accountStatus" class="status" role="status" aria-live="polite"></div>
+        <div id="accountContent"></div>
+      </section>
+    </section>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <script>
+    const $ = (selector) => document.querySelector(selector);
+    const $$ = (selector) => Array.from(document.querySelectorAll(selector));
+
+    const accountLead = $('#accountLead');
+    const accountStatus = $('#accountStatus');
+    const accountContent = $('#accountContent');
+    const signOutButton = $('#signOutButton');
+
+    let supabaseClient = null;
+    let currentUser = null;
+    let currentTab = 'saved';
+
+    function escapeHtml(value) {
+      return String(value ?? '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    function formatDate(value) {
+      if (!value) return '';
+
+      try {
+        return new Intl.DateTimeFormat(undefined, {
+          year: 'numeric',
+          month: 'short',
+          day: 'numeric'
+        }).format(new Date(value));
+      } catch {
+        return '';
+      }
+    }
+
+    function setStatus(message, type = 'info') {
+      accountStatus.className = type === 'error' ? 'status error' : 'status';
+      accountStatus.textContent = message;
+    }
+
+    function setActiveTab(tab) {
+      currentTab = tab;
+
+      $$('.tab-button').forEach((button) => {
+        button.classList.toggle('active', button.dataset.tab === tab);
+      });
+
+      renderCurrentTab();
+    }
+
+    async function loadSupabaseClient() {
+      const response = await fetch('/api/public-config');
+      const config = await response.json();
+
+      if (!response.ok) {
+        throw new Error(config.error || 'Could not load Supabase config.');
+      }
+
+      supabaseClient = window.supabase.createClient(
+        config.supabaseUrl,
+        config.supabaseAnonKey
+      );
+
+      const { data } = await supabaseClient.auth.getSession();
+
+      if (!data.session) {
+        window.location.href = 'signin.html';
+        return;
+      }
+
+      currentUser = data.session.user;
+      accountLead.textContent = `Signed in as ${currentUser.email}. Saved outputs are private unless you share them publicly.`;
+
+      renderCurrentTab();
+    }
+
+    async function fetchSavedOutputs() {
+      const { data, error } = await supabaseClient
+        .from('saved_outputs')
+        .select('id, app_type, title, input_summary, output_json, created_at')
+        .order('created_at', { ascending: false });
+
+      if (error) throw error;
+
+      return data || [];
+    }
+
+    async function fetchJournalEntries() {
+      const { data, error } = await supabaseClient
+        .from('journal_entries')
+        .select('id, saved_output_id, entry_text, created_at, updated_at')
+        .order('updated_at', { ascending: false });
+
+      if (error) throw error;
+
+      return data || [];
+    }
+
+    function getAppLabel(appType) {
+      if (appType === 'rootedos') return 'RootedOS';
+      if (appType === 'newsverse') return 'NewsVerse';
+      if (appType === 'tone') return 'Song DiveIn';
+
+      return 'RootedByte';
+    }
+
+    async function renderSavedTab() {
+      setStatus('Loading saved outputs...');
+      accountContent.innerHTML = '';
+
+      try {
+        const outputs = await fetchSavedOutputs();
+
+        if (!outputs.length) {
+          accountContent.innerHTML = `
+            <div class="empty-state">
+              No saved outputs yet. Generate a RootedOS, NewsVerse, or Song DiveIn result, then choose Save privately.
+            </div>
+          `;
+          setStatus('');
+          return;
+        }
+
+        accountContent.innerHTML = `
+          <h2>Saved Outputs</h2>
+          <div class="saved-list">
+            ${outputs.map((item) => `
+              <article class="saved-card">
+                <span class="pill">${escapeHtml(getAppLabel(item.app_type))}</span>
+                <h3>${escapeHtml(item.title || `${getAppLabel(item.app_type)} Output`)}</h3>
+                <p class="saved-card__meta">
+                  Saved ${escapeHtml(formatDate(item.created_at))}
+                  ${item.input_summary ? ` • ${escapeHtml(item.input_summary)}` : ''}
+                </p>
+
+                <div class="saved-card__actions">
+                  <button class="btn" type="button" data-journal-for="${escapeHtml(item.id)}">
+                    Journal
+                  </button>
+                  <button class="btn" type="button" data-delete-output="${escapeHtml(item.id)}">
+                    Delete
+                  </button>
+                </div>
+
+                <div id="journal-${escapeHtml(item.id)}" hidden>
+                  <textarea placeholder="Write a private journal entry for this saved output..."></textarea>
+                  <div class="saved-card__actions">
+                    <button class="btn primary" type="button" data-save-journal="${escapeHtml(item.id)}">
+                      Save Journal Entry
+                    </button>
+                  </div>
+                </div>
+              </article>
+            `).join('')}
+          </div>
+        `;
+
+        setStatus('');
+      } catch (error) {
+        setStatus(error.message || 'Could not load saved outputs.', 'error');
+      }
+    }
+
+    async function renderSharedTab() {
+      accountContent.innerHTML = `
+        <h2>Shared Links</h2>
+        <div class="empty-state">
+          Shared links are currently public links created from each app.
+          In the next pass, we’ll connect shared links to signed-in accounts.
+        </div>
+      `;
+
+      setStatus('');
+    }
+
+    async function renderJournalTab() {
+      setStatus('Loading journal entries...');
+      accountContent.innerHTML = '';
+
+      try {
+        const entries = await fetchJournalEntries();
+
+        if (!entries.length) {
+          accountContent.innerHTML = `
+            <h2>Journal</h2>
+            <div class="empty-state">
+              No journal entries yet. Open a saved output and write a private reflection.
+            </div>
+          `;
+          setStatus('');
+          return;
+        }
+
+        accountContent.innerHTML = `
+          <h2>Journal</h2>
+          <div class="saved-list">
+            ${entries.map((entry) => `
+              <article class="saved-card">
+                <p>${escapeHtml(entry.entry_text)}</p>
+                <p class="saved-card__meta">Updated ${escapeHtml(formatDate(entry.updated_at || entry.created_at))}</p>
+              </article>
+            `).join('')}
+          </div>
+        `;
+
+        setStatus('');
+      } catch (error) {
+        setStatus(error.message || 'Could not load journal entries.', 'error');
+      }
+    }
+
+    function renderCurrentTab() {
+      if (!supabaseClient || !currentUser) return;
+
+      if (currentTab === 'saved') {
+        renderSavedTab();
+      } else if (currentTab === 'shared') {
+        renderSharedTab();
+      } else if (currentTab === 'journal') {
+        renderJournalTab();
+      }
+    }
+
+    accountContent.addEventListener('click', async (event) => {
+      const journalButton = event.target.closest('[data-journal-for]');
+      const saveJournalButton = event.target.closest('[data-save-journal]');
+      const deleteButton = event.target.closest('[data-delete-output]');
+
+      if (journalButton) {
+        const id = journalButton.dataset.journalFor;
+        const panel = document.getElementById(`journal-${id}`);
+
+        if (panel) {
+          panel.hidden = !panel.hidden;
+        }
+
+        return;
+      }
+
+      if (saveJournalButton) {
+        const savedOutputId = saveJournalButton.dataset.saveJournal;
+        const panel = document.getElementById(`journal-${savedOutputId}`);
+        const textarea = panel?.querySelector('textarea');
+        const entryText = textarea?.value.trim();
+
+        if (!entryText) {
+          setStatus('Write a journal entry before saving.', 'error');
+          return;
+        }
+
+        setStatus('Saving journal entry...');
+
+        const { error } = await supabaseClient
+          .from('journal_entries')
+          .insert({
+            user_id: currentUser.id,
+            saved_output_id: savedOutputId,
+            entry_text: entryText
+          });
+
+        if (error) {
+          setStatus(error.message || 'Could not save journal entry.', 'error');
+          return;
+        }
+
+        textarea.value = '';
+        panel.hidden = true;
+        setStatus('Journal entry saved.');
+        return;
+      }
+
+      if (deleteButton) {
+        const id = deleteButton.dataset.deleteOutput;
+
+        const { error } = await supabaseClient
+          .from('saved_outputs')
+          .delete()
+          .eq('id', id);
+
+        if (error) {
+          setStatus(error.message || 'Could not delete saved output.', 'error');
+          return;
+        }
+
+        setStatus('Saved output deleted.');
+        renderSavedTab();
+      }
+    });
+
+    $$('.tab-button').forEach((button) => {
+      button.addEventListener('click', () => setActiveTab(button.dataset.tab));
+    });
+
+    signOutButton.addEventListener('click', async () => {
+      if (!supabaseClient) return;
+
+      await supabaseClient.auth.signOut();
+      window.location.href = 'signin.html';
+    });
+
+    loadSupabaseClient().catch((error) => {
+      setStatus(error.message || 'Could not load account system.', 'error');
+    });
+  </script>
+</body>
+</html>
