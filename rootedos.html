@@ -364,13 +364,14 @@
     }
 
     .form-card {
-      padding: clamp(1.25rem, 3vw, 2rem);
-      border-radius: 30px;
-      background:
-        linear-gradient(135deg, rgba(255, 252, 244, 0.98), rgba(255, 255, 255, 0.94));
-      border: 1px solid var(--line);
-      box-shadow: 0 22px 54px rgba(34, 48, 37, 0.11);
-    }
+  padding: clamp(1.25rem, 3vw, 2rem);
+  border-radius: 30px;
+  background:
+    radial-gradient(circle at top left, rgba(37, 77, 53, 0.08), transparent 18rem),
+    linear-gradient(135deg, rgba(245, 240, 226, 0.98), rgba(255, 252, 244, 0.96));
+  border: 1px solid rgba(37, 77, 53, 0.18);
+  box-shadow: 0 22px 54px rgba(34, 48, 37, 0.14);
+}
 
     .rootedos-step {
       min-height: 210px;
@@ -453,10 +454,10 @@
   justify-content: flex-start;
   border-radius: 18px;
   position: relative;
-  border: 2px solid transparent;
+  border: 2px solid rgba(37, 77, 53, 0.16);
   background:
-    linear-gradient(rgba(255, 255, 255, 0.72), rgba(255, 255, 255, 0.72)) padding-box,
-    linear-gradient(135deg, transparent, transparent) border-box;
+    linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.84)) padding-box,
+    linear-gradient(135deg, rgba(37, 77, 53, 0.14), rgba(201, 154, 82, 0.14)) border-box;
 }
 
 .choice-button:hover,
