@@ -1113,24 +1113,29 @@
 
   return `
     <div class="share-panel">
-      <h3>Share this ${appLabel}</h3>
+      <h3>Save or share this ${appLabel}</h3>
       <p>
-        Create a public RootedByte link for this generated output.
-        Anyone with the link can view it.
+        Save privately to your account, or create a public RootedByte link
+        that anyone with the link can view.
       </p>
 
       <div class="share-panel__actions">
-        <button class="btn primary small" type="button" id="shareRootedOutput">
-          Share reflection
+        <button class="btn primary small" type="button" id="saveRootedOutput">
+          Save privately
+        </button>
+
+        <button class="btn small" type="button" id="shareRootedOutput">
+          Share publicly
         </button>
       </div>
 
+      <div class="status" id="rootedSaveStatus" role="status" aria-live="polite"></div>
       <div class="status" id="rootedShareStatus" role="status" aria-live="polite"></div>
       <div class="share-link-box" id="rootedShareLink" hidden></div>
     </div>
   `;
 }
-
+    
 async function createSharedOutput({ appType, title, inputSummary, output, statusElement, linkElement }) {
   statusElement.textContent = 'Creating share link...';
 
@@ -1178,6 +1183,46 @@ async function createSharedOutput({ appType, title, inputSummary, output, status
   return data;
 }
 
+  function attachRootedSaveButton(outputData) {
+  const button = document.querySelector('#saveRootedOutput');
+  const statusElement = document.querySelector('#rootedSaveStatus');
+
+  if (!button || !statusElement) return;
+
+  button.addEventListener('click', async () => {
+    button.disabled = true;
+    statusElement.className = 'status';
+    statusElement.textContent = 'Saving privately...';
+
+    try {
+      if (!window.RootedByteSaveOutput || !window.RootedByteSaveOutput.save) {
+        throw new Error('Private saving is not ready yet. Please refresh and try again.');
+      }
+
+      const result = await window.RootedByteSaveOutput.save({
+        appType: 'rootedos',
+        title: 'RootedOS Reflection',
+        inputSummary: 'Private RootedOS reflection',
+        outputJson: outputData
+      });
+
+      if (!result.ok) {
+        statusElement.className = 'status error';
+        statusElement.textContent = result.message || 'Could not save privately.';
+        return;
+      }
+
+      statusElement.className = 'status';
+      statusElement.textContent = 'Saved privately to your account.';
+    } catch (error) {
+      statusElement.className = 'status error';
+      statusElement.textContent = error.message || 'Could not save privately.';
+    } finally {
+      button.disabled = false;
+    }
+  });
+}
+    
 function attachRootedShareButton(outputData) {
   const button = document.querySelector('#shareRootedOutput');
   const statusElement = document.querySelector('#rootedShareStatus');
@@ -1220,8 +1265,9 @@ function attachRootedShareButton(outputData) {
       try {
         const data = await postJson('/api/rootedos', { answers: rootedAnswers });
         result.innerHTML = renderRootedPlan(data) + renderSharePanel('rootedos');
+attachRootedSaveButton(data);
 attachRootedShareButton(data);
-        setStatus($('#rootedStatus'), 'RootedOS plan ready.');
+setStatus($('#rootedStatus'), 'RootedOS plan ready.');
       } catch (error) {
         setStatus($('#rootedStatus'), error.message, 'error');
       } finally {
@@ -1276,7 +1322,8 @@ attachRootedShareButton(data);
   </script>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="js/rootedbyte-auth-nav.js"></script>
+<script src="js/rootedbyte-auth-nav.js"></script>
+<script src="js/rootedbyte-save-output.js"></script>
   
 </body>
 </html>
