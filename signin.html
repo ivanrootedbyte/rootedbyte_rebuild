@@ -420,6 +420,17 @@
           <input id="password" name="password" type="password" autocomplete="current-password" required minlength="6" />
         </div>
 
+        <div id="confirmPasswordGroup" hidden>
+  <label for="confirmPassword">Confirm password</label>
+  <input
+    id="confirmPassword"
+    name="confirmPassword"
+    type="password"
+    autocomplete="new-password"
+    minlength="6"
+  />
+</div>
+        
         <button class="btn primary" type="submit" id="authSubmit">Sign In</button>
         <div class="status" id="authStatus" role="status" aria-live="polite"></div>
       </form>
@@ -444,6 +455,8 @@
     const authStatus = $('#authStatus');
     const emailInput = $('#email');
     const passwordInput = $('#password');
+    const confirmPasswordGroup = $('#confirmPasswordGroup');
+    const confirmPasswordInput = $('#confirmPassword');
 
     let mode = 'signin';
     let supabaseClient = null;
@@ -468,7 +481,17 @@
 
       authSubmit.textContent = isSignUp ? 'Create Account' : 'Sign In';
       passwordInput.autocomplete = isSignUp ? 'new-password' : 'current-password';
-      setStatus('');
+
+if (confirmPasswordGroup && confirmPasswordInput) {
+  confirmPasswordGroup.hidden = !isSignUp;
+  confirmPasswordInput.required = isSignUp;
+
+  if (!isSignUp) {
+    confirmPasswordInput.value = '';
+  }
+}
+
+setStatus('');
     }
 
     async function loadSupabaseClient() {
@@ -503,12 +526,18 @@
       }
 
       const email = emailInput.value.trim();
-      const password = passwordInput.value;
+const password = passwordInput.value;
+const confirmPassword = confirmPasswordInput?.value || '';
 
-      if (!email || !password) {
-        setStatus('Enter your email and password.', 'error');
-        return;
-      }
+if (!email || !password) {
+  setStatus('Enter your email and password.', 'error');
+  return;
+}
+
+if (mode === 'signup' && password !== confirmPassword) {
+  setStatus('Passwords do not match.', 'error');
+  return;
+}
 
       authSubmit.disabled = true;
       setStatus(mode === 'signup' ? 'Creating your account...' : 'Signing you in...');
