@@ -146,7 +146,7 @@
 
 .desktop-nav {
   display: grid;
-  grid-template-columns: repeat(4, auto);
+  grid-template-columns: repeat(5, auto);
   align-items: center;
   gap: 6px;
   padding: 6px;
@@ -1066,6 +1066,36 @@
     display: none;
   }
 
+  .mobile-auth-link {
+  display: none;
+}
+  .header-inner {
+  position: relative;
+}
+
+.mobile-auth-link {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 38px;
+  padding: 0 0.9rem;
+  border-radius: 999px;
+  color: var(--cream-soft);
+  background: var(--charcoal);
+  border: 1px solid rgba(23, 32, 27, 0.08);
+  box-shadow: 0 10px 24px rgba(29, 36, 31, 0.14);
+  font-size: 0.82rem;
+  font-weight: 900;
+  white-space: nowrap;
+}
+
+.brand {
+  padding-right: 7.25rem;
+}
   .button::before {
     opacity: 1;
   }
@@ -1167,8 +1197,10 @@
   <a href="#apps" class="nav-tab">Apps</a>
   <a href="#purpose" class="nav-tab">Purpose</a>
   <a href="#contact" class="nav-tab">Contact</a>
-  <a href="signin.html" data-auth-link>Sign In</a>
+  <a href="signin.html" class="nav-tab" data-auth-link>Sign In</a>
 </nav>
+
+<a href="signin.html" class="mobile-auth-link" data-auth-link>Sign In</a>
 
 
       </div>
@@ -1375,7 +1407,7 @@
   <a href="#contact">Contact</a>
 </nav>
 
-</script>
+
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="js/rootedbyte-auth-nav.js"></script>
