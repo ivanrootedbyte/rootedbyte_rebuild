@@ -109,6 +109,12 @@
       border-radius: 14px;
     }
 
+    .nav-scroll-wrap {
+  display: flex;
+  justify-content: flex-end;
+  min-width: 0;
+}
+
     .nav-links {
       display: flex;
       align-items: center;
@@ -136,7 +142,7 @@
       color: var(--text);
       background: rgba(37, 77, 53, 0.1);
     }
-
+    
     .page {
       width: min(var(--max), calc(100% - 2rem));
       margin: 0 auto;
@@ -302,19 +308,99 @@
     }
 
     @media (max-width: 820px) {
-      .nav {
-        align-items: flex-start;
-        flex-direction: column;
-      }
+  .site-header {
+    padding: 0.7rem 0.85rem;
+  }
 
-      .nav-links {
-        justify-content: flex-start;
-      }
+  .nav {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 0.7rem;
+    width: 100%;
+    padding: 0;
+    overflow: hidden;
+  }
 
-      .account-grid {
-        grid-template-columns: 1fr;
-      }
-    }
+  .brand {
+    flex: 0 0 auto;
+    white-space: nowrap;
+  }
+
+  .brand-mark {
+    width: 34px;
+    height: 34px;
+    border-radius: 12px;
+  }
+
+  .brand span:last-child {
+    font-size: 0.95rem;
+  }
+
+  .nav-scroll-wrap {
+    position: relative;
+    flex: 1 1 auto;
+    min-width: 0;
+    max-width: 100%;
+    overflow: hidden;
+  }
+
+  .nav-scroll-wrap::after {
+    content: "›";
+    position: absolute;
+    right: 0.25rem;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 1.6rem;
+    height: 1.6rem;
+    display: grid;
+    place-items: center;
+    border-radius: 999px;
+    color: var(--text);
+    background: rgba(255, 255, 255, 0.7);
+    pointer-events: none;
+    font-size: 1.2rem;
+    font-weight: 900;
+  }
+
+  .nav-links {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    gap: 0.35rem;
+    max-width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    white-space: nowrap;
+    padding: 0.28rem 2rem 0.28rem 0.28rem;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.48);
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .nav-links::-webkit-scrollbar {
+    display: none;
+  }
+
+  .nav-links a,
+  .nav-links button {
+    flex: 0 0 auto;
+    white-space: nowrap;
+    min-height: 36px;
+    padding: 0 0.68rem;
+    border-radius: 999px;
+    font-size: 0.8rem;
+  }
+
+  .account-grid {
+    grid-template-columns: 1fr;
+  }
+}
+    
   </style>
 </head>
 
@@ -328,14 +414,16 @@
         <span>RootedByte</span>
       </a>
 
+   <div class="nav-scroll-wrap">
       <div class="nav-links">
-        <a href="index.html">Home</a>
-        <a href="tone.html">Song DiveIn</a>
-        <a href="newsverse.html">NewsVerse</a>
-        <a href="rootedos.html">RootedOS</a>
-        <a href="account.html" class="active">My Account</a>
-        <button type="button" id="signOutButton">Sign Out</button>
-      </div>
+      <a href="index.html">Home</a>
+      <a href="tone.html">Song DiveIn</a>
+      <a href="newsverse.html">NewsVerse</a>
+      <a href="rootedos.html">RootedOS</a>
+      <a href="account.html" class="active">My Account</a>
+      <button type="button" id="signOutButton">Sign Out</button>
+    </div>
+</div>
     </nav>
   </header>
 
