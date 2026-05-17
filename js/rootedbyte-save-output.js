@@ -22,7 +22,7 @@
 
           return {
             supabaseUrl: supabaseUrl,
-            supabaseAnonKey: supabaseAnonKey,
+            supabaseAnonKey: supabaseAnonKey
           };
         });
     }
@@ -74,7 +74,7 @@
       return {
         ok: false,
         reason: "not_signed_in",
-        message: "Please sign in to save this privately.",
+        message: "Please sign in to save this privately."
       };
     }
 
@@ -82,7 +82,7 @@
       return {
         ok: false,
         reason: "missing_data",
-        message: "Could not save yet. Missing output details.",
+        message: "Could not save yet. Missing output details."
       };
     }
 
@@ -91,7 +91,7 @@
       app_type: options.appType,
       title: options.title,
       input_summary: options.inputSummary || "",
-      output_json: options.outputJson,
+      output_json: options.outputJson
     };
 
     const insertResult = await client
@@ -107,12 +107,12 @@
     return {
       ok: true,
       id: insertResult.data.id,
-      message: "Saved privately to your account.",
+      message: "Saved privately to your account."
     };
   }
 
   window.RootedByteSaveOutput = {
     save: saveRootedByteOutput,
-    getUser: getCurrentRootedByteUser,
+    getUser: getCurrentRootedByteUser
   };
 })();
