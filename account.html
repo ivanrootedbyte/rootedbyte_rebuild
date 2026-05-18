@@ -33,18 +33,19 @@
       box-sizing: border-box;
     }
 
+    
     body {
-      margin: 0;
-      min-height: 100vh;
-      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      color: var(--text);
-      background:
-        radial-gradient(circle at top left, rgba(37, 77, 53, 0.14), transparent 30rem),
-        radial-gradient(circle at 86% 12%, rgba(111, 127, 79, 0.15), transparent 30rem),
-        linear-gradient(180deg, #fbf8ef 0%, #eef3ea 52%, #dfe8d9 100%);
-      line-height: 1.6;
-    }
-
+  margin: 0;
+  min-height: 100vh;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color: var(--text);
+  background:
+    radial-gradient(circle at top left, rgba(37, 77, 53, 0.18), transparent 30rem),
+    radial-gradient(circle at 88% 8%, rgba(201, 154, 82, 0.18), transparent 30rem),
+    radial-gradient(circle at 50% 100%, rgba(111, 127, 79, 0.15), transparent 34rem),
+    linear-gradient(180deg, #fbf8ef 0%, #eef3ea 50%, #dfe8d9 100%);
+  line-height: 1.6;
+}
     a {
       color: inherit;
       text-decoration: none;
@@ -217,6 +218,66 @@
       font-size: clamp(1.04rem, 2vw, 1.22rem);
     }
 
+    .account-heading {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.account-heading-logo-wrap {
+  width: 82px;
+  height: 82px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  padding: 3px;
+  background:
+    linear-gradient(#fbf8ef, #fbf8ef) padding-box,
+    linear-gradient(
+      135deg,
+      #ff6b6b,
+      #f7b267,
+      #ffe66d,
+      #4ecdc4,
+      #5b8def,
+      #b388ff
+    ) border-box;
+  border: 2px solid transparent;
+  box-shadow:
+    0 18px 38px rgba(34, 48, 37, 0.14),
+    0 0 34px rgba(91, 141, 239, 0.12);
+  overflow: hidden;
+  flex: 0 0 auto;
+}
+
+.account-heading-logo {
+  width: 118%;
+  height: 118%;
+  object-fit: cover;
+  object-position: center;
+  border-radius: 50%;
+  display: block;
+}
+
+.account-heading h1 {
+  margin: 0;
+}
+
+.account-heading p {
+  margin: 0.45rem 0 0;
+  color: var(--muted);
+}
+
+.tag {
+  display: inline-flex;
+  color: var(--forest);
+  font-weight: 900;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 0.45rem;
+}
+    
     .account-grid {
       display: grid;
       grid-template-columns: 260px 1fr;
@@ -277,6 +338,43 @@
       margin-top: 1rem;
     }
 
+    .saved-output-body {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--line);
+}
+
+.saved-output-body[hidden] {
+  display: none;
+}
+
+.saved-output-block {
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  padding: 1rem;
+  margin-top: 0.85rem;
+  background: rgba(255, 255, 255, 0.7);
+}
+
+.saved-output-block p {
+  margin: 0.5rem 0 0;
+  color: var(--muted);
+}
+
+.saved-output-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.85rem;
+  margin-top: 0.85rem;
+}
+
+.saved-output-quote {
+  border-left: 4px solid var(--forest);
+  padding-left: 1rem;
+  color: var(--text);
+  font-size: 1.05rem;
+}
+    
     textarea {
       width: 100%;
       min-height: 120px;
@@ -410,6 +508,19 @@
   .account-grid {
     grid-template-columns: 1fr;
   }
+      .account-heading {
+  gap: 0.85rem;
+}
+
+.account-heading-logo-wrap {
+  width: 62px;
+  height: 62px;
+}
+
+.saved-output-grid {
+  grid-template-columns: 1fr;
+}
+      
 }
     
   </style>
@@ -431,7 +542,7 @@
       <a href="tone.html">Song DiveIn</a>
       <a href="newsverse.html">NewsVerse</a>
       <a href="rootedos.html">RootedOS</a>
-      <a href="account.html" class="active">Your RootedByte Account</a>
+      <a href="account.html" class="active">My Account</a>
       <button type="button" id="signOutButton">Sign Out</button>
     </div>
 </div>
@@ -441,7 +552,17 @@
   <main class="page">
     <section class="hero-card">
       <span class="pill">Private Account</span>
-      <h1>My Account</h1>
+      <div class="account-heading">
+  <span class="account-heading-logo-wrap">
+    <img src="images/rootedbyte-icon.png" alt="" class="account-heading-logo" />
+  </span>
+
+  <div>
+    <span class="tag">Private space</span>
+    <h1>My Account</h1>
+    <p>Your saved RootedByte outputs and reflections live here.</p>
+  </div>
+</div>
       <p class="lead" id="accountLead">
         Loading your saved outputs and journal space...
       </p>
@@ -572,6 +693,80 @@
       return 'RootedByte';
     }
 
+    function renderSavedOutputBody(outputJson) {
+  const data = outputJson || {};
+  const areas = Array.isArray(data.areas) ? data.areas : [];
+  const plan = data.daily_plan || {};
+  const verses = Array.isArray(data.reflection_verses)
+    ? data.reflection_verses.slice(0, 3)
+    : [];
+
+  return `
+    ${
+      data.summary
+        ? `<div class="saved-output-block">
+            <span class="tag">Summary</span>
+            <p>${escapeHtml(data.summary)}</p>
+          </div>`
+        : ''
+    }
+
+    ${
+      areas.length
+        ? areas.map((area) => `
+          <div class="saved-output-block">
+            <span class="tag">${escapeHtml(area.area || 'Reflection area')}</span>
+            ${area.urgency ? `<p><strong>Urgency:</strong> ${escapeHtml(area.urgency)}</p>` : ''}
+            ${area.current_state ? `<p><strong>Current state:</strong> ${escapeHtml(area.current_state)}</p>` : ''}
+            ${area.recommendation ? `<p><strong>Recommendation:</strong> ${escapeHtml(area.recommendation)}</p>` : ''}
+            ${area.scripture ? `<p><strong>Scripture:</strong> ${escapeHtml(area.scripture)}</p>` : ''}
+            ${area.action_step ? `<p><strong>Action step:</strong> ${escapeHtml(area.action_step)}</p>` : ''}
+          </div>
+        `).join('')
+        : ''
+    }
+
+    ${
+      Object.keys(plan).length
+        ? `<div class="saved-output-block">
+            <span class="tag">Daily plan</span>
+            <div class="saved-output-grid">
+              ${plan.prayer_minutes ? `<div><strong>Prayer</strong><p>${escapeHtml(plan.prayer_minutes)} minutes</p></div>` : ''}
+              ${plan.bible_reading_minutes ? `<div><strong>Bible reading</strong><p>${escapeHtml(plan.bible_reading_minutes)} minutes</p></div>` : ''}
+              ${plan.social_media_limit_minutes ? `<div><strong>Social media limit</strong><p>${escapeHtml(plan.social_media_limit_minutes)} minutes</p></div>` : ''}
+              ${plan.fasting_recommendation ? `<div><strong>Fasting</strong><p>${escapeHtml(plan.fasting_recommendation)}</p></div>` : ''}
+              ${plan.community_action ? `<div><strong>Community</strong><p>${escapeHtml(plan.community_action)}</p></div>` : ''}
+            </div>
+          </div>`
+        : ''
+    }
+
+    ${
+      verses.length
+        ? `<div class="saved-output-block">
+            <span class="tag">Verses to reflect on</span>
+            ${verses.map((verse) => `
+              <blockquote class="saved-output-quote">${escapeHtml(verse.text || '')}</blockquote>
+              <p>
+                <strong>${escapeHtml(verse.reference || '')}</strong>
+                ${verse.reflection_prompt ? ' — ' + escapeHtml(verse.reflection_prompt) : ''}
+              </p>
+            `).join('')}
+          </div>`
+        : ''
+    }
+
+    ${
+      data.encouragement
+        ? `<div class="saved-output-block">
+            <span class="tag">Encouragement</span>
+            <p>${escapeHtml(data.encouragement)}</p>
+          </div>`
+        : ''
+    }
+  `;
+}
+    
     async function renderSavedTab() {
       setStatus('Loading saved outputs...');
       accountContent.innerHTML = '';
@@ -592,34 +787,47 @@
         accountContent.innerHTML = `
           <h2>Saved Outputs</h2>
           <div class="saved-list">
-            ${outputs.map((item) => `
-              <article class="saved-card">
-                <span class="pill">${escapeHtml(getAppLabel(item.app_type))}</span>
-                <h3>${escapeHtml(item.title || `${getAppLabel(item.app_type)} Output`)}</h3>
-                <p class="saved-card__meta">
-                  Saved ${escapeHtml(formatDate(item.created_at))}
-                  ${item.input_summary ? ` • ${escapeHtml(item.input_summary)}` : ''}
-                </p>
+            ${outputs.map((item) => {
+  const id = escapeHtml(item.id);
+  const appLabel = getAppLabel(item.app_type);
+  const title = item.title || `${appLabel} Output`;
 
-                <div class="saved-card__actions">
-                  <button class="btn" type="button" data-journal-for="${escapeHtml(item.id)}">
-                    Journal
-                  </button>
-                  <button class="btn" type="button" data-delete-output="${escapeHtml(item.id)}">
-                    Delete
-                  </button>
-                </div>
+  return `
+    <article class="saved-card">
+      <span class="pill">${escapeHtml(appLabel)}</span>
+      <h3>${escapeHtml(title)}</h3>
+      <p class="saved-card__meta">
+        Saved ${escapeHtml(formatDate(item.created_at))}
+        ${item.input_summary ? ` • ${escapeHtml(item.input_summary)}` : ''}
+      </p>
 
-                <div id="journal-${escapeHtml(item.id)}" hidden>
-                  <textarea placeholder="Write a private journal entry for this saved output..."></textarea>
-                  <div class="saved-card__actions">
-                    <button class="btn primary" type="button" data-save-journal="${escapeHtml(item.id)}">
-                      Save Journal Entry
-                    </button>
-                  </div>
-                </div>
-              </article>
-            `).join('')}
+      <div class="saved-card__actions">
+        <button class="btn primary" type="button" data-open-output="${id}">
+          Open
+        </button>
+        <button class="btn" type="button" data-journal-for="${id}">
+          Journal
+        </button>
+        <button class="btn" type="button" data-delete-output="${id}">
+          Delete
+        </button>
+      </div>
+
+      <div class="saved-output-body" id="saved-output-${id}" hidden>
+        ${renderSavedOutputBody(item.output_json)}
+      </div>
+
+      <div id="journal-${id}" hidden>
+        <textarea placeholder="Write a private journal entry for this saved output..."></textarea>
+        <div class="saved-card__actions">
+          <button class="btn primary" type="button" data-save-journal="${id}">
+            Save Journal Entry
+          </button>
+        </div>
+      </div>
+    </article>
+  `;
+}).join('')}
           </div>
         `;
 
@@ -690,9 +898,22 @@
     }
 
     accountContent.addEventListener('click', async (event) => {
-      const journalButton = event.target.closest('[data-journal-for]');
-      const saveJournalButton = event.target.closest('[data-save-journal]');
-      const deleteButton = event.target.closest('[data-delete-output]');
+  const openButton = event.target.closest('[data-open-output]');
+  const journalButton = event.target.closest('[data-journal-for]');
+  const saveJournalButton = event.target.closest('[data-save-journal]');
+  const deleteButton = event.target.closest('[data-delete-output]');
+
+  if (openButton) {
+    const id = openButton.dataset.openOutput;
+    const panel = document.getElementById(`saved-output-${id}`);
+
+    if (panel) {
+      panel.hidden = !panel.hidden;
+      openButton.textContent = panel.hidden ? 'Open' : 'Close';
+    }
+
+    return;
+  }
 
       if (journalButton) {
         const id = journalButton.dataset.journalFor;
