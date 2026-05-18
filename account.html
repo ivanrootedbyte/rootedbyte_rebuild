@@ -628,58 +628,413 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-  <script>
-    const $ = (selector) => document.querySelector(selector);
-    const $$ = (selector) => Array.from(document.querySelectorAll(selector));
+ <script>
+  const $ = (selector) => document.querySelector(selector);
+  const $$ = (selector) => Array.from(document.querySelectorAll(selector));
 
-    const accountLead = $('#accountLead');
-    const accountStatus = $('#accountStatus');
-    const accountContent = $('#accountContent');
-    const signOutButton = $('#signOutButton');
+  const accountLead = $('#accountLead');
+  const accountStatus = $('#accountStatus');
+  const accountContent = $('#accountContent');
+  const signOutButton = $('#signOutButton');
 
-    let supabaseClient = null;
-    let currentUser = null;
-    let currentTab = 'saved';
+  let supabaseClient = null;
+  let currentUser = null;
+  let currentTab = 'saved';
 
-    function escapeHtml(value) {
-      return String(value ?? '')
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#039;');
+  function escapeHtml(value) {
+    return String(value ?? '')
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
+  }
+
+  function formatDate(value) {
+    if (!value) return '';
+
+    try {
+      return new Intl.DateTimeFormat(undefined, {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric'
+      }).format(new Date(value));
+    } catch {
+      return '';
     }
+  }
 
-    function formatDate(value) {
-      if (!value) return '';
+  function setStatus(message, type = 'info') {
+    if (!accountStatus) return;
+    accountStatus.className = type === 'error' ? 'status error' : 'status';
+    accountStatus.textContent = message;
+  }
 
-      try {
-        return new Intl.DateTimeFormat(undefined, {
-          year: 'numeric',
-          month: 'short',
-          day: 'numeric'
-        }).format(new Date(value));
-      } catch {
-        return '';
+  function getAppLabel(appType) {
+    if (appType === 'rootedos') return 'RootedOS';
+    if (appType === 'newsverse') return 'NewsVerse';
+    if (appType === 'tone') return 'Song DiveIn';
+    return 'RootedByte';
+  }
+
+  function renderSavedOutputBody(outputJson) {
+    const data = outputJson || {};
+    const areas = Array.isArray(data.areas) ? data.areas : [];
+    const plan = data.daily_plan || {};
+    const verses = Array.isArray(data.reflection_verses)
+      ? data.reflection_verses.slice(0, 3)
+      : [];
+
+    return `
+      ${
+        data.summary
+          ? `<div class="saved-output-block">
+              <span class="tag">Summary</span>
+              <p>${escapeHtml(data.summary)}</p>
+            </div>`
+          : ''
       }
+
+      ${
+        areas.length
+          ? areas.map((area) => `
+            <div class="saved-output-block">
+              <span class="tag">${escapeHtml(area.area || 'Reflection area')}</span>
+              ${area.urgency ? `<p><strong>Urgency:</strong> ${escapeHtml(area.urgency)}</p>` : ''}
+              ${area.current_state ? `<p><strong>Current state:</strong> ${escapeHtml(area.current_state)}</p>` : ''}
+              ${area.recommendation ? `<p><strong>Recommendation:</strong> ${escapeHtml(area.recommendation)}</p>` : ''}
+              ${area.scripture ? `<p><strong>Scripture:</strong> ${escapeHtml(area.scripture)}</p>` : ''}
+              ${area.action_step ? `<p><strong>Action step:</strong> ${escapeHtml(area.action_step)}</p>` : ''}
+            </div>
+          `).join('')
+          : ''
+      }
+
+      ${
+        Object.keys(plan).length
+          ? `<div class="saved-output-block">
+              <span class="tag">Daily plan</span>
+              <div class="saved-output-grid">
+                ${plan.prayer_minutes ? `<div><strong>Prayer</strong><p>${escapeHtml(plan.prayer_minutes)} minutes</p></div>` : ''}
+                ${plan.bible_reading_minutes ? `<div><strong>Bible reading</strong><p>${escapeHtml(plan.bible_reading_minutes)} minutes</p></div>` : ''}
+                ${plan.social_media_limit_minutes ? `<div><strong>Social media limit</strong><p>${escapeHtml(plan.social_media_limit_minutes)} minutes</p></div>` : ''}
+                ${plan.fasting_recommendation ? `<div><strong>Fasting</strong><p>${escapeHtml(plan.fasting_recommendation)}</p></div>` : ''}
+                ${plan.community_action ? `<div><strong>Community</strong><p>${escapeHtml(plan.community_action)}</p></div>` : ''}
+              </div>
+            </div>`
+          : ''
+      }
+
+      ${
+        verses.length
+          ? `<div class="saved-output-block">
+              <span class="tag">Verses to reflect on</span>
+              ${verses.map((verse) => `
+                <blockquote class="saved-output-quote">${escapeHtml(verse.text || '')}</blockquote>
+                <p>
+                  <strong>${escapeHtml(verse.reference || '')}</strong>
+                  ${verse.reflection_prompt ? ' — ' + escapeHtml(verse.reflection_prompt) : ''}
+                </p>
+              `).join('')}
+            </div>`
+          : ''
+      }
+
+      ${
+        data.encouragement
+          ? `<div class="saved-output-block">
+              <span class="tag">Encouragement</span>
+              <p>${escapeHtml(data.encouragement)}</p>
+            </div>`
+          : ''
+      }
+    `;
+  }
+
+  async function fetchSavedOutputs() {
+    const { data, error } = await supabaseClient
+      .from('saved_outputs')
+      .select('id, app_type, title, input_summary, output_json, created_at')
+      .order('created_at', { ascending: false });
+
+    if (error) throw error;
+    return data || [];
+  }
+
+  async function fetchJournalEntries() {
+    const { data, error } = await supabaseClient
+      .from('journal_entries')
+      .select('id, saved_output_id, entry_text, created_at, updated_at')
+      .order('updated_at', { ascending: false });
+
+    if (error) throw error;
+    return data || [];
+  }
+
+  async function renderSavedTab() {
+    setStatus('Loading saved outputs...');
+    accountContent.innerHTML = '';
+
+    try {
+      const outputs = await fetchSavedOutputs();
+
+      if (!outputs.length) {
+        accountContent.innerHTML = `
+          <h2>Saved Outputs</h2>
+          <div class="empty-state">
+            No saved outputs yet. Generate a RootedOS, NewsVerse, or Song DiveIn result, then choose Save privately.
+          </div>
+        `;
+        setStatus('');
+        return;
+      }
+
+      accountContent.innerHTML = `
+        <h2>Saved Outputs</h2>
+        <div class="saved-list">
+          ${outputs.map((item) => {
+            const id = escapeHtml(item.id);
+            const appLabel = getAppLabel(item.app_type);
+            const title = item.title || `${appLabel} Output`;
+
+            return `
+              <article class="saved-card">
+                <span class="pill">${escapeHtml(appLabel)}</span>
+                <h3>${escapeHtml(title)}</h3>
+
+                <p class="saved-card__meta">
+                  Saved ${escapeHtml(formatDate(item.created_at))}
+                  ${item.input_summary ? ` • ${escapeHtml(item.input_summary)}` : ''}
+                </p>
+
+                <div class="saved-card__actions">
+                  <button class="btn primary" type="button" data-open-output="${id}">
+                    Open
+                  </button>
+                  <button class="btn" type="button" data-journal-for="${id}">
+                    Journal
+                  </button>
+                  <button class="btn" type="button" data-delete-output="${id}">
+                    Delete
+                  </button>
+                </div>
+
+                <div class="saved-output-layout" id="saved-layout-${id}" hidden>
+                  <div class="saved-output-body" id="saved-output-${id}" hidden>
+                    ${renderSavedOutputBody(item.output_json)}
+                  </div>
+
+                  <div class="saved-journal-panel" id="journal-${id}" hidden>
+                    <h4>Private Journal</h4>
+                    <p>Reflect on what you want to remember, apply, or pray through from this output.</p>
+
+                    <textarea placeholder="Write a private journal entry for this saved output..."></textarea>
+
+                    <div class="saved-card__actions">
+                      <button class="btn primary" type="button" data-save-journal="${id}">
+                        Save Journal Entry
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </article>
+            `;
+          }).join('')}
+        </div>
+      `;
+
+      setStatus('');
+    } catch (error) {
+      setStatus(error.message || 'Could not load saved outputs.', 'error');
+    }
+  }
+
+  async function renderSharedTab() {
+    accountContent.innerHTML = `
+      <h2>Shared Links</h2>
+      <div class="empty-state">
+        Shared links are public by design, so anyone with the link can view them.
+        Private saves stay connected to your signed-in account.
+      </div>
+    `;
+
+    setStatus('');
+  }
+
+  async function renderJournalTab() {
+    setStatus('Loading journal entries...');
+    accountContent.innerHTML = '';
+
+    try {
+      const entries = await fetchJournalEntries();
+
+      if (!entries.length) {
+        accountContent.innerHTML = `
+          <h2>Journal</h2>
+          <div class="empty-state">
+            No journal entries yet. Open a saved output and write a private reflection.
+          </div>
+        `;
+        setStatus('');
+        return;
+      }
+
+      accountContent.innerHTML = `
+        <h2>Journal</h2>
+        <div class="saved-list">
+          ${entries.map((entry) => `
+            <article class="saved-card">
+              <p>${escapeHtml(entry.entry_text)}</p>
+              <p class="saved-card__meta">
+                Updated ${escapeHtml(formatDate(entry.updated_at || entry.created_at))}
+              </p>
+            </article>
+          `).join('')}
+        </div>
+      `;
+
+      setStatus('');
+    } catch (error) {
+      setStatus(error.message || 'Could not load journal entries.', 'error');
+    }
+  }
+
+  function renderCurrentTab() {
+    if (!supabaseClient || !currentUser) return;
+
+    if (currentTab === 'saved') {
+      renderSavedTab();
+    } else if (currentTab === 'shared') {
+      renderSharedTab();
+    } else if (currentTab === 'journal') {
+      renderJournalTab();
+    }
+  }
+
+  function setActiveTab(tab) {
+    currentTab = tab;
+
+    $$('.tab-button').forEach((button) => {
+      button.classList.toggle('active', button.dataset.tab === tab);
+    });
+
+    renderCurrentTab();
+  }
+
+  accountContent.addEventListener('click', async (event) => {
+    const openButton = event.target.closest('[data-open-output]');
+    const journalButton = event.target.closest('[data-journal-for]');
+    const saveJournalButton = event.target.closest('[data-save-journal]');
+    const deleteButton = event.target.closest('[data-delete-output]');
+
+    if (openButton) {
+      const id = openButton.dataset.openOutput;
+      const layout = document.getElementById(`saved-layout-${id}`);
+      const outputPanel = document.getElementById(`saved-output-${id}`);
+      const journalPanel = document.getElementById(`journal-${id}`);
+
+      if (layout && outputPanel) {
+        const shouldOpen = outputPanel.hidden;
+
+        layout.hidden = false;
+        outputPanel.hidden = !shouldOpen;
+        openButton.textContent = shouldOpen ? 'Close' : 'Open';
+
+        if (outputPanel.hidden && (!journalPanel || journalPanel.hidden)) {
+          layout.hidden = true;
+        }
+      }
+
+      return;
     }
 
-    function setStatus(message, type = 'info') {
-      accountStatus.className = type === 'error' ? 'status error' : 'status';
-      accountStatus.textContent = message;
+    if (journalButton) {
+      const id = journalButton.dataset.journalFor;
+      const layout = document.getElementById(`saved-layout-${id}`);
+      const outputPanel = document.getElementById(`saved-output-${id}`);
+      const journalPanel = document.getElementById(`journal-${id}`);
+
+      if (layout && journalPanel) {
+        const shouldOpen = journalPanel.hidden;
+
+        layout.hidden = false;
+        journalPanel.hidden = !shouldOpen;
+        journalButton.textContent = shouldOpen ? 'Close Journal' : 'Journal';
+
+        if (journalPanel.hidden && (!outputPanel || outputPanel.hidden)) {
+          layout.hidden = true;
+        }
+      }
+
+      return;
     }
 
-    function setActiveTab(tab) {
-      currentTab = tab;
+    if (saveJournalButton) {
+      const savedOutputId = saveJournalButton.dataset.saveJournal;
+      const panel = document.getElementById(`journal-${savedOutputId}`);
+      const textarea = panel ? panel.querySelector('textarea') : null;
+      const entryText = textarea ? textarea.value.trim() : '';
 
-      $$('.tab-button').forEach((button) => {
-        button.classList.toggle('active', button.dataset.tab === tab);
-      });
+      if (!entryText) {
+        setStatus('Write a journal entry before saving.', 'error');
+        return;
+      }
 
-      renderCurrentTab();
+      setStatus('Saving journal entry...');
+
+      const { error } = await supabaseClient
+        .from('journal_entries')
+        .insert({
+          user_id: currentUser.id,
+          saved_output_id: savedOutputId,
+          entry_text: entryText
+        });
+
+      if (error) {
+        setStatus(error.message || 'Could not save journal entry.', 'error');
+        return;
+      }
+
+      textarea.value = '';
+      setStatus('Journal entry saved.');
+      return;
     }
 
-    async function loadSupabaseClient() {
+    if (deleteButton) {
+      const id = deleteButton.dataset.deleteOutput;
+
+      const { error } = await supabaseClient
+        .from('saved_outputs')
+        .delete()
+        .eq('id', id);
+
+      if (error) {
+        setStatus(error.message || 'Could not delete saved output.', 'error');
+        return;
+      }
+
+      setStatus('Saved output deleted.');
+      renderSavedTab();
+    }
+  });
+
+  $$('.tab-button').forEach((button) => {
+    button.addEventListener('click', () => setActiveTab(button.dataset.tab));
+  });
+
+  if (signOutButton) {
+    signOutButton.addEventListener('click', async () => {
+      if (!supabaseClient) return;
+
+      await supabaseClient.auth.signOut();
+      window.location.href = 'signin.html';
+    });
+  }
+
+  async function loadSupabaseClient() {
+    try {
+      setStatus('Connecting to your account...');
+
       const response = await fetch('/api/public-config');
       const config = await response.json();
 
@@ -687,12 +1042,20 @@
         throw new Error(config.error || 'Could not load Supabase config.');
       }
 
+      if (!window.supabase || !window.supabase.createClient) {
+        throw new Error('Supabase browser client did not load.');
+      }
+
       supabaseClient = window.supabase.createClient(
         config.supabaseUrl,
         config.supabaseAnonKey
       );
 
-      const { data } = await supabaseClient.auth.getSession();
+      const { data, error } = await supabaseClient.auth.getSession();
+
+      if (error) {
+        throw error;
+      }
 
       if (!data.session) {
         window.location.href = 'signin.html';
@@ -703,357 +1066,12 @@
       accountLead.textContent = `Signed in as ${currentUser.email}. Saved outputs are private unless you share them publicly.`;
 
       renderCurrentTab();
-    }
-
-    async function fetchSavedOutputs() {
-      const { data, error } = await supabaseClient
-        .from('saved_outputs')
-        .select('id, app_type, title, input_summary, output_json, created_at')
-        .order('created_at', { ascending: false });
-
-      if (error) throw error;
-
-      return data || [];
-    }
-
-    async function fetchJournalEntries() {
-      const { data, error } = await supabaseClient
-        .from('journal_entries')
-        .select('id, saved_output_id, entry_text, created_at, updated_at')
-        .order('updated_at', { ascending: false });
-
-      if (error) throw error;
-
-      return data || [];
-    }
-
-    function getAppLabel(appType) {
-      if (appType === 'rootedos') return 'RootedOS';
-      if (appType === 'newsverse') return 'NewsVerse';
-      if (appType === 'tone') return 'Song DiveIn';
-
-      return 'RootedByte';
-    }
-
-    function renderSavedOutputBody(outputJson) {
-  const data = outputJson || {};
-  const areas = Array.isArray(data.areas) ? data.areas : [];
-  const plan = data.daily_plan || {};
-  const verses = Array.isArray(data.reflection_verses)
-    ? data.reflection_verses.slice(0, 3)
-    : [];
-
-  return `
-    ${
-      data.summary
-        ? `<div class="saved-output-block">
-            <span class="tag">Summary</span>
-            <p>${escapeHtml(data.summary)}</p>
-          </div>`
-        : ''
-    }
-
-    ${
-      areas.length
-        ? areas.map((area) => `
-          <div class="saved-output-block">
-            <span class="tag">${escapeHtml(area.area || 'Reflection area')}</span>
-            ${area.urgency ? `<p><strong>Urgency:</strong> ${escapeHtml(area.urgency)}</p>` : ''}
-            ${area.current_state ? `<p><strong>Current state:</strong> ${escapeHtml(area.current_state)}</p>` : ''}
-            ${area.recommendation ? `<p><strong>Recommendation:</strong> ${escapeHtml(area.recommendation)}</p>` : ''}
-            ${area.scripture ? `<p><strong>Scripture:</strong> ${escapeHtml(area.scripture)}</p>` : ''}
-            ${area.action_step ? `<p><strong>Action step:</strong> ${escapeHtml(area.action_step)}</p>` : ''}
-          </div>
-        `).join('')
-        : ''
-    }
-
-    ${
-      Object.keys(plan).length
-        ? `<div class="saved-output-block">
-            <span class="tag">Daily plan</span>
-            <div class="saved-output-grid">
-              ${plan.prayer_minutes ? `<div><strong>Prayer</strong><p>${escapeHtml(plan.prayer_minutes)} minutes</p></div>` : ''}
-              ${plan.bible_reading_minutes ? `<div><strong>Bible reading</strong><p>${escapeHtml(plan.bible_reading_minutes)} minutes</p></div>` : ''}
-              ${plan.social_media_limit_minutes ? `<div><strong>Social media limit</strong><p>${escapeHtml(plan.social_media_limit_minutes)} minutes</p></div>` : ''}
-              ${plan.fasting_recommendation ? `<div><strong>Fasting</strong><p>${escapeHtml(plan.fasting_recommendation)}</p></div>` : ''}
-              ${plan.community_action ? `<div><strong>Community</strong><p>${escapeHtml(plan.community_action)}</p></div>` : ''}
-            </div>
-          </div>`
-        : ''
-    }
-
-    ${
-      verses.length
-        ? `<div class="saved-output-block">
-            <span class="tag">Verses to reflect on</span>
-            ${verses.map((verse) => `
-              <blockquote class="saved-output-quote">${escapeHtml(verse.text || '')}</blockquote>
-              <p>
-                <strong>${escapeHtml(verse.reference || '')}</strong>
-                ${verse.reflection_prompt ? ' — ' + escapeHtml(verse.reflection_prompt) : ''}
-              </p>
-            `).join('')}
-          </div>`
-        : ''
-    }
-
-    ${
-      data.encouragement
-        ? `<div class="saved-output-block">
-            <span class="tag">Encouragement</span>
-            <p>${escapeHtml(data.encouragement)}</p>
-          </div>`
-        : ''
-    }
-  `;
-}
-    
-    async function renderSavedTab() {
-      setStatus('Loading saved outputs...');
-      accountContent.innerHTML = '';
-
-      try {
-        const outputs = await fetchSavedOutputs();
-
-        if (!outputs.length) {
-          accountContent.innerHTML = `
-            <div class="empty-state">
-              No saved outputs yet. Generate a RootedOS, NewsVerse, or Song DiveIn result, then choose Save privately.
-            </div>
-          `;
-          setStatus('');
-          return;
-        }
-
-        accountContent.innerHTML = `
-          <h2>Saved Outputs</h2>
-          <div class="saved-list">
-            ${outputs.map((item) => {
-  const id = escapeHtml(item.id);
-  const appLabel = getAppLabel(item.app_type);
-  const title = item.title || `${appLabel} Output`;
-
-  return `
-    <article class="saved-card">
-      <span class="pill">${escapeHtml(appLabel)}</span>
-      <h3>${escapeHtml(title)}</h3>
-      <p class="saved-card__meta">
-        Saved ${escapeHtml(formatDate(item.created_at))}
-        ${item.input_summary ? ` • ${escapeHtml(item.input_summary)}` : ''}
-      </p>
-
-      <div class="saved-card__actions">
-        <button class="btn primary" type="button" data-open-output="${id}">
-          Open
-        </button>
-        <button class="btn" type="button" data-journal-for="${id}">
-          Journal
-        </button>
-        <button class="btn" type="button" data-delete-output="${id}">
-          Delete
-        </button>
-      </div>
-
-      <div class="saved-output-layout" id="saved-layout-${id}" hidden>
-  <div class="saved-output-body" id="saved-output-${id}" hidden>
-    ${renderSavedOutputBody(item.output_json)}
-  </div>
-
-  <div class="saved-journal-panel" id="journal-${id}" hidden>
-    <h4>Private Journal</h4>
-    <p>Reflect on what you want to remember, apply, or pray through from this output.</p>
-
-    <textarea placeholder="Write a private journal entry for this saved output..."></textarea>
-
-    <div class="saved-card__actions">
-      <button class="btn primary" type="button" data-save-journal="${id}">
-        Save Journal Entry
-      </button>
-    </div>
-  </div>
-</div>
-    </article>
-  `;
-}).join('')}
-          </div>
-        `;
-
-        setStatus('');
-      } catch (error) {
-        setStatus(error.message || 'Could not load saved outputs.', 'error');
-      }
-    }
-
-    async function renderSharedTab() {
-      accountContent.innerHTML = `
-        <h2>Shared Links</h2>
-        <div class="empty-state">
-          Shared links are public by design, so anyone with the link can view them.
-          Private saves stay connected to your signed-in account.
-        </div>
-      `;
-
-      setStatus('');
-    }
-
-    async function renderJournalTab() {
-      setStatus('Loading journal entries...');
-      accountContent.innerHTML = '';
-
-      try {
-        const entries = await fetchJournalEntries();
-
-        if (!entries.length) {
-          accountContent.innerHTML = `
-            <h2>Journal</h2>
-            <div class="empty-state">
-              No journal entries yet. Open a saved output and write a private reflection.
-            </div>
-          `;
-          setStatus('');
-          return;
-        }
-
-        accountContent.innerHTML = `
-          <h2>Journal</h2>
-          <div class="saved-list">
-            ${entries.map((entry) => `
-              <article class="saved-card">
-                <p>${escapeHtml(entry.entry_text)}</p>
-                <p class="saved-card__meta">Updated ${escapeHtml(formatDate(entry.updated_at || entry.created_at))}</p>
-              </article>
-            `).join('')}
-          </div>
-        `;
-
-        setStatus('');
-      } catch (error) {
-        setStatus(error.message || 'Could not load journal entries.', 'error');
-      }
-    }
-
-    function renderCurrentTab() {
-      if (!supabaseClient || !currentUser) return;
-
-      if (currentTab === 'saved') {
-        renderSavedTab();
-      } else if (currentTab === 'shared') {
-        renderSharedTab();
-      } else if (currentTab === 'journal') {
-        renderJournalTab();
-      }
-    }
-
-    accountContent.addEventListener('click', async (event) => {
-  const openButton = event.target.closest('[data-open-output]');
-  const journalButton = event.target.closest('[data-journal-for]');
-  const saveJournalButton = event.target.closest('[data-save-journal]');
-  const deleteButton = event.target.closest('[data-delete-output]');
-
-  if (openButton) {
-    const id = openButton.dataset.openOutput;
-    const layout = document.getElementById(`saved-layout-${id}`);
-    const outputPanel = document.getElementById(`saved-output-${id}`);
-    const journalPanel = document.getElementById(`journal-${id}`);
-
-    if (layout && outputPanel) {
-      const shouldOpen = outputPanel.hidden;
-
-      layout.hidden = false;
-      outputPanel.hidden = !shouldOpen;
-      openButton.textContent = shouldOpen ? 'Close' : 'Open';
-
-      if (outputPanel.hidden && (!journalPanel || journalPanel.hidden)) {
-        layout.hidden = true;
-      }
-    }
-
-    return;
-  }
-
-  if (journalButton) {
-    const id = journalButton.dataset.journalFor;
-    const layout = document.getElementById(`saved-layout-${id}`);
-    const outputPanel = document.getElementById(`saved-output-${id}`);
-    const journalPanel = document.getElementById(`journal-${id}`);
-
-    if (layout && journalPanel) {
-      const shouldOpen = journalPanel.hidden;
-
-      layout.hidden = false;
-      journalPanel.hidden = !shouldOpen;
-      journalButton.textContent = shouldOpen ? 'Close Journal' : 'Journal';
-
-      if (journalPanel.hidden && (!outputPanel || outputPanel.hidden)) {
-        layout.hidden = true;
-      }
-    }
-
-    return;
-  }
-
-  if (saveJournalButton) {
-    const savedOutputId = saveJournalButton.dataset.saveJournal;
-    const panel = document.getElementById(`journal-${savedOutputId}`);
-    const textarea = panel?.querySelector('textarea');
-    const entryText = textarea?.value.trim();
-
-    if (!entryText) {
-      setStatus('Write a journal entry before saving.', 'error');
-      return;
-    }
-
-    setStatus('Saving journal entry...');
-
-    const { error } = await supabaseClient
-      .from('journal_entries')
-      .insert({
-        user_id: currentUser.id,
-        saved_output_id: savedOutputId,
-        entry_text: entryText
-      });
-
-    if (error) {
-      setStatus(error.message || 'Could not save journal entry.', 'error');
-      return;
-    }
-
-    textarea.value = '';
-    setStatus('Journal entry saved.');
-    return;
-  }
-
-  if (deleteButton) {
-    const id = deleteButton.dataset.deleteOutput;
-
-    const { error } = await supabaseClient
-      .from('saved_outputs')
-      .delete()
-      .eq('id', id);
-
-    if (error) {
-      setStatus(error.message || 'Could not delete saved output.', 'error');
-      return;
-    }
-
-    setStatus('Saved output deleted.');
-    renderSavedTab();
-  }
-});
-      button.addEventListener('click', () => setActiveTab(button.dataset.tab));
-    });
-
-    signOutButton.addEventListener('click', async () => {
-      if (!supabaseClient) return;
-
-      await supabaseClient.auth.signOut();
-      window.location.href = 'signin.html';
-    });
-
-    loadSupabaseClient().catch((error) => {
+    } catch (error) {
       setStatus(error.message || 'Could not load account system.', 'error');
-    });
-  </script>
+    }
+  }
+
+  loadSupabaseClient();
+</script>
 </body>
 </html>
