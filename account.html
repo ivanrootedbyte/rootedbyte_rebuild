@@ -952,96 +952,95 @@
   const deleteButton = event.target.closest('[data-delete-output]');
 
   if (openButton) {
-  const id = openButton.dataset.openOutput;
-  const layout = document.getElementById(`saved-layout-${id}`);
-  const outputPanel = document.getElementById(`saved-output-${id}`);
-  const journalPanel = document.getElementById(`journal-${id}`);
+    const id = openButton.dataset.openOutput;
+    const layout = document.getElementById(`saved-layout-${id}`);
+    const outputPanel = document.getElementById(`saved-output-${id}`);
+    const journalPanel = document.getElementById(`journal-${id}`);
 
-  if (layout && outputPanel) {
-    const shouldOpen = outputPanel.hidden;
+    if (layout && outputPanel) {
+      const shouldOpen = outputPanel.hidden;
 
-    layout.hidden = false;
-    outputPanel.hidden = !shouldOpen;
-    openButton.textContent = shouldOpen ? 'Close' : 'Open';
+      layout.hidden = false;
+      outputPanel.hidden = !shouldOpen;
+      openButton.textContent = shouldOpen ? 'Close' : 'Open';
 
-    if (outputPanel.hidden && (!journalPanel || journalPanel.hidden)) {
-      layout.hidden = true;
-    }
-  }
-
-  return;
-}
-
-      if (journalButton) {
-  const id = journalButton.dataset.journalFor;
-  const layout = document.getElementById(`saved-layout-${id}`);
-  const outputPanel = document.getElementById(`saved-output-${id}`);
-  const journalPanel = document.getElementById(`journal-${id}`);
-
-  if (layout && journalPanel) {
-    const shouldOpen = journalPanel.hidden;
-
-    layout.hidden = false;
-    journalPanel.hidden = !shouldOpen;
-    journalButton.textContent = shouldOpen ? 'Close Journal' : 'Journal';
-
-    if (journalPanel.hidden && (!outputPanel || outputPanel.hidden)) {
-      layout.hidden = true;
-    }
-  }
-
-  return;
-}
-
-      if (saveJournalButton) {
-        const savedOutputId = saveJournalButton.dataset.saveJournal;
-        const panel = document.getElementById(`journal-${savedOutputId}`);
-        const textarea = panel?.querySelector('textarea');
-        const entryText = textarea?.value.trim();
-
-        if (!entryText) {
-          setStatus('Write a journal entry before saving.', 'error');
-          return;
-        }
-
-        setStatus('Saving journal entry...');
-
-        const { error } = await supabaseClient
-          .from('journal_entries')
-          .insert({
-            user_id: currentUser.id,
-            saved_output_id: savedOutputId,
-            entry_text: entryText
-          });
-
-        if (error) {
-          setStatus(error.message || 'Could not save journal entry.', 'error');
-          return;
-        }
-
-        textarea.value = '';
-setStatus('Journal entry saved.');
-return;
-
-      if (deleteButton) {
-        const id = deleteButton.dataset.deleteOutput;
-
-        const { error } = await supabaseClient
-          .from('saved_outputs')
-          .delete()
-          .eq('id', id);
-
-        if (error) {
-          setStatus(error.message || 'Could not delete saved output.', 'error');
-          return;
-        }
-
-        setStatus('Saved output deleted.');
-        renderSavedTab();
+      if (outputPanel.hidden && (!journalPanel || journalPanel.hidden)) {
+        layout.hidden = true;
       }
-    });
+    }
 
-    $$('.tab-button').forEach((button) => {
+    return;
+  }
+
+  if (journalButton) {
+    const id = journalButton.dataset.journalFor;
+    const layout = document.getElementById(`saved-layout-${id}`);
+    const outputPanel = document.getElementById(`saved-output-${id}`);
+    const journalPanel = document.getElementById(`journal-${id}`);
+
+    if (layout && journalPanel) {
+      const shouldOpen = journalPanel.hidden;
+
+      layout.hidden = false;
+      journalPanel.hidden = !shouldOpen;
+      journalButton.textContent = shouldOpen ? 'Close Journal' : 'Journal';
+
+      if (journalPanel.hidden && (!outputPanel || outputPanel.hidden)) {
+        layout.hidden = true;
+      }
+    }
+
+    return;
+  }
+
+  if (saveJournalButton) {
+    const savedOutputId = saveJournalButton.dataset.saveJournal;
+    const panel = document.getElementById(`journal-${savedOutputId}`);
+    const textarea = panel?.querySelector('textarea');
+    const entryText = textarea?.value.trim();
+
+    if (!entryText) {
+      setStatus('Write a journal entry before saving.', 'error');
+      return;
+    }
+
+    setStatus('Saving journal entry...');
+
+    const { error } = await supabaseClient
+      .from('journal_entries')
+      .insert({
+        user_id: currentUser.id,
+        saved_output_id: savedOutputId,
+        entry_text: entryText
+      });
+
+    if (error) {
+      setStatus(error.message || 'Could not save journal entry.', 'error');
+      return;
+    }
+
+    textarea.value = '';
+    setStatus('Journal entry saved.');
+    return;
+  }
+
+  if (deleteButton) {
+    const id = deleteButton.dataset.deleteOutput;
+
+    const { error } = await supabaseClient
+      .from('saved_outputs')
+      .delete()
+      .eq('id', id);
+
+    if (error) {
+      setStatus(error.message || 'Could not delete saved output.', 'error');
+      return;
+    }
+
+    setStatus('Saved output deleted.');
+    renderSavedTab();
+  }
+});
       button.addEventListener('click', () => setActiveTab(button.dataset.tab));
     });
 
