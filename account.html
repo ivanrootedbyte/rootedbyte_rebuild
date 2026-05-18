@@ -338,10 +338,48 @@
       margin-top: 1rem;
     }
 
-    .saved-output-body {
+    .saved-output-layout {
   margin-top: 1rem;
   padding-top: 1rem;
   border-top: 1px solid var(--line);
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(280px, 0.75fr);
+  gap: 1rem;
+  align-items: start;
+}
+
+.saved-output-layout[hidden] {
+  display: none;
+}
+
+.saved-output-body,
+.saved-journal-panel {
+  min-width: 0;
+}
+
+.saved-output-body[hidden],
+.saved-journal-panel[hidden] {
+  display: none;
+}
+
+.saved-journal-panel {
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  padding: 1rem;
+  background:
+    linear-gradient(135deg, rgba(255, 252, 244, 0.96), rgba(255, 255, 255, 0.82));
+}
+
+.saved-journal-panel h4 {
+  margin: 0;
+  color: var(--forest-dark);
+  font-size: 1rem;
+  letter-spacing: -0.02em;
+}
+
+.saved-journal-panel p {
+  margin: 0.45rem 0 0;
+  color: var(--muted);
 }
 
 .saved-output-body[hidden] {
@@ -518,6 +556,10 @@
 }
 
 .saved-output-grid {
+  grid-template-columns: 1fr;
+}
+
+.saved-output-layout {
   grid-template-columns: 1fr;
 }
       
@@ -813,18 +855,24 @@
         </button>
       </div>
 
-      <div class="saved-output-body" id="saved-output-${id}" hidden>
-        ${renderSavedOutputBody(item.output_json)}
-      </div>
+      <div class="saved-output-layout" id="saved-layout-${id}" hidden>
+  <div class="saved-output-body" id="saved-output-${id}" hidden>
+    ${renderSavedOutputBody(item.output_json)}
+  </div>
 
-      <div id="journal-${id}" hidden>
-        <textarea placeholder="Write a private journal entry for this saved output..."></textarea>
-        <div class="saved-card__actions">
-          <button class="btn primary" type="button" data-save-journal="${id}">
-            Save Journal Entry
-          </button>
-        </div>
-      </div>
+  <div class="saved-journal-panel" id="journal-${id}" hidden>
+    <h4>Private Journal</h4>
+    <p>Reflect on what you want to remember, apply, or pray through from this output.</p>
+
+    <textarea placeholder="Write a private journal entry for this saved output..."></textarea>
+
+    <div class="saved-card__actions">
+      <button class="btn primary" type="button" data-save-journal="${id}">
+        Save Journal Entry
+      </button>
+    </div>
+  </div>
+</div>
     </article>
   `;
 }).join('')}
@@ -904,27 +952,46 @@
   const deleteButton = event.target.closest('[data-delete-output]');
 
   if (openButton) {
-    const id = openButton.dataset.openOutput;
-    const panel = document.getElementById(`saved-output-${id}`);
+  const id = openButton.dataset.openOutput;
+  const layout = document.getElementById(`saved-layout-${id}`);
+  const outputPanel = document.getElementById(`saved-output-${id}`);
+  const journalPanel = document.getElementById(`journal-${id}`);
 
-    if (panel) {
-      panel.hidden = !panel.hidden;
-      openButton.textContent = panel.hidden ? 'Open' : 'Close';
+  if (layout && outputPanel) {
+    const shouldOpen = outputPanel.hidden;
+
+    layout.hidden = false;
+    outputPanel.hidden = !shouldOpen;
+    openButton.textContent = shouldOpen ? 'Close' : 'Open';
+
+    if (outputPanel.hidden && (!journalPanel || journalPanel.hidden)) {
+      layout.hidden = true;
     }
-
-    return;
   }
 
+  return;
+}
+
       if (journalButton) {
-        const id = journalButton.dataset.journalFor;
-        const panel = document.getElementById(`journal-${id}`);
+  const id = journalButton.dataset.journalFor;
+  const layout = document.getElementById(`saved-layout-${id}`);
+  const outputPanel = document.getElementById(`saved-output-${id}`);
+  const journalPanel = document.getElementById(`journal-${id}`);
 
-        if (panel) {
-          panel.hidden = !panel.hidden;
-        }
+  if (layout && journalPanel) {
+    const shouldOpen = journalPanel.hidden;
 
-        return;
-      }
+    layout.hidden = false;
+    journalPanel.hidden = !shouldOpen;
+    journalButton.textContent = shouldOpen ? 'Close Journal' : 'Journal';
+
+    if (journalPanel.hidden && (!outputPanel || outputPanel.hidden)) {
+      layout.hidden = true;
+    }
+  }
+
+  return;
+}
 
       if (saveJournalButton) {
         const savedOutputId = saveJournalButton.dataset.saveJournal;
@@ -953,10 +1020,8 @@
         }
 
         textarea.value = '';
-        panel.hidden = true;
-        setStatus('Journal entry saved.');
-        return;
-      }
+setStatus('Journal entry saved.');
+return;
 
       if (deleteButton) {
         const id = deleteButton.dataset.deleteOutput;
