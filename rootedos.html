@@ -744,6 +744,16 @@
         padding: 2rem 1.25rem;
       }
 
+      .rootedos-update-card.transparent-card {
+  background: rgba(255, 255, 255, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.38);
+  box-shadow:
+    0 24px 70px rgba(34, 48, 37, 0.14),
+    inset 0 1px 0 rgba(255, 255, 255, 0.55);
+  backdrop-filter: blur(26px) saturate(150%);
+  -webkit-backdrop-filter: blur(26px) saturate(150%);
+}
+      
       .rootedos-start-button {
         width: 100%;
         justify-content: flex-start;
@@ -881,7 +891,7 @@
 
   <main id="top">
     <section class="rootedos-launch" id="rootedosIntro" aria-labelledby="rootedos-title">
-      <div class="rootedos-update-card">
+      <div class="rootedos-update-card transparent-card">
         <div class="update-pill">RootedOS Update is Available</div>
 
         <h1 id="rootedos-title">RootedOS</h1>
