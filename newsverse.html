@@ -1074,18 +1074,23 @@ box-shadow:
     function renderSharePanel() {
   return `
     <div class="share-panel">
-      <h3>Share this NewsVerse reflection</h3>
+      <h3>Save or share this NewsVerse reflection</h3>
       <p>
-        Create a public RootedByte link for this generated output.
-        Anyone with the link can view it.
+        Save privately to your account, or create a public RootedByte link
+        that anyone with the link can view.
       </p>
 
       <div class="share-panel__actions">
-        <button class="primary-action" type="button" id="shareNewsOutput">
-          Share reflection
+        <button class="primary-action" type="button" id="saveNewsOutput">
+          Save privately
+        </button>
+
+        <button class="secondary-action" type="button" id="shareNewsOutput">
+          Share publicly
         </button>
       </div>
 
+      <div class="status" id="newsSaveStatus" role="status" aria-live="polite"></div>
       <div class="status" id="newsShareStatus" role="status" aria-live="polite"></div>
       <div class="share-link-box" id="newsShareLink" hidden></div>
     </div>
@@ -1139,6 +1144,50 @@ async function createSharedOutput({ appType, title, inputSummary, output, status
   return data;
 }
 
+    function attachNewsSaveButton(outputData, inputSummary) {
+  const button = document.querySelector('#saveNewsOutput');
+  const statusElement = document.querySelector('#newsSaveStatus');
+
+  if (!button || !statusElement) return;
+
+  button.addEventListener('click', async () => {
+    button.disabled = true;
+    statusElement.className = 'status';
+    statusElement.textContent = 'Saving privately...';
+
+    try {
+      if (!window.RootedByteSaveOutput || !window.RootedByteSaveOutput.save) {
+        throw new Error('Private saving is not ready yet. Please refresh and try again.');
+      }
+
+      const title = outputData?.overall_theme
+        ? `NewsVerse: ${outputData.overall_theme}`
+        : 'NewsVerse Reflection';
+
+      const result = await window.RootedByteSaveOutput.save({
+        appType: 'newsverse',
+        title,
+        inputSummary: inputSummary || 'Private NewsVerse reflection',
+        outputJson: outputData
+      });
+
+      if (!result.ok) {
+        statusElement.className = 'status error';
+        statusElement.textContent = result.message || 'Could not save privately.';
+        return;
+      }
+
+      statusElement.className = 'status';
+      statusElement.textContent = 'Saved privately to your account.';
+    } catch (error) {
+      statusElement.className = 'status error';
+      statusElement.textContent = error.message || 'Could not save privately.';
+    } finally {
+      button.disabled = false;
+    }
+  });
+}
+    
 function attachNewsShareButton(outputData) {
   const button = document.querySelector('#shareNewsOutput');
   const statusElement = document.querySelector('#newsShareStatus');
@@ -1214,6 +1263,7 @@ function attachNewsShareButton(outputData) {
           });
 
           result.innerHTML = renderNews(data) + renderSharePanel();
+attachNewsSaveButton(data, article.title || headlineFromUrl(url));
 attachNewsShareButton(data);
 
           setStatus(
@@ -1230,7 +1280,8 @@ attachNewsShareButton(data);
   </script>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="js/rootedbyte-auth-nav.js"></script>
+<script src="js/rootedbyte-auth-nav.js"></script>
+<script src="js/rootedbyte-save-output.js"></script>
   
 </body>
 </html>
