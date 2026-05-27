@@ -678,78 +678,253 @@
   }
 
   function renderSavedOutputBody(outputJson) {
-    const data = outputJson || {};
-    const areas = Array.isArray(data.areas) ? data.areas : [];
-    const plan = data.daily_plan || {};
-    const verses = Array.isArray(data.reflection_verses)
-      ? data.reflection_verses.slice(0, 3)
-      : [];
+  const data = outputJson || {};
 
-    return `
-      ${
-        data.summary
-          ? `<div class="saved-output-block">
-              <span class="tag">Summary</span>
-              <p>${escapeHtml(data.summary)}</p>
-            </div>`
-          : ''
-      }
+  const areas = Array.isArray(data.areas) ? data.areas : [];
+  const plan = data.daily_plan || {};
+  const rootedVerses = Array.isArray(data.reflection_verses)
+    ? data.reflection_verses.slice(0, 3)
+    : [];
 
-      ${
-        areas.length
-          ? areas.map((area) => `
-            <div class="saved-output-block">
-              <span class="tag">${escapeHtml(area.area || 'Reflection area')}</span>
-              ${area.urgency ? `<p><strong>Urgency:</strong> ${escapeHtml(area.urgency)}</p>` : ''}
-              ${area.current_state ? `<p><strong>Current state:</strong> ${escapeHtml(area.current_state)}</p>` : ''}
-              ${area.recommendation ? `<p><strong>Recommendation:</strong> ${escapeHtml(area.recommendation)}</p>` : ''}
-              ${area.scripture ? `<p><strong>Scripture:</strong> ${escapeHtml(area.scripture)}</p>` : ''}
-              ${area.action_step ? `<p><strong>Action step:</strong> ${escapeHtml(area.action_step)}</p>` : ''}
+  const newsVerses = Array.isArray(data.verses) ? data.verses : [];
+  const prayerPoints = Array.isArray(data.prayer_points) ? data.prayer_points : [];
+
+  const isSongDiveIn =
+    data.song ||
+    data.artist ||
+    data.song_meaning ||
+    data.faith_lens ||
+    data.instrument_guidance;
+
+  const isNewsVerse =
+    data.article_summary ||
+    data.overall_theme ||
+    data.exegesis ||
+    data.jesus_lens ||
+    newsVerses.length;
+
+  const rootedHtml = `
+    ${
+      data.summary
+        ? `<div class="saved-output-block">
+            <span class="tag">Summary</span>
+            <p>${escapeHtml(data.summary)}</p>
+          </div>`
+        : ''
+    }
+
+    ${
+      areas.length
+        ? areas.map((area) => `
+          <div class="saved-output-block">
+            <span class="tag">${escapeHtml(area.area || 'Reflection area')}</span>
+            ${area.urgency ? `<p><strong>Urgency:</strong> ${escapeHtml(area.urgency)}</p>` : ''}
+            ${area.current_state ? `<p><strong>Current state:</strong> ${escapeHtml(area.current_state)}</p>` : ''}
+            ${area.recommendation ? `<p><strong>Recommendation:</strong> ${escapeHtml(area.recommendation)}</p>` : ''}
+            ${area.scripture ? `<p><strong>Scripture:</strong> ${escapeHtml(area.scripture)}</p>` : ''}
+            ${area.action_step ? `<p><strong>Action step:</strong> ${escapeHtml(area.action_step)}</p>` : ''}
+          </div>
+        `).join('')
+        : ''
+    }
+
+    ${
+      Object.keys(plan).length
+        ? `<div class="saved-output-block">
+            <span class="tag">Daily plan</span>
+            <div class="saved-output-grid">
+              ${plan.prayer_minutes ? `<div><strong>Prayer</strong><p>${escapeHtml(plan.prayer_minutes)} minutes</p></div>` : ''}
+              ${plan.bible_reading_minutes ? `<div><strong>Bible reading</strong><p>${escapeHtml(plan.bible_reading_minutes)} minutes</p></div>` : ''}
+              ${plan.social_media_limit_minutes ? `<div><strong>Social media limit</strong><p>${escapeHtml(plan.social_media_limit_minutes)} minutes</p></div>` : ''}
+              ${plan.fasting_recommendation ? `<div><strong>Fasting</strong><p>${escapeHtml(plan.fasting_recommendation)}</p></div>` : ''}
+              ${plan.community_action ? `<div><strong>Community</strong><p>${escapeHtml(plan.community_action)}</p></div>` : ''}
             </div>
-          `).join('')
-          : ''
-      }
+          </div>`
+        : ''
+    }
 
-      ${
-        Object.keys(plan).length
-          ? `<div class="saved-output-block">
-              <span class="tag">Daily plan</span>
-              <div class="saved-output-grid">
-                ${plan.prayer_minutes ? `<div><strong>Prayer</strong><p>${escapeHtml(plan.prayer_minutes)} minutes</p></div>` : ''}
-                ${plan.bible_reading_minutes ? `<div><strong>Bible reading</strong><p>${escapeHtml(plan.bible_reading_minutes)} minutes</p></div>` : ''}
-                ${plan.social_media_limit_minutes ? `<div><strong>Social media limit</strong><p>${escapeHtml(plan.social_media_limit_minutes)} minutes</p></div>` : ''}
-                ${plan.fasting_recommendation ? `<div><strong>Fasting</strong><p>${escapeHtml(plan.fasting_recommendation)}</p></div>` : ''}
-                ${plan.community_action ? `<div><strong>Community</strong><p>${escapeHtml(plan.community_action)}</p></div>` : ''}
-              </div>
-            </div>`
-          : ''
-      }
+    ${
+      rootedVerses.length
+        ? `<div class="saved-output-block">
+            <span class="tag">Verses to reflect on</span>
+            ${rootedVerses.map((verse) => `
+              <blockquote class="saved-output-quote">${escapeHtml(verse.text || '')}</blockquote>
+              <p>
+                <strong>${escapeHtml(verse.reference || '')}</strong>
+                ${verse.reflection_prompt ? ' — ' + escapeHtml(verse.reflection_prompt) : ''}
+              </p>
+            `).join('')}
+          </div>`
+        : ''
+    }
 
-      ${
-        verses.length
-          ? `<div class="saved-output-block">
-              <span class="tag">Verses to reflect on</span>
-              ${verses.map((verse) => `
-                <blockquote class="saved-output-quote">${escapeHtml(verse.text || '')}</blockquote>
-                <p>
-                  <strong>${escapeHtml(verse.reference || '')}</strong>
-                  ${verse.reflection_prompt ? ' — ' + escapeHtml(verse.reflection_prompt) : ''}
-                </p>
-              `).join('')}
-            </div>`
-          : ''
-      }
+    ${
+      data.encouragement
+        ? `<div class="saved-output-block">
+            <span class="tag">Encouragement</span>
+            <p>${escapeHtml(data.encouragement)}</p>
+          </div>`
+        : ''
+    }
+  `;
 
-      ${
-        data.encouragement
-          ? `<div class="saved-output-block">
-              <span class="tag">Encouragement</span>
-              <p>${escapeHtml(data.encouragement)}</p>
-            </div>`
-          : ''
-      }
-    `;
+  const newsHtml = `
+    ${
+      data.overall_theme || data.article_summary
+        ? `<div class="saved-output-block">
+            <span class="tag">NewsVerse summary</span>
+            ${data.overall_theme ? `<h3>${escapeHtml(data.overall_theme)}</h3>` : ''}
+            ${data.article_summary ? `<p>${escapeHtml(data.article_summary)}</p>` : ''}
+          </div>`
+        : ''
+    }
+
+    ${
+      newsVerses.length
+        ? `<div class="saved-output-block">
+            <span class="tag">Relevant verses</span>
+            ${newsVerses.map((verse) => `
+              <blockquote class="saved-output-quote">${escapeHtml(verse.text || '')}</blockquote>
+              <p>
+                <strong>${escapeHtml(verse.reference || '')}</strong>
+                ${verse.relevance_percent ? ` • ${escapeHtml(verse.relevance_percent)}% relevant` : ''}
+              </p>
+              ${verse.relevance_reason ? `<p>${escapeHtml(verse.relevance_reason)}</p>` : ''}
+            `).join('')}
+          </div>`
+        : ''
+    }
+
+    ${
+      data.exegesis
+        ? `<div class="saved-output-block">
+            <span class="tag">Exegesis</span>
+            <p>${escapeHtml(data.exegesis)}</p>
+          </div>`
+        : ''
+    }
+
+    ${
+      data.jesus_lens
+        ? `<div class="saved-output-block">
+            <span class="tag">Jesus Lens</span>
+            <p>${escapeHtml(data.jesus_lens)}</p>
+          </div>`
+        : ''
+    }
+
+    ${
+      prayerPoints.length
+        ? `<div class="saved-output-block">
+            <span class="tag">Prayer points</span>
+            <ul>
+              ${prayerPoints.map((item) => `<li>${escapeHtml(item)}</li>`).join('')}
+            </ul>
+          </div>`
+        : ''
+    }
+  `;
+
+  const songHtml = `
+    ${
+      data.song || data.artist || data.bpm || data.key || data.instrument_label
+        ? `<div class="saved-output-block">
+            <span class="tag">Song Snapshot</span>
+            <div class="saved-output-grid">
+              ${data.song ? `<div><strong>Song</strong><p>${escapeHtml(data.song)}</p></div>` : ''}
+              ${data.artist ? `<div><strong>Artist</strong><p>${escapeHtml(data.artist)}</p></div>` : ''}
+              ${data.bpm ? `<div><strong>BPM</strong><p>${escapeHtml(data.bpm)}</p></div>` : ''}
+              ${data.key ? `<div><strong>Key</strong><p>${escapeHtml(data.key)}</p></div>` : ''}
+              ${data.instrument_label ? `<div><strong>Role</strong><p>${escapeHtml(data.instrument_label)}</p></div>` : ''}
+              ${data.metadata_confidence ? `<div><strong>Confidence</strong><p>${escapeHtml(data.metadata_confidence)}</p></div>` : ''}
+            </div>
+          </div>`
+        : ''
+    }
+
+    ${
+      data.song_meaning
+        ? `<div class="saved-output-block">
+            <span class="tag">What the song is saying</span>
+            <p>${escapeHtml(data.song_meaning)}</p>
+          </div>`
+        : ''
+    }
+
+    ${
+      data.faith_lens
+        ? `<div class="saved-output-block">
+            <span class="tag">Faith Lens</span>
+            <p>${escapeHtml(data.faith_lens)}</p>
+          </div>`
+        : ''
+    }
+
+    ${
+      data.arrangement_feel
+        ? `<div class="saved-output-block">
+            <span class="tag">Song Flow</span>
+            <p>${escapeHtml(data.arrangement_feel)}</p>
+          </div>`
+        : ''
+    }
+
+    ${
+      data.listening_guide
+        ? `<div class="saved-output-block">
+            <span class="tag">Listen Closely</span>
+            <p>${escapeHtml(data.listening_guide)}</p>
+          </div>`
+        : ''
+    }
+
+    ${
+      data.rehearsal_prep
+        ? `<div class="saved-output-block">
+            <span class="tag">Rehearsal Moves</span>
+            <p>${escapeHtml(data.rehearsal_prep)}</p>
+          </div>`
+        : ''
+    }
+
+    ${
+      data.spiritual_reflection
+        ? `<div class="saved-output-block">
+            <span class="tag">Before You Lead</span>
+            <p>${escapeHtml(data.spiritual_reflection)}</p>
+          </div>`
+        : ''
+    }
+
+    ${
+      data.instrument_guidance
+        ? `<div class="saved-output-block">
+            <span class="tag">Role Coaching</span>
+            <p>${escapeHtml(data.instrument_guidance)}</p>
+          </div>`
+        : ''
+    }
+  `;
+
+  if (isSongDiveIn) {
+    return songHtml;
   }
+
+  if (isNewsVerse) {
+    return newsHtml;
+  }
+
+  if (rootedHtml.trim()) {
+    return rootedHtml;
+  }
+
+  return `
+    <div class="saved-output-block">
+      <span class="tag">Saved output</span>
+      <pre>${escapeHtml(JSON.stringify(data, null, 2))}</pre>
+    </div>
+  `;
+}
 
   async function fetchSavedOutputs() {
     const { data, error } = await supabaseClient
