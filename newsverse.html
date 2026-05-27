@@ -1188,33 +1188,50 @@ async function createSharedOutput({ appType, title, inputSummary, output, status
   });
 }
     
-function attachNewsShareButton(outputData) {
-  const button = document.querySelector('#shareNewsOutput');
-  const statusElement = document.querySelector('#newsShareStatus');
-  const linkElement = document.querySelector('#newsShareLink');
+function attachNewsSaveButton(outputData, inputSummary) {
+  const button = document.querySelector('#saveNewsOutput');
+  const statusElement = document.querySelector('#newsSaveStatus');
 
-  if (!button || !statusElement || !linkElement) return;
+  if (!button || !statusElement) return;
 
   button.addEventListener('click', async () => {
     button.disabled = true;
+    statusElement.className = 'status';
+    statusElement.textContent = 'Saving privately...';
 
     try {
-      await createSharedOutput({
+      if (!window.RootedByteSaveOutput || !window.RootedByteSaveOutput.save) {
+        throw new Error('Private saving is not ready yet. Please refresh and try again.');
+      }
+
+      const title = outputData?.overall_theme
+        ? `NewsVerse: ${outputData.overall_theme}`
+        : 'NewsVerse Reflection';
+
+      const result = await window.RootedByteSaveOutput.save({
         appType: 'newsverse',
-        title: 'NewsVerse Reflection',
-        inputSummary: 'Shared NewsVerse reflection',
-        output: outputData,
-        statusElement,
-        linkElement
+        title,
+        inputSummary: inputSummary || 'Private NewsVerse reflection',
+        outputJson: outputData
       });
+
+      if (!result.ok) {
+        statusElement.className = 'status error';
+        statusElement.textContent = result.message || 'Could not save privately.';
+        return;
+      }
+
+      statusElement.className = 'status';
+      statusElement.textContent = 'Saved privately to your account.';
     } catch (error) {
       statusElement.className = 'status error';
-      statusElement.textContent = error.message;
+      statusElement.textContent = error.message || 'Could not save privately.';
     } finally {
       button.disabled = false;
     }
   });
 }
+    
     const newsForm = $('#newsForm');
 
     if (newsForm) {
