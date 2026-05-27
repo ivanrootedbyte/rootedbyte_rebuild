@@ -1160,21 +1160,26 @@
       </section>
 
             <section class="share-panel" id="songSharePanel" hidden>
-        <h3>Share this Song DiveIn prep</h3>
-        <p>
-          Create a public RootedByte link for this generated output.
-          Anyone with the link can view it.
-        </p>
+  <h3>Save or share this Song DiveIn prep</h3>
+  <p>
+    Save privately to your account, or create a public RootedByte link
+    that anyone with the link can view.
+  </p>
 
-        <div class="share-panel__actions">
-          <button class="primary-action" type="button" id="shareToneOutput">
-            Share Song DiveIn
-          </button>
-        </div>
+  <div class="share-panel__actions">
+    <button class="primary-action" type="button" id="saveToneOutput">
+      Save privately
+    </button>
 
-        <div class="status" id="toneShareStatus" role="status" aria-live="polite"></div>
-        <div class="share-link-box" id="toneShareLink" hidden></div>
-      </section>
+    <button class="secondary-action" type="button" id="shareToneOutput">
+      Share publicly
+    </button>
+  </div>
+
+  <div class="status" id="toneSaveStatus" role="status" aria-live="polite"></div>
+  <div class="status" id="toneShareStatus" role="status" aria-live="polite"></div>
+  <div class="share-link-box" id="toneShareLink" hidden></div>
+</section>
       
     </section>
   </main>
@@ -1213,9 +1218,11 @@
   const instrumentGuidanceResult = $('#instrumentGuidanceResult');
 
   const songSharePanel = $('#songSharePanel');
-  const shareToneOutput = $('#shareToneOutput');
-  const toneShareStatus = $('#toneShareStatus');
-  const toneShareLink = $('#toneShareLink');
+const saveToneOutput = $('#saveToneOutput');
+const shareToneOutput = $('#shareToneOutput');
+const toneSaveStatus = $('#toneSaveStatus');
+const toneShareStatus = $('#toneShareStatus');
+const toneShareLink = $('#toneShareLink');
 
   let latestToneOutput = null;
 
@@ -1378,6 +1385,11 @@
       songSharePanel.hidden = true;
     }
 
+    if (toneSaveStatus) {
+  toneSaveStatus.className = 'status';
+  toneSaveStatus.textContent = '';
+}
+    
     if (toneShareStatus) {
       toneShareStatus.className = 'status';
       toneShareStatus.textContent = '';
@@ -1396,6 +1408,11 @@
       songSharePanel.hidden = false;
     }
 
+    if (toneSaveStatus) {
+  toneSaveStatus.className = 'status';
+  toneSaveStatus.textContent = '';
+}
+    
     if (toneShareStatus) {
       toneShareStatus.className = 'status';
       toneShareStatus.textContent = '';
@@ -1595,6 +1612,44 @@
     );
   }
 
+   saveToneOutput?.addEventListener('click', async () => {
+  if (!latestToneOutput) {
+    setStatus(toneSaveStatus, 'Generate a Song DiveIn prep first.', 'error');
+    return;
+  }
+
+  saveToneOutput.disabled = true;
+  setStatus(toneSaveStatus, 'Saving privately...');
+
+  try {
+    if (!window.RootedByteSaveOutput || !window.RootedByteSaveOutput.save) {
+      throw new Error('Private saving is not ready yet. Please refresh and try again.');
+    }
+
+    const title = getToneShareTitle(latestToneOutput);
+
+    const result = await window.RootedByteSaveOutput.save({
+      appType: 'tone',
+      title,
+      inputSummary: latestToneOutput.instrument_label
+        ? `Private Song DiveIn prep for ${latestToneOutput.instrument_label}`
+        : 'Private Song DiveIn prep',
+      outputJson: latestToneOutput
+    });
+
+    if (!result.ok) {
+      setStatus(toneSaveStatus, result.message || 'Could not save privately.', 'error');
+      return;
+    }
+
+    setStatus(toneSaveStatus, 'Saved privately to your account.');
+  } catch (error) {
+    setStatus(toneSaveStatus, error.message || 'Could not save privately.', 'error');
+  } finally {
+    saveToneOutput.disabled = false;
+  }
+});
+   
   shareToneOutput?.addEventListener('click', async () => {
     if (!latestToneOutput) {
       setStatus(toneShareStatus, 'Generate a Song DiveIn prep first.', 'error');
@@ -1667,6 +1722,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="js/rootedbyte-auth-nav.js"></script>
+<script src="js/rootedbyte-save-output.js"></script>
   
 </body>
 </html>
