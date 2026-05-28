@@ -1801,21 +1801,20 @@ function addSongInputRow() {
 
   songInputList.appendChild(row);
 
-  const input = row.querySelector('.songInputItem');
-  const removeButton = row.querySelector('.remove-song-button');
-
-  removeButton?.addEventListener('click', () => {
+  row.querySelector('.remove-song-button')?.addEventListener('click', () => {
     row.remove();
     updateRemoveSongButtons();
   });
 
-  input?.focus();
+  row.querySelector('.songInputItem')?.focus();
 
   updateRemoveSongButtons();
 }
 
 function setupSongInputRows() {
-  addSongButton?.addEventListener('click', addSongInputRow);
+  if (!addSongButton) return;
+
+  addSongButton.addEventListener('click', addSongInputRow);
 
   document.querySelectorAll('.remove-song-button').forEach((button) => {
     button.addEventListener('click', () => {
