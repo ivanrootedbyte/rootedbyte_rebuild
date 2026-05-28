@@ -89,12 +89,29 @@
     }
 
     .brand-mark {
-      display: none;
-    }
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 13px;
+  overflow: hidden;
+  flex: 0 0 auto;
+  background: #ffffff;
+}
 
-    .brand span:last-child {
-      text-shadow: 2px 2px 0 rgba(0, 120, 255, 0.7);
-    }
+.brand-mark img {
+  width: 116%;
+  height: 116%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+
+.brand span:last-child {
+  text-transform: none;
+  letter-spacing: -0.055em;
+  text-shadow: 2px 2px 0 rgba(0, 120, 255, 0.7);
+}
 
     .nav-scroll-wrap {
       justify-self: center;
@@ -439,6 +456,109 @@
       font-size: 0.88rem;
     }
 
+    .song-list-field {
+  align-self: stretch;
+}
+
+.song-input-list {
+  display: grid;
+  gap: 0.7rem;
+}
+
+.song-input-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 0.55rem;
+  align-items: center;
+}
+
+.remove-song-button {
+  width: 42px;
+  height: 42px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 999px;
+  color: #ffffff;
+  background: #050505;
+  cursor: pointer;
+  font-size: 1.35rem;
+  font-weight: 950;
+  line-height: 1;
+}
+
+.remove-song-button:hover {
+  color: var(--song-red);
+  border-color: var(--song-red);
+}
+
+.add-song-button {
+  width: fit-content;
+  min-height: 42px;
+  margin-top: 0.8rem;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 999px;
+  padding: 0 1rem;
+  color: #ffffff;
+  background: transparent;
+  cursor: pointer;
+  font-size: 0.86rem;
+  font-weight: 950;
+  text-transform: uppercase;
+}
+
+.add-song-button:hover {
+  color: var(--song-red);
+  border-color: var(--song-red);
+}
+
+.song-input-note {
+  margin: 0.65rem 0 0;
+  color: var(--song-muted);
+  font-size: 0.88rem;
+  line-height: 1.45;
+  font-weight: 650;
+}
+
+.song-tabs {
+  width: min(1180px, calc(100% - 2rem));
+  margin: 54px auto 0;
+  display: flex;
+  gap: 0.55rem;
+  overflow-x: auto;
+  padding-bottom: 0.35rem;
+  scrollbar-width: none;
+}
+
+.song-tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.song-tab-button {
+  flex: 0 0 auto;
+  min-height: 44px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 999px;
+  padding: 0 1.1rem;
+  color: #ffffff;
+  background: #050505;
+  cursor: pointer;
+  font-weight: 950;
+  max-width: 260px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.song-tab-button.active {
+  border-color: var(--song-red);
+  background: var(--song-red);
+  color: #ffffff;
+}
+
+.song-tab-panel[hidden] {
+  display: none;
+}
+
+    
     .status {
       min-height: 24px;
       margin-top: 0.4rem;
@@ -699,147 +819,171 @@
     }
 
     @media (max-width: 980px) {
-      html {
-        scroll-padding-top: 86px;
-      }
+  html {
+    scroll-padding-top: 86px;
+  }
 
-      .site-header {
-        padding: 0.7rem 0.85rem;
-      }
+  .site-header {
+    padding: 0.7rem 0.85rem;
+  }
 
-      .nav {
-        min-height: auto;
-        display: flex;
-        align-items: center;
-        justify-content: flex-start;
-        gap: 0.75rem;
-        width: 100%;
-        padding: 0;
-        overflow: hidden;
-      }
+  .nav {
+    min-height: auto;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 0.75rem;
+    width: 100%;
+    padding: 0;
+    overflow: hidden;
+  }
 
-      .brand {
-        flex: 0 0 auto;
-        font-size: 1.02rem;
-      }
+  .brand {
+    flex: 0 0 auto;
+    font-size: 1.02rem;
+  }
 
-      .nav-scroll-wrap {
-        position: relative;
-        flex: 1 1 auto;
-        min-width: 0;
-        max-width: 100%;
-        overflow: hidden;
-      }
+  .brand-mark {
+    width: 32px;
+    height: 32px;
+    border-radius: 11px;
+  }
 
-      .nav-scroll-wrap::after {
-        content: "›";
-        position: absolute;
-        right: 0.2rem;
-        top: 50%;
-        transform: translateY(-50%);
-        width: 1.55rem;
-        height: 1.55rem;
-        display: grid;
-        place-items: center;
-        border-radius: 999px;
-        color: #ffffff;
-        background: rgba(255, 255, 255, 0.12);
-        pointer-events: none;
-        font-size: 1.2rem;
-        font-weight: 950;
-      }
+  .brand span:last-child {
+    font-size: 0.98rem;
+  }
 
-      .nav-links {
-        justify-content: flex-start;
-        gap: 0.35rem;
-        overflow-x: auto;
-        overflow-y: hidden;
-        white-space: nowrap;
-        padding: 0.32rem 2rem 0.32rem 0.32rem;
-        border: 1px solid rgba(255, 255, 255, 0.12);
-        border-radius: 999px;
-        scrollbar-width: none;
-      }
+  .nav-scroll-wrap {
+    position: relative;
+    flex: 1 1 auto;
+    min-width: 0;
+    max-width: 100%;
+    overflow: hidden;
+  }
 
-      .nav-links::-webkit-scrollbar {
-        display: none;
-      }
+  .nav-scroll-wrap::after {
+    content: "›";
+    position: absolute;
+    right: 0.2rem;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 1.55rem;
+    height: 1.55rem;
+    display: grid;
+    place-items: center;
+    border-radius: 999px;
+    color: #ffffff;
+    background: rgba(255, 255, 255, 0.12);
+    pointer-events: none;
+    font-size: 1.2rem;
+    font-weight: 950;
+  }
 
-      .nav-links a {
-        flex: 0 0 auto;
-        padding: 0.48rem 0.65rem;
-        border-radius: 999px;
-        font-size: 0.73rem;
-      }
+  .nav-links {
+    justify-content: flex-start;
+    gap: 0.35rem;
+    overflow-x: auto;
+    overflow-y: hidden;
+    white-space: nowrap;
+    padding: 0.32rem 2rem 0.32rem 0.32rem;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 999px;
+    scrollbar-width: none;
+  }
 
-      .nav-links a.active {
-        color: #ffffff;
-        background: var(--song-red);
-      }
+  .nav-links::-webkit-scrollbar {
+    display: none;
+  }
 
-      .song-hero {
-        min-height: auto;
-        padding: 56px 18px 30px;
-        grid-template-columns: 1fr;
-        gap: 2rem;
-      }
+  .nav-links a {
+    flex: 0 0 auto;
+    padding: 0.48rem 0.65rem;
+    border-radius: 999px;
+    font-size: 0.73rem;
+  }
 
-      .song-hero h1 {
-        font-size: clamp(3.45rem, 17vw, 5.2rem);
-      }
+  .nav-links a.active {
+    color: #ffffff;
+    background: var(--song-red);
+  }
 
-      .song-hero__subtitle {
-        font-size: 1rem;
-      }
+  .song-hero {
+    min-height: auto;
+    padding: 56px 18px 30px;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
 
-      .song-hero__image-wrap,
-      .song-hero__image {
-        min-height: 265px;
-      }
+  .song-hero h1 {
+    font-size: clamp(3.45rem, 17vw, 5.2rem);
+  }
 
-      .song-intro-strip__inner {
-        padding: 28px 18px;
-        grid-template-columns: 1fr;
-        gap: 0.8rem;
-      }
+  .song-hero__subtitle {
+    font-size: 1rem;
+  }
 
-      .song-search-card,
-      .verified-song-card,
-      .lookup-actions-card,
-      .song-meaning-card,
-      .prep-cards,
-      .share-panel {
-        width: calc(100% - 1.25rem);
-        margin-top: 54px;
-        padding: 1.15rem;
-      }
+  .song-hero__image-wrap,
+  .song-hero__image {
+    min-height: 265px;
+  }
 
-      .song-start-form,
-      .verified-grid,
-      .resource-results {
-        grid-template-columns: 1fr;
-      }
+  .song-intro-strip__inner {
+    padding: 28px 18px;
+    grid-template-columns: 1fr;
+    gap: 0.8rem;
+  }
 
-      .verified-grid {
-        gap: 0.75rem;
-        background: transparent;
-        border: 0;
-      }
+  .song-search-card,
+  .verified-song-card,
+  .lookup-actions-card,
+  .song-meaning-card,
+  .prep-cards,
+  .share-panel {
+    width: calc(100% - 1.25rem);
+    margin-top: 54px;
+    padding: 1.15rem;
+  }
 
-      .prep-card summary {
-        display: grid;
-      }
+  .song-start-form,
+  .verified-grid,
+  .resource-results {
+    grid-template-columns: 1fr;
+  }
 
-      .prep-card summary small {
-        text-align: left;
-      }
+  .verified-grid {
+    gap: 0.75rem;
+    background: transparent;
+    border: 0;
+  }
 
-      .primary-action,
-      .secondary-action,
-      .generate-action {
-        width: 100%;
-      }
-    }
+  .prep-card summary {
+    display: grid;
+  }
+
+  .prep-card summary small {
+    text-align: left;
+  }
+
+  .primary-action,
+  .secondary-action,
+  .generate-action {
+    width: 100%;
+  }
+
+  /* Add-song mobile updates */
+  .song-input-row {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+
+  .add-song-button {
+    width: 100%;
+  }
+
+  .song-tabs {
+    width: calc(100% - 1.25rem);
+    margin-top: 34px;
+  }
+}
   </style>
 </head>
 
@@ -904,20 +1048,35 @@
       </div>
 
       <form id="songSearchForm" class="song-start-form">
-        <div class="field-group song-input-wide">
-          <label for="songInput">Song title + artist, or YouTube link</label>
-          <div class="input-shell">
-            <span class="input-icon" aria-hidden="true">♪</span>
-            <input
-              id="songInput"
-              name="songInput"
-              type="text"
-              placeholder="Song title - artist/band, or paste a YouTube link"
-              autocomplete="off"
-              required
-            />
-          </div>
-        </div>
+        <div class="field-group song-input-wide song-list-field">
+  <label>Song title + artist, or YouTube link</label>
+
+  <div id="songInputList" class="song-input-list">
+    <div class="song-input-row">
+      <div class="input-shell">
+        <span class="input-icon" aria-hidden="true">♪</span>
+        <input
+          class="songInputItem"
+          name="songInput[]"
+          type="text"
+          placeholder="Song title - artist/band, or paste a YouTube link"
+          autocomplete="off"
+          required
+        />
+      </div>
+
+      <button class="remove-song-button" type="button" aria-label="Remove song" hidden>
+        ×
+      </button>
+    </div>
+  </div>
+
+  <button id="addSongButton" class="add-song-button" type="button">
+    + Add another song
+  </button>
+
+  <p class="song-input-note">Add up to 5 songs. Song DiveIn will create a separate tab for each result.</p>
+</div>
 
         <div class="field-group">
           <label for="instrumentSelect">Your role</label>
@@ -943,6 +1102,8 @@
     </section>
 
     <section id="songResultsArea" class="song-results-area" hidden>
+  <div id="songTabs" class="song-tabs" hidden></div>
+  <div id="songTabPanels"></div>
       <section class="verified-song-card" aria-labelledby="verified-song-title">
         <div class="section-heading compact-heading">
           <p class="eyebrow">Song Snapshot</p>
@@ -1087,6 +1248,7 @@
         <div class="status" id="toneShareStatus" role="status" aria-live="polite"></div>
         <div class="share-link-box" id="toneShareLink" hidden></div>
       </section>
+    </div>
     </section>
   </main>
 
@@ -1100,7 +1262,10 @@
     const $ = (selector) => document.querySelector(selector);
 
     const songSearchForm = $('#songSearchForm');
-    const songInputEl = $('#songInput');
+    const songInputList = $('#songInputList');
+const addSongButton = $('#addSongButton');
+const songTabs = $('#songTabs');
+const songTabPanels = $('#songTabPanels');
     const instrumentSelect = $('#instrumentSelect');
     const songResultsArea = $('#songResultsArea');
     const toneStatus = $('#toneStatus');
@@ -1426,12 +1591,12 @@
       setHtml(instrumentGuidanceResult, `<p class="loading-text">Song DiveIn is creating ${escapeHtml(instrumentLabel)} coaching...</p>`);
     }
 
-    function getSongArtistText(data) {
-      return `${data.song || ''} ${data.artist || ''}`.trim() || songInputEl.value.trim() || 'song';
-    }
+    function getSongArtistText(data, fallbackInput = '') {
+  return `${data.song || ''} ${data.artist || ''}`.trim() || fallbackInput || 'song';
+}
 
     function renderSongDiveIn(data, instrument) {
-      const songArtist = getSongArtistText(data);
+      const songArtist = getSongArtistText(data, data.original_input || '');
 
       setText(verifiedSongName, data.song || 'Unable to verify');
       setText(verifiedArtist, data.artist || 'Unable to verify');
@@ -1486,7 +1651,7 @@
     function getCurrentSongSearchText() {
       const song = verifiedSongName?.textContent?.trim();
       const artist = verifiedArtist?.textContent?.trim();
-      const typedInput = songInputEl?.value?.trim();
+      const typedInput = getSongInputs()[0] || '';
 
       const invalid = new Set([
         '',
@@ -1582,48 +1747,240 @@
       }
     });
 
-    songSearchForm?.addEventListener('submit', async (event) => {
-      event.preventDefault();
+    function getSongInputElements() {
+  return Array.from(document.querySelectorAll('.songInputItem'));
+}
 
-      const songInput = songInputEl.value.trim();
-      const instrument = instrumentSelect.value;
+function getSongInputs() {
+  return getSongInputElements()
+    .map((input) => input.value.trim())
+    .filter(Boolean);
+}
 
-      if (!songInput) {
-        setStatus(toneStatus, 'Please enter a song title + artist, or paste a YouTube link.', 'error');
-        return;
-      }
+function updateRemoveSongButtons() {
+  const rows = Array.from(document.querySelectorAll('.song-input-row'));
 
-      if (/open\.spotify\.com\/track\//i.test(songInput)) {
-        setStatus(
-          toneStatus,
-          'Spotify links are not supported. Please type the song name and artist, or paste a YouTube link.',
-          'error'
-        );
-        return;
-      }
+  rows.forEach((row) => {
+    const removeButton = row.querySelector('.remove-song-button');
+    if (!removeButton) return;
 
-      setStatus(toneStatus, 'The AI Engine is processing the song...', 'info', true);
+    removeButton.hidden = rows.length <= 1;
+  });
 
-      try {
-        setLoadingState(songInput, instrument);
+  if (addSongButton) {
+    addSongButton.disabled = rows.length >= 5;
+    addSongButton.textContent = rows.length >= 5 ? 'Maximum 5 songs added' : '+ Add another song';
+  }
+}
 
-        const data = await postJson('/api/tone', {
-          songInput,
-          instrument
-        });
+function addSongInputRow() {
+  const rows = Array.from(document.querySelectorAll('.song-input-row'));
 
-        renderSongDiveIn(data, instrument);
+  if (rows.length >= 5 || !songInputList) return;
 
-        const toneShareOutput = buildToneShareOutput(data, instrument);
-        showToneSharePanel(toneShareOutput);
+  const row = document.createElement('div');
+  row.className = 'song-input-row';
 
-        setStatus(toneStatus, 'Song DiveIn prep is ready.');
-      } catch (error) {
-        renderErrorState(error);
-      }
+  row.innerHTML = `
+    <div class="input-shell">
+      <span class="input-icon" aria-hidden="true">♪</span>
+      <input
+        class="songInputItem"
+        name="songInput[]"
+        type="text"
+        placeholder="Song title - artist/band, or paste a YouTube link"
+        autocomplete="off"
+        required
+      />
+    </div>
+
+    <button class="remove-song-button" type="button" aria-label="Remove song">
+      ×
+    </button>
+  `;
+
+  songInputList.appendChild(row);
+
+  const input = row.querySelector('.songInputItem');
+  const removeButton = row.querySelector('.remove-song-button');
+
+  removeButton?.addEventListener('click', () => {
+    row.remove();
+    updateRemoveSongButtons();
+  });
+
+  input?.focus();
+
+  updateRemoveSongButtons();
+}
+
+function setupSongInputRows() {
+  addSongButton?.addEventListener('click', addSongInputRow);
+
+  document.querySelectorAll('.remove-song-button').forEach((button) => {
+    button.addEventListener('click', () => {
+      button.closest('.song-input-row')?.remove();
+      updateRemoveSongButtons();
     });
+  });
+
+  updateRemoveSongButtons();
+}
+
+function createSongTabTitle(data, fallbackInput, index) {
+  const song = String(data?.song || '').trim();
+  const artist = String(data?.artist || '').trim();
+
+  if (song && artist) return `${song} — ${artist}`;
+  if (song) return song;
+
+  return fallbackInput || `Song ${index + 1}`;
+}
+
+function cloneCurrentResultsIntoPanel(panelId) {
+  const panel = document.createElement('div');
+  panel.className = 'song-tab-panel';
+  panel.id = panelId;
+
+  const sections = Array.from(songTabPanels.children);
+  sections.forEach((section) => {
+    panel.appendChild(section);
+  });
+
+  songTabPanels.appendChild(panel);
+  return panel;
+}
+
+function activateSongTab(panelId) {
+  document.querySelectorAll('.song-tab-button').forEach((button) => {
+    button.classList.toggle('active', button.dataset.panelId === panelId);
+  });
+
+  document.querySelectorAll('.song-tab-panel').forEach((panel) => {
+    panel.hidden = panel.id !== panelId;
+  });
+}
+
+function createSongTab({ title, panelId, active = false }) {
+  if (!songTabs) return;
+
+  const button = document.createElement('button');
+  button.type = 'button';
+  button.className = active ? 'song-tab-button active' : 'song-tab-button';
+  button.dataset.panelId = panelId;
+  button.textContent = title;
+
+  button.addEventListener('click', () => activateSongTab(panelId));
+
+  songTabs.appendChild(button);
+}
+
+function clearSongTabs() {
+  if (songTabs) {
+    songTabs.innerHTML = '';
+    songTabs.hidden = true;
+  }
+
+  if (songTabPanels) {
+    const currentSections = Array.from(document.querySelectorAll(
+      '.verified-song-card, .lookup-actions-card, .song-meaning-card, .prep-cards, .share-panel'
+    ));
+
+    songTabPanels.innerHTML = '';
+
+    currentSections.forEach((section) => {
+      songTabPanels.appendChild(section);
+    });
+  }
+}
+    
+    songSearchForm?.addEventListener('submit', async (event) => {
+  event.preventDefault();
+
+  const songInputs = getSongInputs();
+  const instrument = instrumentSelect.value;
+
+  if (!songInputs.length) {
+    setStatus(toneStatus, 'Please enter at least one song title + artist, or paste a YouTube link.', 'error');
+    return;
+  }
+
+  if (songInputs.length > 5) {
+    setStatus(toneStatus, 'Please keep your Song DiveIn batch to 5 songs or fewer.', 'error');
+    return;
+  }
+
+  const hasSpotifyLink = songInputs.some((songInput) => /open\.spotify\.com\/track\//i.test(songInput));
+
+  if (hasSpotifyLink) {
+    setStatus(
+      toneStatus,
+      'Spotify links are not supported. Please type the song name and artist, or paste a YouTube link.',
+      'error'
+    );
+    return;
+  }
+
+  clearSongTabs();
+  resetToneSharePanel();
+
+  setStatus(
+    toneStatus,
+    songInputs.length === 1
+      ? 'The AI Engine is processing the song...'
+      : `The AI Engine is processing ${songInputs.length} songs...`,
+    'info',
+    true
+  );
+
+  try {
+    for (let index = 0; index < songInputs.length; index += 1) {
+      const songInput = songInputs[index];
+      const panelId = `song-tab-panel-${Date.now()}-${index}`;
+
+      setLoadingState(songInput, instrument);
+
+      const data = await postJson('/api/tone', {
+        songInput,
+        instrument
+      });
+
+      data.original_input = songInput;
+
+      renderSongDiveIn(data, instrument);
+
+      const toneShareOutput = buildToneShareOutput(data, instrument);
+      showToneSharePanel(toneShareOutput);
+
+      const tabTitle = createSongTabTitle(data, songInput, index);
+
+      if (songTabs) {
+        songTabs.hidden = false;
+      }
+
+      createSongTab({
+        title: tabTitle,
+        panelId,
+        active: index === 0
+      });
+
+      const panel = cloneCurrentResultsIntoPanel(panelId);
+      panel.hidden = index !== 0;
+    }
+
+    setStatus(
+      toneStatus,
+      songInputs.length === 1
+        ? 'Song DiveIn prep is ready.'
+        : 'Song DiveIn prep tabs are ready.'
+    );
+  } catch (error) {
+    renderErrorState(error);
+  }
+});
 
     instrumentSelect?.addEventListener('change', updateTutorialPreview);
+    setupSongInputRows();
   </script>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
