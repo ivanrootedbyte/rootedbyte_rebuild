@@ -1842,9 +1842,18 @@ function cloneCurrentResultsIntoPanel(panelId) {
   panel.className = 'song-tab-panel';
   panel.id = panelId;
 
-  const sections = Array.from(songTabPanels.children);
+  const sections = [
+    document.querySelector('.verified-song-card'),
+    document.querySelector('.lookup-actions-card'),
+    document.querySelector('.song-meaning-card'),
+    document.querySelector('.prep-cards'),
+    document.querySelector('.share-panel')
+  ].filter(Boolean);
+
   sections.forEach((section) => {
-    panel.appendChild(section);
+    const clone = section.cloneNode(true);
+    clone.removeAttribute('id');
+    panel.appendChild(clone);
   });
 
   songTabPanels.appendChild(panel);
@@ -1966,6 +1975,17 @@ function clearSongTabs() {
 
       const panel = cloneCurrentResultsIntoPanel(panelId);
       panel.hidden = index !== 0;
+    }
+
+    document.querySelectorAll(
+      '#songTabPanels > .verified-song-card, #songTabPanels > .lookup-actions-card, #songTabPanels > .song-meaning-card, #songTabPanels > .prep-cards, #songTabPanels > .share-panel'
+    ).forEach((section) => {
+      section.hidden = true;
+    });
+
+    const firstPanel = document.querySelector('.song-tab-panel');
+    if (firstPanel) {
+      activateSongTab(firstPanel.id);
     }
 
     setStatus(
