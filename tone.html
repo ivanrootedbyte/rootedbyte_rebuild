@@ -1843,13 +1843,7 @@ function cloneCurrentResultsIntoPanel(panelId) {
   panel.id = panelId;
 
   const sourceSections = Array.from(songTabPanels.children).filter((child) => {
-    return (
-      child.classList.contains('verified-song-card') ||
-      child.classList.contains('lookup-actions-card') ||
-      child.classList.contains('song-meaning-card') ||
-      child.classList.contains('prep-cards') ||
-      child.classList.contains('share-panel')
-    );
+    return !child.classList.contains('song-tab-panel');
   });
 
   sourceSections.forEach((section) => {
@@ -1994,13 +1988,13 @@ function clearSongTabs() {
       panel.hidden = index !== 0;
     }
 
-    const originalWorkingSections = document.querySelectorAll(
-      '#songTabPanels > .verified-song-card, #songTabPanels > .lookup-actions-card, #songTabPanels > .song-meaning-card, #songTabPanels > .prep-cards, #songTabPanels > .share-panel'
-    );
+    const originalWorkingSections = Array.from(songTabPanels.children).filter((child) => {
+  return !child.classList.contains('song-tab-panel');
+});
 
-    originalWorkingSections.forEach((section) => {
-      section.hidden = true;
-    });
+originalWorkingSections.forEach((section) => {
+  section.hidden = true;
+});
 
     const firstPanel = document.querySelector('#songTabPanels > .song-tab-panel');
     if (firstPanel) {
