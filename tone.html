@@ -1960,19 +1960,36 @@ function clearSongTabs() {
 
       setLoadingState(songInput, instrument);
 
-      const data = await postJson('/api/tone', {
-        songInput,
-        instrument
-      });
+      let data;
 
-      data.original_input = songInput;
+try {
+  data = await postJson('/api/tone', {
+    songInput,
+    instrument
+  });
 
-      renderSongDiveIn(data, instrument);
+  data.original_input = songInput;
 
-      const toneShareOutput = buildToneShareOutput(data, instrument);
-      showToneSharePanel(toneShareOutput);
+  renderSongDiveIn(data, instrument);
 
-          const tabTitle = createSongTabTitle(data, songInput, index);
+  const toneShareOutput = buildToneShareOutput(data, instrument);
+  showToneSharePanel(toneShareOutput);
+} catch (songError) {
+  data = {
+    song: songInput,
+    artist: '',
+    original_input: songInput
+  };
+
+  renderErrorState(songError);
+
+  setHtml(
+    songMeaningResult,
+    `<p class="error-text">${escapeHtml(songError.message || 'This song could not be processed right now.')}</p>`
+  );
+}
+
+const tabTitle = createSongTabTitle(data, songInput, index);
 
       if (songTabs) {
         songTabs.hidden = false;
@@ -1986,8 +2003,20 @@ function clearSongTabs() {
 
       const panel = cloneCurrentResultsIntoPanel(panelId);
       panel.hidden = index !== 0;
+      
+      if (index < songInputs.length - 1) {
+  setStatus(
+    toneStatus,
+    `Song ${index + 1} finished. Waiting a moment before the next song...`,
+    'info',
+    true
+  );
+
+  await wait(2500);
+}
     }
 
+    
     const originalWorkingSections = Array.from(songTabPanels.children).filter((child) => {
   return !child.classList.contains('song-tab-panel');
 });
