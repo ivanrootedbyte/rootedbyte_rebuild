@@ -1161,13 +1161,18 @@ radial-gradient(circle at 62% 82%, rgba(201, 135, 63, 0.16), transparent 22rem);
       font-weight: 800;
     }
 
-    .site-footer {
-      border-top: 1px solid var(--line);
-      padding: 26px 0 0;
-      color: var(--charcoal-soft);
-      font-size: 0.92rem;
-      font-weight: 600;
-    }
+   .footer-section {
+  padding: 28px 0 36px;
+  border-top: 1px solid var(--line);
+  background: rgba(255, 252, 245, 0.62);
+}
+
+.site-footer {
+  padding: 0;
+  color: var(--charcoal-soft);
+  font-size: 0.92rem;
+  font-weight: 700;
+}
 
     .bottom-nav {
       position: fixed;
@@ -1639,7 +1644,24 @@ radial-gradient(circle at 62% 82%, rgba(201, 135, 63, 0.16), transparent 22rem);
   width: min(58%, 190px);
 }
 
+.contact-visual {
+  min-height: 420px;
+  padding: 34px 18px 46px;
+  align-content: center;
+  gap: 22px;
+}
 
+.contact-visual img {
+  width: min(58%, 210px);
+  margin-bottom: 26px;
+}
+
+.contact-visual::after {
+  position: relative;
+  z-index: 2;
+  display: block;
+  margin-top: 10px;
+}
 
 /*
 .mobile-auth-link {
@@ -2094,11 +2116,19 @@ radial-gradient(circle at 62% 82%, rgba(201, 135, 63, 0.16), transparent 22rem);
             </article>
           </div>
 
-          <footer class="site-footer">
-            <p>Copyright 2026 RootedByte. Built for digital wisdom rooted in truth.</p>
-          </footer>
+          
         </div>
       </section>
+      
+      <section class="footer-section" aria-label="RootedByte footer">
+  <div class="container">
+    <footer class="site-footer">
+      <p>Copyright 2026 RootedByte. Built for digital wisdom rooted in truth.</p>
+    </footer>
+    
+  </div>
+</section>
+      
     </main>
     <div class="truth-lens-modal" id="truthLensModal" aria-hidden="true">
       <div class="truth-lens-card" role="dialog" aria-modal="true" aria-labelledby="truthLensTitle">
