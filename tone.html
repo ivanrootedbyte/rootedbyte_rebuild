@@ -57,46 +57,60 @@
     }
 
     .site-header {
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      background: #000000;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
-    }
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: #000000;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
 
-    .nav {
-      width: min(var(--max), 100%);
-      margin: 0 auto;
-      min-height: 78px;
-      padding: 0 46px;
-      display: grid;
-      grid-template-columns: auto 1fr auto;
-      align-items: center;
-      gap: 2rem;
-    }
+.nav {
+  width: min(var(--max), 100%);
+  min-height: 74px;
+  margin: 0 auto;
+  padding: 0 46px;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 1rem;
+}
 
-    .brand {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.7rem;
-      color: #ffffff;
-      font-weight: 950;
-      letter-spacing: -0.06em;
-      font-size: 1.35rem;
-      line-height: 1;
-      text-transform: uppercase;
-      white-space: nowrap;
-    }
+.brand {
+  grid-column: 2;
+  justify-self: center;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: #ffffff;
+  font-weight: 950;
+  letter-spacing: -0.055em;
+  font-size: 1.32rem;
+  line-height: 1;
+  text-transform: none;
+  white-space: nowrap;
+}
 
-    .brand-mark {
+.brand-mark {
   display: grid;
   place-items: center;
-  width: 38px;
-  height: 38px;
-  border-radius: 13px;
+  width: 42px;
+  height: 42px;
+  padding: 3px;
+  border: 2px solid transparent;
+  border-radius: 16px;
+  background:
+    linear-gradient(#000000, #000000) padding-box,
+    linear-gradient(
+      135deg,
+      #ff6b6b,
+      #f7b267,
+      #ffe66d,
+      #4ecdc4,
+      #5b8def,
+      #b388ff
+    ) border-box;
   overflow: hidden;
   flex: 0 0 auto;
-  background: #ffffff;
 }
 
 .brand-mark img {
@@ -105,49 +119,78 @@
   object-fit: cover;
   object-position: center;
   display: block;
+  border-radius: 13px;
 }
 
 .brand span:last-child {
   text-transform: none;
-  letter-spacing: -0.055em;
-  text-shadow: 2px 2px 0 rgba(0, 120, 255, 0.7);
+  text-shadow: 2px 2px 0 rgba(239, 59, 50, 0.45);
 }
 
-    .nav-scroll-wrap {
-      justify-self: center;
-      min-width: 0;
-    }
+.nav-toggle {
+  grid-column: 3;
+  justify-self: end;
+  width: 46px;
+  height: 46px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 16px;
+  background: #111111;
+  display: grid;
+  place-content: center;
+  gap: 5px;
+  cursor: pointer;
+}
 
-    .nav-links {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: clamp(1.1rem, 2.6vw, 2.1rem);
-      white-space: nowrap;
-    }
+.nav-toggle span {
+  display: block;
+  width: 20px;
+  height: 2px;
+  border-radius: 999px;
+  background: #ffffff;
+}
 
-    .nav-links a {
-      color: #ffffff;
-      font-size: 0.96rem;
-      font-weight: 900;
-      letter-spacing: -0.02em;
-      text-transform: uppercase;
-      transition: color 160ms ease, opacity 160ms ease;
-    }
+.nav-scroll-wrap {
+  grid-column: 1 / -1;
+  justify-self: center;
+  min-width: 0;
+  display: none;
+}
 
-    .nav-links a:hover,
-    .nav-links a:focus-visible {
-      color: var(--song-red);
-      outline: none;
-    }
+.nav-scroll-wrap.open {
+  display: block;
+}
 
-    .nav-links a.active {
-      color: var(--song-red);
-    }
+.nav-links {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(1.1rem, 2.6vw, 2.1rem);
+  padding: 0.9rem 0 1.15rem;
+  white-space: nowrap;
+}
 
-    .nav-links a[data-auth-link] {
-      text-transform: none;
-    }
+.nav-links a {
+  color: #ffffff;
+  font-size: 0.86rem;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  transition: color 160ms ease, opacity 160ms ease;
+}
+
+.nav-links a:hover,
+.nav-links a:focus-visible {
+  color: var(--song-red);
+  outline: none;
+}
+
+.nav-links a.active {
+  color: var(--song-red);
+}
+
+.nav-links a[data-auth-link] {
+  text-transform: none;
+}
 
     .song-divein-page {
       padding: 0;
@@ -824,88 +867,75 @@
   }
 
   .site-header {
-    padding: 0.7rem 0.85rem;
-  }
+  padding: 0;
+}
 
-  .nav {
-    min-height: auto;
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    gap: 0.75rem;
-    width: 100%;
-    padding: 0;
-    overflow: hidden;
-  }
+.nav {
+  min-height: 72px;
+  padding: 0 1rem;
+  grid-template-columns: 1fr auto 1fr;
+}
 
-  .brand {
-    flex: 0 0 auto;
-    font-size: 1.02rem;
-  }
+.brand {
+  grid-column: 2;
+  justify-self: center;
+  font-size: 1.08rem;
+}
 
-  .brand-mark {
-    width: 32px;
-    height: 32px;
-    border-radius: 11px;
-  }
+.brand-mark {
+  width: 38px;
+  height: 38px;
+  border-radius: 15px;
+}
 
-  .brand span:last-child {
-    font-size: 0.98rem;
-  }
+.brand span:last-child {
+  font-size: 1.08rem;
+}
 
-  .nav-scroll-wrap {
-    position: relative;
-    flex: 1 1 auto;
-    min-width: 0;
-    max-width: 100%;
-    overflow: hidden;
-  }
+.nav-toggle {
+  grid-column: 3;
+  justify-self: end;
+}
 
-  .nav-scroll-wrap::after {
-    content: "›";
-    position: absolute;
-    right: 0.2rem;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 1.55rem;
-    height: 1.55rem;
-    display: grid;
-    place-items: center;
-    border-radius: 999px;
-    color: #ffffff;
-    background: rgba(255, 255, 255, 0.12);
-    pointer-events: none;
-    font-size: 1.2rem;
-    font-weight: 950;
-  }
+.nav-scroll-wrap {
+  grid-column: 1 / -1;
+  width: 100%;
+  overflow: hidden;
+}
 
-  .nav-links {
-    justify-content: flex-start;
-    gap: 0.35rem;
-    overflow-x: auto;
-    overflow-y: hidden;
-    white-space: nowrap;
-    padding: 0.32rem 2rem 0.32rem 0.32rem;
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    border-radius: 999px;
-    scrollbar-width: none;
-  }
+.nav-scroll-wrap::after {
+  display: none;
+}
 
-  .nav-links::-webkit-scrollbar {
-    display: none;
-  }
+.nav-links {
+  justify-content: flex-start;
+  gap: 0.35rem;
+  overflow-x: auto;
+  overflow-y: hidden;
+  white-space: nowrap;
+  padding: 0.35rem 0 0.9rem;
+  border: 0;
+  border-radius: 0;
+  scrollbar-width: none;
+}
 
-  .nav-links a {
-    flex: 0 0 auto;
-    padding: 0.48rem 0.65rem;
-    border-radius: 999px;
-    font-size: 0.73rem;
-  }
+.nav-links::-webkit-scrollbar {
+  display: none;
+}
 
-  .nav-links a.active {
-    color: #ffffff;
-    background: var(--song-red);
-  }
+.nav-links a {
+  flex: 0 0 auto;
+  padding: 0.52rem 0.72rem;
+  border-radius: 999px;
+  font-size: 0.73rem;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.nav-links a.active {
+  color: #ffffff;
+  background: var(--song-red);
+  border-color: var(--song-red);
+}
 
   .song-hero {
     min-height: auto;
@@ -989,26 +1019,32 @@
 
 <body>
   <header class="site-header">
-    <nav class="nav" aria-label="Primary navigation">
-      <a class="brand" href="index.html" aria-label="RootedByte home">
-        <span class="brand-mark">
-          <img src="images/rootedbyte-icon.png" alt="" />
-        </span>
-        <span>RootedByte</span>
-      </a>
+  <nav class="nav" aria-label="Primary navigation">
+    <a class="brand" href="index.html" aria-label="RootedByte home">
+      <span class="brand-mark">
+        <img src="images/rootedbyte-icon.png" alt="" />
+      </span>
+      <span>RootedByte</span>
+    </a>
 
-      <div class="nav-scroll-wrap">
-        <div class="nav-links">
-          <a href="index.html">Home</a>
-          <a href="tone.html" class="active">Song DiveIn</a>
-          <a href="newsverse.html">NewsVerse</a>
-          <a href="rootedos.html">Rooted OS</a>
-          <a href="signin.html" data-auth-link>Login</a>
-        </div>
+    <button class="nav-toggle" type="button" aria-label="Open navigation" aria-expanded="false">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+
+    <div class="nav-scroll-wrap">
+      <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="tone.html" class="active">Song DiveIn</a>
+        <a href="newsverse.html">NewsVerse</a>
+        <a href="rootedos.html">Rooted OS</a>
+        <a href="signin.html" data-auth-link>Login</a>
       </div>
-    </nav>
-  </header>
-
+    </div>
+  </nav>
+</header>
+  
   <main class="song-divein-page app-page" data-app="song-divein">
     <section class="song-hero">
       <div class="song-hero__content">
@@ -1103,8 +1139,10 @@
 
     <section id="songResultsArea" class="song-results-area" hidden>
   <div id="songTabs" class="song-tabs" hidden></div>
-  <div id="songTabPanels"></div>
-      <section class="verified-song-card" aria-labelledby="verified-song-title">
+
+  <div id="songTabPanels">
+    <section class="verified-song-card" aria-labelledby="verified-song-title">
+      
         <div class="section-heading compact-heading">
           <p class="eyebrow">Song Snapshot</p>
           <h2 id="verified-song-title">The essentials</h2>
@@ -1895,13 +1933,7 @@ function clearSongTabs() {
   if (!songTabPanels) return;
 
   const originalSections = Array.from(songTabPanels.children).filter((child) => {
-    return (
-      child.classList.contains('verified-song-card') ||
-      child.classList.contains('lookup-actions-card') ||
-      child.classList.contains('song-meaning-card') ||
-      child.classList.contains('prep-cards') ||
-      child.classList.contains('share-panel')
-    );
+    return !child.classList.contains('song-tab-panel');
   });
 
   songTabPanels.innerHTML = '';
@@ -1910,7 +1942,10 @@ function clearSongTabs() {
     section.hidden = false;
     songTabPanels.appendChild(section);
   });
-  }
+}
+
+    function wait(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }
     
     songSearchForm?.addEventListener('submit', async (event) => {
@@ -2040,6 +2075,14 @@ originalWorkingSections.forEach((section) => {
   }
 });
 
+    const navToggle = document.querySelector('.nav-toggle');
+const navWrap = document.querySelector('.nav-scroll-wrap');
+
+navToggle?.addEventListener('click', () => {
+  const isOpen = navWrap?.classList.toggle('open');
+  navToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+});
+    
     instrumentSelect?.addEventListener('change', updateTutorialPreview);
     setupSongInputRows();
   </script>
