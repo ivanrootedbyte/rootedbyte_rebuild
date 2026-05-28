@@ -6,44 +6,43 @@
 
   <meta
     name="description"
-    content="Analyze news articles through Scripture with a headline-only fallback when article extraction is blocked."
+    content="Socials & News helps you pause before reacting to public posts, threads, reels, headlines, and online stories by reflecting through Scripture."
   />
 
-  <title>NewsVerse | RootedByte</title>
+  <title>Socials & News | RootedByte</title>
 
   <style>
-    
-:root {
-  --news-bg: #efe6d6;
-  --news-bg-soft: #fbf6ec;
-  --news-card: rgba(255, 250, 240, 0.92);
-  --news-card-strong: rgba(255, 253, 247, 0.97);
+    :root {
+      --news-bg: #efe6d6;
+      --news-bg-soft: #fbf6ec;
+      --news-card: rgba(255, 250, 240, 0.92);
+      --news-card-strong: rgba(255, 253, 247, 0.97);
 
-  --news-ink: #1d2119;
-  --news-muted: #68715f;
+      --news-ink: #1d2119;
+      --news-muted: #68715f;
 
-  --news-teal: #5d7f73;
-  --news-teal-dark: #405f53;
-  --news-blue: #6f8f83;
+      --news-teal: #5d7f73;
+      --news-teal-dark: #405f53;
+      --news-blue: #6f8f83;
 
-  --news-sage: #dce8d5;
-  --news-clay: #b85c38;
-  --news-sand: #e8d7bd;
-  --news-gold: #d8a35d;
+      --news-sage: #dce8d5;
+      --news-clay: #b85c38;
+      --news-sand: #e8d7bd;
+      --news-gold: #d8a35d;
 
-  --news-rust: #c7663d;
-  --news-rust-dark: #934428;
-  --news-rust-light: #e08a5d;
-  --news-rust-soft: rgba(199, 102, 61, 0.14);
+      --news-rust: #c7663d;
+      --news-rust-dark: #934428;
+      --news-rust-light: #e08a5d;
+      --news-rust-soft: rgba(199, 102, 61, 0.14);
 
-  --news-danger: #a64032;
-  --news-line: rgba(29, 33, 25, 0.11);
-  --news-shadow: 0 22px 60px rgba(63, 56, 42, 0.12);
+      --news-danger: #a64032;
+      --news-line: rgba(29, 33, 25, 0.11);
+      --news-shadow: 0 22px 60px rgba(63, 56, 42, 0.12);
 
-  --news-radius: 28px;
-  --news-radius-sm: 16px;
-  --max: 1180px;
-}
+      --news-radius: 28px;
+      --news-radius-sm: 16px;
+      --max: 1180px;
+    }
 
     * {
       box-sizing: border-box;
@@ -54,18 +53,18 @@
       scroll-padding-top: 110px;
     }
 
-body {
-  margin: 0;
-  min-height: 100vh;
-  color: var(--news-ink);
-  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  background:
-    radial-gradient(circle at top left, rgba(184, 92, 56, 0.18), transparent 28rem),
-    radial-gradient(circle at 88% 10%, rgba(93, 127, 115, 0.14), transparent 30rem),
-    radial-gradient(circle at 50% 95%, rgba(216, 163, 93, 0.24), transparent 34rem),
-    linear-gradient(180deg, #f8ead8 0%, #ead8bd 52%, #dfe8d5 100%);
-  line-height: 1.6;
-}
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--news-ink);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(199, 102, 61, 0.15), transparent 28rem),
+        radial-gradient(circle at 88% 10%, rgba(93, 127, 115, 0.16), transparent 30rem),
+        radial-gradient(circle at 50% 95%, rgba(216, 163, 93, 0.2), transparent 34rem),
+        linear-gradient(180deg, #fbf6ec 0%, #efe6d6 52%, #e4ecdf 100%);
+      line-height: 1.6;
+    }
 
     a {
       color: inherit;
@@ -106,38 +105,38 @@ body {
       letter-spacing: -0.045em;
     }
 
-.brand-mark {
-  display: grid;
-  place-items: center;
-  width: 46px;
-  height: 46px;
-  padding: 3px;
-  border: 2px solid transparent;
-  border-radius: 17px;
-  background:
-    linear-gradient(var(--news-bg-soft), var(--news-bg-soft)) padding-box,
-    linear-gradient(
-      135deg,
-      #ff6b6b,
-      #f7b267,
-      #ffe66d,
-      #4ecdc4,
-      #5b8def,
-      #b388ff
-    ) border-box;
-  overflow: hidden;
-  flex: 0 0 auto;
-  box-shadow: 0 10px 24px rgba(45, 55, 48, 0.16);
-}
+    .brand-mark {
+      display: grid;
+      place-items: center;
+      width: 46px;
+      height: 46px;
+      padding: 3px;
+      border: 2px solid transparent;
+      border-radius: 17px;
+      background:
+        linear-gradient(var(--news-bg-soft), var(--news-bg-soft)) padding-box,
+        linear-gradient(
+          135deg,
+          #ff6b6b,
+          #f7b267,
+          #ffe66d,
+          #4ecdc4,
+          #5b8def,
+          #b388ff
+        ) border-box;
+      overflow: hidden;
+      flex: 0 0 auto;
+      box-shadow: 0 10px 24px rgba(45, 55, 48, 0.16);
+    }
 
-.brand-mark img {
-  width: 118%;
-  height: 118%;
-  object-fit: cover;
-  object-position: center;
-  display: block;
-  border-radius: 14px;
-}
+    .brand-mark img {
+      width: 118%;
+      height: 118%;
+      object-fit: cover;
+      object-position: center;
+      display: block;
+      border-radius: 14px;
+    }
 
     .site-nav {
       display: flex;
@@ -182,36 +181,36 @@ body {
       overflow: hidden;
     }
 
-.news-ticker__label {
-  min-height: 36px;
-  padding: 0 1rem;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.55rem;
-  border-radius: 999px;
-  color: #ffffff;
-  background: linear-gradient(135deg, var(--news-rust-dark), var(--news-rust));
-  font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
-  font-size: 0.82rem;
-  font-weight: 900;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  white-space: nowrap;
-  box-shadow: 0 10px 24px rgba(147, 68, 40, 0.24);
-}
+    .news-ticker__label {
+      min-height: 36px;
+      padding: 0 1rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.55rem;
+      border-radius: 999px;
+      color: #ffffff;
+      background: linear-gradient(135deg, var(--news-rust-dark), var(--news-rust));
+      font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
+      font-size: 0.82rem;
+      font-weight: 900;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      white-space: nowrap;
+      box-shadow: 0 10px 24px rgba(147, 68, 40, 0.24);
+    }
 
-.news-ticker__label::before {
-  content: "";
-  width: 0.55rem;
-  height: 0.55rem;
-  border-radius: 999px;
-  background: #ffd2a8;
-  box-shadow:
-    0 0 0 4px rgba(255, 210, 168, 0.18),
-    0 0 16px rgba(255, 210, 168, 0.82);
-  flex: 0 0 auto;
-}
+    .news-ticker__label::before {
+      content: "";
+      width: 0.55rem;
+      height: 0.55rem;
+      border-radius: 999px;
+      background: #ffd2a8;
+      box-shadow:
+        0 0 0 4px rgba(255, 210, 168, 0.18),
+        0 0 16px rgba(255, 210, 168, 0.82);
+      flex: 0 0 auto;
+    }
 
     .news-ticker__viewport {
       overflow: hidden;
@@ -281,10 +280,10 @@ body {
         linear-gradient(
           90deg,
           rgba(18, 35, 36, 0.88) 0%,
-          rgba(18, 35, 36, 0.74) 46%,
-          rgba(18, 35, 36, 0.42) 100%
+          rgba(18, 35, 36, 0.76) 46%,
+          rgba(18, 35, 36, 0.44) 100%
         ),
-        url("images/newsverse-digital-news.jpg") center / cover no-repeat;
+        url("https://images.unsplash.com/photo-1611162616475-46b635cb6868?auto=format&fit=crop&w=1800&q=80") center / cover no-repeat;
       box-shadow: 0 26px 70px rgba(45, 55, 48, 0.16);
     }
 
@@ -314,7 +313,7 @@ body {
       border: 1px solid rgba(255, 255, 255, 0.28);
       border-radius: 999px;
       color: #ffffff;
-     background: linear-gradient(135deg, var(--news-rust-dark), var(--news-rust));
+      background: linear-gradient(135deg, var(--news-rust-dark), var(--news-rust));
       box-shadow:
         0 14px 28px rgba(0, 0, 0, 0.22),
         inset 0 1px 0 rgba(255, 255, 255, 0.24);
@@ -332,9 +331,9 @@ body {
       height: 0.55rem;
       border-radius: 999px;
       background: #ffd2a8;
-box-shadow:
-  0 0 0 4px rgba(255, 210, 168, 0.18),
-  0 0 16px rgba(255, 210, 168, 0.82);
+      box-shadow:
+        0 0 0 4px rgba(255, 210, 168, 0.18),
+        0 0 16px rgba(255, 210, 168, 0.82);
     }
 
     .eyebrow {
@@ -362,7 +361,7 @@ box-shadow:
 
     h1 {
       max-width: 860px;
-      font-size: clamp(3.1rem, 8vw, 6.8rem);
+      font-size: clamp(3.1rem, 8vw, 6.4rem);
       font-weight: 950;
     }
 
@@ -399,7 +398,7 @@ box-shadow:
 
     .news-hero .lead,
     .hero-lead {
-      max-width: 630px;
+      max-width: 650px;
       color: rgba(255, 255, 255, 0.9);
       font-weight: 550;
       text-shadow: 0 8px 26px rgba(0, 0, 0, 0.34);
@@ -435,24 +434,21 @@ box-shadow:
     .primary-action {
       color: #ffffff;
       border: 0;
-background: linear-gradient(135deg, var(--news-rust-dark), var(--news-rust));
-box-shadow:
-  0 16px 34px rgba(147, 68, 40, 0.24),
-  inset 0 1px 0 rgba(255, 255, 255, 0.24);
+      background: linear-gradient(135deg, var(--news-rust-dark), var(--news-rust));
+      box-shadow:
+        0 16px 34px rgba(147, 68, 40, 0.24),
+        inset 0 1px 0 rgba(255, 255, 255, 0.24);
     }
 
     .primary-action:hover,
     .primary-action:focus-visible {
       transform: translateY(-2px);
- box-shadow:
-  0 20px 42px rgba(147, 68, 40, 0.32),
-  inset 0 1px 0 rgba(255, 255, 255, 0.28);
+      box-shadow:
+        0 20px 42px rgba(147, 68, 40, 0.32),
+        inset 0 1px 0 rgba(255, 255, 255, 0.28);
       outline: none;
     }
-    
-.news-pill:hover {
-  background: linear-gradient(135deg, var(--news-rust), var(--news-rust-light));
-}
+
     .secondary-action {
       color: var(--news-ink);
       border: 1px solid var(--news-line);
@@ -468,28 +464,55 @@ box-shadow:
       outline: none;
     }
 
-.hero-editorial-card {
-  position: relative;
-  min-height: 320px;
-  overflow: hidden;
-  border-radius: 28px;
-  background: rgba(255, 253, 247, 0.12);
-  border: 1px solid rgba(255, 253, 247, 0.22);
-  box-shadow:
-    0 24px 56px rgba(0, 0, 0, 0.22),
-    inset 0 1px 0 rgba(255, 255, 255, 0.16);
-  backdrop-filter: blur(12px);
-}
+    .hero-editorial-card {
+      position: relative;
+      min-height: 320px;
+      overflow: hidden;
+      border-radius: 28px;
+      background: rgba(255, 253, 247, 0.12);
+      border: 1px solid rgba(255, 253, 247, 0.22);
+      box-shadow:
+        0 24px 56px rgba(0, 0, 0, 0.22),
+        inset 0 1px 0 rgba(255, 255, 255, 0.16);
+      backdrop-filter: blur(12px);
+    }
 
-.hero-editorial-image {
-  width: 100%;
-  height: 100%;
-  min-height: 320px;
-  object-fit: cover;
-  object-position: center 25%;
-  display: block;
-  filter: saturate(0.9) contrast(1.04);
-}
+    .hero-editorial-image {
+      width: 100%;
+      height: 100%;
+      min-height: 320px;
+      object-fit: cover;
+      object-position: center;
+      display: block;
+      filter: saturate(0.95) contrast(1.06);
+    }
+
+    .floating-card {
+      position: absolute;
+      left: 1rem;
+      right: 1rem;
+      bottom: 1rem;
+      padding: 1rem;
+      border-radius: 22px;
+      color: #ffffff;
+      background: rgba(18, 35, 36, 0.74);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      backdrop-filter: blur(18px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.22);
+    }
+
+    .floating-card strong {
+      display: block;
+      font-size: 1rem;
+      line-height: 1.2;
+    }
+
+    .floating-card span {
+      display: block;
+      margin-top: 0.35rem;
+      color: rgba(255, 255, 255, 0.76);
+      font-size: 0.9rem;
+    }
 
     .section {
       width: min(1120px, calc(100% - 2rem));
@@ -509,71 +532,93 @@ box-shadow:
       align-items: start;
     }
 
-.news-form-card {
-  position: relative;
-  padding: clamp(1.25rem, 3vw, 2rem);
-  border-radius: 30px;
-  background:
-    linear-gradient(135deg, rgba(255, 253, 247, 0.98), rgba(255, 255, 255, 0.95)),
-    radial-gradient(circle at top right, rgba(197, 105, 56, 0.08), transparent 16rem);
-  border: 1px solid rgba(23, 32, 29, 0.12);
-  box-shadow:
-    0 22px 54px rgba(45, 55, 48, 0.11),
-    inset 0 1px 0 rgba(255, 255, 255, 0.8);
-}
+    .prompt-chip-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.55rem;
+      margin-top: 1.1rem;
+    }
 
-.news-form-card::before {
-  content: "Analyze a story";
-  display: inline-flex;
-  margin-bottom: 1rem;
-  padding: 0.42rem 0.7rem;
-  border-radius: 999px;
-  color: var(--news-clay);
-  background: rgba(197, 105, 56, 0.1);
-  font-size: 0.72rem;
-  font-weight: 950;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-}
+    .prompt-chip {
+      display: inline-flex;
+      align-items: center;
+      min-height: 34px;
+      padding: 0 0.8rem;
+      border-radius: 999px;
+      color: var(--news-rust-dark);
+      background: rgba(199, 102, 61, 0.11);
+      border: 1px solid rgba(199, 102, 61, 0.16);
+      font-size: 0.84rem;
+      font-weight: 900;
+    }
 
-.news-form-card label {
-  display: block;
-  margin-bottom: 0.45rem;
-  color: var(--news-ink);
-  font-size: 1rem;
-  font-weight: 950;
-}
+    .news-form-card {
+      position: relative;
+      padding: clamp(1.25rem, 3vw, 2rem);
+      border-radius: 30px;
+      background:
+        linear-gradient(135deg, rgba(255, 253, 247, 0.98), rgba(255, 255, 255, 0.95)),
+        radial-gradient(circle at top right, rgba(197, 105, 56, 0.08), transparent 16rem);
+      border: 1px solid rgba(23, 32, 29, 0.12);
+      box-shadow:
+        0 22px 54px rgba(45, 55, 48, 0.11),
+        inset 0 1px 0 rgba(255, 255, 255, 0.8);
+    }
 
-.news-form-card input {
-  min-height: 60px;
-  border-radius: 20px;
-  padding: 0 1.1rem;
-  color: var(--news-ink);
-  background: #ffffff;
-  border: 1px solid rgba(23, 32, 29, 0.12);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.9),
-    0 10px 26px rgba(45, 55, 48, 0.05);
-}
+    .news-form-card::before {
+      content: "Post + headline check";
+      display: inline-flex;
+      margin-bottom: 1rem;
+      padding: 0.42rem 0.7rem;
+      border-radius: 999px;
+      color: var(--news-clay);
+      background: rgba(197, 105, 56, 0.1);
+      font-size: 0.72rem;
+      font-weight: 950;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
 
-.news-form-card input:focus {
-  border-color: rgba(197, 105, 56, 0.55);
-  box-shadow:
-    0 0 0 4px rgba(197, 105, 56, 0.12),
-    0 14px 30px rgba(45, 55, 48, 0.08);
-}
+    .news-form-card label {
+      display: block;
+      margin-bottom: 0.45rem;
+      color: var(--news-ink);
+      font-size: 1rem;
+      font-weight: 950;
+    }
 
-.news-form-card .hint {
-  margin-top: 0.75rem;
-  color: var(--news-muted);
-  font-size: 0.95rem;
-}
+    .news-form-card input {
+      width: 100%;
+      min-height: 60px;
+      border-radius: 20px;
+      padding: 0 1.1rem;
+      color: var(--news-ink);
+      background: #ffffff;
+      border: 1px solid rgba(23, 32, 29, 0.12);
+      box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.9),
+        0 10px 26px rgba(45, 55, 48, 0.05);
+    }
 
-.news-form-card .primary-action {
-  margin-top: 1rem;
-  min-height: 54px;
-  padding-inline: 1.45rem;
-}
+    .news-form-card input:focus {
+      border-color: rgba(197, 105, 56, 0.55);
+      box-shadow:
+        0 0 0 4px rgba(197, 105, 56, 0.12),
+        0 14px 30px rgba(45, 55, 48, 0.08);
+      outline: none;
+    }
+
+    .news-form-card .hint {
+      margin-top: 0.75rem;
+      color: var(--news-muted);
+      font-size: 0.95rem;
+    }
+
+    .news-form-card .primary-action {
+      margin-top: 1rem;
+      min-height: 54px;
+      padding-inline: 1.45rem;
+    }
 
     .status {
       min-height: 24px;
@@ -685,39 +730,39 @@ box-shadow:
     }
 
     .share-panel {
-  margin-top: 1rem;
-  padding: 1.1rem;
-  border: 1px solid var(--news-line);
-  border-radius: 24px;
-  background: rgba(255, 255, 255, 0.72);
-}
+      margin-top: 1rem;
+      padding: 1.1rem;
+      border: 1px solid var(--news-line);
+      border-radius: 24px;
+      background: rgba(255, 255, 255, 0.72);
+    }
 
-.share-panel p {
-  margin: 0.65rem 0 0;
-  color: var(--news-muted);
-}
+    .share-panel p {
+      margin: 0.65rem 0 0;
+      color: var(--news-muted);
+    }
 
-.share-panel__actions {
-  display: flex;
-  gap: 0.75rem;
-  flex-wrap: wrap;
-  margin-top: 1rem;
-}
+    .share-panel__actions {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      margin-top: 1rem;
+    }
 
-.share-link-box {
-  width: 100%;
-  min-height: 46px;
-  margin-top: 0.85rem;
-  padding: 0.75rem 0.9rem;
-  border: 1px solid var(--news-line);
-  border-radius: 16px;
-  color: var(--news-ink);
-  background: rgba(255, 255, 255, 0.78);
-  overflow-wrap: anywhere;
-  font-size: 0.92rem;
-  font-weight: 800;
-}
-    
+    .share-link-box {
+      width: 100%;
+      min-height: 46px;
+      margin-top: 0.85rem;
+      padding: 0.75rem 0.9rem;
+      border: 1px solid var(--news-line);
+      border-radius: 16px;
+      color: var(--news-ink);
+      background: rgba(255, 255, 255, 0.78);
+      overflow-wrap: anywhere;
+      font-size: 0.92rem;
+      font-weight: 800;
+    }
+
     @media (prefers-reduced-motion: reduce) {
       .news-ticker__track {
         animation: none;
@@ -725,121 +770,121 @@ box-shadow:
     }
 
     @media (max-width: 900px) {
-  .site-header {
-    padding: 0.7rem 0.85rem;
-  }
+      .site-header {
+        padding: 0.7rem 0.85rem;
+      }
 
-  .nav-shell {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: flex-start;
-    gap: 0.7rem;
-    width: 100%;
-    padding: 0;
-    overflow: hidden;
-  }
+      .nav-shell {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 0.7rem;
+        width: 100%;
+        padding: 0;
+        overflow: hidden;
+      }
 
-  .brand {
-    flex: 0 0 auto;
-    white-space: nowrap;
-  }
+      .brand {
+        flex: 0 0 auto;
+        white-space: nowrap;
+      }
 
-  .brand-mark {
-    width: 34px;
-    height: 34px;
-    border-radius: 12px;
-    font-size: 0.82rem;
-  }
+      .brand-mark {
+        width: 34px;
+        height: 34px;
+        border-radius: 12px;
+        font-size: 0.82rem;
+      }
 
-  .brand span:last-child {
-    font-size: 0.95rem;
-  }
+      .brand span:last-child {
+        font-size: 0.95rem;
+      }
 
-  .nav-scroll-wrap {
-    position: relative;
-    flex: 1 1 auto;
-    min-width: 0;
-    max-width: 100%;
-    overflow: hidden;
-  }
+      .nav-scroll-wrap {
+        position: relative;
+        flex: 1 1 auto;
+        min-width: 0;
+        max-width: 100%;
+        overflow: hidden;
+      }
 
-  .nav-scroll-wrap::after {
-    content: "›";
-    position: absolute;
-    right: 0.25rem;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 1.6rem;
-    height: 1.6rem;
-    display: grid;
-    place-items: center;
-    border-radius: 999px;
-    color: var(--news-ink);
-    background: rgba(255, 255, 255, 0.7);
-    pointer-events: none;
-    font-size: 1.2rem;
-    font-weight: 900;
-  }
+      .nav-scroll-wrap::after {
+        content: "›";
+        position: absolute;
+        right: 0.25rem;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 1.6rem;
+        height: 1.6rem;
+        display: grid;
+        place-items: center;
+        border-radius: 999px;
+        color: var(--news-ink);
+        background: rgba(255, 255, 255, 0.7);
+        pointer-events: none;
+        font-size: 1.2rem;
+        font-weight: 900;
+      }
 
-  .site-nav {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: nowrap;
-    justify-content: flex-start;
-    gap: 0.35rem;
-    max-width: 100%;
-    overflow-x: auto;
-    overflow-y: hidden;
-    white-space: nowrap;
-    padding: 0.28rem 2rem 0.28rem 0.28rem;
-    border: 1px solid var(--news-line);
-    border-radius: 999px;
-    background: rgba(255, 255, 255, 0.48);
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
-  }
+      .site-nav {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        justify-content: flex-start;
+        gap: 0.35rem;
+        max-width: 100%;
+        overflow-x: auto;
+        overflow-y: hidden;
+        white-space: nowrap;
+        padding: 0.28rem 2rem 0.28rem 0.28rem;
+        border: 1px solid var(--news-line);
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.48);
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+      }
 
-  .site-nav::-webkit-scrollbar {
-    display: none;
-  }
+      .site-nav::-webkit-scrollbar {
+        display: none;
+      }
 
-  .site-nav a {
-    flex: 0 0 auto;
-    white-space: nowrap;
-    padding: 0.5rem 0.68rem;
-    border-radius: 999px;
-    font-size: 0.8rem;
-  }
+      .site-nav a {
+        flex: 0 0 auto;
+        white-space: nowrap;
+        padding: 0.5rem 0.68rem;
+        border-radius: 999px;
+        font-size: 0.8rem;
+      }
 
-  .news-ticker {
-    width: 100%;
-    margin-bottom: 2rem;
-  }
+      .news-ticker {
+        width: 100%;
+        margin-bottom: 2rem;
+      }
 
-  .news-hero,
-  .app-top {
-    grid-template-columns: 1fr;
-  }
+      .news-hero,
+      .app-top {
+        grid-template-columns: 1fr;
+      }
 
-  .news-hero {
-    width: 100%;
-    min-height: auto;
-  }
+      .news-hero {
+        width: 100%;
+        min-height: auto;
+      }
 
-  .hero-editorial-card {
-    min-height: 260px;
-  }
+      .hero-editorial-card {
+        min-height: 260px;
+      }
 
-  .hero-editorial-image {
-    min-height: 260px;
-  }
+      .hero-editorial-image {
+        min-height: 260px;
+      }
 
-  .section,
-  .news-shell {
-    width: 100%;
-  }
-}
+      .section,
+      .news-shell {
+        width: 100%;
+      }
+    }
 
     @media (max-width: 620px) {
       .newsverse-page {
@@ -859,6 +904,16 @@ box-shadow:
       .news-ticker__label {
         width: fit-content;
       }
+
+      .share-panel__actions {
+        display: grid;
+        grid-template-columns: 1fr;
+      }
+
+      .primary-action,
+      .secondary-action {
+        width: 100%;
+      }
     }
   </style>
 </head>
@@ -874,34 +929,35 @@ box-shadow:
       </a>
 
       <div class="nav-scroll-wrap">
-  <nav class="site-nav" aria-label="Primary navigation">
-    <a href="index.html">Home</a>
-    <a href="tone.html">Song DiveIn</a>
-    <a href="newsverse.html" aria-current="page">NewsVerse</a>
-    <a href="rootedos.html">RootedOS</a>
-    <a href="index.html#contact">Contact</a>
-    <a href="signin.html" data-auth-link>Sign In</a>
-  </nav>
-</div>
-
+        <nav class="site-nav" aria-label="Primary navigation">
+          <a href="index.html">Home</a>
+          <a href="tone.html">Song DiveIn</a>
+          <a href="newsverse.html" aria-current="page">Socials & News</a>
+          <a href="rootedos.html">RootedOS</a>
+          <a href="index.html#contact">Contact</a>
+          <a href="signin.html" data-auth-link>Sign In</a>
+        </nav>
+      </div>
     </div>
   </header>
 
   <main id="top" class="newsverse-page app-page" data-app="newsverse">
-    <section class="news-ticker" aria-label="NewsVerse highlights">
-      <div class="news-ticker__label">Reflect + Daily News</div>
+    <section class="news-ticker" aria-label="Socials and News highlights">
+      <div class="news-ticker__label">Scroll Check + News</div>
 
       <div class="news-ticker__viewport">
         <div class="news-ticker__track">
-          <span>Reflect on headlines through Scripture</span>
-          <span>Pause before reacting</span>
-          <span>Prayer-centered response to current events</span>
-          <span>Read the news with wisdom</span>
+          <span>Pause before reposting</span>
+          <span>Scripture before the spiral</span>
+          <span>Check the reaction before the reply</span>
+          <span>Wisdom before comments</span>
+          <span>Don’t let the feed disciple you</span>
 
-          <span>Reflect on headlines through Scripture</span>
-          <span>Pause before reacting</span>
-          <span>Prayer-centered response to current events</span>
-          <span>Read the news with wisdom</span>
+          <span>Pause before reposting</span>
+          <span>Scripture before the spiral</span>
+          <span>Check the reaction before the reply</span>
+          <span>Wisdom before comments</span>
+          <span>Don’t let the feed disciple you</span>
         </div>
       </div>
     </section>
@@ -910,24 +966,30 @@ box-shadow:
       <div class="news-hero__content">
         <p class="eyebrow">Pause before the post</p>
 
-        <h1 id="newsverse-title" class="hero-title">NewsVerse</h1>
+        <h1 id="newsverse-title" class="hero-title">Socials & News</h1>
 
         <p class="lead hero-lead">
-       News can feel like a lot. NewsVerse helps you pause, bring the moment to Scripture,
-  and respond with wisdom instead of reacting on impulse.
+          Posts, headlines, threads, and trends can pull your heart fast.
+          Socials & News helps you pause, bring what you saw to Scripture,
+          and respond with wisdom before you react, repost, or spiral.
         </p>
 
         <div class="hero-actions">
-          <a href="#try-it" class="primary-action">Reflect on a headline</a>
+          <a href="#try-it" class="primary-action">Run a Truth Check</a>
         </div>
       </div>
 
-      <aside class="hero-editorial-card" aria-label="NewsVerse digital news image">
+      <aside class="hero-editorial-card" aria-label="Social media and news reflection image">
         <img
-  src="images/newsverse-small.jpg"
-  alt="Digital newsroom and online news background"
-  class="hero-editorial-image"
+          src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1200&q=80"
+          alt="Person using a laptop and digital media"
+          class="hero-editorial-image"
         />
+
+        <div class="floating-card">
+          <strong>Seen something online?</strong>
+          <span>Paste the public link. Slow the reaction. Check the heart.</span>
+        </div>
       </aside>
     </section>
 
@@ -935,28 +997,40 @@ box-shadow:
       <article class="news-shell" aria-labelledby="news-demo-title">
         <div class="app-top">
           <div class="news-copy">
-            <span class="tag">Let’s pause</span>
-            <h2 id="news-demo-title">Reflect before you react</h2>
+            <span class="tag">Pause the scroll</span>
+            <h2 id="news-demo-title">Check what you just saw</h2>
             <p>
-              Paste a news article link and let NewsVerse help you slow down,
-              consider the story through Scripture, and turn what you read into
-              reflection, prayer, and wiser response.
+              Paste a public social post, thread, reel link, or news article.
+              Socials & News helps you slow down, notice what the content is stirring,
+              and respond through Scripture instead of impulse.
             </p>
+
+            <div class="prompt-chip-row" aria-label="Examples of links you can check">
+              <span class="prompt-chip">Public post</span>
+              <span class="prompt-chip">Headline</span>
+              <span class="prompt-chip">Thread</span>
+              <span class="prompt-chip">Reel link</span>
+              <span class="prompt-chip">News story</span>
+            </div>
           </div>
 
           <form class="news-form-card" id="newsForm">
             <div class="field">
-              <label for="articleUrl">Drop a news link</label>
+              <label for="articleUrl">Paste a public post or news link</label>
               <input
                 id="articleUrl"
                 name="articleUrl"
                 type="url"
-                placeholder="Paste news link..."
+                placeholder="Paste public Facebook, Instagram, Threads, or news link..."
                 required
               />
             </div>
 
-            <button class="primary-action" type="submit">NewsVersify</button>
+            <p class="hint">
+              Works best with public links. If the full page is blocked, Socials & News will still try a headline-based reflection.
+            </p>
+
+            <button class="primary-action" type="submit">Run Truth Check</button>
             <div class="status" id="newsStatus" role="status" aria-live="polite"></div>
           </form>
         </div>
@@ -1024,7 +1098,7 @@ box-shadow:
           .replace(/\.[a-z0-9]+$/i, '')
           .trim() || parsed.hostname;
       } catch {
-        return 'News headline from submitted link';
+        return 'Post or headline from submitted link';
       }
     }
 
@@ -1034,8 +1108,8 @@ box-shadow:
 
       return `
         <div class="result-card ${data.source_mode === 'headline_only' ? 'highlight' : ''}">
-          <span class="tag">${data.source_mode === 'headline_only' ? 'Headline-based reflection' : 'Article summary'}</span>
-          <h3>${escapeHtml(data.overall_theme || 'NewsVerse reflection')}</h3>
+          <span class="tag">${data.source_mode === 'headline_only' ? 'Link-based reflection' : 'What’s going on?'}</span>
+          <h3>${escapeHtml(data.overall_theme || 'Socials & News reflection')}</h3>
           <p>${escapeHtml(data.article_summary)}</p>
         </div>
 
@@ -1055,183 +1129,170 @@ box-shadow:
         </div>
 
         <div class="result-card">
-          <span class="tag">Exegesis</span>
+          <span class="tag">What Scripture helps me notice</span>
           <p>${escapeHtml(data.exegesis)}</p>
         </div>
 
         <div class="result-card highlight">
-          <span class="tag">Jesus Lens</span>
+          <span class="tag">Christ-centered response</span>
           <p>${escapeHtml(data.jesus_lens)}</p>
         </div>
 
         <div class="result-card">
-          <span class="tag">Prayer points</span>
+          <span class="tag">Pray before reacting</span>
           <ol>${prayers.map((item) => `<li>${escapeHtml(item)}</li>`).join('')}</ol>
         </div>
       `;
     }
 
     function renderSharePanel() {
-  return `
-    <div class="share-panel">
-      <h3>Save or share this NewsVerse reflection</h3>
-      <p>
-        Save privately to your account, or create a public RootedByte link
-        that anyone with the link can view.
-      </p>
+      return `
+        <div class="share-panel">
+          <h3>Save or share this Socials & News check</h3>
+          <p>
+            Save privately to your account, or create a public RootedByte link
+            that anyone with the link can view.
+          </p>
 
-      <div class="share-panel__actions">
-        <button class="primary-action" type="button" id="saveNewsOutput">
-          Save privately
-        </button>
+          <div class="share-panel__actions">
+            <button class="primary-action" type="button" id="saveNewsOutput">
+              Save privately
+            </button>
 
-        <button class="secondary-action" type="button" id="shareNewsOutput">
-          Share publicly
-        </button>
-      </div>
+            <button class="secondary-action" type="button" id="shareNewsOutput">
+              Share publicly
+            </button>
+          </div>
 
-      <div class="status" id="newsSaveStatus" role="status" aria-live="polite"></div>
-      <div class="status" id="newsShareStatus" role="status" aria-live="polite"></div>
-      <div class="share-link-box" id="newsShareLink" hidden></div>
-    </div>
-  `;
-}
-
-async function createSharedOutput({ appType, title, inputSummary, output, statusElement, linkElement }) {
-  statusElement.textContent = 'Creating share link...';
-
-  const response = await fetch('/api/share', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-      appType,
-      title,
-      inputSummary,
-      output
-    })
-  });
-
-  const data = await response.json();
-
-  if (!response.ok) {
-    throw new Error(data.error || 'Could not create share link.');
-  }
-
-  linkElement.hidden = false;
-  linkElement.textContent = data.shareUrl;
-
-  try {
-    await navigator.clipboard.writeText(data.shareUrl);
-    statusElement.textContent = 'Share link created and copied.';
-  } catch {
-    statusElement.textContent = 'Share link created.';
-  }
-
-  if (navigator.share) {
-    try {
-      await navigator.share({
-        title,
-        text: `View this ${title} from RootedByte.`,
-        url: data.shareUrl
-      });
-    } catch {
-      // User cancelled native share. Link is still created.
+          <div class="status" id="newsSaveStatus" role="status" aria-live="polite"></div>
+          <div class="status" id="newsShareStatus" role="status" aria-live="polite"></div>
+          <div class="share-link-box" id="newsShareLink" hidden></div>
+        </div>
+      `;
     }
-  }
 
-  return data;
-}
+    async function createSharedOutput({ appType, title, inputSummary, output, statusElement, linkElement }) {
+      statusElement.textContent = 'Creating share link...';
+      statusElement.className = 'status';
+
+      const response = await fetch('/api/share', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          appType,
+          title,
+          inputSummary,
+          output
+        })
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Could not create share link.');
+      }
+
+      linkElement.hidden = false;
+      linkElement.textContent = data.shareUrl;
+
+      try {
+        await navigator.clipboard.writeText(data.shareUrl);
+        statusElement.textContent = 'Share link created and copied.';
+      } catch {
+        statusElement.textContent = 'Share link created.';
+      }
+
+      if (navigator.share) {
+        try {
+          await navigator.share({
+            title,
+            text: `View this ${title} from RootedByte.`,
+            url: data.shareUrl
+          });
+        } catch {
+          // User cancelled native share. Link is still created.
+        }
+      }
+
+      return data;
+    }
 
     function attachNewsSaveButton(outputData, inputSummary) {
-  const button = document.querySelector('#saveNewsOutput');
-  const statusElement = document.querySelector('#newsSaveStatus');
+      const button = document.querySelector('#saveNewsOutput');
+      const statusElement = document.querySelector('#newsSaveStatus');
 
-  if (!button || !statusElement) return;
+      if (!button || !statusElement) return;
 
-  button.addEventListener('click', async () => {
-    button.disabled = true;
-    statusElement.className = 'status';
-    statusElement.textContent = 'Saving privately...';
+      button.addEventListener('click', async () => {
+        button.disabled = true;
+        statusElement.className = 'status';
+        statusElement.textContent = 'Saving privately...';
 
-    try {
-      if (!window.RootedByteSaveOutput || !window.RootedByteSaveOutput.save) {
-        throw new Error('Private saving is not ready yet. Please refresh and try again.');
-      }
+        try {
+          if (!window.RootedByteSaveOutput || !window.RootedByteSaveOutput.save) {
+            throw new Error('Private saving is not ready yet. Please refresh and try again.');
+          }
 
-      const title = outputData?.overall_theme
-        ? `NewsVerse: ${outputData.overall_theme}`
-        : 'NewsVerse Reflection';
+          const title = outputData?.overall_theme
+            ? `Socials & News: ${outputData.overall_theme}`
+            : 'Socials & News Check';
 
-      const result = await window.RootedByteSaveOutput.save({
-        appType: 'newsverse',
-        title,
-        inputSummary: inputSummary || 'Private NewsVerse reflection',
-        outputJson: outputData
+          const result = await window.RootedByteSaveOutput.save({
+            appType: 'newsverse',
+            title,
+            inputSummary: inputSummary || 'Private Socials & News check',
+            outputJson: outputData
+          });
+
+          if (!result.ok) {
+            statusElement.className = 'status error';
+            statusElement.textContent = result.message || 'Could not save privately.';
+            return;
+          }
+
+          statusElement.className = 'status';
+          statusElement.textContent = 'Saved privately to your account.';
+        } catch (error) {
+          statusElement.className = 'status error';
+          statusElement.textContent = error.message || 'Could not save privately.';
+        } finally {
+          button.disabled = false;
+        }
       });
-
-      if (!result.ok) {
-        statusElement.className = 'status error';
-        statusElement.textContent = result.message || 'Could not save privately.';
-        return;
-      }
-
-      statusElement.className = 'status';
-      statusElement.textContent = 'Saved privately to your account.';
-    } catch (error) {
-      statusElement.className = 'status error';
-      statusElement.textContent = error.message || 'Could not save privately.';
-    } finally {
-      button.disabled = false;
     }
-  });
-}
-    
-function attachNewsSaveButton(outputData, inputSummary) {
-  const button = document.querySelector('#saveNewsOutput');
-  const statusElement = document.querySelector('#newsSaveStatus');
 
-  if (!button || !statusElement) return;
+    function attachNewsShareButton(outputData) {
+      const button = document.querySelector('#shareNewsOutput');
+      const statusElement = document.querySelector('#newsShareStatus');
+      const linkElement = document.querySelector('#newsShareLink');
 
-  button.addEventListener('click', async () => {
-    button.disabled = true;
-    statusElement.className = 'status';
-    statusElement.textContent = 'Saving privately...';
+      if (!button || !statusElement || !linkElement) return;
 
-    try {
-      if (!window.RootedByteSaveOutput || !window.RootedByteSaveOutput.save) {
-        throw new Error('Private saving is not ready yet. Please refresh and try again.');
-      }
+      button.addEventListener('click', async () => {
+        button.disabled = true;
+        statusElement.className = 'status';
+        statusElement.textContent = 'Creating share link...';
 
-      const title = outputData?.overall_theme
-        ? `NewsVerse: ${outputData.overall_theme}`
-        : 'NewsVerse Reflection';
-
-      const result = await window.RootedByteSaveOutput.save({
-        appType: 'newsverse',
-        title,
-        inputSummary: inputSummary || 'Private NewsVerse reflection',
-        outputJson: outputData
+        try {
+          await createSharedOutput({
+            appType: 'newsverse',
+            title: 'Socials & News Check',
+            inputSummary: 'Shared Socials & News check',
+            output: outputData,
+            statusElement,
+            linkElement
+          });
+        } catch (error) {
+          statusElement.className = 'status error';
+          statusElement.textContent = error.message || 'Could not create share link.';
+        } finally {
+          button.disabled = false;
+        }
       });
-
-      if (!result.ok) {
-        statusElement.className = 'status error';
-        statusElement.textContent = result.message || 'Could not save privately.';
-        return;
-      }
-
-      statusElement.className = 'status';
-      statusElement.textContent = 'Saved privately to your account.';
-    } catch (error) {
-      statusElement.className = 'status error';
-      statusElement.textContent = error.message || 'Could not save privately.';
-    } finally {
-      button.disabled = false;
     }
-  });
-}
-    
+
     const newsForm = $('#newsForm');
 
     if (newsForm) {
@@ -1243,7 +1304,7 @@ function attachNewsSaveButton(outputData, inputSummary) {
         const result = $('#newsResult');
 
         result.innerHTML = '';
-        setStatus(status, 'Reading article...', 'info', true);
+        setStatus(status, 'Checking the link...', 'info', true);
 
         try {
           let article;
@@ -1263,12 +1324,12 @@ function attachNewsSaveButton(outputData, inputSummary) {
           if (article.extractionBlocked) {
             setStatus(
               status,
-              'Full article extraction was blocked. Using the best available headline instead...',
+              'The full page was blocked. Using the best available public link details instead...',
               'info',
               true
             );
           } else {
-            setStatus(status, 'Analyzing article through NewsVerse...', 'info', true);
+            setStatus(status, 'Running a Socials & News truth check...', 'info', true);
           }
 
           const data = await postJson('/api/newsverse', {
@@ -1280,14 +1341,14 @@ function attachNewsSaveButton(outputData, inputSummary) {
           });
 
           result.innerHTML = renderNews(data) + renderSharePanel();
-attachNewsSaveButton(data, article.title || headlineFromUrl(url));
-attachNewsShareButton(data);
+          attachNewsSaveButton(data, article.title || headlineFromUrl(url));
+          attachNewsShareButton(data);
 
           setStatus(
             status,
             article.extractionBlocked
-              ? 'Headline-based NewsVerse reflection ready.'
-              : 'NewsVerse analysis ready.'
+              ? 'Link-based Socials & News check ready.'
+              : 'Socials & News check ready.'
           );
         } catch (error) {
           setStatus(status, error.message, 'error');
@@ -1297,8 +1358,7 @@ attachNewsShareButton(data);
   </script>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="js/rootedbyte-auth-nav.js"></script>
-<script src="js/rootedbyte-save-output.js"></script>
-  
+  <script src="js/rootedbyte-auth-nav.js"></script>
+  <script src="js/rootedbyte-save-output.js"></script>
 </body>
 </html>
