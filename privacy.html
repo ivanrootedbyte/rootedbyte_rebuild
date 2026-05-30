@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Privacy Policy | RootedByte</title>
+<meta name="description" content="Privacy Policy for RootedByte, including how account, usage, contact, and app-related information may be collected, used, stored, and protected.">
+
+<style>
+:root {
+  --bg: #f7f3ec;
+  --card: rgba(255, 255, 255, 0.86);
+  --text: #241f1a;
+  --muted: #6f6257;
+  --soft: #efe4d4;
+  --border: rgba(80, 60, 40, 0.16);
+  --accent: #7c4f2f;
+  --accent-dark: #4f301d;
+  --shadow: 0 18px 50px rgba(52, 35, 20, 0.10);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at top left, rgba(180, 130, 78, 0.16), transparent 35%),
+    radial-gradient(circle at bottom right, rgba(120, 88, 55, 0.12), transparent 38%),
+    var(--bg);
+  color: var(--text);
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  line-height: 1.7;
+  padding: 22px;
+}
+
+.page-wrap {
+  width: min(980px, 100%);
+  margin: 0 auto;
+}
+
+.top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 22px;
+  padding: 12px 4px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 900;
+  letter-spacing: -0.04em;
+  color: var(--accent-dark);
+}
+
+.brand-mark {
+  width: 38px;
+  height: 38px;
+  border-radius: 14px;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(135deg, #f6d365, #fda085, #a18cd1, #84fab0);
+  box-shadow: 0 10px 24px rgba(124, 79, 47, 0.18);
+  font-size: 1.1rem;
+}
+
+.back-link {
+  color: var(--accent-dark);
+  background: rgba(255, 255, 255, 0.68);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 9px 14px;
+  text-decoration: none;
+  font-weight: 800;
+  box-shadow: 0 8px 20px rgba(52, 35, 20, 0.06);
+}
+
+.back-link:hover {
+  background: #fff;
+}
+
+.policy-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 30px;
+  padding: clamp(24px, 5vw, 48px);
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(18px);
+}
+
+.kicker {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.66);
+  color: var(--accent-dark);
+  border-radius: 999px;
+  padding: 7px 12px;
+  font-weight: 900;
+  font-size: 0.82rem;
+  margin-bottom: 16px;
+}
+
+h1 {
+  font-size: clamp(2.15rem, 7vw, 4.25rem);
+  line-height: 0.95;
+  letter-spacing: -0.075em;
+  color: var(--accent-dark);
+  margin-bottom: 14px;
+}
+
+.updated {
+  color: var(--muted);
+  font-weight: 700;
+  margin-bottom: 24px;
+}
+
+.intro {
+  font-size: 1.05rem;
+  color: var(--muted);
+  max-width: 760px;
+  margin-bottom: 28px;
+}
+
+.notice-box {
+  background: var(--soft);
+  border: 1px solid var(--border);
+  border-radius: 22px;
+  padding: 18px;
+  margin: 22px 0 30px;
+}
+
+.notice-box strong {
+  color: var(--accent-dark);
+}
+
+.toc {
+  background: rgba(255, 255, 255, 0.58);
+  border: 1px solid var(--border);
+  border-radius: 22px;
+  padding: 20px;
+  margin: 28px 0 34px;
+}
+
+.toc h2 {
+  margin-top: 0;
+}
+
+.toc a {
+  color: var(--accent-dark);
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.toc a:hover {
+  text-decoration: underline;
+}
+
+.toc ol {
+  padding-left: 22px;
+  display: grid;
+  gap: 6px;
+}
+
+section {
+  padding-top: 18px;
+  margin-top: 18px;
+  border-top: 1px solid var(--border);
+}
+
+h2 {
+  font-size: clamp(1.35rem, 3vw, 1.85rem);
+  letter-spacing: -0.035em;
+  line-height: 1.15;
+  color: var(--accent-dark);
+  margin-bottom: 12px;
+}
+
+h3 {
+  color: var(--text);
+  margin-top: 18px;
+  margin-bottom: 8px;
+  font-size: 1.05rem;
+}
+
+p {
+  color: var(--muted);
+  margin-bottom: 12px;
+}
+
+ul {
+  color: var(--muted);
+  padding-left: 22px;
+  margin-bottom: 14px;
+}
+
+li {
+  margin-bottom: 8px;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  overflow: hidden;
+  margin: 18px 0;
+  border-radius: 18px;
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.52);
+}
+
+.data-table th,
+.data-table td {
+  text-align: left;
+  vertical-align: top;
+  padding: 14px;
+  border-bottom: 1px solid var(--border);
+  color: var(--muted);
+}
+
+.data-table th {
+  color: var(--accent-dark);
+  font-size: 0.86rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  background: rgba(239, 228, 212, 0.72);
+}
+
+.data-table tr:last-child td {
+  border-bottom: none;
+}
+
+.contact-card {
+  background: rgba(255, 255, 255, 0.65);
+  border: 1px solid var(--border);
+  border-radius: 22px;
+  padding: 18px;
+  margin-top: 16px;
+}
+
+.placeholder {
+  font-weight: 900;
+  color: var(--accent-dark);
+}
+
+.site-footer {
+  text-align: center;
+  color: var(--muted);
+  font-size: 0.9rem;
+  padding: 28px 0 8px;
+}
+
+.site-footer a {
+  color: var(--accent-dark);
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.site-footer a:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 720px) {
+  body {
+    padding: 14px;
+  }
+
+  .top-bar {
+    align-items: flex-start;
+  }
+
+  .brand span {
+    font-size: 0.95rem;
+  }
+
+  .back-link {
+    font-size: 0.86rem;
+    padding: 8px 12px;
+  }
+
+  .policy-card {
+    border-radius: 24px;
+  }
+
+  .data-table,
+  .data-table thead,
+  .data-table tbody,
+  .data-table th,
+  .data-table td,
+  .data-table tr {
+    display: block;
+  }
+
+  .data-table thead {
+    display: none;
+  }
+
+  .data-table tr {
+    border-bottom: 1px solid var(--border);
+    padding: 12px;
+  }
+
+  .data-table tr:last-child {
+    border-bottom: none;
+  }
+
+  .data-table td {
+    border-bottom: none;
+    padding: 8px 4px;
+  }
+
+  .data-table td::before {
+    content: attr(data-label);
+    display: block;
+    color: var(--accent-dark);
+    font-weight: 900;
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin-bottom: 3px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="page-wrap">
+
+  <header class="top-bar">
+    <div class="brand">
+      <div class="brand-mark">RB</div>
+      <span>RootedByte</span>
+    </div>
+
+    <a href="index.html" class="back-link">← Back Home</a>
+  </header>
+
+  <main class="policy-card">
+    <span class="kicker">Privacy & Data Use</span>
+
+    <h1>Privacy Policy</h1>
+
+    <p class="updated">
+      Last updated: May 29, 2026
+    </p>
+
+    <p class="intro">
+      RootedByte is designed to help people use technology with more wisdom, reflection, and intention.
+      This Privacy Policy explains what information we may collect, how we use it, how it may be stored,
+      and what choices you have when using RootedByte websites, tools, apps, and related services.
+    </p>
+
+    <div class="notice-box">
+      <p>
+        <strong>Important:</strong> RootedByte is currently a developing independent project. Some features,
+        such as accounts, saved reflections, payments, analytics, newsletters, or parent/kid experiences,
+        may be added, changed, or removed over time. When features change, this Privacy Policy may be updated
+        to reflect those changes.
+      </p>
+    </div>
+
+    <nav class="toc" aria-label="Privacy policy table of contents">
+      <h2>Contents</h2>
+      <ol>
+        <li><a href="#who-we-are">Who We Are</a></li>
+        <li><a href="#scope">Scope of This Policy</a></li>
+        <li><a href="#information-we-collect">Information We May Collect</a></li>
+        <li><a href="#how-we-use">How We Use Information</a></li>
+        <li><a href="#accounts">Accounts and Authentication</a></li>
+        <li><a href="#children">Children and Family Use</a></li>
+        <li><a href="#third-party-services">Third-Party Services</a></li>
+        <li><a href="#cookies">Cookies, Analytics, and Local Storage</a></li>
+        <li><a href="#ai-features">AI and Reflection Features</a></li>
+        <li><a href="#payments">Payments and Digital Products</a></li>
+        <li><a href="#sharing">When Information May Be Shared</a></li>
+        <li><a href="#security">Data Security</a></li>
+        <li><a href="#retention">Data Retention</a></li>
+        <li><a href="#your-rights">Your Privacy Choices and Rights</a></li>
+        <li><a href="#international">International Users</a></li>
+        <li><a href="#changes">Changes to This Policy</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ol>
+    </nav>
+
+    <section id="who-we-are">
+      <h2>1. Who We Are</h2>
+      <p>
+        RootedByte is a digital project that may include web apps, educational tools, faith-based reflection tools,
+        digital wellness resources, printable products, and account-based features.
+      </p>
+      <p>
+        In this policy, “RootedByte,” “we,” “our,” or “us” refers to the owner and operator of the RootedByte website
+        and related RootedByte apps or pages.
+      </p>
+    </section>
+
+    <section id="scope">
+      <h2>2. Scope of This Policy</h2>
+      <p>
+        This Privacy Policy applies to RootedByte websites and related pages, including but not limited to:
+      </p>
+      <ul>
+        <li>the RootedByte home page;</li>
+        <li>RootedOS;</li>
+        <li>Song DiveIn;</li>
+        <li>Socials & News, previously known as NewsVerse;</li>
+        <li>account, sign-in, or profile pages;</li>
+        <li>contact forms, waitlists, newsletters, or digital product pages;</li>
+        <li>future parent, kid, family, or educational experiences under the RootedByte name.</li>
+      </ul>
+      <p>
+        This policy does not apply to websites, services, or platforms that we do not control, even if they are linked
+        from RootedByte.
+      </p>
+    </section>
+
+    <section id="information-we-collect">
+      <h2>3. Information We May Collect</h2>
+
+      <p>
+        The information we collect depends on how you use RootedByte. Some areas may be usable without creating an
+        account. Other features may require sign-in or user-provided information.
+      </p>
+
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Category</th>
+            <th>Examples</th>
+            <th>Why It May Be Collected</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td data-label="Category">Account Information</td>
+            <td data-label="Examples">Name, email address, password authentication data, account ID, profile settings.</td>
+            <td data-label="Why It May Be Collected">To create accounts, allow sign-in, manage user access, and protect accounts.</td>
+          </tr>
+          <tr>
+            <td data-label="Category">Contact Information</td>
+            <td data-label="Examples">Name, email address, message content submitted through a contact form.</td>
+            <td data-label="Why It May Be Collected">To respond to questions, feedback, support requests, or privacy requests.</td>
+          </tr>
+          <tr>
+            <td data-label="Category">User-Generated Content</td>
+            <td data-label="Examples">Reflections, typed prompts, truth-check notes, saved app entries, preferences, or responses you choose to submit.</td>
+            <td data-label="Why It May Be Collected">To provide app functionality, save your progress, or personalize your experience if those features are enabled.</td>
+          </tr>
+          <tr>
+            <td data-label="Category">Usage Information</td>
+            <td data-label="Examples">Pages visited, features used, buttons clicked, general session activity, referring pages.</td>
+            <td data-label="Why It May Be Collected">To understand performance, improve design, fix bugs, and maintain security.</td>
+          </tr>
+          <tr>
+            <td data-label="Category">Device and Technical Information</td>
+            <td data-label="Examples">Browser type, device type, operating system, approximate location from IP address, error logs.</td>
+            <td data-label="Why It May Be Collected">To keep the website working properly, troubleshoot issues, and protect against abuse.</td>
+          </tr>
+          <tr>
+            <td data-label="Category">Payment Information</td>
+            <td data-label="Examples">Purchase status, order details, product purchased, payment confirmation. Full payment card details are usually handled by third-party payment providers.</td>
+            <td data-label="Why It May Be Collected">To process purchases, deliver digital products, provide receipts, and handle support requests.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>Information You Provide Directly</h3>
+      <p>
+        You may provide information when you create an account, sign in, submit a form, request support, download a
+        product, join a waitlist, or use interactive features.
+      </p>
+
+      <h3>Information Collected Automatically</h3>
+      <p>
+        Like many websites, RootedByte or its service providers may automatically receive limited technical information
+        when you visit the site. This can include browser, device, IP address, timestamps, referring pages, and basic
+        usage logs.
+      </p>
+
+      <h3>Information We Do Not Intentionally Collect</h3>
+      <p>
+        RootedByte is not designed to collect highly sensitive personal information such as government identification
+        numbers, financial account numbers, medical records, or precise location data. Please do not submit sensitive
+        information into RootedByte forms or app fields unless a feature clearly asks for it and explains why.
+      </p>
+    </section>
+
+    <section id="how-we-use">
+      <h2>4. How We Use Information</h2>
+
+      <p>
+        We may use collected information for the following purposes:
+      </p>
+
+      <ul>
+        <li>to operate, maintain, and improve RootedByte;</li>
+        <li>to create, authenticate, and manage user accounts;</li>
+        <li>to save user preferences or app content when account-based features are enabled;</li>
+        <li>to respond to messages, questions, or support requests;</li>
+        <li>to deliver digital products, downloads, or email confirmations;</li>
+        <li>to troubleshoot technical issues, fix bugs, and improve performance;</li>
+        <li>to understand how users interact with RootedByte features;</li>
+        <li>to protect the website from spam, misuse, fraud, or unauthorized access;</li>
+        <li>to comply with applicable legal, security, or regulatory obligations.</li>
+      </ul>
+
+      <p>
+        We do not use personal information for purposes that are materially different from those described in this
+        policy unless we update this policy or provide additional notice where appropriate.
+      </p>
+    </section>
+
+    <section id="accounts">
+      <h2>5. Accounts and Authentication</h2>
+
+      <p>
+        If RootedByte offers account creation or sign-in, account information may be processed by a third-party
+        authentication or database provider, such as Supabase or a similar service.
+      </p>
+
+      <p>
+        Account-related information may include your email address, encrypted password authentication data, account ID,
+        login timestamps, and security-related metadata. Passwords should not be stored by RootedByte in plain readable
+        text.
+      </p>
+
+      <p>
+        You are responsible for keeping your account login information secure. Please use a strong password and do not
+        share your account credentials with others.
+      </p>
+
+      <h3>Account Deletion</h3>
+      <p>
+        If account deletion is available inside the website, you may use that feature to request removal of your account.
+        If no self-serve deletion tool is available yet, you may contact RootedByte to request account deletion.
+      </p>
+
+      <p>
+        Some limited information may need to be retained for security, legal, backup, abuse-prevention, or transaction
+        record purposes.
+      </p>
+    </section>
+
+    <section id="children">
+      <h2>6. Children and Family Use</h2>
+
+      <p>
+        RootedByte may include content designed for families, parents, or children. Parents and guardians should supervise
+        children’s use of RootedByte, especially when a feature allows typed input, account creation, or saved activity.
+      </p>
+
+      <p>
+        RootedByte does not knowingly seek to collect personal information from children without appropriate parental
+        involvement or consent where required by law. If we learn that a child has provided personal information without
+        appropriate consent, we will take reasonable steps to delete or limit that information.
+      </p>
+
+      <p>
+        If you are a parent or guardian and believe your child has submitted personal information through RootedByte,
+        please contact us so we can review and respond.
+      </p>
+
+      <h3>For Parent/Kid Features</h3>
+      <p>
+        If RootedByte later launches a dedicated parent/kid experience, we may add more specific child privacy details,
+        including what children can submit, whether parents can review or delete information, and whether any data is
+        shared with third-party providers.
+      </p>
+    </section>
+
+    <section id="third-party-services">
+      <h2>7. Third-Party Services</h2>
+
+      <p>
+        RootedByte may rely on trusted third-party services to operate the website and provide features. These providers
+        may process limited information as needed to perform services for RootedByte.
+      </p>
+
+      <p>
+        Examples may include:
+      </p>
+
+      <ul>
+        <li><strong>Hosting providers</strong>, such as Vercel or similar platforms;</li>
+        <li><strong>Authentication and database providers</strong>, such as Supabase or similar services;</li>
+        <li><strong>Payment providers</strong>, such as PayPal, Stripe, or similar services;</li>
+        <li><strong>Email or form providers</strong>, for contact messages, newsletters, or waitlists;</li>
+        <li><strong>Analytics providers</strong>, if analytics are enabled;</li>
+        <li><strong>Cloud storage providers</strong>, for downloadable files or digital products.</li>
+      </ul>
+
+      <p>
+        These third-party services have their own privacy and security practices. RootedByte is not responsible for
+        the privacy practices of external websites or platforms that we do not control.
+      </p>
+    </section>
+
+    <section id="cookies">
+      <h2>8. Cookies, Analytics, and Local Storage</h2>
+
+      <p>
+        RootedByte may use cookies, browser storage, or similar technologies to keep the website functional, remember
+        preferences, improve performance, or understand how users interact with the site.
+      </p>
+
+      <h3>Essential Storage</h3>
+      <p>
+        Some storage may be necessary for sign-in sessions, security, navigation, or saving basic preferences.
+      </p>
+
+      <h3>Analytics</h3>
+      <p>
+        If analytics are used, they may help us understand general usage patterns, such as which pages are visited,
+        what features are used, and where technical errors occur. We should aim to use privacy-conscious analytics
+        wherever practical.
+      </p>
+
+      <h3>Your Browser Choices</h3>
+      <p>
+        Most browsers allow you to block, delete, or control cookies and local storage. Some RootedByte features may
+        not work correctly if essential cookies or storage are disabled.
+      </p>
+    </section>
+
+    <section id="ai-features">
+      <h2>9. AI and Reflection Features</h2>
+
+      <p>
+        Some RootedByte tools may include reflection prompts, truth-check features, song or media reflection tools,
+        or other AI-assisted experiences.
+      </p>
+
+      <p>
+        If an AI-assisted feature is used, text you submit may be processed to generate a response or reflection.
+        Please avoid entering private, sensitive, or confidential information into AI or reflection fields.
+      </p>
+
+      <p>
+        AI-generated responses may be imperfect and should not be treated as professional advice, legal advice,
+        medical advice, financial advice, or pastoral authority. Users should exercise personal judgment and,
+        where appropriate, seek help from trusted qualified people.
+      </p>
+    </section>
+
+    <section id="payments">
+      <h2>10. Payments and Digital Products</h2>
+
+      <p>
+        RootedByte may offer printable resources, digital downloads, subscriptions, donations, or other products.
+        Payment processing may be handled by third-party payment providers.
+      </p>
+
+      <p>
+        RootedByte generally should not directly receive or store full credit card numbers. Payment providers may
+        collect and process payment details according to their own privacy policies and security standards.
+      </p>
+
+      <p>
+        We may receive limited transaction information, such as your name, email address, product purchased, order ID,
+        payment status, and delivery information, so we can provide access, receipts, refunds, or customer support.
+      </p>
+    </section>
+
+    <section id="sharing">
+      <h2>11. When Information May Be Shared</h2>
+
+      <p>
+        We do not sell your personal information. We may share limited information only when reasonably necessary for
+        the purposes described in this policy.
+      </p>
+
+      <p>
+        Information may be shared with:
+      </p>
+
+      <ul>
+        <li>service providers that help operate RootedByte;</li>
+        <li>payment processors when you make a purchase;</li>
+        <li>hosting, database, and authentication providers;</li>
+        <li>support or communication tools used to respond to you;</li>
+        <li>legal, safety, or security authorities if required by law or necessary to protect rights, safety, or security;</li>
+        <li>a successor organization if RootedByte is ever transferred, merged, or reorganized.</li>
+      </ul>
+
+      <p>
+        We do not intentionally share personal user content publicly unless you choose to make it public or a feature
+        clearly explains that your submission will be visible to others.
+      </p>
+    </section>
+
+    <section id="security">
+      <h2>12. Data Security</h2>
+
+      <p>
+        We take reasonable steps to protect personal information from unauthorized access, misuse, loss, or disclosure.
+        These steps may include account authentication, provider-level security protections, access controls, encryption
+        where supported, and limiting access to information where practical.
+      </p>
+
+      <p>
+        However, no website, database, or online service can guarantee perfect security. You use RootedByte with the
+        understanding that internet-based services carry some level of risk.
+      </p>
+
+      <p>
+        If we become aware of a data incident that affects personal information, we will take reasonable steps to
+        investigate and respond according to applicable obligations.
+      </p>
+    </section>
+
+    <section id="retention">
+      <h2>13. Data Retention</h2>
+
+      <p>
+        We keep personal information only as long as reasonably necessary for the purposes described in this policy,
+        unless a longer retention period is required or permitted by law.
+      </p>
+
+      <p>
+        Retention periods may depend on:
+      </p>
+
+      <ul>
+        <li>whether you have an active account;</li>
+        <li>whether the information is needed to provide a service or product;</li>
+        <li>whether the information is needed for security, fraud prevention, or abuse prevention;</li>
+        <li>whether the information relates to payments, tax, accounting, or legal records;</li>
+        <li>whether backups or logs temporarily retain information after deletion.</li>
+      </ul>
+
+      <p>
+        When information is no longer needed, we will take reasonable steps to delete, anonymize, or limit access to it.
+      </p>
+    </section>
+
+    <section id="your-rights">
+      <h2>14. Your Privacy Choices and Rights</h2>
+
+      <p>
+        Depending on where you live, you may have rights regarding your personal information. These may include the
+        right to:
+      </p>
+
+      <ul>
+        <li>request access to personal information we hold about you;</li>
+        <li>request correction of inaccurate information;</li>
+        <li>request deletion of your account or certain personal information;</li>
+        <li>withdraw consent where processing is based on consent;</li>
+        <li>object to or restrict certain processing;</li>
+        <li>request a copy of certain information in a portable format;</li>
+        <li>make a complaint to a privacy regulator where applicable.</li>
+      </ul>
+
+      <p>
+        To make a privacy request, contact us using the contact details below. We may need to verify your identity before
+        completing certain requests.
+      </p>
+    </section>
+
+    <section id="international">
+      <h2>15. International Users</h2>
+
+      <p>
+        RootedByte may be accessed from different countries. The service providers used to operate RootedByte may process
+        or store information in countries other than your own.
+      </p>
+
+      <p>
+        If you access RootedByte from outside the country where it is operated, you understand that your information may
+        be processed in jurisdictions with different data protection laws.
+      </p>
+    </section>
+
+    <section id="changes">
+      <h2>16. Changes to This Privacy Policy</h2>
+
+      <p>
+        We may update this Privacy Policy from time to time as RootedByte changes, new features are added, or legal and
+        operational requirements change.
+      </p>
+
+      <p>
+        When this policy is updated, the “Last updated” date at the top of the page will be changed. Significant changes
+        may also be communicated through the website or account-related notices where appropriate.
+      </p>
+    </section>
+
+    <section id="contact">
+      <h2>17. Contact</h2>
+
+      <p>
+        For privacy questions, account deletion requests, or data access requests, please contact RootedByte.
+      </p>
+
+      <div class="contact-card">
+        <p>
+          <strong>Email:</strong>
+          <span class="placeholder">rootedbyte@outlook.com</span>
+        </p>
+
+        <p>
+          <strong>Website:</strong>
+          <span class="placeholder">https://rootedbyte.vercel.app</span>
+        </p>
+
+        <p>
+          Replace the email above with the actual email address you want users to contact for privacy requests.
+        </p>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <p>
+      © 2026 RootedByte. All rights reserved.
+      <br>
+      <a href="index.html">Home</a>
+    </p>
+  </footer>
+
+</div>
+
+</body>
+</html>
