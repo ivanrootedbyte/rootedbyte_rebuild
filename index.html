@@ -103,15 +103,16 @@
   position: absolute;
   right: 0;
   top: 50%;
-  display: inline-grid;
-  gap: 4px;
-  place-items: center;
+  z-index: 60;
+  display: grid;
+  place-content: center;
+  gap: 5px;
   width: 42px;
   height: 42px;
   transform: translateY(-50%);
-  border: 1px solid rgba(23, 32, 27, 0.08);
+  border: 1px solid rgba(23, 32, 27, 0.12);
   border-radius: 15px;
-  background: rgba(255, 252, 245, 0.86);
+  background: rgba(255, 252, 245, 0.92);
   color: var(--forest);
   cursor: pointer;
   box-shadow: 0 10px 24px rgba(29, 36, 31, 0.08);
@@ -119,7 +120,7 @@
 
 .menu-toggle span {
   display: block;
-  width: 19px;
+  width: 20px;
   height: 2px;
   border-radius: 999px;
   background: currentColor;
@@ -127,7 +128,7 @@
 }
 
 .menu-toggle[aria-expanded="true"] span:nth-child(1) {
-  transform: translateY(6px) rotate(45deg);
+  transform: translateY(7px) rotate(45deg);
 }
 
 .menu-toggle[aria-expanded="true"] span:nth-child(2) {
@@ -135,7 +136,7 @@
 }
 
 .menu-toggle[aria-expanded="true"] span:nth-child(3) {
-  transform: translateY(-6px) rotate(-45deg);
+  transform: translateY(-7px) rotate(-45deg);
 }
 
 .site-menu {
@@ -147,7 +148,6 @@
   background: transparent;
   backdrop-filter: none;
   border-top: 0;
-  pointer-events: none;
 }
 
 .site-menu.is-open {
@@ -1706,15 +1706,13 @@ radial-gradient(circle at 62% 82%, rgba(201, 135, 63, 0.16), transparent 22rem);
 }
 
 .menu-toggle {
-  position: absolute;
-  right: 0;
-  top: 50%;
-  z-index: 60;
-  display: inline-grid;
+  width: 42px;
+  height: 42px;
+  border-radius: 15px;
 }
 
 .menu-toggle span {
-  width: 19px;
+  width: 20px;
   height: 2px;
 }
 
