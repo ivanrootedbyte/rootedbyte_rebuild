@@ -862,24 +862,51 @@
     }
 
     .site-footer {
-      padding: 2.5rem 1rem 3rem;
-      color: var(--song-dark-muted);
-      text-align: center;
-      background: #000000;
-    }
+  padding: 2.5rem 1rem 3rem;
+  color: var(--song-dark-muted);
+  text-align: center;
+  background: #000000;
+}
 
-    .footer-shell {
-      width: min(var(--max), 100%);
-      margin: 0 auto;
-      padding-top: 1.25rem;
-      border-top: 1px solid rgba(255, 255, 255, 0.1);
-    }
+.footer-shell {
+  width: min(var(--max), 100%);
+  margin: 0 auto;
+  padding-top: 1.25rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
 
-    .site-footer p {
-      margin: 0;
-      font-size: 0.92rem;
-      font-weight: 650;
-    }
+.footer-links {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px 14px;
+  text-align: center;
+}
+
+.footer-links p {
+  margin: 0;
+  font-size: 0.92rem;
+  font-weight: 650;
+}
+
+.footer-links span {
+  color: rgba(255, 255, 255, 0.32);
+}
+
+.footer-links a {
+  color: #ffffff;
+  font-size: 0.92rem;
+  font-weight: 850;
+  text-decoration: none;
+  transition: color 160ms ease;
+}
+
+.footer-links a:hover,
+.footer-links a:focus-visible {
+  color: var(--song-red);
+  outline: none;
+}  
 
     @media (max-width: 980px) {
   html {
@@ -1059,7 +1086,7 @@
     <section class="song-hero">
       <div class="song-hero__content">
         <p class="eyebrow">Song Prep Review</p>
-        <h1>Song DiveIn: Prepare With Purpose</h1>
+        <h1>Song DiveIn</h1>
         <p class="song-hero__subtitle">
           Turn any song or YouTube link into focused, rehearsal-ready prep for your worship team, practice time, and personal reflection.
         </p>
@@ -1301,11 +1328,15 @@
   </main>
 
   <footer class="site-footer">
-    <div class="footer-shell">
+  <div class="footer-shell">
+    <div class="footer-links">
       <p>&copy; 2026 RootedByte. Built for thoughtful tools, creative learning, and faith-rooted preparation.</p>
+      <span aria-hidden="true">•</span>
+      <a href="privacy.html">Privacy Policy</a>
     </div>
-  </footer>
-
+  </div>
+</footer>
+  
   <script>
     const $ = (selector) => document.querySelector(selector);
 
