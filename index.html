@@ -144,13 +144,15 @@
   inset: 82px 0 auto;
   z-index: 49;
   padding: 18px 0;
-  background: rgba(250, 248, 242, 0.84);
-  backdrop-filter: blur(22px);
-  border-top: 1px solid rgba(23, 32, 27, 0.06);
+  background: transparent;
+  backdrop-filter: none;
+  border-top: 0;
+  pointer-events: none;
 }
 
 .site-menu.is-open {
   display: block;
+  pointer-events: auto;
 }
 
 .site-menu-panel {
@@ -1704,9 +1706,11 @@ radial-gradient(circle at 62% 82%, rgba(201, 135, 63, 0.16), transparent 22rem);
 }
 
 .menu-toggle {
-  width: 42px;
-  height: 42px;
-  border-radius: 15px;
+  position: absolute;
+  right: 0;
+  top: 50%;
+  z-index: 60;
+  display: inline-grid;
 }
 
 .menu-toggle span {
