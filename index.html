@@ -258,6 +258,69 @@
       padding: 24px;
     }
 
+    .mood-selected-state {
+  min-height: 140px;
+  display: grid;
+  justify-items: center;
+  align-content: center;
+  text-align: center;
+  gap: 10px;
+}
+
+.mood-selected-kicker {
+  color: var(--muted-soft);
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.mood-selected-icon {
+  font-size: 2.2rem;
+  line-height: 1;
+}
+
+.mood-selected-label {
+  font-family: "Playfair Display", Georgia, serif;
+  color: var(--cream);
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: -0.04em;
+}
+
+.streak-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.streak-count {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--amber);
+  font-size: 1rem;
+  font-weight: 800;
+}
+
+.streak-flame {
+  font-size: 1rem;
+  line-height: 1;
+}
+
+.day.complete .day-dot {
+  color: #111714;
+  border-color: var(--sage);
+  background: var(--sage);
+}
+
+.day.complete .day-dot::before {
+  content: "✓";
+  font-size: 0.82rem;
+  font-weight: 900;
+}
+    
     .card-title {
       font-family: "Playfair Display", Georgia, serif;
       color: var(--cream);
@@ -1070,52 +1133,66 @@
         </div>
 
         <section class="card mood-card" aria-labelledby="mood-title">
-          <h2 class="card-title" id="mood-title">How’s your inner weather?</h2>
-          <p class="card-copy">Tap to check in for today.</p>
+  <div id="moodPromptState">
+    <h2 class="card-title" id="mood-title">How’s your inner weather?</h2>
+    <p class="card-copy">Tap to check in for today.</p>
 
-          <div class="mood-grid" id="moodGrid">
-            <button class="mood-button" type="button" data-mood="Heavy">
-              <span class="mood-emoji">🌫️</span>
-              <span class="mood-label">Heavy</span>
-            </button>
-            <button class="mood-button" type="button" data-mood="Numb">
-              <span class="mood-emoji">☁️</span>
-              <span class="mood-label">Numb</span>
-            </button>
-            <button class="mood-button" type="button" data-mood="Wired">
-              <span class="mood-emoji">⚡</span>
-              <span class="mood-label">Wired</span>
-            </button>
-            <button class="mood-button" type="button" data-mood="Calm">
-              <span class="mood-emoji">🌿</span>
-              <span class="mood-label">Calm</span>
-            </button>
-            <button class="mood-button" type="button" data-mood="Charged">
-              <span class="mood-emoji">🔥</span>
-              <span class="mood-label">Charged</span>
-            </button>
-            <button class="mood-button" type="button" data-mood="Clear">
-              <span class="mood-emoji">✨</span>
-              <span class="mood-label">Clear</span>
-            </button>
-          </div>
-        </section>
+    <div class="mood-grid" id="moodGrid">
+      <button class="mood-button" type="button" data-mood="Heavy" data-emoji="🪨">
+        <span class="mood-emoji">🪨</span>
+        <span class="mood-label">Heavy</span>
+      </button>
+      <button class="mood-button" type="button" data-mood="Numb" data-emoji="◻️">
+        <span class="mood-emoji">◻️</span>
+        <span class="mood-label">Numb</span>
+      </button>
+      <button class="mood-button" type="button" data-mood="Wired" data-emoji="⚡">
+        <span class="mood-emoji">⚡</span>
+        <span class="mood-label">Wired</span>
+      </button>
+      <button class="mood-button" type="button" data-mood="Calm" data-emoji="🌿">
+        <span class="mood-emoji">🌿</span>
+        <span class="mood-label">Calm</span>
+      </button>
+      <button class="mood-button" type="button" data-mood="Charged" data-emoji="🔥">
+        <span class="mood-emoji">🔥</span>
+        <span class="mood-label">Charged</span>
+      </button>
+      <button class="mood-button" type="button" data-mood="Clear" data-emoji="✨">
+        <span class="mood-emoji">✨</span>
+        <span class="mood-label">Clear</span>
+      </button>
+    </div>
+  </div>
+
+  <div id="moodSelectedState" class="mood-selected-state" hidden>
+    <span class="mood-selected-kicker">Today’s check-in</span>
+    <div class="mood-selected-icon" id="selectedMoodEmoji">🪨</div>
+    <div class="mood-selected-label" id="selectedMoodLabel">Heavy</div>
+  </div>
+</section>
 
         <section class="card streak-card" aria-labelledby="streak-title">
-          <h2 class="card-title" id="streak-title">Weekly streak</h2>
+  <div class="streak-top">
+    <h2 class="card-title" id="streak-title">Weekly streak</h2>
+    <div class="streak-count" id="streakCount">
+      <span class="streak-flame">🔥</span>
+      <span id="streakCountNumber">0</span>
+    </div>
+  </div>
 
-          <div class="streak-row" id="weeklyStreak">
-            <div class="day"><span>M</span><span class="day-dot">·</span></div>
-            <div class="day"><span>T</span><span class="day-dot">·</span></div>
-            <div class="day"><span>W</span><span class="day-dot">·</span></div>
-            <div class="day"><span>T</span><span class="day-dot">·</span></div>
-            <div class="day"><span>F</span><span class="day-dot">·</span></div>
-            <div class="day"><span>S</span><span class="day-dot">·</span></div>
-            <div class="day today"><span>S</span><span class="day-dot">·</span></div>
-          </div>
+  <div class="streak-row" id="weeklyStreak">
+    <div class="day"><span>M</span><span class="day-dot">·</span></div>
+    <div class="day"><span>T</span><span class="day-dot">·</span></div>
+    <div class="day"><span>W</span><span class="day-dot">·</span></div>
+    <div class="day"><span>T</span><span class="day-dot">·</span></div>
+    <div class="day"><span>F</span><span class="day-dot">·</span></div>
+    <div class="day"><span>S</span><span class="day-dot">·</span></div>
+    <div class="day today"><span>S</span><span class="day-dot">·</span></div>
+  </div>
 
-          <p class="streak-message" id="streakMessage">Start your streak today.</p>
-        </section>
+  <p class="streak-message" id="streakMessage">Day one. Everything starts here.</p>
+</section>
 
         <section class="section-block">
           <div class="section-heading">
@@ -1630,43 +1707,49 @@
       });
     }
 
-    function updateStreakUI() {
-      const today = todayKey();
+   function updateStreakUI() {
+  const today = todayKey();
 
-      if (!Array.isArray(state.streak)) state.streak = [];
+  if (!Array.isArray(state.streak)) state.streak = [];
 
-      const days = $$("#weeklyStreak .day");
-      const currentDay = new Date().getDay();
-      const mondayBasedToday = currentDay === 0 ? 6 : currentDay - 1;
+  const days = $$("#weeklyStreak .day");
+  const currentDay = new Date().getDay();
+  const mondayBasedToday = currentDay === 0 ? 6 : currentDay - 1;
 
-      days.forEach((day, index) => {
-        day.classList.toggle("today", index === mondayBasedToday);
-        day.classList.toggle("complete", index <= mondayBasedToday && state.streak.includes(today));
-      });
+  days.forEach((day, index) => {
+    day.classList.toggle("today", index === mondayBasedToday);
+    day.classList.toggle("complete", index <= mondayBasedToday && state.streak.includes(today));
+  });
 
-      const count = state.streak.length;
-      $("#streakMessage").textContent = count
-        ? `${count} day${count === 1 ? "" : "s"} checked in. Keep showing up.`
-        : "Start your streak today.";
+  const count = state.streak.length;
 
-      $("#currentStreakStat").textContent = `${count}d`;
+  const streakCountNumber = $("#streakCountNumber");
+  if (streakCountNumber) {
+    streakCountNumber.textContent = count;
+  }
+
+  $("#streakMessage").textContent = count
+    ? `Day ${count}. Everything starts here.`
+    : "Day one. Everything starts here.";
+
+  $("#currentStreakStat").textContent = `${count}d`;
+}
+
+$$(".mood-button").forEach((button) => {
+  button.addEventListener("click", () => {
+    state.mood = button.dataset.mood;
+
+    const today = todayKey();
+    if (!state.streak.includes(today)) {
+      state.streak.push(today);
     }
 
-    $$(".mood-button").forEach((button) => {
-      button.addEventListener("click", () => {
-        state.mood = button.dataset.mood;
-
-        const today = todayKey();
-        if (!state.streak.includes(today)) {
-          state.streak.push(today);
-        }
-
-        saveState();
-        updateMoodUI();
-        updateStreakUI();
-      });
-    });
-
+    saveState();
+    updateMoodUI();
+    updateStreakUI();
+  });
+});
+    
     function showTool(tool) {
       setScreen("tool-detail");
 
