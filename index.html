@@ -4,29 +4,43 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <title>RootedByte | Intentional Technology</title>
+  <title>RootedByte | Clarity for a Loud World</title>
 
   <meta
     name="description"
-    content="RootedByte builds tools for clarity, reflection, and growth—technology that turns digital noise into intentional focus."
+    content="RootedByte is a mobile-first reflection app for mood check-ins, wisdom prompts, AI-powered tools, journaling, and growth tracking."
   />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&display=swap"
+    rel="stylesheet"
+  >
 
   <style>
     :root {
-      --cream: #FAF8F2;
-      --cream-soft: #FFFFFF;
-      --charcoal: #17201B;
-      --charcoal-soft: #66736A;
-      --forest: #214D35;
-      --forest-dark: #13291E;
-      --forest-light: #D9E7D6;
-      --sage: #66736A;
-      --ochre: #C9873F;
-      --line: rgba(23, 32, 27, 0.10);
-      --shadow: 0 24px 70px rgba(23, 32, 27, 0.08);
-      --radius-xl: 32px;
-      --radius-lg: 24px;
-      --radius-md: 18px;
+      --bg: #111714;
+      --bg-deep: #0b100d;
+      --panel: rgba(24, 32, 27, 0.88);
+      --panel-strong: rgba(27, 37, 31, 0.96);
+      --panel-soft: rgba(27, 37, 31, 0.66);
+      --cream: #f5efe4;
+      --muted: #9fb2a7;
+      --muted-soft: #75877d;
+      --line: rgba(168, 197, 160, 0.17);
+      --line-strong: rgba(168, 197, 160, 0.34);
+      --sage: #a8c5a0;
+      --sage-deep: #263a2f;
+      --amber: #e8c97a;
+      --lavender: #b8a8d8;
+      --danger: #d97965;
+      --shadow: 0 24px 70px rgba(0, 0, 0, 0.34);
+      --radius-xl: 28px;
+      --radius-lg: 22px;
+      --radius-md: 16px;
+      --phone: 420px;
+      --bottom-nav-height: 76px;
     }
 
     * {
@@ -37,17 +51,19 @@
 
     html {
       scroll-behavior: smooth;
+      background: var(--bg-deep);
     }
 
     body {
       min-height: 100vh;
-      background:
-        radial-gradient(circle at 82% 12%, rgba(41, 75, 53, 0.10), transparent 34%),
-        radial-gradient(circle at 8% 35%, rgba(220, 200, 160, 0.20), transparent 30%),
-        var(--cream);
-      color: var(--charcoal);
+      color: var(--cream);
       font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      line-height: 1.6;
+      background:
+        radial-gradient(circle at 12% 8%, rgba(168, 197, 160, 0.08), transparent 18rem),
+        radial-gradient(circle at 88% 22%, rgba(232, 201, 122, 0.08), transparent 18rem),
+        radial-gradient(circle at 50% 100%, rgba(184, 168, 216, 0.07), transparent 20rem),
+        var(--bg-deep);
+      line-height: 1.55;
     }
 
     a {
@@ -55,2286 +71,1753 @@
       text-decoration: none;
     }
 
+    button,
+    input,
+    textarea,
+    select {
+      font: inherit;
+    }
+
+    button {
+      -webkit-tap-highlight-color: transparent;
+    }
+
     img {
       display: block;
       max-width: 100%;
     }
 
-    .page-shell {
-      overflow: hidden;
-      padding-bottom: 88px;
-    }
-
-    .container {
-      width: min(1120px, calc(100% - 40px));
+    .app-shell {
+      position: relative;
+      width: min(var(--phone), 100%);
+      min-height: 100vh;
       margin: 0 auto;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 50% -10%, rgba(168, 197, 160, 0.1), transparent 18rem),
+        linear-gradient(180deg, #111714 0%, #0f1512 100%);
+      border-left: 1px solid rgba(168, 197, 160, 0.08);
+      border-right: 1px solid rgba(168, 197, 160, 0.08);
     }
 
-    .site-header {
+    .app-header {
       position: sticky;
       top: 0;
       z-index: 50;
-      border-bottom: 1px solid var(--line);
-      background: rgba(247, 243, 234, 0.86);
-      backdrop-filter: blur(18px);
-    }
-
-    .header-inner {
+      height: 52px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      min-height: 74px;
+      padding: 0 18px;
+      background: rgba(17, 23, 20, 0.88);
+      border-bottom: 1px solid rgba(168, 197, 160, 0.1);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
     }
 
-    .menu-header {
-  position: relative;
-  justify-content: center;
-  min-height: 86px;
-}
-
-.centered-brand {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  padding-right: 0;
-}
-
-.menu-toggle {
-  position: absolute;
-  right: 0;
-  top: 50%;
-  z-index: 60;
-  display: grid;
-  place-content: center;
-  gap: 5px;
-  width: 42px;
-  height: 42px;
-  transform: translateY(-50%);
-  border: 1px solid rgba(23, 32, 27, 0.12);
-  border-radius: 15px;
-  background: rgba(255, 252, 245, 0.92);
-  color: var(--forest);
-  cursor: pointer;
-  box-shadow: 0 10px 24px rgba(29, 36, 31, 0.08);
-}
-
-.menu-toggle span {
-  display: block;
-  width: 20px;
-  height: 2px;
-  border-radius: 999px;
-  background: currentColor;
-  transition: transform 180ms ease, opacity 180ms ease;
-}
-
-.menu-toggle[aria-expanded="true"] span:nth-child(1) {
-  transform: translateY(7px) rotate(45deg);
-}
-
-.menu-toggle[aria-expanded="true"] span:nth-child(2) {
-  opacity: 0;
-}
-
-.menu-toggle[aria-expanded="true"] span:nth-child(3) {
-  transform: translateY(-7px) rotate(-45deg);
-}
-
-.site-menu {
-  display: none;
-  position: fixed;
-  inset: 82px 0 auto;
-  z-index: 49;
-  padding: 18px 0;
-  background: transparent;
-  backdrop-filter: none;
-  border-top: 0;
-}
-
-.site-menu.is-open {
-  display: block;
-  pointer-events: auto;
-}
-
-.site-menu-panel {
-  width: min(720px, calc(100% - 40px));
-  margin: 0 auto;
-  overflow: hidden;
-  border-top: 6px solid var(--forest);
-  border-radius: 0 0 28px 28px;
-  background: rgba(255, 252, 245, 0.98);
-  box-shadow: 0 24px 70px rgba(23, 32, 27, 0.14);
-}
-
-.site-menu-panel a {
-  display: flex;
-  align-items: center;
-  min-height: 58px;
-  padding: 0 34px;
-  border-bottom: 1px solid rgba(23, 32, 27, 0.08);
-  color: var(--charcoal-soft);
-  font-size: clamp(1.05rem, 2vw, 1.45rem);
-  font-weight: 850;
-  letter-spacing: -0.035em;
-  transition: background 180ms ease, color 180ms ease, padding-left 180ms ease;
-}
-
-.site-menu-panel a:hover,
-.site-menu-panel a:focus-visible {
-  background: rgba(33, 77, 53, 0.06);
-  color: var(--forest);
-  padding-left: 44px;
-  outline: none;
-}
-
-.site-menu-panel a:first-child {
-  color: var(--charcoal);
-}
-
-.site-menu-panel a:last-child {
-  border-bottom: 0;
-}
-    
     .brand {
       display: inline-flex;
       align-items: center;
-      gap: 12px;
-      font-weight: 800;
-      letter-spacing: -0.03em;
+      gap: 9px;
+      min-width: 0;
     }
 
-.brand-mark {
-  display: grid;
-  place-items: center;
-  width: 46px;
-  height: 46px;
-  padding: 3px;
-  border: 2px solid transparent;
-  border-radius: 17px;
-  background:
-    linear-gradient(var(--cream), var(--cream)) padding-box,
-    linear-gradient(
-      135deg,
-      #ff6b6b,
-      #f7b267,
-      #ffe66d,
-      #4ecdc4,
-      #5b8def,
-      #b388ff
-    ) border-box;
-  overflow: hidden;
-  flex: 0 0 auto;
-}
+    .brand-mark {
+      width: 34px;
+      height: 34px;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      border-radius: 12px;
+      background:
+        linear-gradient(var(--bg), var(--bg)) padding-box,
+        linear-gradient(135deg, var(--sage), var(--amber), var(--lavender)) border-box;
+      border: 1px solid transparent;
+      flex: 0 0 auto;
+    }
 
-.brand-mark img {
-  width: 118%;
-  height: 118%;
-  object-fit: cover;
-  object-position: center;
-}
+    .brand-mark img {
+      width: 118%;
+      height: 118%;
+      object-fit: cover;
+      object-position: center;
+      border-radius: 10px;
+    }
 
-    .brand-text span {
+    .brand-name {
+      font-family: "Playfair Display", Georgia, serif;
+      font-size: 1rem;
+      font-weight: 700;
+      letter-spacing: -0.04em;
+      color: var(--cream);
+      white-space: nowrap;
+    }
+
+    .profile-button {
+      width: 34px;
+      height: 34px;
+      display: grid;
+      place-items: center;
+      border: 1px solid rgba(168, 197, 160, 0.1);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--muted);
+      transition: transform 180ms ease, background 180ms ease, border-color 180ms ease;
+    }
+
+    .profile-button:hover,
+    .profile-button:focus-visible {
+      transform: translateY(-1px);
+      background: rgba(168, 197, 160, 0.1);
+      border-color: rgba(168, 197, 160, 0.22);
+      outline: none;
+    }
+
+    .app-main {
+      min-height: calc(100vh - 52px);
+      padding: 28px 16px calc(var(--bottom-nav-height) + 32px);
+    }
+
+    .screen {
+      display: none;
+      animation: screenIn 240ms ease both;
+    }
+
+    .screen.active {
       display: block;
     }
 
-.brand-name {
-  display: block;
-  color: var(--charcoal);
-  font-size: 1.45rem;
-  font-weight: 900;
-  letter-spacing: -0.045em;
-  line-height: 1;
-}
-
-.nav-cluster {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 12px;
-}
-
-.desktop-nav {
-  display: grid;
-  grid-template-columns: repeat(5, auto);
-  align-items: center;
-  gap: 6px;
-  padding: 6px;
-  border-radius: 999px;
-  background: rgba(255, 252, 245, 0.9);
-  border: 1px solid rgba(23, 32, 27, 0.08);
-  box-shadow: 0 8px 22px rgba(29, 36, 31, 0.07);
-}
-
-.nav-tab {
-  display: grid;
-  place-items: center;
-  min-height: 42px;
-  padding: 0 16px;
-  border-radius: 999px;
-  color: var(--sage);
-  background: transparent;
-  font-size: 0.86rem;
-  font-weight: 900;
-  letter-spacing: -0.02em;
-  transition: background 180ms ease, color 180ms ease, transform 180ms ease, box-shadow 180ms ease;
-}
-
-.mobile-auth-link {
-  display: none;
-}
-    
-.nav-tab:hover,
-.nav-tab:focus-visible {
-  color: var(--charcoal);
-  background: rgba(33, 77, 53, 0.06);
-  outline: none;
-}
-
-.nav-tab.active {
-  color: var(--cream-soft);
-  background: linear-gradient(90deg, #0f2118, #11291f);
-  box-shadow: 0 8px 18px rgba(17, 41, 31, 0.16);
-}
-
-    .header-cta,
-    .button {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      min-height: 48px;
-      border-radius: 999px;
-      background: var(--charcoal);
-      color: var(--cream-soft);
-      font-size: 0.94rem;
-      font-weight: 800;
-      letter-spacing: -0.01em;
-      transition: transform 180ms ease, background 180ms ease, box-shadow 180ms ease;
-      box-shadow: 0 14px 34px rgba(29, 36, 31, 0.16);
+    @keyframes screenIn {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
-
-    .header-cta {
-      padding: 0 20px;
-    }
-
-    .button {
-      width: 100%;
-      padding: 0 22px;
-    }
-
-.button,
-.header-cta {
-  position: relative;
-  isolation: isolate;
-  overflow: hidden;
-}
-
-.button::before,
-.header-cta::before {
-  content: "";
-  position: absolute;
-  inset: -2px;
-  z-index: -2;
-  border-radius: inherit;
-  background: conic-gradient(
-    from 0deg,
-    #ff6b6b,
-    #f7b267,
-    #ffe66d,
-    #4ecdc4,
-    #5b8def,
-    #b388ff,
-    #ff6b6b
-  );
-  opacity: 0;
-  transition: opacity 220ms ease;
-  animation: buttonRainbowSpin 4s linear infinite;
-}
-
-.button::after,
-.header-cta::after {
-  content: "";
-  position: absolute;
-  inset: 2px;
-  z-index: -1;
-  border-radius: inherit;
-  background: var(--charcoal);
-}
-
-.button:hover::before,
-.button:focus-visible::before,
-.header-cta:hover::before,
-.header-cta:focus-visible::before {
-  opacity: 1;
-}
-
-@keyframes buttonRainbowSpin {
-  from {
-    transform: rotate(0deg);
-  }
-
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-    
-.header-cta:hover,
-.button:hover {
-  background: var(--forest-dark);
-  transform: translateY(-2px);
-  box-shadow:
-    0 18px 42px rgba(33, 77, 53, 0.20),
-    0 0 28px rgba(91, 141, 239, 0.16);
-}
 
     .hero {
-  position: relative;
-  padding: 100px 0 58px;
-  overflow: hidden;
-  background:
-    radial-gradient(circle at 76% 42%, rgba(33, 77, 53, 0.18), transparent 26rem),
-radial-gradient(circle at 22% 22%, rgba(201, 135, 63, 0.18), transparent 24rem),
-    linear-gradient(135deg, rgba(255, 252, 245, 0.96), rgba(221, 232, 216, 0.72));
-  border-bottom: 1px solid rgba(23, 32, 27, 0.08);
-}
-
-    .hero::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background:
-    linear-gradient(90deg, rgba(255, 252, 245, 0.86), rgba(255, 252, 245, 0.2)),
-    radial-gradient(circle at 88% 18%, rgba(91, 141, 239, 0.14), transparent 26rem),
-radial-gradient(circle at 62% 82%, rgba(201, 135, 63, 0.16), transparent 22rem);
-  pointer-events: none;
-}
-
-.hero .container {
-  position: relative;
-  z-index: 1;
-}
-
-.hero-grid {
-  display: grid;
-  grid-template-columns: minmax(0, 0.95fr) minmax(340px, 0.75fr);
-  align-items: center;
-  gap: 44px;
-}
-
-    .eyebrow {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 28px;
-      padding: 9px 14px;
-      border: 1px solid var(--line);
-      border-radius: 999px;
-      background: rgba(255, 252, 245, 0.66);
-      color: var(--forest);
-      font-size: 0.84rem;
-      font-weight: 800;
-      box-shadow: 0 10px 32px rgba(29, 36, 31, 0.05);
+      text-align: center;
+      padding: 20px 0 14px;
     }
 
-    .eyebrow-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 999px;
-      background: var(--forest);
-    }
-    
-    h1 {
-      max-width: 880px;
-      color: var(--charcoal);
-      font-size: clamp(3.2rem, 6.4vw, 6.1rem);
-      font-weight: 900;
+    .hero h1 {
+      max-width: 390px;
+      margin: 0 auto;
+      font-family: "Playfair Display", Georgia, serif;
+      color: var(--cream);
+      font-size: clamp(3rem, 13vw, 4.35rem);
+      line-height: 0.92;
       letter-spacing: -0.075em;
-      line-height: 0.94;
-    }
-
-    .hero-subheadline {
-      max-width: 690px;
-      margin-top: 30px;
-      color: var(--charcoal-soft);
-      font-size: clamp(1.12rem, 2vw, 1.42rem);
-      font-weight: 450;
-      letter-spacing: -0.015em;
-    }
-
-    .hero-subheadline strong {
-      color: var(--forest);
-      font-weight: 850;
-    }
-
-    .hero-actions {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      gap: 16px;
-      margin-top: 36px;
-    }
-
-    .hero-actions .button {
-      width: auto;
-      padding-inline: 26px;
-    }
-
-    .text-link {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      min-height: 48px;
-      color: var(--charcoal-soft);
-      font-size: 0.96rem;
       font-weight: 800;
     }
 
-.hero-panel {
-  isolation: isolate;
-  position: relative;
-  display: grid;
-  place-items: center;
-  width: min(100%, 420px);
-  aspect-ratio: 1 / 1;
-  margin-left: 0 auto;
-  border: 1px solid rgba(29, 36, 31, 0.08);
-  border-radius: 50%;
-  background:
-    radial-gradient(circle at 35% 30%, rgba(255, 252, 245, 0.92), rgba(220, 232, 216, 0.42)),
-    rgba(255, 252, 245, 0.58);
-  padding: 12px;
-  box-shadow:
-    0 24px 70px rgba(29, 36, 31, 0.11),
-    0 0 58px rgba(33, 77, 53, 0.10);
-  backdrop-filter: blur(18px);
-  overflow: hidden;
-}
-    
-.hero-panel::before {
-  content: "";
-  position: absolute;
-  inset: -42px;
-  border-radius: 50%;
-  background:
-    radial-gradient(circle at 30% 30%, rgba(201, 135, 63, 0.10), transparent 34%),
-    radial-gradient(circle at 75% 70%, rgba(74, 127, 165, 0.10), transparent 38%),
-    radial-gradient(circle at 45% 85%, rgba(49, 198, 79, 0.08), transparent 30%);
-  filter: blur(10px);
-  z-index: -1;
-}
+    .hero h1 .sage {
+      color: var(--sage);
+    }
 
-.hero-panel::after {
-  content: "";
-  position: absolute;
-  inset: 22px;
-  border-radius: 50%;
-  border: 1px solid rgba(33, 77, 53, 0.08);
-  pointer-events: none;
-}
-    
-    
-.hero-panel-link {
-  cursor: pointer;
-  transition:
-    transform 220ms ease,
-    box-shadow 220ms ease,
-    border-color 220ms ease;
-}
+    .hero p {
+      max-width: 310px;
+      margin: 18px auto 0;
+      color: var(--muted);
+      font-size: 0.95rem;
+      line-height: 1.55;
+    }
 
-.hero-panel-link:hover {
-  transform: translateY(-4px) scale(1.01);
-  box-shadow:
-    0 26px 70px rgba(23, 32, 27, 0.12),
-    0 0 0 1px rgba(201, 135, 63, 0.12);
-}
+    .wisdom-strip {
+      min-height: 72px;
+      display: grid;
+      place-items: center;
+      padding: 14px 22px;
+      margin: 18px 0 22px;
+      color: #b9d0c0;
+      font-size: 0.98rem;
+      line-height: 1.45;
+      font-style: italic;
+      text-align: center;
+    }
 
-.hero-panel-link:focus-visible {
-  outline: none;
-  transform: translateY(-4px) scale(1.01);
-  box-shadow:
-    0 26px 70px rgba(23, 32, 27, 0.12),
-    0 0 0 2px rgba(201, 135, 63, 0.22);
-}
+    .card {
+      border: 1px solid var(--line);
+      border-radius: var(--radius-xl);
+      background:
+        linear-gradient(180deg, rgba(25, 35, 29, 0.92), rgba(20, 28, 24, 0.88));
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+    }
 
-/* rainbow border layer */
-.hero-panel-link::before {
-  content: "";
-  position: absolute;
-  inset: -2px;
-  border-radius: calc(var(--radius-xl) + 2px);
-  padding: 2px;
-  background: conic-gradient(
-    from 0deg,
-    rgba(255, 99, 132, 0.0),
-    rgba(255, 166, 0, 0.75),
-    rgba(255, 221, 87, 0.75),
-    rgba(64, 224, 208, 0.75),
-    rgba(90, 140, 255, 0.75),
-    rgba(180, 90, 255, 0.75),
-    rgba(255, 99, 132, 0.75),
-    rgba(255, 99, 132, 0.0)
-  );
-  -webkit-mask:
-    linear-gradient(#fff 0 0) content-box,
-    linear-gradient(#fff 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
-  opacity: 0.22;
-  transition: opacity 240ms ease, filter 240ms ease;
-  animation: heroRainbowSpin 8s linear infinite;
-  pointer-events: none;
-}
+    .card + .card,
+    .section-block + .section-block {
+      margin-top: 20px;
+    }
 
-/* soft glow */
-.hero-panel-link::after {
-  content: "";
-  position: absolute;
-  inset: 10px;
-  border-radius: calc(var(--radius-xl) - 8px);
-  background:
-    radial-gradient(circle at 20% 20%, rgba(201, 135, 63, 0.12), transparent 35%),
-    radial-gradient(circle at 80% 20%, rgba(122, 92, 255, 0.08), transparent 30%),
-    radial-gradient(circle at 50% 85%, rgba(0, 188, 212, 0.08), transparent 32%);
-  filter: blur(22px);
-  opacity: 0.45;
-  transition: opacity 240ms ease, transform 240ms ease;
-  pointer-events: none;
-}
+    .mood-card {
+      padding: 24px;
+    }
 
-.hero-panel-link:hover::before,
-.hero-panel-link:focus-visible::before {
-  opacity: 0.75;
-  filter: saturate(1.15);
-}
+    .card-title {
+      font-family: "Playfair Display", Georgia, serif;
+      color: var(--cream);
+      font-size: 1.35rem;
+      line-height: 1.08;
+      letter-spacing: -0.045em;
+      font-weight: 700;
+    }
 
-.hero-panel-link:hover::after,
-.hero-panel-link:focus-visible::after {
-  opacity: 0.78;
-  transform: scale(1.02);
-}
+    .card-copy {
+      margin-top: 4px;
+      color: var(--muted-soft);
+      font-size: 0.86rem;
+    }
 
-.hero-panel-link.clicked::before {
-  opacity: 1;
-  filter: blur(0.5px) saturate(1.25);
-}
+    .mood-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-top: 18px;
+    }
 
-.hero-panel-link.clicked::after {
-  opacity: 1;
-  transform: scale(1.04);
-}
+    .mood-button {
+      min-height: 78px;
+      display: grid;
+      place-items: center;
+      gap: 6px;
+      border: 1px solid rgba(168, 197, 160, 0.16);
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.025);
+      color: var(--muted);
+      cursor: pointer;
+      transition:
+        transform 180ms ease,
+        background 180ms ease,
+        border-color 180ms ease,
+        color 180ms ease,
+        box-shadow 180ms ease;
+    }
 
-.focus-orb {
-  position: relative;
-  display: grid;
-  place-items: center;
-  width: 100%;
-  height: 100%;
-  min-height: auto;
-  border-radius: 50%;
-  background:
-    linear-gradient(145deg, rgba(255, 252, 245, 0.94), rgba(220, 232, 216, 0.50)),
-    radial-gradient(circle, rgba(41, 75, 53, 0.10), transparent 54%);
-  border: 1px solid rgba(29, 36, 31, 0.06);
-  overflow: hidden;
-}
+    .mood-button:hover,
+    .mood-button:focus-visible {
+      transform: translateY(-2px);
+      border-color: rgba(168, 197, 160, 0.32);
+      background: rgba(168, 197, 160, 0.06);
+      outline: none;
+    }
 
-.focus-orb::after {
-  content: "";
-  position: absolute;
-  width: 280px;
-  height: 280px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(201, 135, 63, 0.10), transparent 65%);
-  filter: blur(10px);
-  pointer-events: none;
-}
+    .mood-button.active {
+      color: var(--cream);
+      border-color: rgba(168, 197, 160, 0.58);
+      background: rgba(168, 197, 160, 0.13);
+      box-shadow: 0 0 0 1px rgba(168, 197, 160, 0.08);
+    }
 
-.orb-content {
-  position: relative;
-  z-index: 1;
-  width: 72%;
-  height: 72%;
-  border-radius: 50%;
-  display: grid;
-  place-items: center;
-  background:
-    linear-gradient(rgba(255, 252, 245, 0.76), rgba(255, 252, 245, 0.76)) padding-box,
-    linear-gradient(
-      135deg,
-      #ff6b6b,
-      #f7b267,
-      #ffe66d,
-      #4ecdc4,
-      #5b8def,
-      #b388ff
-    ) border-box;
-  border: 1px solid transparent;
-  box-shadow:
-    inset 0 0 42px rgba(41, 75, 53, 0.06),
-    0 10px 26px rgba(23, 32, 27, 0.06);
-  overflow: hidden;
-}
+    .mood-emoji {
+      font-size: 1.45rem;
+      line-height: 1;
+    }
 
-.orb-content::before {
-  content: none;
-}
+    .mood-label {
+      font-size: 0.78rem;
+      font-weight: 700;
+    }
 
-.orb-logo-image {
-  position: absolute;
-  z-index: 1;
-  inset: 28px;
-  width: calc(100% - 56px);
-  height: calc(100% - 56px);
-  object-fit: contain;
-  opacity: 0.42;
-  filter: saturate(0.95) contrast(1.05);
-  pointer-events: none;
-}
+    .streak-card {
+      padding: 24px;
+    }
 
+    .streak-row {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 9px;
+      margin-top: 18px;
+    }
 
-.hero-panel-link:hover .orb-content,
-.hero-panel-link:focus-visible .orb-content {
-  transform: scale(1.035);
-  box-shadow:
-    inset 0 0 50px rgba(41, 75, 53, 0.06),
-    0 16px 34px rgba(23, 32, 27, 0.10),
-    0 0 28px rgba(201, 135, 63, 0.10);
-}
+    .day {
+      display: grid;
+      justify-items: center;
+      gap: 8px;
+      color: var(--muted-soft);
+      font-size: 0.7rem;
+    }
 
-.orb-ring {
-  position: relative;
-  display: block;
-  width: 34px;
-  height: 34px;
-  margin: 0 auto 14px;
-  border-radius: 50%;
-  background: conic-gradient(
-    #ff6b6b,
-    #f7b267,
-    #ffe66d,
-    #4ecdc4,
-    #5b8def,
-    #b388ff,
-    #ff6b6b
-  );
-  box-shadow:
-    0 0 14px rgba(255, 170, 120, 0.28),
-    0 0 24px rgba(91, 141, 239, 0.18);
-}
+    .day-dot {
+      width: 31px;
+      height: 31px;
+      display: grid;
+      place-items: center;
+      border-radius: 999px;
+      border: 1px solid rgba(168, 197, 160, 0.13);
+      background: rgba(255, 255, 255, 0.018);
+      color: var(--muted-soft);
+      font-size: 0.75rem;
+    }
 
-.orb-ring::before {
-  content: "";
-  position: absolute;
-  inset: 4px;
-  border-radius: 50%;
-  background: rgba(255, 252, 245, 0.96);
-}
+    .day.complete .day-dot {
+      color: var(--bg);
+      border-color: var(--sage);
+      background: var(--sage);
+    }
 
-.orb-ring::after {
-  content: "";
-  position: absolute;
-  inset: 10px;
-  border-radius: 50%;
-  background: var(--forest);
-}
+    .day.today .day-dot {
+      border-color: rgba(168, 197, 160, 0.48);
+      box-shadow: 0 0 0 4px rgba(168, 197, 160, 0.06);
+    }
 
-.hero-panel-link:hover .orb-ring,
-.hero-panel-link:focus-visible .orb-ring {
-  box-shadow:
-    0 0 18px rgba(255, 170, 120, 0.38),
-    0 0 30px rgba(91, 141, 239, 0.24),
-    0 0 42px rgba(179, 136, 255, 0.18);
-}
-
-.orb-message {
-  position: relative;
-  z-index: 2;
-  display: grid;
-  gap: 2px;
-  max-width: 178px;
-  margin-top: 0;
-  padding: 12px 16px;
-  border: 1px solid rgba(33, 77, 53, 0.10);
-  border-radius: 999px;
-  background: rgba(255, 252, 245, 0.72);
-  color: var(--forest);
-  text-align: center;
-  line-height: 1.05;
-  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  box-shadow: 0 10px 26px rgba(23, 32, 27, 0.08);
-  backdrop-filter: blur(10px);
-}
-
-.orb-message span {
-  font-size: clamp(1.25rem, 2.2vw, 1.72rem);
-  font-weight: 950;
-  letter-spacing: -0.055em;
-}
-
-.orb-message small {
-  font-size: 0.74rem;
-  font-weight: 900;
-  color: var(--forest);
-  line-height: 1.2;
-  letter-spacing: 0.03em;
-  text-transform: uppercase;
-}
-
-    .hero-logo-content {
-  display: grid;
-  place-items: center;
-  text-align: center;
-}
-
-.hero-logo-image {
-  width: 72px;
-  height: 72px;
-  object-fit: cover;
-  object-position: center;
-  border-radius: 22px;
-  margin-bottom: 12px;
-  box-shadow: 0 12px 28px rgba(29, 36, 31, 0.10);
-}
-    
-.hero-panel-caption {
-  position: relative;
-  z-index: 1;
-  display: flex;
-  justify-content: center;
-  margin-top: 16px;
-}
-
-.hero-panel-caption span {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  min-height: 36px;
-  padding: 0 14px;
-  border-radius: 999px;
-  background: rgba(255, 252, 245, 0.76);
-  border: 1px solid rgba(23, 32, 27, 0.08);
-  color: var(--forest);
-  font-size: 0.82rem;
-  font-weight: 800;
-  letter-spacing: -0.01em;
-  box-shadow: 0 8px 22px rgba(23, 32, 27, 0.05);
-}
-
-@keyframes heroRainbowSpin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-    .section {
-      padding: 52px 0;
+    .streak-message {
+      margin-top: 16px;
+      color: var(--muted);
+      text-align: center;
+      font-size: 0.86rem;
     }
 
     .section-heading {
-      max-width: 760px;
-      margin-bottom: 28px;
+      margin: 28px 0 14px;
     }
 
-    .section-label {
-      margin-bottom: 12px;
-      color: var(--forest);
-      font-size: 0.78rem;
-      font-weight: 900;
-      letter-spacing: 0.16em;
-      text-transform: uppercase;
-    }
-
-    h2 {
-      color: var(--charcoal);
-      font-size: clamp(2rem, 4vw, 3.75rem);
-      font-weight: 900;
+    .section-heading h2 {
+      font-family: "Playfair Display", Georgia, serif;
+      font-size: 1.65rem;
+      line-height: 1;
       letter-spacing: -0.055em;
-      line-height: 1;
     }
 
-    .section-copy {
-      margin-top: 16px;
-      color: var(--charcoal-soft);
-      font-size: 1.05rem;
-      font-weight: 450;
+    .section-heading p {
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 0.93rem;
     }
 
-    .ecosystem-grid {
+    .tool-list {
       display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 18px;
+      gap: 12px;
     }
 
-.app-card {
-  position: relative;
-  display: flex;
-  min-height: 520px;
-  flex-direction: column;
-  justify-content: space-between;
-  overflow: hidden;
-  border: 2px solid transparent;
-  border-radius: var(--radius-xl);
-  background:
-    linear-gradient(rgba(255, 252, 245, 0.92), rgba(255, 252, 245, 0.92)) padding-box,
-    linear-gradient(
-      135deg,
-      #ff6b6b,
-      #f7b267,
-      #ffe66d,
-      #4ecdc4,
-      #5b8def,
-      #b388ff
-    ) border-box;
-  box-shadow: 0 20px 60px rgba(29, 36, 31, 0.06);
-  transition: transform 200ms ease, box-shadow 200ms ease;
-}
-
-.app-card::before {
-  content: "";
-  position: absolute;
-  inset: -1px;
-  border-radius: inherit;
-  background:
-    radial-gradient(circle at 20% 15%, rgba(201, 135, 63, 0.18), transparent 32%),
-    radial-gradient(circle at 80% 18%, rgba(91, 141, 239, 0.14), transparent 28%),
-    radial-gradient(circle at 50% 100%, rgba(120, 220, 180, 0.14), transparent 30%);
-  opacity: 0;
-  filter: blur(16px);
-  transition: opacity 220ms ease;
-  z-index: -1;
-  pointer-events: none;
-}
-
-.app-card:hover {
-  box-shadow:
-    0 28px 80px rgba(29, 36, 31, 0.10),
-    0 0 28px rgba(201, 135, 63, 0.16);
-  transform: translateY(-5px);
-}
-
-.app-card:hover::before {
-  opacity: 1;
-}
-
-.app-card {
-  isolation: isolate;
-}
-
-
-    
-.app-card:nth-child(1)::before {
-  background:
-    radial-gradient(circle at 20% 15%, rgba(201, 135, 63, 0.22), transparent 34%),
-    radial-gradient(circle at 80% 100%, rgba(255, 190, 120, 0.14), transparent 28%);
-}
-
-.app-card:nth-child(2)::before {
-  background:
-    radial-gradient(circle at 20% 15%, rgba(91, 141, 239, 0.18), transparent 34%),
-    radial-gradient(circle at 80% 100%, rgba(120, 220, 255, 0.14), transparent 28%);
-}
-
-.app-card:nth-child(3)::before {
-  background:
-    radial-gradient(circle at 20% 15%, rgba(90, 160, 120, 0.18), transparent 34%),
-    radial-gradient(circle at 80% 100%, rgba(201, 135, 63, 0.14), transparent 28%);
-}
-
-    .app-image {
-      height: 190px;
-      overflow: hidden;
-      background: var(--forest-light);
-    }
-
-    .app-image {
-  border-top-left-radius: var(--radius-xl);
-  border-top-right-radius: var(--radius-xl);
-}
-    .app-image img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    .app-card-body {
-      display: flex;
-      flex: 1;
-      flex-direction: column;
-      justify-content: space-between;
-      padding: 28px;
-    }
-
-    .app-meta {
-      color: var(--sage);
-      font-size: 0.78rem;
-      font-weight: 900;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-    }
-
-    .app-card h3 {
-      margin-top: 10px;
-      color: var(--charcoal);
-      font-size: 2rem;
-      font-weight: 900;
-      letter-spacing: -0.05em;
-      line-height: 1;
-    }
-
-    .app-tagline {
-      margin-top: 24px;
-      color: var(--charcoal);
-      font-size: 1.28rem;
-      font-weight: 900;
-      letter-spacing: -0.035em;
-      line-height: 1.1;
-    }
-
-    .app-description {
-      margin-top: 12px;
-      color: var(--charcoal-soft);
-      font-size: 0.98rem;
-      font-weight: 450;
-    }
-
-    .app-card .button {
-      margin-top: 34px;
-    }
-
-    .purpose-grid {
+    .tool-card {
       display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 18px;
-    }
-
-    .purpose-card {
-      min-height: 360px;
+      grid-template-columns: 1fr auto;
+      gap: 12px;
+      align-items: center;
+      min-height: 130px;
+      padding: 22px;
       border: 1px solid var(--line);
-      border-radius: var(--radius-xl);
-      padding: 34px;
-      box-shadow: 0 22px 64px rgba(29, 36, 31, 0.06);
+      border-radius: var(--radius-lg);
+      background: rgba(25, 35, 29, 0.82);
+      cursor: pointer;
+      transition: transform 180ms ease, border-color 180ms ease, background 180ms ease;
     }
 
-    .problem-card {
-      background: rgba(29, 36, 31, 0.95);
-      color: var(--cream-soft);
-    }
-
-.solution-card {
-  position: relative;
-  overflow: hidden;
-  border: 2px solid transparent;
-  background:
-    linear-gradient(rgba(255, 252, 245, 0.88), rgba(255, 252, 245, 0.88)) padding-box,
-    linear-gradient(
-      135deg,
-      #ff6b6b,
-      #f7b267,
-      #ffe66d,
-      #4ecdc4,
-      #5b8def,
-      #b388ff
-    ) border-box;
-  color: var(--charcoal);
-}
-
-    .purpose-icon {
-      display: grid;
-      place-items: center;
-      width: 58px;
-      height: 58px;
-      margin-bottom: 28px;
-      border-radius: 22px;
-    }
-
-    .problem-card .purpose-icon {
-      background: rgba(247, 243, 234, 0.12);
-      color: var(--cream);
-    }
-
-    .solution-card .purpose-icon {
-      background: var(--forest-light);
-      color: var(--forest);
-    }
-
-    .solution-card {
-  transition: transform 200ms ease, box-shadow 200ms ease;
-}
-
-.solution-card:hover {
-  transform: translateY(-4px);
-  box-shadow:
-    0 28px 80px rgba(29, 36, 31, 0.10),
-    0 0 28px rgba(201, 135, 63, 0.14);
-}
-  
-    .purpose-card h3 {
-      font-size: clamp(1.8rem, 3vw, 3rem);
-      font-weight: 900;
-      letter-spacing: -0.055em;
-      line-height: 1;
-    }
-
-    .purpose-card p {
-      margin-top: 18px;
-      font-size: 1.02rem;
-      font-weight: 430;
-    }
-
-    .problem-card p {
-      color: rgba(255, 252, 245, 0.72);
-    }
-
-    .solution-card p {
-      color: var(--charcoal-soft);
-    }
-
-    .outcome-list {
-      display: grid;
-      gap: 12px;
-      margin-top: 28px;
-      list-style: none;
-    }
-
-    .outcome-list li {
-      display: flex;
-      align-items: flex-start;
-      gap: 12px;
-      font-size: 0.98rem;
-      font-weight: 650;
-    }
-
-    .outcome-list span {
-      display: inline-grid;
-      flex: 0 0 auto;
-      place-items: center;
-      width: 24px;
-      height: 24px;
-      border-radius: 999px;
-      background: rgba(41, 75, 53, 0.14);
-      color: var(--forest);
-      font-size: 0.76rem;
-      font-weight: 900;
-    }
-
-    .problem-card .outcome-list span {
-      background: rgba(247, 243, 234, 0.14);
-      color: var(--cream);
-    }
-
-    .contact-card {
-      border: 1px solid var(--line);
-      border-radius: var(--radius-xl);
-      background: rgba(255, 252, 245, 0.74);
-      padding: 34px;
-      box-shadow: 0 22px 64px rgba(29, 36, 31, 0.06);
-    }
-
-    .contact-links {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-      margin-top: 24px;
-    }
-
-    .contact-links a {
-      display: inline-grid;
-      place-items: center;
-      width: 52px;
-      height: 52px;
-      border-radius: 999px;
-      background: var(--charcoal);
-      color: var(--cream-soft);
-      transition: transform 180ms ease, background 180ms ease;
-    }
-
-    .contact-links a:hover {
-      background: var(--forest-dark);
+    .tool-card:hover,
+    .tool-card:focus-visible {
       transform: translateY(-2px);
+      border-color: rgba(168, 197, 160, 0.34);
+      background: rgba(29, 41, 34, 0.94);
+      outline: none;
     }
 
-    .contact-email {
-      display: inline-flex;
-      margin-top: 22px;
-      color: var(--forest);
+    .tool-kicker {
+      color: var(--sage);
+      font-size: 0.72rem;
+      font-weight: 900;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .tool-card.signal .tool-kicker {
+      color: var(--amber);
+    }
+
+    .tool-card.sound .tool-kicker {
+      color: var(--lavender);
+    }
+
+    .tool-card h3 {
+      margin-top: 7px;
+      font-family: "Playfair Display", Georgia, serif;
+      font-size: 1.3rem;
+      letter-spacing: -0.045em;
+    }
+
+    .tool-card p {
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 0.91rem;
+    }
+
+    .chevron {
+      color: var(--muted);
+      font-size: 1.45rem;
+    }
+
+    .tool-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 24px;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .back-button {
+      border: 0;
+      background: transparent;
+      color: var(--muted);
+      cursor: pointer;
+    }
+
+    .tool-title {
+      margin-bottom: 20px;
+    }
+
+    .tool-title h1,
+    .screen-title h1 {
+      font-family: "Playfair Display", Georgia, serif;
+      color: var(--cream);
+      font-size: 2.15rem;
+      line-height: 0.98;
+      letter-spacing: -0.065em;
+    }
+
+    .tool-title p,
+    .screen-title p {
+      margin-top: 6px;
+      color: var(--muted);
+      font-size: 0.94rem;
+    }
+
+    .tab-pills {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 22px;
+    }
+
+    .pill-button {
+      min-height: 34px;
+      padding: 0 14px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: transparent;
+      color: var(--muted);
+      font-size: 0.82rem;
+      cursor: pointer;
+      transition: border-color 180ms ease, color 180ms ease, background 180ms ease;
+    }
+
+    .pill-button.active {
+      color: #111714;
+      background: var(--sage);
+      border-color: var(--sage);
+    }
+
+    .pill-button.amber.active {
+      background: var(--amber);
+      border-color: var(--amber);
+    }
+
+    .pill-button.lavender.active {
+      background: var(--lavender);
+      border-color: var(--lavender);
+    }
+
+    .form-panel {
+      display: grid;
+      gap: 18px;
+    }
+
+    .field {
+      display: grid;
+      gap: 8px;
+    }
+
+    .field label {
+      color: var(--cream);
+      font-size: 0.91rem;
       font-weight: 800;
     }
 
-  .footer-section {
-  padding: 28px 0 36px;
-  border-top: 1px solid var(--line);
-  background: rgba(255, 252, 245, 0.62);
-}
+    input,
+    textarea,
+    select {
+      width: 100%;
+      border: 1px solid rgba(168, 197, 160, 0.2);
+      border-radius: 12px;
+      color: var(--cream);
+      background: rgba(255, 255, 255, 0.04);
+      outline: none;
+      transition: border-color 180ms ease, box-shadow 180ms ease, background 180ms ease;
+    }
 
-.site-footer {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 10px 14px;
-  padding: 0;
-  color: var(--charcoal-soft);
-  font-size: 0.92rem;
-  font-weight: 700;
-  text-align: center;
-}
+    input,
+    select {
+      min-height: 46px;
+      padding: 0 14px;
+    }
 
-.site-footer p {
-  margin: 0;
-}
+    textarea {
+      min-height: 104px;
+      padding: 13px 14px;
+      resize: vertical;
+    }
 
-.site-footer a {
-  color: var(--forest);
-  font-weight: 900;
-  text-decoration: none;
-}
+    input::placeholder,
+    textarea::placeholder {
+      color: #8ea297;
+    }
 
-.site-footer a:hover {
-  text-decoration: underline;
-}
+    input:focus,
+    textarea:focus,
+    select:focus {
+      border-color: rgba(168, 197, 160, 0.72);
+      box-shadow: 0 0 0 3px rgba(168, 197, 160, 0.08);
+      background: rgba(255, 255, 255, 0.055);
+    }
+
+    select option {
+      color: #111714;
+      background: #f5efe4;
+    }
+
+    .choice-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .choice {
+      min-height: 46px;
+      padding: 0 12px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.025);
+      color: var(--muted);
+      text-align: left;
+      cursor: pointer;
+    }
+
+    .choice.active {
+      color: var(--cream);
+      border-color: rgba(168, 197, 160, 0.72);
+      background: rgba(168, 197, 160, 0.09);
+    }
+
+    .primary-button {
+      min-height: 48px;
+      border: 0;
+      border-radius: 12px;
+      color: #111714;
+      background: var(--sage);
+      font-weight: 900;
+      cursor: pointer;
+      transition: transform 180ms ease, filter 180ms ease;
+    }
+
+    .primary-button:hover,
+    .primary-button:focus-visible {
+      transform: translateY(-1px);
+      filter: brightness(1.04);
+      outline: none;
+    }
+
+    .primary-button.amber {
+      background: var(--amber);
+    }
+
+    .primary-button.lavender {
+      background: var(--lavender);
+    }
+
+    .ghost-note {
+      color: var(--muted-soft);
+      font-size: 0.82rem;
+      line-height: 1.45;
+    }
+
+    .journal-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 18px;
+      margin-bottom: 18px;
+    }
+
+    .add-entry-button {
+      width: 42px;
+      height: 42px;
+      border: 0;
+      border-radius: 999px;
+      color: #111714;
+      background: var(--sage);
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+
+    .prompt-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 14px 0 22px;
+    }
+
+    .prompt-chip {
+      min-height: 32px;
+      padding: 0 12px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: transparent;
+      color: var(--muted);
+      font-size: 0.82rem;
+      cursor: pointer;
+    }
+
+    .journal-editor {
+      display: none;
+      margin-bottom: 20px;
+      padding: 16px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      background: rgba(25, 35, 29, 0.74);
+    }
+
+    .journal-editor.active {
+      display: grid;
+      gap: 12px;
+    }
+
+    .journal-empty {
+      min-height: 260px;
+      display: grid;
+      place-items: center;
+      color: var(--muted);
+      text-align: center;
+      font-size: 0.95rem;
+    }
+
+    .journal-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .journal-entry {
+      padding: 15px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-md);
+      background: rgba(255, 255, 255, 0.025);
+    }
+
+    .journal-entry strong {
+      display: block;
+      color: var(--cream);
+      font-size: 0.92rem;
+    }
+
+    .journal-entry p {
+      margin-top: 6px;
+      color: var(--muted);
+      font-size: 0.88rem;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 22px;
+    }
+
+    .stat-card {
+      min-height: 108px;
+      padding: 16px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      background: rgba(25, 35, 29, 0.82);
+    }
+
+    .stat-icon {
+      color: var(--sage);
+      font-size: 1rem;
+    }
+
+    .stat-card.amber .stat-icon {
+      color: var(--amber);
+    }
+
+    .stat-card.lavender .stat-icon {
+      color: var(--lavender);
+    }
+
+    .stat-value {
+      margin-top: 14px;
+      font-family: "Playfair Display", Georgia, serif;
+      color: var(--cream);
+      font-size: 1.55rem;
+      line-height: 1;
+    }
+
+    .stat-label {
+      margin-top: 2px;
+      color: var(--muted);
+      font-size: 0.78rem;
+    }
+
+    .focus-list {
+      display: grid;
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .focus-card {
+      padding: 16px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-md);
+      background: rgba(25, 35, 29, 0.82);
+    }
+
+    .focus-card-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      color: var(--cream);
+      font-size: 0.9rem;
+      font-weight: 850;
+    }
+
+    .focus-card-top span:last-child {
+      color: var(--muted);
+      font-size: 0.78rem;
+      font-weight: 500;
+    }
+
+    .progress {
+      height: 6px;
+      margin-top: 12px;
+      overflow: hidden;
+      border-radius: 999px;
+      background: rgba(168, 197, 160, 0.12);
+    }
+
+    .progress span {
+      display: block;
+      width: var(--width);
+      height: 100%;
+      border-radius: inherit;
+      background: var(--sage);
+    }
+
+    .app-footer {
+      margin-top: 36px;
+      padding-top: 24px;
+      border-top: 1px solid rgba(168, 197, 160, 0.1);
+    }
+
+    .footer-brand {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+    }
+
+    .footer-socials {
+      display: flex;
+      gap: 12px;
+      color: var(--muted);
+    }
+
+    .footer-bottom {
+      display: flex;
+      justify-content: space-between;
+      gap: 14px;
+      margin-top: 16px;
+      color: var(--muted-soft);
+      font-size: 0.78rem;
+    }
+
+    .footer-bottom a {
+      color: var(--muted);
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 14px;
+    }
+
+    .contact-card-mini {
+      margin-top: 18px;
+      padding: 16px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-md);
+      background: rgba(255, 255, 255, 0.025);
+    }
+
+    .contact-card-mini h3 {
+      font-family: "Playfair Display", Georgia, serif;
+      font-size: 1.2rem;
+    }
+
+    .contact-card-mini p,
+    .contact-card-mini a {
+      margin-top: 6px;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
 
     .bottom-nav {
       position: fixed;
-      right: 16px;
-      bottom: 16px;
-      left: 16px;
+      left: 50%;
+      bottom: 0;
       z-index: 60;
-      display: none;
+      width: min(var(--phone), 100%);
+      height: var(--bottom-nav-height);
+      transform: translateX(-50%);
+      display: grid;
       grid-template-columns: repeat(4, 1fr);
-      gap: 8px;
-      padding: 8px;
-      border: 1px solid var(--line);
-      border-radius: 24px;
-      background: rgba(255, 252, 245, 0.92);
-      box-shadow: 0 20px 60px rgba(29, 36, 31, 0.16);
+      gap: 4px;
+      padding: 8px 14px 10px;
+      background: rgba(13, 18, 15, 0.94);
+      border-top: 1px solid rgba(168, 197, 160, 0.12);
       backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
     }
 
-    .bottom-nav a {
+    .bottom-nav button {
       display: grid;
       place-items: center;
-      min-height: 48px;
-      border-radius: 17px;
-      color: var(--charcoal-soft);
-      font-size: 0.78rem;
-      font-weight: 900;
+      gap: 3px;
+      border: 0;
+      border-radius: 16px;
+      background: transparent;
+      color: var(--muted-soft);
+      cursor: pointer;
+      font-size: 0.68rem;
+      font-weight: 700;
+      transition: color 180ms ease, background 180ms ease, box-shadow 180ms ease;
     }
 
-    .bottom-nav a:first-child {
-      background: var(--charcoal);
-      color: var(--cream-soft);
+    .bottom-nav button svg {
+      width: 21px;
+      height: 21px;
     }
-    
-.hero-actions .button::before {
-  opacity: 1;
-}
 
-
-/* Truth Lens modal */
-.truth-lens-trigger {
-  border: 1px solid rgba(29, 36, 31, 0.08);
-  font: inherit;
-  color: inherit;
-}
-
-.orb-message {
-  position: relative;
-  z-index: 2;
-}
-
-.truth-lens-modal {
-  position: fixed;
-  inset: 0;
-  z-index: 100;
-  display: grid;
-  place-items: center;
-  padding: 22px;
-  background: rgba(23, 32, 27, 0.54);
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 220ms ease;
-  backdrop-filter: blur(16px);
-}
-
-.truth-lens-modal.is-open {
-  opacity: 1;
-  pointer-events: auto;
-}
-
-.truth-lens-card {
-  position: relative;
-  width: min(100%, 720px);
-  max-height: min(88vh, 760px);
-  overflow: auto;
-  border: 2px solid transparent;
-  border-radius: var(--radius-xl);
-  background:
-    linear-gradient(rgba(255, 252, 245, 0.96), rgba(255, 252, 245, 0.96)) padding-box,
-    linear-gradient(
-      135deg,
-      #ff6b6b,
-      #f7b267,
-      #ffe66d,
-      #4ecdc4,
-      #5b8def,
-      #b388ff
-    ) border-box;
-  box-shadow: 0 34px 90px rgba(0, 0, 0, 0.24);
-  transform: translateY(14px) scale(0.98);
-  transition: transform 220ms ease;
-}
-
-.truth-lens-modal.is-open .truth-lens-card {
-  transform: translateY(0) scale(1);
-}
-
-.truth-lens-card::before {
-  content: "";
-  position: absolute;
-  inset: -40px;
-  z-index: -1;
-  background:
-    radial-gradient(circle at 20% 10%, rgba(201, 135, 63, 0.22), transparent 34%),
-    radial-gradient(circle at 82% 12%, rgba(91, 141, 239, 0.18), transparent 30%),
-    radial-gradient(circle at 50% 100%, rgba(78, 205, 196, 0.14), transparent 28%);
-  filter: blur(20px);
-}
-
-.truth-lens-inner {
-  padding: 34px;
-}
-
-.truth-lens-top {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 18px;
-  margin-bottom: 22px;
-}
-
-.truth-lens-brand {
-  display: inline-flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.truth-lens-brand img {
-  width: 48px;
-  height: 48px;
-  border-radius: 17px;
-  object-fit: cover;
-  box-shadow: 0 12px 26px rgba(23, 32, 27, 0.10);
-}
-
-.truth-lens-kicker {
-  color: var(--forest);
-  font-size: 0.78rem;
-  font-weight: 900;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-}
-
-.truth-lens-title {
-  color: var(--charcoal);
-  font-size: clamp(2.2rem, 6vw, 4.3rem);
-  font-weight: 900;
-  letter-spacing: -0.065em;
-  line-height: 0.96;
-}
-
-.truth-lens-close {
-  display: grid;
-  place-items: center;
-  width: 42px;
-  height: 42px;
-  flex: 0 0 auto;
-  border: 1px solid rgba(23, 32, 27, 0.10);
-  border-radius: 999px;
-  background: rgba(255, 252, 245, 0.78);
-  color: var(--charcoal);
-  cursor: pointer;
-  font-size: 1.35rem;
-  font-weight: 900;
-}
-
-.truth-lens-prompt {
-  margin-top: 18px;
-  color: var(--charcoal);
-  font-size: clamp(1.4rem, 3vw, 2.2rem);
-  font-weight: 900;
-  letter-spacing: -0.045em;
-  line-height: 1.06;
-}
-
-.truth-lens-copy {
-  margin-top: 14px;
-  color: var(--charcoal-soft);
-  font-size: 1rem;
-  font-weight: 500;
-}
-
-.truth-lens-options {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 12px;
-  margin-top: 24px;
-}
-
-.truth-lens-option {
-  min-height: 58px;
-  border: 1px solid rgba(23, 32, 27, 0.10);
-  border-radius: 18px;
-  background: rgba(255, 255, 255, 0.54);
-  color: var(--charcoal);
-  cursor: pointer;
-  padding: 12px 14px;
-  text-align: left;
-  font: inherit;
-  font-size: 0.94rem;
-  font-weight: 850;
-  transition: transform 180ms ease, border-color 180ms ease, background 180ms ease;
-}
-
-.truth-lens-option:hover,
-.truth-lens-option:focus-visible {
-  border-color: rgba(33, 77, 53, 0.28);
-  background: rgba(217, 231, 214, 0.48);
-  outline: none;
-  transform: translateY(-2px);
-}
-
-.truth-lens-result {
-  display: none;
-  margin-top: 24px;
-  border-radius: 24px;
-  background: rgba(33, 77, 53, 0.07);
-  border: 1px solid rgba(33, 77, 53, 0.12);
-  padding: 22px;
-}
-
-.truth-lens-result.is-visible {
-  display: block;
-}
-
-.truth-lens-question {
-  color: var(--charcoal);
-  font-size: 1.18rem;
-  font-weight: 900;
-  letter-spacing: -0.035em;
-  line-height: 1.2;
-}
-
-.truth-lens-verse {
-  margin-top: 16px;
-  color: var(--forest);
-  font-size: 1rem;
-  font-weight: 800;
-  line-height: 1.5;
-}
-
-.truth-lens-reflection {
-  margin-top: 14px;
-  color: var(--charcoal-soft);
-  font-size: 0.98rem;
-  font-weight: 550;
-}
-
-.truth-lens-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-  margin-top: 24px;
-}
-
-.truth-lens-actions .button {
-  width: auto;
-  border: 0;
-  cursor: pointer;
-  padding-inline: 22px;
-}
-
-.truth-lens-secondary {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 48px;
-  border: 1px solid rgba(23, 32, 27, 0.10);
-  border-radius: 999px;
-  background: rgba(255, 252, 245, 0.72);
-  color: var(--charcoal);
-  cursor: pointer;
-  padding: 0 20px;
-  font: inherit;
-  font-size: 0.94rem;
-  font-weight: 850;
-}
-
-
-.contact-layout {
-  display: grid;
-  grid-template-columns: minmax(260px, 0.75fr) minmax(0, 1.25fr);
-  gap: 22px;
-  align-items: stretch;
-}
-
-    
-.contact-visual {
-  position: relative;
-  display: grid;
-  place-items: center;
-  min-height: 520px;
-  overflow: hidden;
-  border: 2px solid transparent;
-  border-radius: var(--radius-xl);
-  background:
-    linear-gradient(rgba(255, 252, 245, 0.86), rgba(255, 252, 245, 0.86)) padding-box,
-    linear-gradient(
-      135deg,
-      #ff6b6b,
-      #f7b267,
-      #ffe66d,
-      #4ecdc4,
-      #5b8def,
-      #b388ff
-    ) border-box;
-  box-shadow: 0 22px 64px rgba(29, 36, 31, 0.06);
-}
-
-.contact-visual::before {
-  content: "";
-  position: absolute;
-  inset: -40px;
-  background:
-    radial-gradient(circle at 25% 25%, rgba(201, 135, 63, 0.22), transparent 34%),
-    radial-gradient(circle at 80% 72%, rgba(91, 141, 239, 0.16), transparent 36%),
-    radial-gradient(circle at 45% 92%, rgba(78, 205, 196, 0.14), transparent 32%);
-  filter: blur(14px);
-}
-
-
-.contact-visual::after {
-  content: "RootedByte";
-  position: absolute;
-  z-index: 0;
-  bottom: 34px;
-  left: 50%;
-  transform: translateX(-50%);
-  color: rgba(33, 77, 53, 0.55);
-  font-size: 0.82rem;
-  font-weight: 900;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-}
-
-.contact-visual img {
-  position: relative;
-  z-index: 1;
-  width: min(72%, 280px);
-  aspect-ratio: 1 / 1;
-  object-fit: cover;
-  border-radius: 50%;
-  padding: 10px;
-  background:
-    linear-gradient(rgba(255, 252, 245, 0.88), rgba(255, 252, 245, 0.88)) padding-box,
-    conic-gradient(
-      #ff6b6b,
-      #f7b267,
-      #ffe66d,
-      #4ecdc4,
-      #5b8def,
-      #b388ff,
-      #ff6b6b
-    ) border-box;
-  border: 3px solid transparent;
-  box-shadow: 0 28px 70px rgba(23, 32, 27, 0.12);
-}
-
-.contact-card {
-  display: grid;
-  align-content: start;
-}
-
-.contact-card h3 {
-  color: var(--charcoal);
-  font-size: clamp(2rem, 4vw, 4.2rem);
-  font-weight: 900;
-  letter-spacing: -0.06em;
-  line-height: 0.96;
-}
-
-.contact-form-grid {
-  display: grid;
-  gap: 18px;
-  margin-top: 30px;
-}
-
-.form-row {
-  display: grid;
-  gap: 8px;
-}
-
-.form-row label {
-  color: var(--charcoal);
-  font-size: 0.9rem;
-  font-weight: 850;
-  letter-spacing: -0.02em;
-}
-
-.form-row input,
-.form-row textarea {
-  width: 100%;
-  border: 0;
-  border-bottom: 2px solid rgba(23, 32, 27, 0.72);
-  background: transparent;
-  color: var(--charcoal);
-  padding: 12px 0;
-  font: inherit;
-  font-size: 1rem;
-  outline: none;
-}
-
-.form-row textarea {
-  min-height: 112px;
-  resize: vertical;
-}
-
-.form-row input:focus,
-.form-row textarea:focus {
-  border-color: var(--forest);
-}
-
-.contact-form-actions {
-  margin-top: 12px;
-}
-
-.contact-info-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 22px;
-  margin-top: 34px;
-}
-
-.contact-info-block h4 {
-  color: var(--charcoal);
-  font-size: 1.05rem;
-  font-weight: 900;
-  letter-spacing: -0.03em;
-}
-
-.contact-info-block p,
-.contact-info-block a {
-  color: var(--charcoal-soft);
-  font-weight: 650;
-}
-
-.contact-links a.coming-soon {
-  cursor: not-allowed;
-  opacity: 0.72;
-}
-
-.contact-links a.coming-soon:hover {
-  transform: none;
-  background: var(--charcoal);
-}
-
-.coming-soon-text {
-  margin-top: 10px;
-  color: var(--charcoal-soft);
-  font-size: 0.86rem;
-  font-weight: 700;
-}
-
-@media (max-width: 900px) {
-  .nav-cluster,
-  .desktop-nav {
-    display: none;
-  }
-
-  .header-inner {
-  position: relative;
-}
-
-
-  .contact-visual {
-    min-height: 420px;
-    padding: 34px 18px 46px;
-    align-content: center;
-    gap: 22px;
-  }
-
-  .contact-visual img {
-    width: min(56%, 190px);
-    margin-bottom: 20px;
-  }
-
-  .contact-visual::after {
-    margin-top: 12px;
-    font-size: 0.74rem;
-    line-height: 1.2;
-  }
-
-
-/*
-.mobile-auth-link {
-  position: absolute;
-  right: 0;
-  top: 50%;
-  transform: translateY(-50%);
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 38px;
-  padding: 0 0.9rem;
-  border-radius: 999px;
-  color: var(--cream-soft);
-  background: var(--charcoal);
-  border: 1px solid rgba(23, 32, 27, 0.08);
-  box-shadow: 0 10px 24px rgba(29, 36, 31, 0.14);
-  font-size: 0.82rem;
-  font-weight: 900;
-  white-space: nowrap;
-} 
-.brand {
-  padding-right: 7.25rem;
-}
-*/
-  .menu-header {
-  min-height: 70px;
-}
-
-.menu-toggle {
-  width: 42px;
-  height: 42px;
-  border-radius: 15px;
-}
-
-.menu-toggle span {
-  width: 20px;
-  height: 2px;
-}
-
-.site-menu {
-  inset: 70px 0 auto;
-  padding: 14px 0;
-}
-
-.site-menu-panel {
-  width: min(100% - 28px, 720px);
-  border-radius: 0 0 24px 24px;
-}
-
-.site-menu-panel a {
-  min-height: 56px;
-  padding: 0 26px;
-  font-size: 1.18rem;
-}
-  
-  .button::before {
-    opacity: 1;
-  }
-
-  .hero {
-    padding: 74px 0 34px;
-  }
-
-  .hero-grid,
-  .purpose-grid {
-    grid-template-columns: 1fr;
-    gap: 28px;
-  }
-
-  .hero-panel {
-    display: grid;
-    width: min(100%, 300px);
-    margin: 6px auto 0;
-  }
-
-  .focus-orb {
-    min-height: auto;
-  }
-
-  .contact-layout,
-  .contact-info-grid,
-  .truth-lens-options {
-    grid-template-columns: 1fr;
-  }
-
-  .contact-visual {
-    min-height: 280px;
-  }
-
-  .contact-visual img {
-    width: min(62%, 210px);
-  }
-
-  .contact-card h3 {
-    font-size: clamp(2.2rem, 12vw, 3.3rem);
-  }
-
-  .contact-form-grid {
-    margin-top: 24px;
-  }
-
-  .contact-links {
-    margin-top: 14px;
-  }
-
-  .truth-lens-inner {
-    padding: 24px;
-  }
-
-  .truth-lens-actions,
-  .truth-lens-actions .button,
-  .truth-lens-secondary {
-    width: 100%;
-  }
-
-  .ecosystem-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .app-card {
-    min-height: auto;
-  }
-
-  .bottom-nav {
-    display: grid;
-  }
-}
-
-    @media (max-width: 560px) {
-      .container {
-        width: min(100% - 28px, 1120px);
+    .bottom-nav button.active {
+      color: var(--sage);
+    }
+
+    .bottom-nav button.active.tools-active {
+      box-shadow: inset 0 0 0 2px var(--cream);
+      background: rgba(168, 197, 160, 0.08);
+    }
+
+    .onboarding {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      display: grid;
+      place-items: center;
+      padding: 22px;
+      background: rgba(3, 7, 5, 0.72);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 220ms ease;
+    }
+
+    .onboarding.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .onboarding-card {
+      position: relative;
+      width: min(360px, 100%);
+      min-height: 342px;
+      display: grid;
+      align-content: center;
+      justify-items: center;
+      padding: 38px 22px 28px;
+      border: 1px solid rgba(168, 197, 160, 0.24);
+      border-radius: 10px;
+      background: rgba(25, 35, 29, 0.98);
+      box-shadow: 0 30px 90px rgba(0, 0, 0, 0.48);
+      text-align: center;
+    }
+
+    .onboarding-close {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      border: 0;
+      background: transparent;
+      color: var(--muted);
+      font-size: 1.35rem;
+      cursor: pointer;
+    }
+
+    .onboarding-progress {
+      position: absolute;
+      top: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 6px;
+    }
+
+    .progress-pill {
+      width: 9px;
+      height: 4px;
+      border-radius: 999px;
+      background: rgba(168, 197, 160, 0.18);
+    }
+
+    .progress-pill.active {
+      width: 32px;
+      background: var(--sage);
+    }
+
+    .onboarding-icon {
+      margin-top: 18px;
+      font-size: 2.2rem;
+    }
+
+    .onboarding-title {
+      margin-top: 18px;
+      font-family: "Playfair Display", Georgia, serif;
+      font-size: 1.55rem;
+      line-height: 1.1;
+      letter-spacing: -0.045em;
+    }
+
+    .onboarding-copy {
+      max-width: 282px;
+      margin-top: 14px;
+      color: var(--muted);
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+
+    .onboarding-actions {
+      width: 100%;
+      display: grid;
+      gap: 10px;
+      margin-top: 28px;
+    }
+
+    .skip-button {
+      border: 0;
+      background: transparent;
+      color: var(--muted-soft);
+      cursor: pointer;
+      font-size: 0.84rem;
+    }
+
+    @media (min-width: 760px) {
+      body {
+        padding: 18px 0;
       }
 
-      .header-inner {
-        min-height: 66px;
+      .app-shell {
+        min-height: calc(100vh - 36px);
+        border-radius: 30px;
+        box-shadow: 0 28px 90px rgba(0, 0, 0, 0.36);
       }
 
-.brand-mark {
-  width: 42px;
-  height: 42px;
-  border-radius: 15px;
-  padding: 3px;
-}
-
-      h1 {
-        font-size: clamp(3rem, 16vw, 4.6rem);
+      .bottom-nav {
+        bottom: 18px;
+        border-radius: 0 0 30px 30px;
       }
+    }
 
-      .hero-subheadline {
-        margin-top: 24px;
-      }
-
-      .hero-actions {
-        align-items: stretch;
-        flex-direction: column;
-      }
-
-      .hero-actions .button,
-      .text-link {
-        width: 100%;
-      }
-
-      .text-link {
-        justify-content: center;
-      }
-
-      .section {
-        padding: 42px 0;
-      }
-
-      .purpose-card,
-      .contact-card {
-        min-height: auto;
-        padding: 26px;
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+        transition-duration: 0.01ms !important;
       }
     }
   </style>
 </head>
 
 <body>
-  <div class="page-shell">
-    <header class="site-header">
-  <div class="container header-inner menu-header">
-    <a href="#top" class="brand centered-brand" aria-label="RootedByte home">
-      <span class="brand-mark">
-        <img src="images/rootedbyte-icon.png" alt="RootedByte logo" />
-      </span>
-
-      <span class="brand-text">
+  <div class="app-shell">
+    <header class="app-header">
+      <a href="#home" class="brand" aria-label="RootedByte home" data-nav="home">
+        <span class="brand-mark">
+          <img src="images/rootedbyte-icon.png" alt="RootedByte logo" />
+        </span>
         <span class="brand-name">RootedByte</span>
-      </span>
-    </a>
+      </a>
 
-    <button
-      class="menu-toggle"
-      type="button"
-      aria-label="Open navigation menu"
-      aria-expanded="false"
-      aria-controls="site-menu"
-    >
-      <span></span>
-      <span></span>
-      <span></span>
-    </button>
-  </div>
+      <a class="profile-button" href="signin.html" aria-label="Open account">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" aria-hidden="true">
+          <path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z" stroke="currentColor" stroke-width="1.8"/>
+          <path d="M4.5 20a7.5 7.5 0 0 1 15 0" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+        </svg>
+      </a>
+    </header>
 
-  <nav id="site-menu" class="site-menu" aria-label="Primary navigation">
-    <div class="site-menu-panel">
-      <a href="#top">Home</a>
-      <a href="#apps">Apps</a>
-      <a href="#purpose">Purpose</a>
-      <a href="#contact">Contact</a>
-      <a href="signin.html" data-auth-link>Sign In</a>
-    </div>
-  </nav>
-</header>
+    <main class="app-main">
+      <section class="screen active" id="screen-home" aria-labelledby="home-title">
+        <div class="hero">
+          <h1 id="home-title">Clarity for a <span class="sage">loud</span> world.</h1>
+          <p>Slow down, reflect with intention, and grow — one day at a time.</p>
+        </div>
 
-    <main>
-      <section id="top" class="hero">
-        <div class="container hero-grid">
-          <div>
+        <div class="wisdom-strip" id="wisdomStrip">
+          “What you’re building in secret will eventually speak for itself.”
+        </div>
 
-            <h1>Less noise. More purpose.</h1>
+        <section class="card mood-card" aria-labelledby="mood-title">
+          <h2 class="card-title" id="mood-title">How’s your inner weather?</h2>
+          <p class="card-copy">Tap to check in for today.</p>
 
-<p class="hero-subheadline">
-  RootedByte helps you use tech with more intention — for music, news, reflection, and everyday spiritual growth.
-</p>
+          <div class="mood-grid" id="moodGrid">
+            <button class="mood-button" type="button" data-mood="Heavy">
+              <span class="mood-emoji">🌫️</span>
+              <span class="mood-label">Heavy</span>
+            </button>
+            <button class="mood-button" type="button" data-mood="Numb">
+              <span class="mood-emoji">☁️</span>
+              <span class="mood-label">Numb</span>
+            </button>
+            <button class="mood-button" type="button" data-mood="Wired">
+              <span class="mood-emoji">⚡</span>
+              <span class="mood-label">Wired</span>
+            </button>
+            <button class="mood-button" type="button" data-mood="Calm">
+              <span class="mood-emoji">🌿</span>
+              <span class="mood-label">Calm</span>
+            </button>
+            <button class="mood-button" type="button" data-mood="Charged">
+              <span class="mood-emoji">🔥</span>
+              <span class="mood-label">Charged</span>
+            </button>
+            <button class="mood-button" type="button" data-mood="Clear">
+              <span class="mood-emoji">✨</span>
+              <span class="mood-label">Clear</span>
+            </button>
+          </div>
+        </section>
 
-            <div class="hero-actions">
-              <a href="#apps" class="button">Explore the Apps</a>
-              <a href="#purpose" class="text-link">
-                Why it matters
-                <span aria-hidden="true">→</span>
+        <section class="card streak-card" aria-labelledby="streak-title">
+          <h2 class="card-title" id="streak-title">Weekly streak</h2>
+
+          <div class="streak-row" id="weeklyStreak">
+            <div class="day"><span>M</span><span class="day-dot">·</span></div>
+            <div class="day"><span>T</span><span class="day-dot">·</span></div>
+            <div class="day"><span>W</span><span class="day-dot">·</span></div>
+            <div class="day"><span>T</span><span class="day-dot">·</span></div>
+            <div class="day"><span>F</span><span class="day-dot">·</span></div>
+            <div class="day"><span>S</span><span class="day-dot">·</span></div>
+            <div class="day today"><span>S</span><span class="day-dot">·</span></div>
+          </div>
+
+          <p class="streak-message" id="streakMessage">Start your streak today.</p>
+        </section>
+
+        <section class="section-block">
+          <div class="section-heading">
+            <h2>Your tools</h2>
+          </div>
+
+          <div class="tool-list">
+            <button class="tool-card" type="button" data-open-tool="inner">
+              <span>
+                <span class="tool-kicker">Reflect · Grow</span>
+                <h3>Inner Work</h3>
+                <p>Guided reflection for pressure, identity, comparison, purpose, digital habits, and relationships.</p>
+              </span>
+              <span class="chevron">›</span>
+            </button>
+
+            <button class="tool-card signal" type="button" data-open-tool="signal">
+              <span>
+                <span class="tool-kicker">Discern · Filter</span>
+                <h3>Signal</h3>
+                <p>Paste any post, headline, or trend. See what it’s doing to your thinking before you react.</p>
+              </span>
+              <span class="chevron">›</span>
+            </button>
+
+            <button class="tool-card sound" type="button" data-open-tool="sound">
+              <span>
+                <span class="tool-kicker">Listen · Prepare</span>
+                <h3>SoundSense</h3>
+                <p>Any song, any genre. Full breakdown — vibe, message, and practice prep for your instrument.</p>
+              </span>
+              <span class="chevron">›</span>
+            </button>
+          </div>
+        </section>
+
+        <section class="contact-card-mini" id="contact">
+          <h3>Contact RootedByte</h3>
+          <p>Have feedback, collaboration ideas, or a future improvement in mind?</p>
+          <a href="mailto:rootedbyte@outlook.com">rootedbyte@outlook.com</a>
+        </section>
+
+        <footer class="app-footer">
+          <div class="footer-brand">
+            <a class="brand" href="#home" data-nav="home" aria-label="RootedByte home">
+              <span class="brand-mark">
+                <img src="images/rootedbyte-icon.png" alt="" />
+              </span>
+              <span class="brand-name">RootedByte</span>
+            </a>
+
+            <div class="footer-socials" aria-label="Social links">
+              <a href="https://www.youtube.com/channel/UCnPBSWzxDD7_r1HmVXhr3cA" target="_blank" rel="noopener" aria-label="RootedByte YouTube">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M22 12s0-4-1-5.3c-.6-.8-1.4-1-2.3-1.1C16.7 5.3 12 5.3 12 5.3s-4.7 0-6.7.3c-.9.1-1.7.3-2.3 1.1C2 8 2 12 2 12s0 4 1 5.3c.6.8 1.4 1 2.3 1.1 2 .3 6.7.3 6.7.3s4.7 0 6.7-.3c.9-.1 1.7-.3 2.3-1.1C22 16 22 12 22 12Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                  <path d="M10 9.5v5l4.5-2.5L10 9.5Z" fill="currentColor"/>
+                </svg>
+              </a>
+
+              <a href="mailto:rootedbyte@outlook.com" aria-label="Email RootedByte">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M4 6h16v12H4V6Z" stroke="currentColor" stroke-width="1.8" />
+                  <path d="m4 7 8 6 8-6" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" />
+                </svg>
               </a>
             </div>
           </div>
 
-<button type="button" class="hero-panel hero-panel-link truth-lens-trigger" aria-label="Open Truth Lens reflection">
-  <div class="focus-orb">
-    <div class="orb-content" aria-label="RootedByte Truth Lens visual">
-      <img class="orb-logo-image" src="images/rootedbyte-icon.png" alt="" aria-hidden="true" />
-      <div class="orb-message">
-        <span>Curious?</span>
-        <small>Tap here</small>
-      </div>
-    </div>
-  </div>
-</button>
+          <div class="footer-bottom">
+            <p>© 2026 RootedByte</p>
+            <div class="footer-links">
+              <a href="mailto:rootedbyte@outlook.com">Contact</a>
+              <a href="privacy.html">Privacy</a>
+            </div>
+          </div>
+        </footer>
+      </section>
+
+      <section class="screen" id="screen-tools" aria-labelledby="tools-title">
+        <div class="screen-title">
+          <h1 id="tools-title">Tools</h1>
+          <p>Three ways to slow down and grow.</p>
+        </div>
+
+        <div class="tool-list" style="margin-top: 24px;">
+          <button class="tool-card" type="button" data-open-tool="inner">
+            <span>
+              <span class="tool-kicker">Reflect · Grow</span>
+              <h3>Inner Work</h3>
+              <p>Navigate pressure, identity, comparison, purpose, digital habits, and relationships with honest insight.</p>
+            </span>
+            <span class="chevron">›</span>
+          </button>
+
+          <button class="tool-card signal" type="button" data-open-tool="signal">
+            <span>
+              <span class="tool-kicker">Discern · Filter</span>
+              <h3>Signal</h3>
+              <p>Paste any social post, headline, or trend. Understand what it’s doing to your thinking before you react.</p>
+            </span>
+            <span class="chevron">›</span>
+          </button>
+
+          <button class="tool-card sound" type="button" data-open-tool="sound">
+            <span>
+              <span class="tool-kicker">Listen · Prepare</span>
+              <h3>SoundSense</h3>
+              <p>Drop any song for a complete breakdown — vibe, message, instrument tips, and practice prep.</p>
+            </span>
+            <span class="chevron">›</span>
+          </button>
         </div>
       </section>
 
-      <section id="apps" class="section" aria-labelledby="apps-title">
-        <div class="container">
-          <div class="section-heading">
-            <p class="section-label">Apps</p>
-            <h2 id="apps-title">Pick what you need right now.</h2>
-            <p class="section-copy">
-              Three simple tools for the moments you actually live in — songs you’re preparing, news you’re processing, and questions you’re working through.
-            </p>
+      <section class="screen" id="screen-tool-detail" aria-labelledby="tool-detail-title">
+        <div class="tool-header">
+          <button class="back-button" type="button" data-nav="tools">←</button>
+          <span>Tools</span>
+        </div>
+
+        <div id="toolInner" class="tool-panel">
+          <div class="tool-title">
+            <h1 id="tool-detail-title">Inner Work</h1>
+            <p>Reflect honestly. Take one intentional step forward.</p>
           </div>
 
-          <div class="ecosystem-grid">
-            <article class="app-card">
-              <a class="app-image" href="tone.html" aria-label="Open Song DiveIn">
-                <img
-                  src="https://images.unsplash.com/photo-1660834772989-c15d049c35d7?auto=format&fit=crop&w=1200&q=80"
-                  alt="Band performing live on stage with instruments"
-                />
-              </a>
-
-              <div class="app-card-body">
-                <div>
-                  <p class="app-meta">Learn • Music Tech</p>
-                  <h3>Song DiveIn</h3>
-                  <p class="app-tagline">Explore a song before you play it.</p>
-                  <p class="app-description">
-                    Drop a song title or YouTube link and get the vibe check — what it’s saying, the mood behind it, practice notes for your instrument, music flow, and  chord/lyric sources when available.
-                  </p>
-                </div>
-                <a class="button" href="tone.html">Open App</a>
+          <div class="form-panel">
+            <div class="field">
+              <label>What’s pressing on you?</label>
+              <div class="choice-grid" id="innerChoices">
+                <button class="choice active" type="button" data-focus="Pressure">🏋️ Pressure</button>
+                <button class="choice" type="button" data-focus="Identity">💡 Identity</button>
+                <button class="choice" type="button" data-focus="Comparison">⚖️ Comparison</button>
+                <button class="choice" type="button" data-focus="Digital Habits">📱 Digital Habits</button>
+                <button class="choice" type="button" data-focus="Relationships">🤝 Relationships</button>
+                <button class="choice" type="button" data-focus="Purpose">🧭 Purpose</button>
               </div>
-            </article>
+            </div>
 
-           <article class="app-card">
-  <a class="app-image" href="newsverse.html" aria-label="Open Socials&News">
-    <img
-      src="https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&w=1200&q=80"
-      alt="Person using social media apps on a smartphone"
-    />
-  </a>
+            <div class="field">
+              <label for="innerInput">Tell me more.</label>
+              <textarea id="innerInput" placeholder="Be as honest as you want. This is your space."></textarea>
+            </div>
 
-  <div class="app-card-body">
-    <div>
-      <p class="app-meta">Discern • Social Media • News</p>
-      <h3>Socials&News</h3>
-      <p class="app-tagline">Don’t just scroll it. Discern it.</p>
-      <p class="app-description">
-        Paste a public post, article, or trend and slow it down with a truth-rooted reflection, Scripture lens, and prayer points before it shapes your mood, opinion, or feed.
-      </p>
-    </div>
-    <a class="button" href="newsverse.html">Open App</a>
-  </div>
-</article>
+            <button class="primary-button" type="button" id="innerSubmit">Get honest insight</button>
+            <p class="ghost-note">API response will be connected later in the JavaScript step.</p>
+          </div>
+        </div>
 
-            <article class="app-card">
-              <a class="app-image" href="rootedos.html" aria-label="Open RootedOS">
-                <img
-                  src="https://images.unsplash.com/photo-1513258496099-48168024aec0?auto=format&fit=crop&w=1200&q=80"
-                  alt="Person reflecting with notebook and coffee"
-                />
-              </a>
+        <div id="toolSignal" class="tool-panel" hidden>
+          <div class="tool-title">
+            <h1>Signal</h1>
+            <p>Don’t let the feed disciple you. Paste what you saw. See what it’s really doing.</p>
+          </div>
 
-              <div class="app-card-body">
-                <div>
-                  <p class="app-meta">Plan • Spiritual Growth</p>
-                  <h3>RootedOS</h3>
-                  <p class="app-tagline">Reflect honestly and take one intentional step forward.</p>
-                  <p class="app-description">
-                    For anyone trying to stay grounded while navigating pressure, comparison, digital habits, relationships, purpose, and big life questions.
-                  </p>
-                </div>
-                <a class="button" href="rootedos.html">Open App</a>
+          <div class="form-panel">
+            <div class="field">
+              <label>What kind of content?</label>
+              <div class="tab-pills" id="signalKinds">
+                <button class="pill-button amber active" type="button">Post</button>
+                <button class="pill-button amber" type="button">Headline</button>
+                <button class="pill-button amber" type="button">Thread</button>
+                <button class="pill-button amber" type="button">Reel</button>
+                <button class="pill-button amber" type="button">Trend</button>
+                <button class="pill-button amber" type="button">News story</button>
               </div>
-            </article>
+            </div>
+
+            <div class="field">
+              <label for="signalInput">Paste the link or content</label>
+              <textarea id="signalInput" placeholder="Paste a public link, headline, or copy the post text here..."></textarea>
+            </div>
+
+            <button class="primary-button amber" type="button" id="signalSubmit">Run truth check</button>
+            <p class="ghost-note">API response will be connected later in the JavaScript step.</p>
+          </div>
+        </div>
+
+        <div id="toolSound" class="tool-panel" hidden>
+          <div class="tool-title">
+            <h1>SoundSense</h1>
+            <p>Any song. Full breakdown. Ready to play.</p>
+          </div>
+
+          <div class="form-panel">
+            <div class="field">
+              <label for="soundInput">Song title + artist, or YouTube link</label>
+              <input id="soundInput" type="text" placeholder="e.g. Good Grace — Hillsong UNITED" />
+            </div>
+
+            <div class="field">
+              <label for="soundRole">Your role</label>
+              <select id="soundRole">
+                <option>Acoustic Guitar</option>
+                <option>Electric Guitar</option>
+                <option>Bass</option>
+                <option>Drums</option>
+                <option>Keys / Piano</option>
+                <option>Vocals</option>
+              </select>
+            </div>
+
+            <button class="primary-button lavender" type="button" id="soundSubmit">Dive into this song</button>
+            <p class="ghost-note">API response will be connected later in the JavaScript step.</p>
           </div>
         </div>
       </section>
 
-      <section id="purpose" class="section" aria-labelledby="purpose-title">
-        <div class="container">
-          <div class="section-heading">
-            <p class="section-label">What RootedByte helps with</p>
-            <h2 id="purpose-title">A calmer way to move through the digital world.</h2>
+      <section class="screen" id="screen-journal" aria-labelledby="journal-title">
+        <div class="journal-top">
+          <div class="screen-title">
+            <h1 id="journal-title">Journal</h1>
+            <p>Your private space to think.</p>
           </div>
 
-          <div class="purpose-grid">
-            <article class="purpose-card problem-card">
-              <div class="purpose-icon" aria-hidden="true">
-                <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
-                  <path d="M12 3v18M4 8h16M6 16h12" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
-                </svg>
-              </div>
-              <p class="section-label" style="color: rgba(255,252,245,.64);">The problem</p>
-              <h3>Digital Overwhelm</h3>
-              <p>
-                Feeds, alerts, noise, and endless options can make attention feel scattered. RootedByte starts by naming the problem clearly: too much input, not enough intention.
-              </p>
-              <ul class="outcome-list">
-                <li><span>1</span>Constant distraction</li>
-                <li><span>2</span>Shallow information habits</li>
-                <li><span>3</span>Unstructured growth</li>
-              </ul>
-            </article>
-
-            <article class="purpose-card solution-card">
-              <div class="purpose-icon" aria-hidden="true">
-                <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
-                  <path d="M12 21s7-4.5 7-11V5l-7-3-7 3v5c0 6.5 7 11 7 11Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round" />
-                  <path d="m9 12 2 2 4-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                </svg>
-              </div>
-              <p class="section-label">The solution</p>
-              <h3>Anchored Living</h3>
-              <p>
-                RootedByte offers focused tools that help you replace passive scrolling with purposeful rhythms: listen with intention, read with discernment, and grow with structure.
-              </p>
-              <ul class="outcome-list">
-                <li><span>✓</span><strong>Clarity</strong> for what deserves attention</li>
-                <li><span>✓</span><strong>Reflection</strong> for better daily choices</li>
-                <li><span>✓</span><strong>Growth</strong> through simple next steps</li>
-              </ul>
-            </article>
-          </div>
+          <button class="add-entry-button" type="button" id="addJournalEntry" aria-label="Add journal entry">+</button>
         </div>
+
+        <p class="ghost-note">✦ Try a prompt</p>
+        <div class="prompt-row">
+          <button class="prompt-chip" type="button">What am I avoiding?</button>
+          <button class="prompt-chip" type="button">What felt true today?</button>
+          <button class="prompt-chip" type="button">What do I want more of?</button>
+        </div>
+
+        <div class="journal-editor" id="journalEditor">
+          <textarea id="journalText" placeholder="Write what you need to say..."></textarea>
+          <button class="primary-button" type="button" id="saveJournalEntry">Save entry</button>
+        </div>
+
+        <div id="journalEmpty" class="journal-empty">
+          <p>Your first entry is waiting.<br>Tap + or pick a prompt above.</p>
+        </div>
+
+        <div id="journalList" class="journal-list"></div>
       </section>
 
-      <section id="contact" class="section" aria-labelledby="contact-title">
-        <div class="container">
-          <div class="section-heading">
-            <p class="section-label">Contact</p>
-            <h2 id="contact-title">Connect with RootedByte.</h2>
-            <p class="section-copy">
-              Have feedback, collaboration ideas, or a future improvement in mind?
-            </p>
-          </div>
+      <section class="screen" id="screen-growth" aria-labelledby="growth-title">
+        <div class="screen-title">
+          <h1 id="growth-title">Growth</h1>
+          <p>Here’s where you’re at.</p>
+        </div>
 
-          <div class="contact-layout">
-            <aside class="contact-visual" aria-label="RootedByte contact visual">
-  <img src="images/rootedbyte-icon.png" alt="RootedByte logo" />
-</aside>
+        <div class="stats-grid">
+          <article class="stat-card">
+            <div class="stat-icon">♨</div>
+            <div class="stat-value" id="currentStreakStat">0d</div>
+            <div class="stat-label">Current streak</div>
+          </article>
 
-            <article class="contact-card">
-              <p class="section-label">Contact us</p>
-              <h3>Let’s build more intentional tech.</h3>
+          <article class="stat-card">
+            <div class="stat-icon">⊙</div>
+            <div class="stat-value" id="reflectionsStat">0</div>
+            <div class="stat-label">Reflections</div>
+          </article>
 
-              <form
-                class="contact-form-grid"
-                action="mailto:rootedbyte@outlook.com"
-                method="post"
-                enctype="text/plain"
-              >
-                <div class="form-row">
-                  <label for="contact-name">Full Name</label>
-                  <input id="contact-name" name="Full Name" type="text" required />
-                </div>
+          <article class="stat-card amber">
+            <div class="stat-icon">↗</div>
+            <div class="stat-value" id="signalStat">0</div>
+            <div class="stat-label">Signal checks</div>
+          </article>
 
-                <div class="form-row">
-                  <label for="contact-email">E-mail</label>
-                  <input id="contact-email" name="Email" type="email" required />
-                </div>
+          <article class="stat-card lavender">
+            <div class="stat-icon">♫</div>
+            <div class="stat-value" id="soundStat">0</div>
+            <div class="stat-label">Songs prepped</div>
+          </article>
 
-                <div class="form-row">
-                  <label for="contact-message">Message</label>
-                  <textarea id="contact-message" name="Message" required></textarea>
-                </div>
+          <article class="stat-card">
+            <div class="stat-icon">□</div>
+            <div class="stat-value" id="journalStat">0</div>
+            <div class="stat-label">Journal entries</div>
+          </article>
+        </div>
 
-                <div class="contact-form-actions">
-                  <button class="button" type="submit">Contact Us</button>
-                </div>
-              </form>
+        <div class="section-heading">
+          <h2>Focus areas</h2>
+        </div>
 
-              <div class="contact-info-grid">
-                <div class="contact-info-block">
-                  <h4>Email</h4>
-                  <a class="contact-email" href="mailto:rootedbyte@outlook.com">rootedbyte@outlook.com</a>
-                </div>
-
-                <div class="contact-info-block">
-                  <h4>Socials</h4>
-
-                  <div class="contact-links" aria-label="RootedByte social links">
-                    <a href="#" class="coming-soon" aria-label="Instagram coming soon" title="Instagram coming soon">
-                      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                        <rect x="3" y="3" width="18" height="18" rx="5" stroke="currentColor" stroke-width="2"/>
-                        <circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="2"/>
-                        <circle cx="17.5" cy="6.5" r="1.2" fill="currentColor"/>
-                      </svg>
-                    </a>
-
-                    <a href="https://www.youtube.com/channel/UCnPBSWzxDD7_r1HmVXhr3cA" aria-label="RootedByte YouTube" target="_blank" rel="noopener">
-                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                        <path d="M22 12s0-4-1-5.3c-.6-.8-1.4-1-2.3-1.1C16.7 5.3 12 5.3 12 5.3s-4.7 0-6.7.3c-.9.1-1.7.3-2.3 1.1C2 8 2 12 2 12s0 4 1 5.3c.6.8 1.4 1 2.3 1.1 2 .3 6.7.3 6.7.3s4.7 0 6.7-.3c.9-.1 1.7-.3 2.3-1.1C22 16 22 12 22 12Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
-                        <path d="M10 9.5v5l4.5-2.5L10 9.5Z" fill="currentColor"/>
-                      </svg>
-                    </a>
-                  </div>
-
-                  <p class="coming-soon-text">Instagram coming soon.</p>
-                </div>
-              </div>
-            </article>
-          </div>
-
-          
+        <div class="focus-list" id="focusList">
+          <article class="focus-card">
+            <div class="focus-card-top"><strong>Identity</strong><span>0 reflections</span></div>
+            <div class="progress"><span style="--width: 0%;"></span></div>
+          </article>
+          <article class="focus-card">
+            <div class="focus-card-top"><strong>Digital Habits</strong><span>0 reflections</span></div>
+            <div class="progress"><span style="--width: 0%;"></span></div>
+          </article>
+          <article class="focus-card">
+            <div class="focus-card-top"><strong>Relationships</strong><span>0 reflections</span></div>
+            <div class="progress"><span style="--width: 0%;"></span></div>
+          </article>
+          <article class="focus-card">
+            <div class="focus-card-top"><strong>Purpose</strong><span>0 reflections</span></div>
+            <div class="progress"><span style="--width: 0%;"></span></div>
+          </article>
+          <article class="focus-card">
+            <div class="focus-card-top"><strong>Pressure</strong><span>0 reflections</span></div>
+            <div class="progress"><span style="--width: 0%;"></span></div>
+          </article>
+          <article class="focus-card">
+            <div class="focus-card-top"><strong>Comparison</strong><span>0 reflections</span></div>
+            <div class="progress"><span style="--width: 0%;"></span></div>
+          </article>
         </div>
       </section>
-      
-<section class="footer-section" aria-label="RootedByte footer">
-  <div class="container">
-    <footer class="site-footer">
-      <p>Copyright 2026 RootedByte. Built for digital wisdom rooted in truth. All rights reserved.</p>
-      <span aria-hidden="true">•</span>
-      <a href="privacy.html">Privacy Policy</a>
-    </footer>
-  </div>
-</section>
-      
     </main>
-    <div class="truth-lens-modal" id="truthLensModal" aria-hidden="true">
-      <div class="truth-lens-card" role="dialog" aria-modal="true" aria-labelledby="truthLensTitle">
-        <div class="truth-lens-inner">
-          <div class="truth-lens-top">
-            <div>
-              <div class="truth-lens-brand">
-                <img src="images/rootedbyte-icon.png" alt="" aria-hidden="true" />
-                <div>
-                  <p class="truth-lens-kicker">RootedByte moment</p>
-                  <h2 class="truth-lens-title" id="truthLensTitle">Truth Lens</h2>
-                </div>
-              </div>
-
-              <p class="truth-lens-prompt">Before you trust what you saw online, pause and test it.</p>
-              <p class="truth-lens-copy">
-                Choose what you are processing today. RootedByte will give you one Scripture-rooted question to slow down, discern, and return to truth.
-              </p>
-            </div>
-
-            <button class="truth-lens-close" type="button" aria-label="Close Truth Lens">×</button>
-          </div>
-
-          <div class="truth-lens-options" aria-label="Truth Lens choices">
-            <button class="truth-lens-option" type="button" data-lens="online">Something I saw online</button>
-            <button class="truth-lens-option" type="button" data-lens="creator">A creator or influencer</button>
-            <button class="truth-lens-option" type="button" data-lens="ai">An AI answer</button>
-            <button class="truth-lens-option" type="button" data-lens="trend">A trend or viral opinion</button>
-            <button class="truth-lens-option" type="button" data-lens="feelings">My own feelings</button>
-            <button class="truth-lens-option" type="button" data-lens="comment">A comment about me</button>
-          </div>
-
-          <div class="truth-lens-result" id="truthLensResult" aria-live="polite">
-            <p class="truth-lens-question" id="truthLensQuestion"></p>
-            <p class="truth-lens-verse" id="truthLensVerse"></p>
-            <p class="truth-lens-reflection" id="truthLensReflection"></p>
-
-            <div class="truth-lens-actions">
-              <a class="button" href="#apps" id="truthLensAppsLink">Take me to the tools</a>
-              <button class="truth-lens-secondary" type="button" id="truthLensAnother">Give me another Truth Lens</button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
   </div>
 
+  <nav class="bottom-nav" aria-label="Bottom navigation">
+    <button class="active" type="button" data-nav="home">
+      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="m4 10 8-7 8 7v10H6V11" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+        <path d="M10 20v-6h4v6" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+      </svg>
+      <span>Home</span>
+    </button>
 
-<script>
- 
-  const truthLensData = {
-  online: {
-    question: "Is this leading me toward truth, peace, wisdom, and love — or toward fear, confusion, comparison, or pride?",
-    verse: "“But test them all; hold on to what is good.” — 1 Thessalonians 5:21 NIV",
-    reflection: "Do not receive everything quickly. Test it, hold what is good, and let go of what pulls your heart away from truth."
-  },
-  creator: {
-    question: "Am I following this voice because it is wise, or because it is loud, popular, and persuasive?",
-    verse: "“The simple believe anything, but the prudent give thought to their steps.” — Proverbs 14:15 NIV",
-    reflection: "A voice can be confident and still be wrong. Look carefully at the direction it is taking your thoughts, habits, and desires."
-  },
-  ai: {
-    question: "Have I asked God for wisdom, or am I only asking a machine for answers?",
-    verse: "“If any of you lacks wisdom, you should ask God, who gives generously to all without finding fault...” — James 1:5 NIV",
-    reflection: "Use tools carefully, but do not let tools become your source of wisdom. Ask, seek, and test what you receive."
-  },
-  trend: {
-    question: "Is this trend helping me walk in truth, or is it training me to copy the crowd?",
-    verse: "“Do not conform to the pattern of this world, but be transformed by the renewing of your mind.” — Romans 12:2 NIV",
-    reflection: "Not everything viral is worth following. Let your mind be renewed before your habits are shaped by the crowd."
-  },
-  feelings: {
-    question: "Are my feelings telling me something real, or are they trying to rule over what is true?",
-    verse: "“Those who trust in themselves are fools, but those who walk in wisdom are kept safe.” — Proverbs 28:26 NIV",
-    reflection: "Feelings matter, but they are not always a safe foundation. Bring them into truth before you build decisions on them."
-  },
-  comment: {
-    question: "Am I letting one comment name me, or am I remembering what God has spoken?",
-    verse: "“Am I now trying to win the approval of human beings, or of God?” — Galatians 1:10 NIV",
-    reflection: "A comment can hurt, but it does not have authority over your identity. Do not hand your peace to a passing opinion."
-  }
-};
+    <button type="button" data-nav="tools">
+      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <circle cx="12" cy="12" r="8" stroke="currentColor" stroke-width="1.8"/>
+        <path d="m15 9-2 5-4 1 2-5 4-1Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+      </svg>
+      <span>Tools</span>
+    </button>
 
-  const truthLensModal = document.getElementById("truthLensModal");
-  const truthLensTriggers = document.querySelectorAll(".truth-lens-trigger");
-  const truthLensClose = document.querySelector(".truth-lens-close");
-  const truthLensOptions = document.querySelectorAll(".truth-lens-option");
-  const truthLensResult = document.getElementById("truthLensResult");
-  const truthLensQuestion = document.getElementById("truthLensQuestion");
-  const truthLensVerse = document.getElementById("truthLensVerse");
-  const truthLensReflection = document.getElementById("truthLensReflection");
-  const truthLensAnother = document.getElementById("truthLensAnother");
-  const truthLensAppsLink = document.getElementById("truthLensAppsLink");
+    <button type="button" data-nav="journal">
+      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M5 5.5A2.5 2.5 0 0 1 7.5 3H20v16H7.5A2.5 2.5 0 0 0 5 21V5.5Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+        <path d="M5 5.5A2.5 2.5 0 0 0 2.5 3H2v16h.5A2.5 2.5 0 0 1 5 21" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+      </svg>
+      <span>Journal</span>
+    </button>
 
-  function openTruthLens() {
-    truthLensModal.classList.add("is-open");
-    truthLensModal.setAttribute("aria-hidden", "false");
-    document.body.style.overflow = "hidden";
-    truthLensResult.classList.remove("is-visible");
-    setTimeout(() => {
-      const firstOption = document.querySelector(".truth-lens-option");
-      if (firstOption) firstOption.focus();
-    }, 80);
-  }
+    <button type="button" data-nav="growth">
+      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M4 16l5-5 4 4 7-8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M16 7h4v4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <span>Growth</span>
+    </button>
+  </nav>
 
-  function closeTruthLens() {
-    truthLensModal.classList.remove("is-open");
-    truthLensModal.setAttribute("aria-hidden", "true");
-    document.body.style.overflow = "";
-  }
+  <div class="onboarding" id="onboarding" aria-hidden="true">
+    <section class="onboarding-card" role="dialog" aria-modal="true" aria-labelledby="onboardingTitle">
+      <button class="onboarding-close" type="button" id="closeOnboarding" aria-label="Close onboarding">×</button>
 
-  function showTruthLens(key) {
-    const data = truthLensData[key];
-    if (!data) return;
+      <div class="onboarding-progress">
+        <span class="progress-pill active"></span>
+        <span class="progress-pill"></span>
+        <span class="progress-pill"></span>
+      </div>
 
-    truthLensQuestion.textContent = data.question;
-    truthLensVerse.textContent = data.verse;
-    truthLensReflection.textContent = data.reflection;
-    truthLensResult.classList.add("is-visible");
-    truthLensResult.scrollIntoView({ behavior: "smooth", block: "nearest" });
-  }
+      <div class="onboarding-icon" id="onboardingIcon">🌿</div>
+      <h2 class="onboarding-title" id="onboardingTitle">Welcome to RootedByte</h2>
+      <p class="onboarding-copy" id="onboardingCopy">
+        A space to slow down, reflect with intention, and grow — grounded in timeless wisdom.
+      </p>
 
-  truthLensTriggers.forEach((trigger) => {
-    trigger.addEventListener("click", openTruthLens);
-  });
-
-  truthLensClose.addEventListener("click", closeTruthLens);
-
-  truthLensOptions.forEach((option) => {
-    option.addEventListener("click", () => {
-      showTruthLens(option.dataset.lens);
-    });
-  });
-
-  truthLensAnother.addEventListener("click", () => {
-    const keys = Object.keys(truthLensData);
-    const randomKey = keys[Math.floor(Math.random() * keys.length)];
-    showTruthLens(randomKey);
-  });
-
-  truthLensAppsLink.addEventListener("click", closeTruthLens);
-
-  truthLensModal.addEventListener("click", (event) => {
-    if (event.target === truthLensModal) {
-      closeTruthLens();
-    }
-  });
-
-  document.addEventListener("keydown", (event) => {
-    if (event.key === "Escape" && truthLensModal.classList.contains("is-open")) {
-      closeTruthLens();
-    }
-  });
-</script>
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="js/rootedbyte-auth-nav.js"></script>
+      <div class="onboarding-actions">
+        <button class="primary-button" type="button" id="nextOnboarding">Next</button>
+        <button class="skip-button" type="button" id="skipOnboarding">Skip intro</button>
+      </div>
+    </section>
+  </div>
 
   <script>
-  const menuToggle = document.querySelector(".menu-toggle");
-  const siteMenu = document.querySelector("#site-menu");
-  const menuLinks = document.querySelectorAll(".site-menu-panel a");
+    const $ = (selector) => document.querySelector(selector);
+    const $$ = (selector) => Array.from(document.querySelectorAll(selector));
 
-  if (menuToggle && siteMenu) {
-    menuToggle.addEventListener("click", () => {
-      const isOpen = siteMenu.classList.toggle("is-open");
-      menuToggle.setAttribute("aria-expanded", String(isOpen));
-      menuToggle.setAttribute(
-        "aria-label",
-        isOpen ? "Close navigation menu" : "Open navigation menu"
-      );
-    });
+    const storageKey = "rootedbyte_app_state_v1";
 
-    menuLinks.forEach((link) => {
-      link.addEventListener("click", () => {
-        siteMenu.classList.remove("is-open");
-        menuToggle.setAttribute("aria-expanded", "false");
-        menuToggle.setAttribute("aria-label", "Open navigation menu");
+    const defaultState = {
+      onboarded: false,
+      mood: "",
+      streak: [],
+      reflections: 0,
+      signals: 0,
+      songs: 0,
+      journal: [],
+      focus: {
+        Identity: 0,
+        "Digital Habits": 0,
+        Relationships: 0,
+        Purpose: 0,
+        Pressure: 0,
+        Comparison: 0
+      }
+    };
+
+    let state = loadState();
+
+    function loadState() {
+      try {
+        return { ...defaultState, ...JSON.parse(localStorage.getItem(storageKey) || "{}") };
+      } catch {
+        return { ...defaultState };
+      }
+    }
+
+    function saveState() {
+      localStorage.setItem(storageKey, JSON.stringify(state));
+    }
+
+    function todayKey() {
+      return new Date().toISOString().slice(0, 10);
+    }
+
+    function setScreen(name) {
+      $$(".screen").forEach((screen) => {
+        screen.classList.toggle("active", screen.id === `screen-${name}`);
+      });
+
+      $$(".bottom-nav button").forEach((button) => {
+        const isActive = button.dataset.nav === name;
+        button.classList.toggle("active", isActive);
+        button.classList.toggle("tools-active", isActive && name === "tools");
+      });
+
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    $$("[data-nav]").forEach((item) => {
+      item.addEventListener("click", (event) => {
+        const nav = item.dataset.nav;
+        if (!nav) return;
+
+        event.preventDefault();
+        setScreen(nav);
       });
     });
 
-    document.addEventListener("keydown", (event) => {
-      if (event.key === "Escape") {
-        siteMenu.classList.remove("is-open");
-        menuToggle.setAttribute("aria-expanded", "false");
-        menuToggle.setAttribute("aria-label", "Open navigation menu");
+    const wisdomQuotes = [
+      "“What you’re building in secret will eventually speak for itself.”",
+      "“Peace grows where attention is guarded.”",
+      "“Slow is not stuck. Slow is where roots form.”",
+      "“Not every signal deserves your reaction.”",
+      "“Return to what is true before you respond to what is loud.”"
+    ];
+
+    let wisdomIndex = 0;
+    setInterval(() => {
+      wisdomIndex = (wisdomIndex + 1) % wisdomQuotes.length;
+      const wisdomStrip = $("#wisdomStrip");
+      if (wisdomStrip) wisdomStrip.textContent = wisdomQuotes[wisdomIndex];
+    }, 6000);
+
+    const onboardingSteps = [
+      {
+        icon: "🌿",
+        title: "Welcome to RootedByte",
+        copy: "A space to slow down, reflect with intention, and grow — grounded in timeless wisdom."
+      },
+      {
+        icon: "🧭",
+        title: "Check in before you scroll",
+        copy: "Track your inner weather, build a weekly rhythm, and notice what shapes your attention."
+      },
+      {
+        icon: "✨",
+        title: "Use tools with purpose",
+        copy: "Reflect with Inner Work, test the feed with Signal, prepare songs with SoundSense, and journal what matters."
       }
+    ];
+
+    let onboardingIndex = 0;
+
+    function renderOnboarding() {
+      const step = onboardingSteps[onboardingIndex];
+      $("#onboardingIcon").textContent = step.icon;
+      $("#onboardingTitle").textContent = step.title;
+      $("#onboardingCopy").textContent = step.copy;
+      $$(".progress-pill").forEach((pill, index) => {
+        pill.classList.toggle("active", index === onboardingIndex);
+      });
+      $("#nextOnboarding").textContent = onboardingIndex === onboardingSteps.length - 1 ? "Start" : "Next";
+    }
+
+    function openOnboarding() {
+      renderOnboarding();
+      $("#onboarding").classList.add("active");
+      $("#onboarding").setAttribute("aria-hidden", "false");
+    }
+
+    function closeOnboarding() {
+      state.onboarded = true;
+      saveState();
+      $("#onboarding").classList.remove("active");
+      $("#onboarding").setAttribute("aria-hidden", "true");
+    }
+
+    $("#nextOnboarding").addEventListener("click", () => {
+      if (onboardingIndex < onboardingSteps.length - 1) {
+        onboardingIndex += 1;
+        renderOnboarding();
+        return;
+      }
+
+      closeOnboarding();
     });
-  }
-</script>
-  
+
+    $("#skipOnboarding").addEventListener("click", closeOnboarding);
+    $("#closeOnboarding").addEventListener("click", closeOnboarding);
+
+    if (!state.onboarded) {
+      window.setTimeout(openOnboarding, 450);
+    }
+
+    function updateMoodUI() {
+      $$(".mood-button").forEach((button) => {
+        button.classList.toggle("active", button.dataset.mood === state.mood);
+      });
+    }
+
+    function updateStreakUI() {
+      const today = todayKey();
+
+      if (!Array.isArray(state.streak)) state.streak = [];
+
+      const days = $$("#weeklyStreak .day");
+      const currentDay = new Date().getDay();
+      const mondayBasedToday = currentDay === 0 ? 6 : currentDay - 1;
+
+      days.forEach((day, index) => {
+        day.classList.toggle("today", index === mondayBasedToday);
+        day.classList.toggle("complete", index <= mondayBasedToday && state.streak.includes(today));
+      });
+
+      const count = state.streak.length;
+      $("#streakMessage").textContent = count
+        ? `${count} day${count === 1 ? "" : "s"} checked in. Keep showing up.`
+        : "Start your streak today.";
+
+      $("#currentStreakStat").textContent = `${count}d`;
+    }
+
+    $$(".mood-button").forEach((button) => {
+      button.addEventListener("click", () => {
+        state.mood = button.dataset.mood;
+
+        const today = todayKey();
+        if (!state.streak.includes(today)) {
+          state.streak.push(today);
+        }
+
+        saveState();
+        updateMoodUI();
+        updateStreakUI();
+      });
+    });
+
+    function showTool(tool) {
+      setScreen("tool-detail");
+
+      $("#toolInner").hidden = tool !== "inner";
+      $("#toolSignal").hidden = tool !== "signal";
+      $("#toolSound").hidden = tool !== "sound";
+    }
+
+    $$("[data-open-tool]").forEach((button) => {
+      button.addEventListener("click", () => showTool(button.dataset.openTool));
+    });
+
+    $("#innerChoices").addEventListener("click", (event) => {
+      const choice = event.target.closest(".choice");
+      if (!choice) return;
+
+      $$("#innerChoices .choice").forEach((item) => item.classList.remove("active"));
+      choice.classList.add("active");
+    });
+
+    $("#signalKinds").addEventListener("click", (event) => {
+      const button = event.target.closest(".pill-button");
+      if (!button) return;
+
+      $$("#signalKinds .pill-button").forEach((item) => item.classList.remove("active"));
+      button.classList.add("active");
+    });
+
+    $("#innerSubmit").addEventListener("click", () => {
+      const selected = $("#innerChoices .choice.active")?.dataset.focus || "Pressure";
+      state.reflections += 1;
+      state.focus[selected] = (state.focus[selected] || 0) + 1;
+      saveState();
+      updateGrowthUI();
+    });
+
+    $("#signalSubmit").addEventListener("click", () => {
+      state.signals += 1;
+      saveState();
+      updateGrowthUI();
+    });
+
+    $("#soundSubmit").addEventListener("click", () => {
+      state.songs += 1;
+      saveState();
+      updateGrowthUI();
+    });
+
+    const journalEditor = $("#journalEditor");
+    const journalText = $("#journalText");
+
+    $("#addJournalEntry").addEventListener("click", () => {
+      journalEditor.classList.toggle("active");
+      if (journalEditor.classList.contains("active")) journalText.focus();
+    });
+
+    $$(".prompt-chip").forEach((chip) => {
+      chip.addEventListener("click", () => {
+        journalEditor.classList.add("active");
+        journalText.value = chip.textContent.trim() + "\n\n";
+        journalText.focus();
+      });
+    });
+
+    $("#saveJournalEntry").addEventListener("click", () => {
+      const text = journalText.value.trim();
+      if (!text) return;
+
+      state.journal.unshift({
+        text,
+        createdAt: new Date().toISOString()
+      });
+
+      journalText.value = "";
+      journalEditor.classList.remove("active");
+
+      saveState();
+      renderJournal();
+      updateGrowthUI();
+    });
+
+    function renderJournal() {
+      const list = $("#journalList");
+      const empty = $("#journalEmpty");
+
+      list.innerHTML = "";
+
+      if (!state.journal.length) {
+        empty.style.display = "grid";
+        return;
+      }
+
+      empty.style.display = "none";
+
+      state.journal.forEach((entry) => {
+        const date = new Intl.DateTimeFormat(undefined, {
+          month: "short",
+          day: "numeric"
+        }).format(new Date(entry.createdAt));
+
+        const article = document.createElement("article");
+        article.className = "journal-entry";
+        article.innerHTML = `
+          <strong>${date}</strong>
+          <p>${escapeHtml(entry.text).slice(0, 180)}${entry.text.length > 180 ? "..." : ""}</p>
+        `;
+        list.appendChild(article);
+      });
+    }
+
+    function updateGrowthUI() {
+      $("#reflectionsStat").textContent = state.reflections || 0;
+      $("#signalStat").textContent = state.signals || 0;
+      $("#soundStat").textContent = state.songs || 0;
+      $("#journalStat").textContent = state.journal.length || 0;
+
+      const focusList = $("#focusList");
+      const max = Math.max(1, ...Object.values(state.focus || {}));
+
+      focusList.innerHTML = Object.entries(state.focus || defaultState.focus).map(([name, count]) => {
+        const width = Math.min(100, Math.round((count / max) * 100));
+
+        return `
+          <article class="focus-card">
+            <div class="focus-card-top">
+              <strong>${escapeHtml(name)}</strong>
+              <span>${count} reflection${count === 1 ? "" : "s"}</span>
+            </div>
+            <div class="progress"><span style="--width: ${width}%;"></span></div>
+          </article>
+        `;
+      }).join("");
+
+      updateStreakUI();
+    }
+
+    function escapeHtml(value) {
+      return String(value ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    updateMoodUI();
+    updateStreakUI();
+    renderJournal();
+    updateGrowthUI();
+  </script>
+
+  <script src="js/rootedbyte-auth-nav.js"></script>
 </body>
 </html>
