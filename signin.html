@@ -11,31 +11,23 @@
 
   <title>Sign In | RootedByte</title>
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&display=swap"
-    rel="stylesheet"
-  >
-
   <style>
     :root {
-      --bg: #111714;
-      --bg-deep: #0b100d;
-      --panel: rgba(24, 32, 27, 0.92);
-      --panel-strong: rgba(27, 37, 31, 0.98);
-      --cream: #f5efe4;
+      --bg: #07110d;
+      --bg-soft: #0c1712;
+      --card: rgba(20, 30, 25, 0.92);
+      --card-2: rgba(18, 27, 23, 0.96);
+      --text: #f5efe4;
       --muted: #9fb2a7;
-      --muted-soft: #72857b;
+      --muted-soft: #708178;
       --line: rgba(168, 197, 160, 0.16);
+      --line-strong: rgba(168, 197, 160, 0.38);
       --sage: #a8c5a0;
-      --amber: #e8c97a;
-      --lavender: #b8a8d8;
       --danger: #d97965;
       --shadow: 0 24px 70px rgba(0, 0, 0, 0.34);
       --radius-xl: 28px;
-      --radius-lg: 22px;
-      --radius-md: 16px;
+      --radius-lg: 20px;
+      --radius-md: 14px;
       --phone: 420px;
     }
 
@@ -43,21 +35,23 @@
       box-sizing: border-box;
     }
 
+    [hidden] {
+      display: none !important;
+    }
+
     html {
-      background: var(--bg-deep);
+      background: #030806;
     }
 
     body {
       margin: 0;
       min-height: 100vh;
-      color: var(--cream);
       font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text);
       background:
-        radial-gradient(circle at 12% 8%, rgba(168, 197, 160, 0.08), transparent 18rem),
-        radial-gradient(circle at 88% 20%, rgba(232, 201, 122, 0.06), transparent 18rem),
-        radial-gradient(circle at 50% 100%, rgba(184, 168, 216, 0.06), transparent 20rem),
-        var(--bg-deep);
-      line-height: 1.55;
+        radial-gradient(circle at top left, rgba(168, 197, 160, 0.08), transparent 24rem),
+        radial-gradient(circle at bottom right, rgba(168, 197, 160, 0.05), transparent 20rem),
+        linear-gradient(180deg, #07110d 0%, #06100c 100%);
     }
 
     a {
@@ -74,149 +68,130 @@
       width: min(var(--phone), 100%);
       min-height: 100vh;
       margin: 0 auto;
+      padding: 28px 18px 34px;
       background:
-        radial-gradient(circle at 50% -10%, rgba(168, 197, 160, 0.08), transparent 18rem),
-        linear-gradient(180deg, #111714 0%, #0f1512 100%);
-      border-left: 1px solid rgba(168, 197, 160, 0.08);
-      border-right: 1px solid rgba(168, 197, 160, 0.08);
+        radial-gradient(circle at 50% -10%, rgba(168, 197, 160, 0.06), transparent 18rem),
+        linear-gradient(180deg, #07110d 0%, #06100c 100%);
+      border-left: 1px solid rgba(168, 197, 160, 0.05);
+      border-right: 1px solid rgba(168, 197, 160, 0.05);
     }
 
-    .app-header {
-      position: sticky;
-      top: 0;
-      z-index: 10;
-      height: 52px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 16px;
-      background: rgba(17, 23, 20, 0.9);
-      border-bottom: 1px solid rgba(168, 197, 160, 0.1);
-      backdrop-filter: blur(18px);
-      -webkit-backdrop-filter: blur(18px);
-    }
-
-    .brand {
+    .top-link {
       display: inline-flex;
       align-items: center;
-      gap: 9px;
+      gap: 8px;
+      color: var(--muted);
+      font-size: 0.88rem;
+      font-weight: 700;
+      margin-bottom: 24px;
     }
 
-    .brand-mark {
-      width: 34px;
-      height: 34px;
+    .auth-wrap {
+      min-height: calc(100vh - 90px);
+      display: grid;
+      align-content: start;
+      justify-items: center;
+      padding-top: 18px;
+    }
+
+    .hero-icon {
+      width: 56px;
+      height: 56px;
       display: grid;
       place-items: center;
-      overflow: hidden;
-      border-radius: 12px;
-      background:
-        linear-gradient(var(--bg), var(--bg)) padding-box,
-        linear-gradient(135deg, var(--sage), var(--amber), var(--lavender)) border-box;
-      border: 1px solid transparent;
-      flex: 0 0 auto;
+      margin-bottom: 18px;
+      border-radius: 16px;
+      background: var(--sage);
+      color: #08100c;
+      box-shadow: 0 18px 32px rgba(168, 197, 160, 0.14);
     }
 
-    .brand-mark img {
-      width: 118%;
-      height: 118%;
-      object-fit: cover;
-      object-position: center;
-      border-radius: 10px;
+    .hero-icon svg {
+      width: 28px;
+      height: 28px;
     }
 
-    .brand-name {
-      font-family: "Playfair Display", Georgia, serif;
-      font-size: 1rem;
-      font-weight: 700;
-      letter-spacing: -0.04em;
-      color: var(--cream);
-      white-space: nowrap;
+    .hero-copy {
+      text-align: center;
+      margin-bottom: 24px;
     }
 
-    .header-link {
+    .hero-copy h1 {
+      margin: 0;
+      font-size: 2.05rem;
+      line-height: 1;
+      letter-spacing: -0.05em;
+      font-weight: 800;
+      color: var(--text);
+    }
+
+    .hero-copy p {
+      margin: 10px 0 0;
       color: var(--muted);
-      font-size: 0.84rem;
-      font-weight: 700;
-    }
-
-    .page {
-      min-height: calc(100vh - 52px);
-      display: grid;
-      align-items: center;
-      padding: 24px 14px 32px;
+      font-size: 0.98rem;
     }
 
     .auth-card {
+      width: 100%;
       border: 1px solid var(--line);
       border-radius: var(--radius-xl);
       background:
-        linear-gradient(180deg, rgba(25, 35, 29, 0.94), rgba(20, 28, 24, 0.92));
+        linear-gradient(180deg, rgba(21, 31, 26, 0.94), rgba(16, 24, 21, 0.96));
       box-shadow: var(--shadow);
-      padding: 22px 18px 18px;
+      padding: 18px 16px 18px;
     }
 
-    .pill {
+    .google-button {
+      width: 100%;
+      min-height: 48px;
       display: inline-flex;
       align-items: center;
-      min-height: 30px;
-      padding: 0 12px;
-      border-radius: 999px;
-      color: var(--sage);
-      background: rgba(168, 197, 160, 0.08);
-      border: 1px solid rgba(168, 197, 160, 0.12);
-      font-size: 0.73rem;
+      justify-content: center;
+      gap: 12px;
+      border: 1px solid rgba(168, 197, 160, 0.16);
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.02);
+      color: var(--text);
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .google-g {
       font-weight: 900;
-      letter-spacing: 0.1em;
+      font-size: 1.1rem;
+      line-height: 1;
+      background: linear-gradient(90deg, #4285f4 0 25%, #ea4335 25% 50%, #fbbc05 50% 75%, #34a853 75% 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .divider {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      gap: 14px;
+      margin: 16px 0 16px;
+      color: var(--muted-soft);
+      font-size: 0.78rem;
+      letter-spacing: 0.08em;
       text-transform: uppercase;
     }
 
-    h1 {
-      margin: 16px 0 0;
-      font-family: "Playfair Display", Georgia, serif;
-      font-size: 2.25rem;
-      line-height: 0.98;
-      letter-spacing: -0.06em;
-      color: var(--cream);
-    }
-
-    .lead {
-      margin: 10px 0 0;
-      color: var(--muted);
-      font-size: 0.94rem;
-      line-height: 1.65;
+    .divider::before,
+    .divider::after {
+      content: "";
+      height: 1px;
+      background: rgba(168, 197, 160, 0.12);
     }
 
     .tabs {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 8px;
-      margin-top: 18px;
-      padding: 4px;
-      border: 1px solid rgba(168, 197, 160, 0.12);
-      border-radius: 999px;
-      background: rgba(255, 255, 255, 0.03);
-    }
-
-    .tab-button {
-      min-height: 40px;
-      border: 0;
-      border-radius: 999px;
-      color: var(--muted);
-      background: transparent;
-      font-weight: 800;
-      cursor: pointer;
-      transition: background 180ms ease, color 180ms ease;
-    }
-
-    .tab-button.active {
-      color: #111714;
-      background: var(--sage);
+      display: none;
     }
 
     .auth-form {
       display: grid;
       gap: 14px;
-      margin-top: 18px;
     }
 
     .field {
@@ -224,22 +199,54 @@
       gap: 8px;
     }
 
+    .field-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
     label {
-      color: var(--cream);
-      font-size: 0.91rem;
+      color: var(--text);
+      font-size: 0.92rem;
       font-weight: 800;
+    }
+
+    .forgot-link {
+      color: var(--sage);
+      font-size: 0.82rem;
+      font-weight: 700;
+    }
+
+    .input-wrap {
+      position: relative;
+    }
+
+    .input-wrap svg {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 18px;
+      height: 18px;
+      color: var(--muted);
+      pointer-events: none;
     }
 
     input {
       width: 100%;
-      min-height: 46px;
-      padding: 0 14px;
-      border: 1px solid rgba(168, 197, 160, 0.2);
-      border-radius: 12px;
-      color: var(--cream);
-      background: rgba(255, 255, 255, 0.04);
+      min-height: 48px;
+      padding: 0 14px 0 44px;
+      border: 1px solid rgba(168, 197, 160, 0.22);
+      border-radius: 14px;
+      color: var(--text);
+      background: rgba(255, 255, 255, 0.02);
       outline: none;
       transition: border-color 180ms ease, box-shadow 180ms ease, background 180ms ease;
+    }
+
+    #confirmPassword {
+      padding-left: 14px;
     }
 
     input::placeholder {
@@ -249,27 +256,27 @@
     input:focus {
       border-color: rgba(168, 197, 160, 0.72);
       box-shadow: 0 0 0 3px rgba(168, 197, 160, 0.08);
-      background: rgba(255, 255, 255, 0.055);
+      background: rgba(255, 255, 255, 0.035);
     }
 
-    .btn {
+    .submit-button {
+      width: 100%;
       min-height: 48px;
-      border-radius: 12px;
-      font-weight: 900;
-      cursor: pointer;
-    }
-
-    .btn.primary {
+      margin-top: 2px;
       border: 0;
-      color: #111714;
+      border-radius: 14px;
       background: var(--sage);
+      color: #09100d;
+      font-weight: 900;
+      font-size: 1rem;
+      cursor: pointer;
       transition: transform 180ms ease, filter 180ms ease;
     }
 
-    .btn.primary:hover,
-    .btn.primary:focus-visible {
+    .submit-button:hover,
+    .submit-button:focus-visible {
       transform: translateY(-1px);
-      filter: brightness(1.04);
+      filter: brightness(1.03);
       outline: none;
     }
 
@@ -284,26 +291,28 @@
       color: var(--danger);
     }
 
+    .bottom-switch {
+      margin-top: 22px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.96rem;
+    }
+
+    .bottom-switch button {
+      border: 0;
+      background: transparent;
+      color: var(--sage);
+      font-weight: 800;
+      cursor: pointer;
+      padding: 0;
+    }
+
     .small-note {
       margin-top: 14px;
+      text-align: center;
       color: var(--muted-soft);
-      font-size: 0.82rem;
+      font-size: 0.8rem;
       line-height: 1.5;
-    }
-
-    .auth-footer {
-      margin-top: 18px;
-      padding-top: 16px;
-      border-top: 1px solid rgba(168, 197, 160, 0.1);
-      display: flex;
-      justify-content: space-between;
-      gap: 10px;
-      color: var(--muted-soft);
-      font-size: 0.78rem;
-    }
-
-    .auth-footer a {
-      color: var(--muted);
     }
 
     @media (min-width: 760px) {
@@ -316,52 +325,83 @@
         border-radius: 30px;
         box-shadow: 0 28px 90px rgba(0, 0, 0, 0.36);
       }
+
+      .auth-wrap {
+        min-height: calc(100vh - 126px);
+      }
     }
   </style>
 </head>
 
 <body>
   <div class="app-shell">
-    <header class="app-header">
-      <a class="brand" href="index.html" aria-label="RootedByte home">
-        <span class="brand-mark">
-          <img src="images/rootedbyte-icon.png" alt="RootedByte logo" />
-        </span>
-        <span class="brand-name">RootedByte</span>
-      </a>
+    <a class="top-link" href="index.html">
+      <span>←</span>
+      <span>Back to RootedByte</span>
+    </a>
 
-      <a class="header-link" href="index.html">Home</a>
-    </header>
+    <main class="auth-wrap">
+      <div class="hero-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none">
+          <path d="M8 7V4h9a3 3 0 0 1 3 3v13a3 3 0 0 1-3 3H8v-3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M14 12H4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          <path d="m10 8-4 4 4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
 
-    <main class="page">
+      <div class="hero-copy">
+        <h1 id="authTitle">Welcome back</h1>
+        <p id="authLead">Log in to your account</p>
+      </div>
+
       <section class="auth-card">
-        <span class="pill">RootedByte Account</span>
-        <h1 id="authTitle">Sign in</h1>
-        <p class="lead" id="authLead">
-          Sign in to save your streaks, reflections, shared outputs, and journal entries.
-        </p>
+        <button type="button" class="google-button" id="googleSignInButton">
+          <span class="google-g">G</span>
+          <span>Continue with Google</span>
+        </button>
 
-        <div class="tabs" role="tablist" aria-label="Authentication mode">
-          <button class="tab-button active" type="button" id="signInTab">Sign In</button>
-          <button class="tab-button" type="button" id="signUpTab">Create Account</button>
-        </div>
+        <div class="divider">or</div>
 
         <form class="auth-form" id="authForm">
           <div class="field">
             <label for="email">Email</label>
-            <input id="email" name="email" type="email" autocomplete="email" required />
+            <div class="input-wrap">
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M4 6h16v12H4V6Z" stroke="currentColor" stroke-width="1.8" />
+                <path d="m4 7 8 6 8-6" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" />
+              </svg>
+              <input
+                id="email"
+                name="email"
+                type="email"
+                autocomplete="email"
+                placeholder="you@example.com"
+                required
+              />
+            </div>
           </div>
 
           <div class="field">
-            <label for="password">Password</label>
-            <input
-              id="password"
-              name="password"
-              type="password"
-              autocomplete="current-password"
-              required
-              minlength="6"
-            />
+            <div class="field-row">
+              <label for="password">Password</label>
+              <a href="#" class="forgot-link" id="forgotPasswordLink">Forgot password?</a>
+            </div>
+
+            <div class="input-wrap">
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M7 11V8a5 5 0 0 1 10 0v3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                <rect x="5" y="11" width="14" height="10" rx="2" stroke="currentColor" stroke-width="1.8"/>
+              </svg>
+              <input
+                id="password"
+                name="password"
+                type="password"
+                autocomplete="current-password"
+                placeholder="••••••••"
+                required
+                minlength="6"
+              />
+            </div>
           </div>
 
           <div class="field" id="confirmPasswordGroup" hidden>
@@ -372,22 +412,23 @@
               type="password"
               autocomplete="new-password"
               minlength="6"
+              placeholder="Confirm password"
             />
           </div>
 
-          <button class="btn primary" type="submit" id="authSubmit">Sign In</button>
+          <button class="submit-button" type="submit" id="authSubmit">Log in</button>
           <div class="status" id="authStatus" role="status" aria-live="polite"></div>
         </form>
-
-        <p class="small-note">
-          Your saved outputs stay private unless you choose to create a share link.
-        </p>
-
-        <div class="auth-footer">
-          <a href="privacy.html">Privacy</a>
-          <a href="mailto:rootedbyte@outlook.com">Contact</a>
-        </div>
       </section>
+
+      <div class="bottom-switch">
+        <span id="switchText">Don't have an account?</span>
+        <button type="button" id="switchModeButton">Create one</button>
+      </div>
+
+      <p class="small-note">
+        Your saved outputs stay private unless you choose to create a share link.
+      </p>
     </main>
   </div>
 
@@ -397,107 +438,181 @@
     const $ = (selector) => document.querySelector(selector);
 
     const authTitle = $("#authTitle");
-const authLead = $("#authLead");
-const signInTab = $("#signInTab");
-const signUpTab = $("#signUpTab");
-const authForm = $("#authForm");
-const authSubmit = $("#authSubmit");
-const authStatus = $("#authStatus");
-const emailInput = $("#email");
-const passwordInput = $("#password");
-const confirmPasswordGroup = $("#confirmPasswordGroup");
-const confirmPasswordInput = $("#confirmPassword");
+    const authLead = $("#authLead");
+    const authForm = $("#authForm");
+    const authSubmit = $("#authSubmit");
+    const authStatus = $("#authStatus");
+    const emailInput = $("#email");
+    const passwordInput = $("#password");
+    const confirmPasswordGroup = $("#confirmPasswordGroup");
+    const confirmPasswordInput = $("#confirmPassword");
+    const switchText = $("#switchText");
+    const switchModeButton = $("#switchModeButton");
+    const forgotPasswordLink = $("#forgotPasswordLink");
+    const googleSignInButton = $("#googleSignInButton");
 
-let mode = "signin";
-let supabaseClient = null;
+    let mode = "signin";
+    let supabaseClient = null;
 
-function setStatus(message, type = "info") {
-  authStatus.className = type === "error" ? "status error" : "status";
-  authStatus.textContent = message || "";
-}
-
-function setMode(nextMode) {
-  mode = nextMode;
-
-  const signingIn = mode === "signin";
-
-  signInTab.classList.toggle("active", signingIn);
-  signUpTab.classList.toggle("active", !signingIn);
-
-  authTitle.textContent = signingIn ? "Sign in" : "Create account";
-  authLead.textContent = signingIn
-    ? "Sign in to save your streaks, reflections, shared outputs, and journal entries."
-    : "Create your RootedByte account to keep your progress connected to you.";
-
-  authSubmit.textContent = signingIn ? "Sign In" : "Create Account";
-
-  confirmPasswordGroup.hidden = signingIn;
-  confirmPasswordInput.required = !signingIn;
-
-  if (signingIn) {
-    confirmPasswordInput.value = "";
-  }
-
-  passwordInput.autocomplete = signingIn ? "current-password" : "new-password";
-
-  setStatus("");
-}
-
-signInTab.addEventListener("click", () => setMode("signin"));
-signUpTab.addEventListener("click", () => setMode("signup"));
-
-authForm.addEventListener("submit", async (event) => {
-  event.preventDefault();
-
-  const email = emailInput.value.trim();
-  const password = passwordInput.value;
-  const confirmPassword = confirmPasswordInput.value;
-
-  if (!email || !password) {
-    setStatus("Enter your email and password.", "error");
-    return;
-  }
-
-  if (mode === "signup" && password !== confirmPassword) {
-    setStatus("Passwords do not match.", "error");
-    return;
-  }
-
-  authSubmit.disabled = true;
-  setStatus(mode === "signin" ? "Signing you in..." : "Creating your account...");
-
-  try {
-    const client = ensureSupabaseClient();
-
-    if (mode === "signin") {
-      const { error } = await client.auth.signInWithPassword({
-        email,
-        password
-      });
-
-      if (error) throw error;
-
-      setStatus("Signed in. Redirecting...");
-      window.location.href = "account.html";
-      return;
+    function setStatus(message, type = "info") {
+      authStatus.className = type === "error" ? "status error" : "status";
+      authStatus.textContent = message || "";
     }
 
-    const { error } = await client.auth.signUp({
-      email,
-      password
+    function getSupabaseConfig() {
+      const SUPABASE_URL =
+        window.SUPABASE_URL ||
+        document.documentElement.dataset.supabaseUrl ||
+        "";
+      const SUPABASE_ANON_KEY =
+        window.SUPABASE_ANON_KEY ||
+        document.documentElement.dataset.supabaseAnonKey ||
+        "";
+
+      return { SUPABASE_URL, SUPABASE_ANON_KEY };
+    }
+
+    function ensureSupabaseClient() {
+      if (supabaseClient) return supabaseClient;
+
+      const { SUPABASE_URL, SUPABASE_ANON_KEY } = getSupabaseConfig();
+
+      if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
+        throw new Error("Supabase keys are not connected yet.");
+      }
+
+      supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+      return supabaseClient;
+    }
+
+    function setMode(nextMode) {
+      mode = nextMode;
+
+      const signingIn = mode === "signin";
+
+      authTitle.textContent = signingIn ? "Welcome back" : "Create account";
+      authLead.textContent = signingIn
+        ? "Log in to your account"
+        : "Create your RootedByte account";
+
+      authSubmit.textContent = signingIn ? "Log in" : "Create account";
+
+      switchText.textContent = signingIn
+        ? "Don't have an account?"
+        : "Already have an account?";
+
+      switchModeButton.textContent = signingIn
+        ? "Create one"
+        : "Sign in";
+
+      confirmPasswordGroup.hidden = signingIn;
+      confirmPasswordInput.required = !signingIn;
+
+      forgotPasswordLink.hidden = !signingIn;
+
+      if (signingIn) {
+        confirmPasswordInput.value = "";
+      }
+
+      passwordInput.autocomplete = signingIn ? "current-password" : "new-password";
+      setStatus("");
+    }
+
+    switchModeButton.addEventListener("click", () => {
+      setMode(mode === "signin" ? "signup" : "signin");
     });
 
-    if (error) throw error;
+    forgotPasswordLink.addEventListener("click", async (event) => {
+      event.preventDefault();
 
-    setStatus("Account created. Check your email if confirmation is enabled.");
-  } catch (error) {
-    setStatus(error.message || "Something went wrong.", "error");
-  } finally {
-    authSubmit.disabled = false;
-  }
-});
+      const email = emailInput.value.trim();
+      if (!email) {
+        setStatus("Enter your email first, then tap forgot password again.", "error");
+        return;
+      }
 
-setMode("signin");
+      try {
+        const client = ensureSupabaseClient();
+        const { error } = await client.auth.resetPasswordForEmail(email, {
+          redirectTo: window.location.origin + "/signin.html"
+        });
+
+        if (error) throw error;
+
+        setStatus("Password reset email sent.");
+      } catch (error) {
+        setStatus(error.message || "Could not send reset email.", "error");
+      }
+    });
+
+    googleSignInButton.addEventListener("click", async () => {
+      try {
+        const client = ensureSupabaseClient();
+        const { error } = await client.auth.signInWithOAuth({
+          provider: "google",
+          options: {
+            redirectTo: window.location.origin + "/account.html"
+          }
+        });
+
+        if (error) throw error;
+      } catch (error) {
+        setStatus(error.message || "Google sign-in is not ready.", "error");
+      }
+    });
+
+    authForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
+
+      const email = emailInput.value.trim();
+      const password = passwordInput.value;
+      const confirmPassword = confirmPasswordInput.value;
+
+      if (!email || !password) {
+        setStatus("Enter your email and password.", "error");
+        return;
+      }
+
+      if (mode === "signup" && password !== confirmPassword) {
+        setStatus("Passwords do not match.", "error");
+        return;
+      }
+
+      authSubmit.disabled = true;
+      setStatus(mode === "signin" ? "Signing you in..." : "Creating your account...");
+
+      try {
+        const client = ensureSupabaseClient();
+
+        if (mode === "signin") {
+          const { error } = await client.auth.signInWithPassword({
+            email,
+            password
+          });
+
+          if (error) throw error;
+
+          setStatus("Signed in. Redirecting...");
+          window.location.href = "account.html";
+          return;
+        }
+
+        const { error } = await client.auth.signUp({
+          email,
+          password
+        });
+
+        if (error) throw error;
+
+        setStatus("Account created. Check your email if confirmation is enabled.");
+      } catch (error) {
+        setStatus(error.message || "Something went wrong.", "error");
+      } finally {
+        authSubmit.disabled = false;
+      }
+    });
+
+    setMode("signin");
   </script>
 </body>
 </html>
