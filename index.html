@@ -258,69 +258,6 @@
       padding: 24px;
     }
 
-    .mood-selected-state {
-  min-height: 140px;
-  display: grid;
-  justify-items: center;
-  align-content: center;
-  text-align: center;
-  gap: 10px;
-}
-
-.mood-selected-kicker {
-  color: var(--muted-soft);
-  font-size: 0.75rem;
-  font-weight: 800;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-}
-
-.mood-selected-icon {
-  font-size: 2.2rem;
-  line-height: 1;
-}
-
-.mood-selected-label {
-  font-family: "Playfair Display", Georgia, serif;
-  color: var(--cream);
-  font-size: 1.1rem;
-  font-weight: 700;
-  letter-spacing: -0.04em;
-}
-
-.streak-top {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-}
-
-.streak-count {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  color: var(--amber);
-  font-size: 1rem;
-  font-weight: 800;
-}
-
-.streak-flame {
-  font-size: 1rem;
-  line-height: 1;
-}
-
-.day.complete .day-dot {
-  color: #111714;
-  border-color: var(--sage);
-  background: var(--sage);
-}
-
-.day.complete .day-dot::before {
-  content: "✓";
-  font-size: 0.82rem;
-  font-weight: 900;
-}
-    
     .card-title {
       font-family: "Playfair Display", Georgia, serif;
       color: var(--cream);
@@ -386,8 +323,59 @@
       font-weight: 700;
     }
 
+    .mood-selected-state {
+      min-height: 140px;
+      display: grid;
+      justify-items: center;
+      align-content: center;
+      text-align: center;
+      gap: 10px;
+    }
+
+    .mood-selected-kicker {
+      color: var(--muted-soft);
+      font-size: 0.75rem;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .mood-selected-icon {
+      font-size: 2.2rem;
+      line-height: 1;
+    }
+
+    .mood-selected-label {
+      font-family: "Playfair Display", Georgia, serif;
+      color: var(--cream);
+      font-size: 1.1rem;
+      font-weight: 700;
+      letter-spacing: -0.04em;
+    }
+
     .streak-card {
       padding: 24px;
+    }
+
+    .streak-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .streak-count {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--amber);
+      font-size: 1rem;
+      font-weight: 800;
+    }
+
+    .streak-flame {
+      font-size: 1rem;
+      line-height: 1;
     }
 
     .streak-row {
@@ -418,9 +406,15 @@
     }
 
     .day.complete .day-dot {
-      color: var(--bg);
+      color: #111714;
       border-color: var(--sage);
       background: var(--sage);
+    }
+
+    .day.complete .day-dot::before {
+      content: "✓";
+      font-size: 0.82rem;
+      font-weight: 900;
     }
 
     .day.today .day-dot {
@@ -895,33 +889,24 @@
       font-size: 0.78rem;
     }
 
-    .footer-bottom a {
+    .footer-bottom a,
+    .footer-links button,
+    .footer-links a {
       color: var(--muted);
     }
 
     .footer-links {
       display: flex;
       gap: 14px;
+      align-items: center;
     }
 
-    .contact-card-mini {
-      margin-top: 18px;
-      padding: 16px;
-      border: 1px solid var(--line);
-      border-radius: var(--radius-md);
-      background: rgba(255, 255, 255, 0.025);
-    }
-
-    .contact-card-mini h3 {
-      font-family: "Playfair Display", Georgia, serif;
-      font-size: 1.2rem;
-    }
-
-    .contact-card-mini p,
-    .contact-card-mini a {
-      margin-top: 6px;
+    .footer-link-button {
+      padding: 0;
+      border: 0;
+      background: transparent;
+      cursor: pointer;
       color: var(--muted);
-      font-size: 0.9rem;
     }
 
     .bottom-nav {
@@ -970,7 +955,8 @@
       background: rgba(168, 197, 160, 0.08);
     }
 
-    .onboarding {
+    .onboarding,
+    .contact-modal {
       position: fixed;
       inset: 0;
       z-index: 100;
@@ -985,27 +971,37 @@
       transition: opacity 220ms ease;
     }
 
-    .onboarding.active {
+    .onboarding.active,
+    .contact-modal.active {
       opacity: 1;
       pointer-events: auto;
     }
 
-    .onboarding-card {
+    .onboarding-card,
+    .contact-card-modal {
       position: relative;
       width: min(360px, 100%);
+      border: 1px solid rgba(168, 197, 160, 0.24);
+      border-radius: 18px;
+      background: rgba(25, 35, 29, 0.98);
+      box-shadow: 0 30px 90px rgba(0, 0, 0, 0.48);
+    }
+
+    .onboarding-card {
       min-height: 342px;
       display: grid;
       align-content: center;
       justify-items: center;
       padding: 38px 22px 28px;
-      border: 1px solid rgba(168, 197, 160, 0.24);
-      border-radius: 10px;
-      background: rgba(25, 35, 29, 0.98);
-      box-shadow: 0 30px 90px rgba(0, 0, 0, 0.48);
       text-align: center;
     }
 
-    .onboarding-close {
+    .contact-card-modal {
+      padding: 24px 18px 18px;
+    }
+
+    .onboarding-close,
+    .contact-close {
       position: absolute;
       top: 16px;
       right: 16px;
@@ -1042,7 +1038,8 @@
       font-size: 2.2rem;
     }
 
-    .onboarding-title {
+    .onboarding-title,
+    .contact-title {
       margin-top: 18px;
       font-family: "Playfair Display", Georgia, serif;
       font-size: 1.55rem;
@@ -1050,12 +1047,22 @@
       letter-spacing: -0.045em;
     }
 
-    .onboarding-copy {
+    .contact-title {
+      margin-top: 0;
+      color: var(--cream);
+    }
+
+    .onboarding-copy,
+    .contact-copy {
       max-width: 282px;
       margin-top: 14px;
       color: var(--muted);
       font-size: 0.95rem;
       line-height: 1.6;
+    }
+
+    .contact-copy {
+      max-width: none;
     }
 
     .onboarding-actions {
@@ -1071,6 +1078,24 @@
       color: var(--muted-soft);
       cursor: pointer;
       font-size: 0.84rem;
+    }
+
+    .contact-form {
+      display: grid;
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .contact-form input,
+    .contact-form textarea {
+      width: 100%;
+    }
+
+    .contact-note {
+      margin-top: 12px;
+      color: var(--muted-soft);
+      font-size: 0.8rem;
+      line-height: 1.45;
     }
 
     @media (min-width: 760px) {
@@ -1133,66 +1158,66 @@
         </div>
 
         <section class="card mood-card" aria-labelledby="mood-title">
-  <div id="moodPromptState">
-    <h2 class="card-title" id="mood-title">How’s your inner weather?</h2>
-    <p class="card-copy">Tap to check in for today.</p>
+          <div id="moodPromptState">
+            <h2 class="card-title" id="mood-title">How’s your inner weather?</h2>
+            <p class="card-copy">Tap to check in for today.</p>
 
-    <div class="mood-grid" id="moodGrid">
-      <button class="mood-button" type="button" data-mood="Heavy" data-emoji="🪨">
-        <span class="mood-emoji">🪨</span>
-        <span class="mood-label">Heavy</span>
-      </button>
-      <button class="mood-button" type="button" data-mood="Numb" data-emoji="◻️">
-        <span class="mood-emoji">◻️</span>
-        <span class="mood-label">Numb</span>
-      </button>
-      <button class="mood-button" type="button" data-mood="Wired" data-emoji="⚡">
-        <span class="mood-emoji">⚡</span>
-        <span class="mood-label">Wired</span>
-      </button>
-      <button class="mood-button" type="button" data-mood="Calm" data-emoji="🌿">
-        <span class="mood-emoji">🌿</span>
-        <span class="mood-label">Calm</span>
-      </button>
-      <button class="mood-button" type="button" data-mood="Charged" data-emoji="🔥">
-        <span class="mood-emoji">🔥</span>
-        <span class="mood-label">Charged</span>
-      </button>
-      <button class="mood-button" type="button" data-mood="Clear" data-emoji="✨">
-        <span class="mood-emoji">✨</span>
-        <span class="mood-label">Clear</span>
-      </button>
-    </div>
-  </div>
+            <div class="mood-grid" id="moodGrid">
+              <button class="mood-button" type="button" data-mood="Heavy" data-emoji="🪨">
+                <span class="mood-emoji">🪨</span>
+                <span class="mood-label">Heavy</span>
+              </button>
+              <button class="mood-button" type="button" data-mood="Numb" data-emoji="◻️">
+                <span class="mood-emoji">◻️</span>
+                <span class="mood-label">Numb</span>
+              </button>
+              <button class="mood-button" type="button" data-mood="Wired" data-emoji="⚡">
+                <span class="mood-emoji">⚡</span>
+                <span class="mood-label">Wired</span>
+              </button>
+              <button class="mood-button" type="button" data-mood="Calm" data-emoji="🌿">
+                <span class="mood-emoji">🌿</span>
+                <span class="mood-label">Calm</span>
+              </button>
+              <button class="mood-button" type="button" data-mood="Charged" data-emoji="🔥">
+                <span class="mood-emoji">🔥</span>
+                <span class="mood-label">Charged</span>
+              </button>
+              <button class="mood-button" type="button" data-mood="Clear" data-emoji="✨">
+                <span class="mood-emoji">✨</span>
+                <span class="mood-label">Clear</span>
+              </button>
+            </div>
+          </div>
 
-  <div id="moodSelectedState" class="mood-selected-state" hidden>
-    <span class="mood-selected-kicker">Today’s check-in</span>
-    <div class="mood-selected-icon" id="selectedMoodEmoji">🪨</div>
-    <div class="mood-selected-label" id="selectedMoodLabel">Heavy</div>
-  </div>
-</section>
+          <div id="moodSelectedState" class="mood-selected-state" hidden>
+            <span class="mood-selected-kicker">Today’s check-in</span>
+            <div class="mood-selected-icon" id="selectedMoodEmoji">🪨</div>
+            <div class="mood-selected-label" id="selectedMoodLabel">Heavy</div>
+          </div>
+        </section>
 
         <section class="card streak-card" aria-labelledby="streak-title">
-  <div class="streak-top">
-    <h2 class="card-title" id="streak-title">Weekly streak</h2>
-    <div class="streak-count" id="streakCount">
-      <span class="streak-flame">🔥</span>
-      <span id="streakCountNumber">0</span>
-    </div>
-  </div>
+          <div class="streak-top">
+            <h2 class="card-title" id="streak-title">Weekly streak</h2>
+            <div class="streak-count" id="streakCount">
+              <span class="streak-flame">🔥</span>
+              <span id="streakCountNumber">0</span>
+            </div>
+          </div>
 
-  <div class="streak-row" id="weeklyStreak">
-    <div class="day"><span>M</span><span class="day-dot">·</span></div>
-    <div class="day"><span>T</span><span class="day-dot">·</span></div>
-    <div class="day"><span>W</span><span class="day-dot">·</span></div>
-    <div class="day"><span>T</span><span class="day-dot">·</span></div>
-    <div class="day"><span>F</span><span class="day-dot">·</span></div>
-    <div class="day"><span>S</span><span class="day-dot">·</span></div>
-    <div class="day today"><span>S</span><span class="day-dot">·</span></div>
-  </div>
+          <div class="streak-row" id="weeklyStreak">
+            <div class="day"><span>M</span><span class="day-dot">·</span></div>
+            <div class="day"><span>T</span><span class="day-dot">·</span></div>
+            <div class="day"><span>W</span><span class="day-dot">·</span></div>
+            <div class="day"><span>T</span><span class="day-dot">·</span></div>
+            <div class="day"><span>F</span><span class="day-dot">·</span></div>
+            <div class="day"><span>S</span><span class="day-dot">·</span></div>
+            <div class="day today"><span>S</span><span class="day-dot">·</span></div>
+          </div>
 
-  <p class="streak-message" id="streakMessage">Day one. Everything starts here.</p>
-</section>
+          <p class="streak-message" id="streakMessage">Day one. Everything starts here.</p>
+        </section>
 
         <section class="section-block">
           <div class="section-heading">
@@ -1229,12 +1254,6 @@
           </div>
         </section>
 
-        <section class="contact-card-mini" id="contact">
-          <h3>Contact RootedByte</h3>
-          <p>Have feedback, collaboration ideas, or a future improvement in mind?</p>
-          <a href="mailto:rootedbyte@outlook.com">rootedbyte@outlook.com</a>
-        </section>
-
         <footer class="app-footer">
           <div class="footer-brand">
             <a class="brand" href="#home" data-nav="home" aria-label="RootedByte home">
@@ -1264,7 +1283,7 @@
           <div class="footer-bottom">
             <p>© 2026 RootedByte</p>
             <div class="footer-links">
-              <a href="mailto:rootedbyte@outlook.com">Contact</a>
+              <button class="footer-link-button" type="button" id="openContactModal">Contact</button>
               <a href="privacy.html">Privacy</a>
             </div>
           </div>
@@ -1559,6 +1578,28 @@
     </section>
   </div>
 
+  <div class="contact-modal" id="contactModal" aria-hidden="true">
+    <section class="contact-card-modal" role="dialog" aria-modal="true" aria-labelledby="contactModalTitle">
+      <button class="contact-close" type="button" id="closeContactModal" aria-label="Close contact form">×</button>
+
+      <h2 class="contact-title" id="contactModalTitle">Contact RootedByte</h2>
+      <p class="contact-copy">
+        Send a message and keep the direct email visible here too.
+      </p>
+
+      <form class="contact-form" id="contactForm">
+        <input type="text" id="contactName" placeholder="Your name" />
+        <input type="email" id="contactEmail" placeholder="Your email" />
+        <textarea id="contactMessage" placeholder="Your message"></textarea>
+        <button class="primary-button" type="submit">Send message</button>
+      </form>
+
+      <p class="contact-note">
+        Direct email: <a href="mailto:rootedbyte@outlook.com">rootedbyte@outlook.com</a>
+      </p>
+    </section>
+  </div>
+
   <script>
     const $ = (selector) => document.querySelector(selector);
     const $$ = (selector) => Array.from(document.querySelectorAll(selector));
@@ -1702,54 +1743,78 @@
     }
 
     function updateMoodUI() {
+      const promptState = $("#moodPromptState");
+      const selectedState = $("#moodSelectedState");
+      const selectedMoodLabel = $("#selectedMoodLabel");
+      const selectedMoodEmoji = $("#selectedMoodEmoji");
+
+      const moodMap = {
+        Heavy: "🪨",
+        Numb: "◻️",
+        Wired: "⚡",
+        Calm: "🌿",
+        Charged: "🔥",
+        Clear: "✨"
+      };
+
       $$(".mood-button").forEach((button) => {
         button.classList.toggle("active", button.dataset.mood === state.mood);
       });
+
+      if (state.mood) {
+        promptState.hidden = true;
+        selectedState.hidden = false;
+        selectedMoodLabel.textContent = state.mood;
+        selectedMoodEmoji.textContent = moodMap[state.mood] || "✨";
+      } else {
+        promptState.hidden = false;
+        selectedState.hidden = true;
+      }
     }
 
-   function updateStreakUI() {
-  const today = todayKey();
+    function updateStreakUI() {
+      const today = todayKey();
 
-  if (!Array.isArray(state.streak)) state.streak = [];
+      if (!Array.isArray(state.streak)) state.streak = [];
 
-  const days = $$("#weeklyStreak .day");
-  const currentDay = new Date().getDay();
-  const mondayBasedToday = currentDay === 0 ? 6 : currentDay - 1;
+      const days = $$("#weeklyStreak .day");
+      const currentDay = new Date().getDay();
+      const mondayBasedToday = currentDay === 0 ? 6 : currentDay - 1;
 
-  days.forEach((day, index) => {
-    day.classList.toggle("today", index === mondayBasedToday);
-    day.classList.toggle("complete", index <= mondayBasedToday && state.streak.includes(today));
-  });
+      days.forEach((day, index) => {
+        day.classList.toggle("today", index === mondayBasedToday);
+        day.classList.toggle("complete", index <= mondayBasedToday && state.streak.includes(today));
+      });
 
-  const count = state.streak.length;
+      const count = state.streak.length;
 
-  const streakCountNumber = $("#streakCountNumber");
-  if (streakCountNumber) {
-    streakCountNumber.textContent = count;
-  }
+      const streakCountNumber = $("#streakCountNumber");
+      if (streakCountNumber) {
+        streakCountNumber.textContent = count;
+      }
 
-  $("#streakMessage").textContent = count
-    ? `Day ${count}. Everything starts here.`
-    : "Day one. Everything starts here.";
+      $("#streakMessage").textContent = count
+        ? `Day ${count}. Everything starts here.`
+        : "Day one. Everything starts here.";
 
-  $("#currentStreakStat").textContent = `${count}d`;
-}
-
-$$(".mood-button").forEach((button) => {
-  button.addEventListener("click", () => {
-    state.mood = button.dataset.mood;
-
-    const today = todayKey();
-    if (!state.streak.includes(today)) {
-      state.streak.push(today);
+      $("#currentStreakStat").textContent = `${count}d`;
     }
 
-    saveState();
-    updateMoodUI();
-    updateStreakUI();
-  });
-});
-    
+    $$(".mood-button").forEach((button) => {
+      button.addEventListener("click", () => {
+        state.mood = button.dataset.mood;
+
+        const today = todayKey();
+        if (!state.streak.includes(today)) {
+          state.streak.push(today);
+        }
+
+        saveState();
+        updateMoodUI();
+        updateStreakUI();
+      });
+    });
+
     function showTool(tool) {
       setScreen("tool-detail");
 
@@ -1884,6 +1949,54 @@ $$(".mood-button").forEach((button) => {
       }).join("");
 
       updateStreakUI();
+    }
+
+    const contactModal = $("#contactModal");
+    const openContactModal = $("#openContactModal");
+    const closeContactModal = $("#closeContactModal");
+    const contactForm = $("#contactForm");
+
+    function showContactModal() {
+      contactModal.classList.add("active");
+      contactModal.setAttribute("aria-hidden", "false");
+    }
+
+    function hideContactModal() {
+      contactModal.classList.remove("active");
+      contactModal.setAttribute("aria-hidden", "true");
+    }
+
+    if (openContactModal) {
+      openContactModal.addEventListener("click", showContactModal);
+    }
+
+    if (closeContactModal) {
+      closeContactModal.addEventListener("click", hideContactModal);
+    }
+
+    if (contactModal) {
+      contactModal.addEventListener("click", (event) => {
+        if (event.target === contactModal) {
+          hideContactModal();
+        }
+      });
+    }
+
+    if (contactForm) {
+      contactForm.addEventListener("submit", (event) => {
+        event.preventDefault();
+
+        const name = $("#contactName").value.trim();
+        const email = $("#contactEmail").value.trim();
+        const message = $("#contactMessage").value.trim();
+
+        const subject = encodeURIComponent("RootedByte Contact Form");
+        const body = encodeURIComponent(
+          `Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`
+        );
+
+        window.location.href = `mailto:rootedbyte@outlook.com?subject=${subject}&body=${body}`;
+      });
     }
 
     function escapeHtml(value) {
