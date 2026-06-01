@@ -6,38 +6,39 @@
 
   <meta
     name="description"
-    content="Socials & News helps you pause before reacting to public posts, threads, reels, headlines, and online stories by reflecting through Scripture."
+    content="Signal helps you pause before reacting to posts, reels, headlines, threads, and news by checking what they are doing to your thinking."
   />
 
-  <title>Socials & News | RootedByte</title>
+  <title>Signal | RootedByte</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&display=swap"
+    rel="stylesheet"
+  >
 
   <style>
     :root {
-      --news-bg: #fafafa;
-      --news-bg-soft: #ffffff;
-      --news-card: #ffffff;
-      --news-card-strong: #ffffff;
-
-      --news-ink: #121212;
-      --news-muted: #6f6f6f;
-
-      --news-rust: #c7663d;
-      --news-rust-dark: #934428;
-      --news-rust-light: #e08a5d;
-
-      --news-danger: #a64032;
-      --news-line: #e8e3da;
-      --news-shadow: 0 16px 38px rgba(0, 0, 0, 0.07);
-
-      --ig-yellow: #feda75;
-      --ig-orange: #fa7e1e;
-      --ig-pink: #d62976;
-      --ig-purple: #962fbf;
-      --ig-blue: #4f5bd5;
-      --ig-teal: #4ecdc4;
-
-      --news-radius: 28px;
-      --max: 1180px;
+      --bg: #111714;
+      --bg-deep: #0b100d;
+      --panel: rgba(24, 32, 27, 0.9);
+      --panel-strong: rgba(27, 37, 31, 0.98);
+      --cream: #f5efe4;
+      --muted: #9fb2a7;
+      --muted-soft: #72857b;
+      --line: rgba(168, 197, 160, 0.16);
+      --line-strong: rgba(232, 201, 122, 0.34);
+      --sage: #a8c5a0;
+      --amber: #e8c97a;
+      --lavender: #b8a8d8;
+      --danger: #d97965;
+      --shadow: 0 24px 70px rgba(0, 0, 0, 0.34);
+      --radius-xl: 28px;
+      --radius-lg: 22px;
+      --radius-md: 16px;
+      --phone: 420px;
+      --bottom-nav-height: 76px;
     }
 
     * {
@@ -46,19 +47,20 @@
 
     html {
       scroll-behavior: smooth;
-      scroll-padding-top: 110px;
+      background: var(--bg-deep);
     }
 
     body {
       margin: 0;
       min-height: 100vh;
-      color: var(--news-ink);
-      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Inter", "Segoe UI", sans-serif;
+      color: var(--cream);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       background:
-        radial-gradient(circle at 10% 0%, rgba(214, 41, 118, 0.05), transparent 22rem),
-        radial-gradient(circle at 90% 8%, rgba(254, 218, 117, 0.13), transparent 24rem),
-        linear-gradient(180deg, #fafafa 0%, #f7f4ef 100%);
-      line-height: 1.6;
+        radial-gradient(circle at 12% 8%, rgba(168, 197, 160, 0.06), transparent 18rem),
+        radial-gradient(circle at 88% 20%, rgba(232, 201, 122, 0.08), transparent 18rem),
+        radial-gradient(circle at 50% 100%, rgba(184, 168, 216, 0.05), transparent 20rem),
+        var(--bg-deep);
+      line-height: 1.55;
     }
 
     a {
@@ -73,676 +75,306 @@
       font: inherit;
     }
 
-   .site-header {
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  border-bottom: 1px solid #ece7df;
-  background: rgba(255, 255, 255, 0.92);
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
-}
-
-.nav {
-  position: relative;
-  width: min(var(--max), 100%);
-  min-height: 78px;
-  margin: 0 auto;
-  padding: 0 clamp(1rem, 3vw, 2rem);
-  display: grid;
-  grid-template-columns: 1fr auto 1fr;
-  align-items: center;
-  gap: 1rem;
-}
-
-.brand {
-  grid-column: 2;
-  justify-self: center;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.7rem;
-  color: var(--news-ink);
-  font-weight: 950;
-  letter-spacing: -0.045em;
-  white-space: nowrap;
-}
-
-.brand-mark {
-  display: grid;
-  place-items: center;
-  width: 46px;
-  height: 46px;
-  padding: 3px;
-  border: 2px solid transparent;
-  border-radius: 17px;
-  background:
-    linear-gradient(#ffffff, #ffffff) padding-box,
-    linear-gradient(135deg, var(--ig-yellow), var(--ig-orange), var(--ig-pink), var(--ig-purple), var(--ig-blue)) border-box;
-  overflow: hidden;
-  flex: 0 0 auto;
-  box-shadow: 0 10px 24px rgba(214, 41, 118, 0.11);
-}
-
-.brand-mark img {
-  width: 118%;
-  height: 118%;
-  object-fit: cover;
-  object-position: center;
-  display: block;
-  border-radius: 14px;
-}
-
-.nav-toggle {
-  grid-column: 3;
-  justify-self: end;
-  width: 46px;
-  height: 46px;
-  display: inline-grid;
-  place-items: center;
-  gap: 5px;
-  padding: 11px;
-  border: 1px solid var(--news-line);
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.88);
-  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.07);
-  cursor: pointer;
-}
-
-.nav-toggle span {
-  width: 20px;
-  height: 2px;
-  display: block;
-  border-radius: 999px;
-  background: var(--news-ink);
-  transition:
-    transform 180ms ease,
-    opacity 180ms ease;
-}
-
-.nav-toggle.is-open span:nth-child(1) {
-  transform: translateY(7px) rotate(45deg);
-}
-
-.nav-toggle.is-open span:nth-child(2) {
-  opacity: 0;
-}
-
-.nav-toggle.is-open span:nth-child(3) {
-  transform: translateY(-7px) rotate(-45deg);
-}
-
-.nav-scroll-wrap {
-  position: absolute;
-  left: 50%;
-  top: calc(100% + 10px);
-  width: min(430px, calc(100vw - 2rem));
-  transform: translateX(-50%) translateY(-8px);
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
-  z-index: 120;
-  transition:
-    opacity 180ms ease,
-    transform 180ms ease,
-    visibility 180ms ease;
-}
-
-.nav-scroll-wrap.open {
-  opacity: 1;
-  visibility: visible;
-  pointer-events: auto;
-  transform: translateX(-50%) translateY(0);
-}
-
-.nav-links {
-  display: grid;
-  overflow: hidden;
-  border: 1px solid var(--news-line);
-  border-top: 4px solid var(--ig-pink);
-  border-radius: 24px;
-  background: rgba(255, 255, 255, 0.97);
-  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.12);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-}
-
-.nav-links a {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 52px;
-  padding: 0.85rem 1.1rem;
-  color: var(--news-muted);
-  border-bottom: 1px solid var(--news-line);
-  font-size: 0.95rem;
-  font-weight: 900;
-  text-align: center;
-  transition:
-    background 180ms ease,
-    color 180ms ease;
-}
-
-.nav-links a:last-child {
-  border-bottom: 0;
-}
-
-.nav-links a:hover,
-.nav-links a:focus-visible {
-  color: var(--news-ink);
-  background: #f7ece4;
-  outline: none;
-}
-
-.nav-links a.active {
-  color: #ffffff;
-  background: linear-gradient(135deg, var(--ig-orange), var(--ig-pink), var(--ig-purple));
-}
-
-    .newsverse-page {
-      padding: clamp(1.25rem, 3vw, 3rem);
+    button {
+      -webkit-tap-highlight-color: transparent;
     }
 
-    .news-ticker {
-      width: min(1120px, calc(100% - 2rem));
-      min-height: 56px;
-      margin: 0 auto 2rem;
-      padding: 0.5rem;
-      display: grid;
-      grid-template-columns: auto minmax(0, 1fr);
-      align-items: center;
-      gap: 0.85rem;
-      border: 1px solid #ece7df;
-      border-radius: 999px;
-      background: rgba(255, 255, 255, 0.94);
-      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.04);
+    img {
+      display: block;
+      max-width: 100%;
+    }
+
+    [hidden] {
+      display: none !important;
+    }
+
+    .app-shell {
+      width: min(var(--phone), 100%);
+      min-height: 100vh;
+      margin: 0 auto;
       overflow: hidden;
+      background:
+        radial-gradient(circle at 50% -10%, rgba(168, 197, 160, 0.08), transparent 18rem),
+        linear-gradient(180deg, #111714 0%, #0f1512 100%);
+      border-left: 1px solid rgba(168, 197, 160, 0.08);
+      border-right: 1px solid rgba(168, 197, 160, 0.08);
     }
 
-    .news-ticker__label {
-      min-height: 36px;
-      padding: 0 1rem;
+    .app-header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      height: 52px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 16px;
+      background: rgba(17, 23, 20, 0.9);
+      border-bottom: 1px solid rgba(168, 197, 160, 0.1);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+    }
+
+    .brand {
       display: inline-flex;
       align-items: center;
-      justify-content: center;
-      gap: 0.55rem;
-      border-radius: 999px;
-      color: #ffffff;
-      background: linear-gradient(135deg, var(--ig-orange), var(--ig-pink), var(--ig-purple));
-      font-size: 0.78rem;
-      font-weight: 950;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      white-space: nowrap;
-      box-shadow: 0 10px 24px rgba(214, 41, 118, 0.18);
+      gap: 9px;
+      min-width: 0;
     }
 
-    .news-ticker__label::before {
-      content: "";
-      width: 0.55rem;
-      height: 0.55rem;
-      border-radius: 999px;
-      background: #ffffff;
-      box-shadow:
-        0 0 0 4px rgba(255, 255, 255, 0.18),
-        0 0 16px rgba(255, 255, 255, 0.82);
+    .brand-mark {
+      width: 34px;
+      height: 34px;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      border-radius: 12px;
+      background:
+        linear-gradient(var(--bg), var(--bg)) padding-box,
+        linear-gradient(135deg, var(--sage), var(--amber), var(--lavender)) border-box;
+      border: 1px solid transparent;
       flex: 0 0 auto;
     }
 
-    .news-ticker__viewport {
-      overflow: hidden;
-      mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
-      -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
-    }
-
-    .news-ticker__track {
-      width: max-content;
-      display: flex;
-      align-items: center;
-      gap: 1.4rem;
-      color: #262626;
-      font-size: 0.95rem;
-      font-weight: 850;
-      white-space: nowrap;
-      animation: newsTicker 18s ease-in-out infinite alternate;
-    }
-
-    .news-ticker__track span {
-      position: relative;
-    }
-
-    .news-ticker__track span:not(:last-child)::after {
-      content: "•";
-      margin-left: 1.4rem;
-      color: var(--ig-pink);
-    }
-
-    @keyframes newsTicker {
-      from {
-        transform: translateX(0);
-      }
-
-      to {
-        transform: translateX(-50%);
-      }
-    }
-
-    .news-card,
-    .news-shell,
-    .news-form-card,
-    .result-card,
-    .verse-card {
-      border: 1px solid var(--news-line);
-      border-radius: var(--news-radius);
-      background: var(--news-card);
-      box-shadow: var(--news-shadow);
-    }
-
-    .news-hero {
-      width: min(1120px, calc(100% - 2rem));
-      margin: 0 auto 1.5rem;
-      padding: clamp(1.2rem, 3vw, 2rem);
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) minmax(320px, 0.88fr);
-      gap: 1.6rem;
-      align-items: center;
-      min-height: 420px;
-      border-radius: 32px;
-      border: 1px solid #e8e3da;
-      background: #ffffff;
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.06);
-      overflow: hidden;
-    }
-
-    .news-hero__content {
-      position: relative;
-      z-index: 2;
-      max-width: 720px;
-    }
-
-    .eyebrow {
-      margin: 0 0 0.55rem;
-      color: #c65f32;
-      font-size: 0.76rem;
-      font-weight: 900;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-    }
-
-    h1,
-    h2,
-    h3 {
-      margin: 0;
-      color: var(--news-ink);
-      line-height: 1.04;
-      letter-spacing: -0.055em;
-    }
-
-    h1 {
-      max-width: 860px;
-      font-size: clamp(3rem, 8vw, 6.4rem);
-      font-weight: 950;
-      letter-spacing: -0.075em;
-    }
-
-    h2 {
-      font-size: clamp(1.85rem, 4.5vw, 3.45rem);
-      font-weight: 950;
-      letter-spacing: -0.07em;
-    }
-
-    h3 {
-      font-size: clamp(1.25rem, 2.7vw, 2rem);
-      font-weight: 920;
-    }
-
-    .hero-title {
-      color: #121212;
-      text-shadow: none;
-    }
-
-    .lead,
-    .news-copy p,
-    .hint,
-    .result-card p,
-    .verse-card p {
-      color: var(--news-muted);
-      line-height: 1.7;
-    }
-
-    .lead {
-      max-width: 760px;
-      margin: 1.25rem 0 0;
-      font-size: clamp(1.04rem, 2vw, 1.25rem);
-    }
-
-    .hero-lead {
-      max-width: 620px;
-      color: #4f4f4f;
-      font-weight: 500;
-      text-shadow: none;
-    }
-
-    .story-row {
-      display: flex;
-      gap: 0.8rem;
-      flex-wrap: wrap;
-      margin-top: 1.35rem;
-      margin-bottom: 1.25rem;
-    }
-
-    .story-chip {
-      width: 72px;
-      height: 72px;
-      padding: 3px;
-      border-radius: 999px;
-      background:
-        linear-gradient(#ffffff, #ffffff) padding-box,
-        linear-gradient(135deg, var(--ig-yellow), var(--ig-orange), var(--ig-pink), var(--ig-purple), var(--ig-blue)) border-box;
-      border: 2px solid transparent;
-      display: grid;
-      place-items: center;
-      box-shadow: 0 10px 24px rgba(214, 41, 118, 0.12);
-    }
-
-    .story-chip span {
-      width: 100%;
-      height: 100%;
-      border-radius: 999px;
-      display: grid;
-      place-items: center;
-      background: #ffffff;
-      color: #1f1f1f;
-      font-size: 0.82rem;
-      font-weight: 850;
-    }
-
-    .hero-actions {
-      display: flex;
-      gap: 0.85rem;
-      flex-wrap: wrap;
-      margin-top: 0.5rem;
-    }
-
-    .ig-heart-cta {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      text-decoration: none;
-    }
-
-    .ig-heart-badge {
-      width: 62px;
-      height: 62px;
-      border-radius: 50%;
-      display: grid;
-      place-items: center;
-      color: #ffffff;
-      font-size: 1.5rem;
-      line-height: 1;
-      background:
-        radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.35), transparent 24%),
-        linear-gradient(135deg, var(--ig-yellow), var(--ig-orange), var(--ig-pink), var(--ig-purple), var(--ig-blue));
-      box-shadow:
-        0 12px 26px rgba(214, 41, 118, 0.26),
-        0 0 22px rgba(150, 47, 191, 0.18);
-      transition: transform 180ms ease, box-shadow 180ms ease;
-    }
-
-    .ig-heart-cta:hover .ig-heart-badge,
-    .ig-heart-cta:focus-visible .ig-heart-badge {
-      transform: scale(1.08);
-      box-shadow:
-        0 16px 34px rgba(214, 41, 118, 0.34),
-        0 0 30px rgba(150, 47, 191, 0.24);
-    }
-
-    .hero-editorial-card {
-      position: relative;
-      min-height: 320px;
-      overflow: hidden;
-      border-radius: 28px;
-      background: #ffffff;
-      border: 1px solid #e7e2da;
-      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.08);
-    }
-
-    .hero-editorial-image {
-      width: 100%;
-      height: 100%;
-      min-height: 320px;
+    .brand-mark img {
+      width: 118%;
+      height: 118%;
       object-fit: cover;
       object-position: center;
-      display: block;
-      filter: saturate(0.95) contrast(1.06);
+      border-radius: 10px;
     }
 
-    .floating-card {
-      position: absolute;
-      left: 1rem;
-      right: 1rem;
-      bottom: 1rem;
-      padding: 1rem;
-      border-radius: 20px;
-      color: #121212;
-      background: rgba(255, 255, 255, 0.92);
-      border: 1px solid #ebe6df;
-      backdrop-filter: blur(14px);
-      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08);
-    }
-
-    .floating-card strong {
-      display: block;
+    .brand-name {
+      font-family: "Playfair Display", Georgia, serif;
       font-size: 1rem;
-      line-height: 1.2;
+      font-weight: 700;
+      letter-spacing: -0.04em;
+      color: var(--cream);
+      white-space: nowrap;
     }
 
-    .floating-card span {
-      display: block;
-      margin-top: 0.35rem;
-      color: #6a6a6a;
+    .profile-button {
+      width: 34px;
+      height: 34px;
+      display: grid;
+      place-items: center;
+      border: 1px solid rgba(168, 197, 160, 0.1);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--muted);
+    }
+
+    .page {
+      min-height: calc(100vh - 52px);
+      padding: 18px 10px calc(var(--bottom-nav-height) + 26px);
+    }
+
+    .tool-topbar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 18px;
+      color: var(--muted);
       font-size: 0.92rem;
     }
 
-    .section {
-      width: min(1120px, calc(100% - 2rem));
-      margin: 0 auto;
+    .tool-topbar a {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--muted);
     }
 
-    .news-shell {
-      width: min(1120px, calc(100% - 2rem));
-      margin: 1.5rem auto 0;
-      padding: clamp(1.5rem, 4vw, 3rem);
-      background: #ffffff;
+    .screen-block {
+      border-top: 1px solid rgba(168, 197, 160, 0.08);
+      padding-top: 18px;
     }
 
-    .app-top {
+    .hero-copy {
+      padding: 8px 6px 18px;
+    }
+
+    .hero-copy h1,
+    .result-card h2,
+    .share-panel h3 {
+      font-family: "Playfair Display", Georgia, serif;
+      color: var(--cream);
+      letter-spacing: -0.06em;
+      line-height: 0.98;
+      margin: 0;
+    }
+
+    .hero-copy h1 {
+      font-size: 2.5rem;
+    }
+
+    .hero-copy p {
+      margin: 8px 0 0;
+      color: var(--muted);
+      font-size: 0.98rem;
+      line-height: 1.55;
+      max-width: 330px;
+    }
+
+    .card {
+      border: 1px solid var(--line);
+      border-radius: var(--radius-xl);
+      background:
+        linear-gradient(180deg, rgba(25, 35, 29, 0.92), rgba(20, 28, 24, 0.9));
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+    }
+
+    .signal-card {
+      padding: 18px;
+    }
+
+    .form-card {
+      padding: 16px;
+      border: 1px solid rgba(168, 197, 160, 0.14);
+      border-radius: var(--radius-lg);
+      background: rgba(255, 255, 255, 0.03);
+    }
+
+    .field {
       display: grid;
-      grid-template-columns: minmax(0, 0.95fr) minmax(300px, 0.8fr);
-      gap: clamp(2rem, 5vw, 4rem);
-      align-items: start;
+      gap: 8px;
     }
 
-    .prompt-chip-row {
+    .field + .field {
+      margin-top: 18px;
+    }
+
+    .field label {
+      color: var(--cream);
+      font-size: 0.94rem;
+      font-weight: 800;
+    }
+
+    .kind-row {
       display: flex;
       flex-wrap: wrap;
-      gap: 0.55rem;
-      margin-top: 1.1rem;
+      gap: 8px;
     }
 
-    .prompt-chip {
-      display: inline-flex;
-      align-items: center;
+    .kind-button {
       min-height: 34px;
-      padding: 0 0.8rem;
+      padding: 0 14px;
+      border: 1px solid rgba(168, 197, 160, 0.16);
       border-radius: 999px;
-      color: #934428;
-      background: #f7ece4;
-      border: 1px solid #efd9ca;
-      font-size: 0.84rem;
-      font-weight: 900;
-    }
-
-    .news-form-card {
-      position: relative;
-      padding: clamp(1.25rem, 3vw, 2rem);
-      border-radius: 28px;
-      background: #fbfbfb;
-      border: 1px solid #e9e4dc;
-      box-shadow: 0 14px 32px rgba(0, 0, 0, 0.05);
-    }
-
-    .news-form-card::before {
-      content: "Post + headline check";
-      display: inline-flex;
-      margin-bottom: 1rem;
-      padding: 0.42rem 0.75rem;
-      border-radius: 999px;
-      color: #c65f32;
-      background: #f7ece4;
-      font-size: 0.72rem;
-      font-weight: 900;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-    }
-
-    .news-form-card label {
-      display: block;
-      margin-bottom: 0.45rem;
-      color: #151515;
-      font-size: 1rem;
-      font-weight: 950;
-    }
-
-    .news-form-card input {
-      width: 100%;
-      min-height: 56px;
-      border-radius: 18px;
-      padding: 0 1rem;
-      color: #151515;
-      background: #ffffff;
-      border: 1px solid #e4dfd7;
-      box-shadow: none;
-      outline: none;
-    }
-
-    .news-form-card input:focus {
-      border-color: rgba(214, 41, 118, 0.42);
-      box-shadow: 0 0 0 4px rgba(214, 41, 118, 0.08);
-    }
-
-    .news-form-card .hint {
-      margin-top: 0.75rem;
-      color: var(--news-muted);
-      font-size: 0.95rem;
-    }
-
-    .primary-action,
-    .secondary-action {
-      min-height: 50px;
-      border-radius: 999px;
-      padding: 0 1.25rem;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.55rem;
-      font-weight: 900;
-      font-size: 0.95rem;
-      text-decoration: none;
+      background: transparent;
+      color: var(--muted);
+      font-size: 0.82rem;
       cursor: pointer;
-      transition:
-        transform 180ms ease,
-        box-shadow 180ms ease,
-        background 180ms ease,
-        border-color 180ms ease;
+      transition: border-color 180ms ease, background 180ms ease, color 180ms ease;
     }
 
-    .primary-action {
-      color: #ffffff;
-      border: 0;
-      background: linear-gradient(135deg, var(--ig-orange), var(--ig-pink), var(--ig-purple));
-      box-shadow:
-        0 14px 30px rgba(214, 41, 118, 0.2),
-        inset 0 1px 0 rgba(255, 255, 255, 0.24);
-    }
-
-    .secondary-action {
-      color: #121212;
-      border: 1px solid #e4dfd7;
-      background: #ffffff;
-    }
-
-    .primary-action:hover,
-    .primary-action:focus-visible,
-    .secondary-action:hover,
-    .secondary-action:focus-visible {
-      transform: translateY(-2px);
+    .kind-button:hover,
+    .kind-button:focus-visible {
+      border-color: rgba(232, 201, 122, 0.42);
       outline: none;
     }
 
-    .rainbow-action {
-      position: relative;
-      isolation: isolate;
-      border: 2px solid transparent;
-      background:
-        linear-gradient(#ffffff, #ffffff) padding-box,
-        linear-gradient(135deg, var(--ig-yellow), var(--ig-orange), var(--ig-pink), var(--ig-purple), var(--ig-blue), var(--ig-teal)) border-box;
-      color: #151515;
-      box-shadow:
-        0 14px 34px rgba(214, 41, 118, 0.12),
-        0 0 24px rgba(150, 47, 191, 0.11);
+    .kind-button.active {
+      color: #111714;
+      background: var(--amber);
+      border-color: var(--amber);
     }
 
-    .rainbow-action:hover,
-    .rainbow-action:focus-visible {
-      box-shadow:
-        0 18px 42px rgba(214, 41, 118, 0.2),
-        0 0 30px rgba(150, 47, 191, 0.16),
-        0 0 18px rgba(254, 218, 117, 0.18);
+    input,
+    textarea {
+      width: 100%;
+      border: 1px solid rgba(168, 197, 160, 0.2);
+      border-radius: 12px;
+      color: var(--cream);
+      background: rgba(255, 255, 255, 0.04);
+      outline: none;
+      transition: border-color 180ms ease, box-shadow 180ms ease, background 180ms ease;
     }
 
-    .form-heart-button {
-      min-height: 54px;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.65rem;
-      padding-inline: 1.2rem;
-      margin-top: 1rem;
+    input {
+      min-height: 46px;
+      padding: 0 14px;
     }
 
-    .mini-heart {
-      width: 30px;
-      height: 30px;
-      border-radius: 50%;
-      display: grid;
-      place-items: center;
-      color: #ffffff;
-      font-size: 0.95rem;
-      background: linear-gradient(135deg, var(--ig-yellow), var(--ig-orange), var(--ig-pink), var(--ig-purple), var(--ig-blue));
-      box-shadow:
-        0 8px 18px rgba(214, 41, 118, 0.22),
-        0 0 18px rgba(150, 47, 191, 0.14);
+    textarea {
+      min-height: 96px;
+      padding: 13px 14px;
+      resize: vertical;
+    }
+
+    input::placeholder,
+    textarea::placeholder {
+      color: #8ea297;
+    }
+
+    input:focus,
+    textarea:focus {
+      border-color: rgba(232, 201, 122, 0.56);
+      box-shadow: 0 0 0 3px rgba(232, 201, 122, 0.08);
+      background: rgba(255, 255, 255, 0.055);
+    }
+
+    .primary-button,
+    .secondary-button {
+      min-height: 48px;
+      border-radius: 12px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .primary-button {
+      border: 0;
+      color: #111714;
+      background: var(--amber);
+      transition: transform 180ms ease, filter 180ms ease;
+    }
+
+    .secondary-button {
+      border: 1px solid rgba(168, 197, 160, 0.18);
+      color: var(--cream);
+      background: rgba(255, 255, 255, 0.04);
+      transition: transform 180ms ease, filter 180ms ease;
+    }
+
+    .primary-button:hover,
+    .primary-button:focus-visible,
+    .secondary-button:hover,
+    .secondary-button:focus-visible {
+      transform: translateY(-1px);
+      filter: brightness(1.03);
+      outline: none;
+    }
+
+    .ghost-note {
+      margin-top: 10px;
+      color: var(--muted-soft);
+      font-size: 0.82rem;
+      line-height: 1.45;
     }
 
     .status {
       min-height: 24px;
-      margin-top: 0.8rem;
-      color: #405f53;
+      margin-top: 14px;
+      color: var(--sage);
       display: flex;
       align-items: center;
       gap: 10px;
-      font-weight: 850;
+      font-size: 0.9rem;
+      font-weight: 700;
     }
 
     .status.error {
-      color: var(--news-danger);
+      color: var(--danger);
     }
 
     .spinner {
-      width: 18px;
-      height: 18px;
+      width: 16px;
+      height: 16px;
       border-radius: 50%;
-      border: 2px solid rgba(214, 41, 118, 0.18);
-      border-top-color: var(--ig-pink);
+      border: 2px solid rgba(232, 201, 122, 0.18);
+      border-top-color: var(--amber);
       animation: spin 0.8s linear infinite;
       flex: 0 0 auto;
     }
@@ -755,519 +387,505 @@
 
     .results {
       display: grid;
-      gap: 1rem;
-      margin-top: 1.5rem;
+      gap: 14px;
+      margin-top: 18px;
     }
 
     .result-card,
-    .verse-card {
-      padding: 1.25rem;
-      background: var(--news-card-strong);
-      border: 1px solid var(--news-line);
-      border-radius: var(--news-radius);
-      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.04);
+    .verse-card,
+    .share-panel {
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      background: rgba(255, 255, 255, 0.04);
+      overflow: hidden;
     }
 
-    .result-card.highlight,
-    .verse-card.highlight {
-      border-color: rgba(214, 41, 118, 0.2);
+    .result-card,
+    .verse-card,
+    .share-panel {
+      padding: 16px;
+    }
+
+    .result-card h2,
+    .result-card h3,
+    .verse-card h3 {
+      margin: 0;
+      font-family: "Playfair Display", Georgia, serif;
+      color: var(--cream);
+      letter-spacing: -0.04em;
+    }
+
+    .result-card p,
+    .verse-card p,
+    .share-panel p {
+      color: var(--muted);
+      line-height: 1.65;
+    }
+
+    .highlight {
+      border-color: rgba(232, 201, 122, 0.26);
       background:
-        linear-gradient(135deg, rgba(214, 41, 118, 0.06), rgba(255, 255, 255, 0.95));
+        linear-gradient(135deg, rgba(232, 201, 122, 0.08), rgba(255, 255, 255, 0.03));
     }
 
     .tag {
       display: inline-flex;
-      margin-bottom: 0.75rem;
-      color: #c65f32;
-      font-size: 0.78rem;
-      font-weight: 950;
-      letter-spacing: 0.13em;
+      align-items: center;
+      min-height: 30px;
+      padding: 0 12px;
+      border-radius: 999px;
+      color: var(--amber);
+      background: rgba(232, 201, 122, 0.08);
+      border: 1px solid rgba(232, 201, 122, 0.12);
+      font-size: 0.73rem;
+      font-weight: 900;
+      letter-spacing: 0.1em;
       text-transform: uppercase;
-    }
-
-    .verse-grid {
-      display: grid;
-      gap: 1rem;
-    }
-
-    .verse-card blockquote {
-      margin: 0.75rem 0;
-      color: var(--news-ink);
-      font-size: 1.05rem;
-      line-height: 1.7;
+      margin-bottom: 10px;
     }
 
     .progress {
-      height: 10px;
+      height: 8px;
       border-radius: 999px;
       overflow: hidden;
-      background: rgba(23, 32, 29, 0.1);
-      margin: 0.7rem 0;
+      background: rgba(232, 201, 122, 0.1);
+      margin: 10px 0 4px;
     }
 
     .progress span {
       display: block;
       height: 100%;
-      width: var(--width);
-      background: linear-gradient(90deg, var(--ig-yellow), var(--ig-orange), var(--ig-pink), var(--ig-purple), var(--ig-blue));
+      width: var(--width, 0%);
+      background: var(--amber);
+      border-radius: inherit;
     }
 
-    .result-card ol {
-      margin: 0.75rem 0 0;
-      padding-left: 1.25rem;
-      color: var(--news-muted);
+    .verse-grid {
+      display: grid;
+      gap: 12px;
+    }
+
+    .verse-card blockquote {
+      margin: 8px 0;
+      color: var(--cream);
+      line-height: 1.65;
+      font-size: 1rem;
+    }
+
+    .result-card ol,
+    .result-card ul {
+      margin: 10px 0 0;
+      padding-left: 18px;
+      color: var(--muted);
     }
 
     .result-card li + li {
-      margin-top: 0.5rem;
-    }
-
-    .share-panel {
-      margin-top: 1rem;
-      padding: 1.1rem;
-      border: 1px solid var(--news-line);
-      border-radius: 24px;
-      background: #ffffff;
-      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.04);
-    }
-
-    .share-panel p {
-      margin: 0.65rem 0 0;
-      color: var(--news-muted);
+      margin-top: 6px;
     }
 
     .share-panel__actions {
-      display: flex;
-      gap: 0.75rem;
-      flex-wrap: wrap;
-      margin-top: 1rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 14px;
     }
 
     .share-link-box {
       width: 100%;
-      min-height: 46px;
-      margin-top: 0.85rem;
-      padding: 0.75rem 0.9rem;
-      border: 1px solid var(--news-line);
-      border-radius: 16px;
-      color: var(--news-ink);
-      background: rgba(255, 255, 255, 0.78);
+      min-height: 44px;
+      margin-top: 10px;
+      padding: 11px 12px;
+      border: 1px solid rgba(168, 197, 160, 0.16);
+      border-radius: 12px;
+      color: var(--cream);
+      background: rgba(255, 255, 255, 0.03);
       overflow-wrap: anywhere;
-      font-size: 0.92rem;
-      font-weight: 800;
+      font-size: 0.88rem;
+      font-weight: 700;
     }
 
-    .site-footer {
-      padding: 2rem clamp(1rem, 3vw, 2rem) 2.4rem;
-      color: var(--news-muted);
-      text-align: center;
+    .footer-card {
+      margin-top: 22px;
+      padding-top: 22px;
+      border-top: 1px solid rgba(168, 197, 160, 0.1);
     }
 
-    .footer-shell {
-      width: min(var(--max), 100%);
-      margin: 0 auto;
-      padding-top: 1.25rem;
-      border-top: 1px solid var(--news-line);
+    .footer-brand {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
     }
 
-    @media (prefers-reduced-motion: reduce) {
-      .news-ticker__track {
-        animation: none;
+    .footer-socials {
+      display: flex;
+      gap: 12px;
+      color: var(--muted);
+    }
+
+    .footer-bottom {
+      display: flex;
+      justify-content: space-between;
+      gap: 14px;
+      margin-top: 16px;
+      color: var(--muted-soft);
+      font-size: 0.78rem;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 14px;
+    }
+
+    .bottom-nav {
+      position: fixed;
+      left: 50%;
+      bottom: 0;
+      z-index: 60;
+      width: min(var(--phone), 100%);
+      height: var(--bottom-nav-height);
+      transform: translateX(-50%);
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 4px;
+      padding: 8px 14px 10px;
+      background: rgba(13, 18, 15, 0.94);
+      border-top: 1px solid rgba(168, 197, 160, 0.12);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+    }
+
+    .bottom-nav a {
+      display: grid;
+      place-items: center;
+      gap: 3px;
+      border-radius: 16px;
+      color: var(--muted-soft);
+      font-size: 0.68rem;
+      font-weight: 700;
+    }
+
+    .bottom-nav a svg {
+      width: 21px;
+      height: 21px;
+    }
+
+    .bottom-nav a.active {
+      color: var(--sage);
+    }
+
+    .bottom-nav a.tools-active {
+      box-shadow: inset 0 0 0 2px var(--cream);
+      background: rgba(168, 197, 160, 0.08);
+    }
+
+    @media (min-width: 760px) {
+      body {
+        padding: 18px 0;
       }
 
-      .ig-heart-badge,
-      .primary-action,
-      .secondary-action {
-        transition: none;
+      .app-shell {
+        min-height: calc(100vh - 36px);
+        border-radius: 30px;
+        box-shadow: 0 28px 90px rgba(0, 0, 0, 0.36);
+      }
+
+      .bottom-nav {
+        bottom: 18px;
+        border-radius: 0 0 30px 30px;
       }
     }
 
-    .nav {
-  min-height: 72px;
-  padding: 0 0.85rem;
-}
-
-.brand {
-  font-size: 0.98rem;
-}
-
-.brand-mark {
-  width: 38px;
-  height: 38px;
-  border-radius: 14px;
-}
-
-.nav-toggle {
-  width: 42px;
-  height: 42px;
-}
-    @media (max-width: 900px) {
-
-      .nav {
-  min-height: 72px;
-  padding: 0 0.85rem;
-}
-
-.brand {
-  font-size: 0.98rem;
-}
-
-.brand-mark {
-  width: 38px;
-  height: 38px;
-  border-radius: 14px;
-}
-
-.nav-toggle {
-  width: 42px;
-  height: 42px;
-}
-      .news-ticker {
-        width: 100%;
-        margin-bottom: 2rem;
-      }
-
-      .news-hero,
-      .app-top {
-        grid-template-columns: 1fr;
-      }
-
-      .news-hero {
-        width: 100%;
-        min-height: auto;
-      }
-
-      .hero-editorial-card {
-        min-height: 260px;
-      }
-
-      .hero-editorial-image {
-        min-height: 260px;
-      }
-
-      .section,
-      .news-shell {
-        width: 100%;
-      }
-    }
-
-    @media (max-width: 620px) {
-      .newsverse-page {
-        padding-inline: 0.85rem;
-      }
-
-      .news-hero {
-        border-radius: 26px;
-        padding: 1.25rem;
-      }
-
-      .news-ticker {
-        grid-template-columns: 1fr;
-        border-radius: 24px;
-      }
-
-      .news-ticker__label {
-        width: fit-content;
-      }
-
-      .story-chip {
-        width: 62px;
-        height: 62px;
-      }
-
+    @media (max-width: 380px) {
       .share-panel__actions {
-        display: grid;
         grid-template-columns: 1fr;
-      }
-
-      .primary-action,
-      .secondary-action {
-        width: 100%;
       }
     }
   </style>
 </head>
 
 <body>
-  <header class="site-header">
-  <nav class="nav" aria-label="Primary navigation">
-    <a class="brand" href="index.html" aria-label="RootedByte home">
-      <span class="brand-mark">
-        <img src="images/rootedbyte-icon.png" alt="" />
-      </span>
-      <span>RootedByte</span>
-    </a>
+  <div class="app-shell">
+    <header class="app-header">
+      <a class="brand" href="index.html" aria-label="RootedByte home">
+        <span class="brand-mark">
+          <img src="images/rootedbyte-icon.png" alt="RootedByte logo" />
+        </span>
+        <span class="brand-name">RootedByte</span>
+      </a>
 
-    <button class="nav-toggle" type="button" aria-label="Open navigation" aria-expanded="false">
-      <span></span>
-      <span></span>
-      <span></span>
-    </button>
+      <a class="profile-button" href="signin.html" aria-label="Open account">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" aria-hidden="true">
+          <path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z" stroke="currentColor" stroke-width="1.8"/>
+          <path d="M4.5 20a7.5 7.5 0 0 1 15 0" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+        </svg>
+      </a>
+    </header>
 
-    <div class="nav-scroll-wrap">
-      <div class="nav-links">
-        <a href="index.html">Home</a>
-        <a href="tone.html">Song DiveIn</a>
-        <a href="newsverse.html" class="active">Socials &amp; News</a>
-        <a href="rootedos.html">Rooted OS</a>
-        <a href="signin.html" data-auth-link>Sign In</a>
-      </div>
-    </div>
-  </nav>
-</header>
-
-  <main id="top" class="newsverse-page app-page" data-app="newsverse">
-    <section class="news-ticker" aria-label="Socials and News highlights">
-      <div class="news-ticker__label">Scroll Check + News</div>
-
-      <div class="news-ticker__viewport">
-        <div class="news-ticker__track">
-          <span>Pause before reposting</span>
-          <span>Scripture before the spiral</span>
-          <span>Check the reaction before the reply</span>
-          <span>Wisdom before comments</span>
-          <span>Don’t let the feed disciple you</span>
-
-          <span>Pause before reposting</span>
-          <span>Scripture before the spiral</span>
-          <span>Check the reaction before the reply</span>
-          <span>Wisdom before comments</span>
-          <span>Don’t let the feed disciple you</span>
-        </div>
-      </div>
-    </section>
-
-    <section class="news-hero news-card" aria-labelledby="newsverse-title">
-      <div class="news-hero__content">
-        <p class="eyebrow">Pause before the post</p>
-
-        <h1 id="newsverse-title" class="hero-title">Socials & News</h1>
-
-        <p class="lead hero-lead">
-          Posts, headlines, threads, and trends can pull your heart fast.
-          Socials & News helps you pause, bring what you saw to Scripture,
-          and respond with wisdom before you react, repost, or spiral.
-        </p>
-
-        <div class="story-row" aria-label="Story-style categories">
-          <div class="story-chip"><span>Post</span></div>
-          <div class="story-chip"><span>Reel</span></div>
-          <div class="story-chip"><span>Thread</span></div>
-          <div class="story-chip"><span>News</span></div>
-          <div class="story-chip"><span>Trend</span></div>
-        </div>
-
-        <div class="hero-actions">
-          <a href="#try-it" class="ig-heart-cta" aria-label="Run Truth Check">
-            <span class="ig-heart-badge" aria-hidden="true">♥</span>
-          </a>
-        </div>
+    <main class="page">
+      <div class="tool-topbar">
+        <a href="index.html">
+          <span aria-hidden="true">←</span>
+          <span>Tools</span>
+        </a>
       </div>
 
-      <aside class="hero-editorial-card" aria-label="Social media and news reflection image">
-        <img
-          src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=1200&q=80"
-          alt="People gathered around a phone and social media content"
-          class="hero-editorial-image"
-        />
-
-        <div class="floating-card">
-          <strong>Seen something online?</strong>
-          <span>Paste the public link. Slow the reaction. Check the heart.</span>
+      <section class="screen-block">
+        <div class="hero-copy">
+          <h1>Signal</h1>
+          <p>Don’t let the feed disciple you. Paste what you saw. See what it’s really doing.</p>
         </div>
-      </aside>
-    </section>
 
-    <section class="section" id="try-it">
-      <article class="news-shell" aria-labelledby="news-demo-title">
-        <div class="app-top">
-          <div class="news-copy">
-            <span class="tag">Pause the scroll</span>
-            <h2 id="news-demo-title">Check what you just saw</h2>
-            <p>
-              Paste a public social post, thread, reel link, or news article.
-              Socials & News helps you slow down, notice what the content is stirring,
-              and respond through Scripture instead of impulse.
-            </p>
-
-            <div class="prompt-chip-row" aria-label="Examples of links you can check">
-              <span class="prompt-chip">Public post</span>
-              <span class="prompt-chip">Headline</span>
-              <span class="prompt-chip">Thread</span>
-              <span class="prompt-chip">Reel link</span>
-              <span class="prompt-chip">News story</span>
-            </div>
-          </div>
-
-          <form class="news-form-card" id="newsForm">
+        <article class="card signal-card">
+          <div class="form-card">
             <div class="field">
-              <label for="articleUrl">Paste a public post or news link</label>
+              <label>What kind of content?</label>
+              <div class="kind-row" id="newsTypeButtons">
+                <button class="kind-button active" type="button" data-type="post">Post</button>
+                <button class="kind-button" type="button" data-type="headline">Headline</button>
+                <button class="kind-button" type="button" data-type="thread">Thread</button>
+                <button class="kind-button" type="button" data-type="reel">Reel</button>
+                <button class="kind-button" type="button" data-type="trend">Trend</button>
+                <button class="kind-button" type="button" data-type="news_story">News story</button>
+              </div>
+              <input type="hidden" id="newsType" value="post" />
+            </div>
+
+            <div class="field">
+              <label for="newsArticleUrl">Paste the link</label>
               <input
-                id="articleUrl"
-                name="articleUrl"
+                id="newsArticleUrl"
                 type="url"
-                placeholder="Paste public Facebook, Instagram, Threads, or news link..."
-                required
+                placeholder="https://example.com/article or public post link"
               />
             </div>
 
-            <p class="hint">
-              Works best with public links. If the full page is blocked, Socials & News will still try a headline-based reflection.
-            </p>
+            <div class="field">
+              <label for="newsHeadline">Or paste the headline / post text</label>
+              <textarea
+                id="newsHeadline"
+                placeholder="Paste a public link, headline, or copy the post text here..."
+              ></textarea>
+            </div>
 
-            <button class="primary-action rainbow-action form-heart-button" type="submit">
-              <span class="mini-heart" aria-hidden="true">♥</span>
-              <span>Run Truth Check</span>
+            <button class="primary-button" type="button" id="newsAnalyzeButton">
+              Run truth check
             </button>
 
             <div class="status" id="newsStatus" role="status" aria-live="polite"></div>
-          </form>
-        </div>
+            <p class="ghost-note">
+              Signal will be fully wired to the API in the JS step next.
+            </p>
+          </div>
 
-        <div class="results" id="newsResult" aria-live="polite"></div>
-      </article>
-    </section>
-  </main>
+          <div class="results" id="newsResult" aria-live="polite"></div>
+        </article>
 
-  <footer class="site-footer">
-    <div class="footer-shell">
-      <p>&copy; <span id="year"></span> RootedByte. Built for digital wisdom rooted in truth.</p>
-    </div>
-  </footer>
+        <footer class="footer-card">
+          <div class="footer-brand">
+            <a class="brand" href="index.html" aria-label="RootedByte home">
+              <span class="brand-mark">
+                <img src="images/rootedbyte-icon.png" alt="" />
+              </span>
+              <span class="brand-name">RootedByte</span>
+            </a>
+
+            <div class="footer-socials" aria-label="Social links">
+              <a href="https://www.youtube.com/channel/UCnPBSWzxDD7_r1HmVXhr3cA" target="_blank" rel="noopener" aria-label="RootedByte YouTube">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M22 12s0-4-1-5.3c-.6-.8-1.4-1-2.3-1.1C16.7 5.3 12 5.3 12 5.3s-4.7 0-6.7.3c-.9.1-1.7.3-2.3 1.1C2 8 2 12 2 12s0 4 1 5.3c.6.8 1.4 1 2.3 1.1 2 .3 6.7.3 6.7.3s4.7 0 6.7-.3c.9-.1 1.7-.3 2.3-1.1C22 16 22 12 22 12Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                  <path d="M10 9.5v5l4.5-2.5L10 9.5Z" fill="currentColor"/>
+                </svg>
+              </a>
+
+              <a href="mailto:rootedbyte@outlook.com" aria-label="Email RootedByte">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M4 6h16v12H4V6Z" stroke="currentColor" stroke-width="1.8" />
+                  <path d="m4 7 8 6 8-6" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" />
+                </svg>
+              </a>
+            </div>
+          </div>
+
+          <div class="footer-bottom">
+            <p>© <span id="year"></span> RootedByte</p>
+            <div class="footer-links">
+              <a href="mailto:rootedbyte@outlook.com">Contact</a>
+              <a href="privacy.html">Privacy</a>
+            </div>
+          </div>
+        </footer>
+      </section>
+    </main>
+  </div>
+
+  <nav class="bottom-nav" aria-label="Bottom navigation">
+    <a href="index.html">
+      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="m4 10 8-7 8 7v10H6V11" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+        <path d="M10 20v-6h4v6" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+      </svg>
+      <span>Home</span>
+    </a>
+
+    <a href="index.html#screen-tools" class="active tools-active">
+      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <circle cx="12" cy="12" r="8" stroke="currentColor" stroke-width="1.8"/>
+        <path d="m15 9-2 5-4 1 2-5 4-1Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+      </svg>
+      <span>Tools</span>
+    </a>
+
+    <a href="index.html#screen-journal">
+      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M5 5.5A2.5 2.5 0 0 1 7.5 3H20v16H7.5A2.5 2.5 0 0 0 5 21V5.5Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+        <path d="M5 5.5A2.5 2.5 0 0 0 2.5 3H2v16h.5A2.5 2.5 0 0 1 5 21" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+      </svg>
+      <span>Journal</span>
+    </a>
+
+    <a href="index.html#screen-growth">
+      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M4 16l5-5 4 4 7-8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M16 7h4v4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <span>Growth</span>
+    </a>
+  </nav>
 
   <script>
     const $ = (selector) => document.querySelector(selector);
+    const $$ = (selector) => Array.from(document.querySelectorAll(selector));
 
-const year = $('#year');
-if (year) {
-  year.textContent = new Date().getFullYear();
-}
+    const year = $("#year");
+    if (year) year.textContent = new Date().getFullYear();
 
-const navToggle = document.querySelector('.nav-toggle');
-const navWrap = document.querySelector('.nav-scroll-wrap');
-
-navToggle?.addEventListener('click', () => {
-  const isOpen = navWrap?.classList.toggle('open');
-
-  navToggle.classList.toggle('is-open', Boolean(isOpen));
-  navToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
-});
-
-document.querySelectorAll('.nav-links a').forEach((link) => {
-  link.addEventListener('click', () => {
-    navWrap?.classList.remove('open');
-    navToggle?.classList.remove('is-open');
-    navToggle?.setAttribute('aria-expanded', 'false');
-  });
-});
-
-function escapeHtml(value) {
-      return String(value ?? '')
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#039;');
+    function escapeHtml(value) {
+      return String(value ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
     }
 
-    function setStatus(element, message, type = 'info', loading = false) {
+    function setStatus(element, message, type = "info", loading = false) {
       if (!element) return;
 
-      element.className = type === 'error' ? 'status error' : 'status';
+      element.className = type === "error" ? "status error" : "status";
       element.innerHTML = loading
-        ? `<span class="spinner" aria-hidden="true"></span><span>${escapeHtml(message)}</span>`
+        ? '<span class="spinner" aria-hidden="true"></span><span>' + escapeHtml(message) + "</span>"
         : escapeHtml(message);
     }
 
     async function postJson(url, body) {
       const response = await fetch(url, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body)
       });
 
       const data = await response.json().catch(() => ({}));
 
       if (!response.ok) {
-        throw new Error(data.error || 'Something went wrong. Please try again.');
+        throw new Error(data.error || "Something went wrong. Please try again.");
       }
 
       return data;
     }
 
-    function headlineFromUrl(url) {
-      try {
-        const parsed = new URL(url);
-        const last = parsed.pathname.split('/').filter(Boolean).pop() || parsed.hostname;
+    $$("#newsTypeButtons .kind-button").forEach((button) => {
+      button.addEventListener("click", () => {
+        $$("#newsTypeButtons .kind-button").forEach((item) => item.classList.remove("active"));
+        button.classList.add("active");
+        $("#newsType").value = button.dataset.type || "post";
+      });
+    });
 
-        return decodeURIComponent(last)
-          .replace(/[-_]+/g, ' ')
-          .replace(/\.[a-z0-9]+$/i, '')
-          .trim() || parsed.hostname;
-      } catch {
-        return 'Post or headline from submitted link';
-      }
-    }
-
-    function renderNews(data) {
+    function renderNewsResult(data) {
       const verses = Array.isArray(data.verses) ? data.verses : [];
-      const prayers = Array.isArray(data.prayer_points) ? data.prayer_points : [];
+      const prayerPoints = Array.isArray(data.prayer_points) ? data.prayer_points : [];
+      const publicPath = data.source_mode === "headline_only";
 
       return `
-        <div class="result-card ${data.source_mode === 'headline_only' ? 'highlight' : ''}">
-          <span class="tag">${data.source_mode === 'headline_only' ? 'Link-based reflection' : 'What’s going on?'}</span>
-          <h3>${escapeHtml(data.overall_theme || 'Socials & News reflection')}</h3>
-          <p>${escapeHtml(data.article_summary)}</p>
+        <div class="result-card ${publicPath ? "highlight" : ""}">
+          <span class="tag">${publicPath ? "Headline-based reflection" : "Article summary"}</span>
+          <h2>${escapeHtml(data.overall_theme || "Signal reflection")}</h2>
+          <p>${escapeHtml(data.article_summary || "")}</p>
         </div>
 
-        <div class="verse-grid">
-          ${verses.map((verse) => {
-            const percent = Math.max(0, Math.min(100, Number(verse.relevance_percent) || 0));
-
-            return `<article class="verse-card">
-              <strong>${escapeHtml(verse.reference)} • ${percent}% relevant</strong>
-              <div class="progress" aria-label="${percent}% relevance">
-                <span style="--width:${percent}%"></span>
+        <div class="result-card">
+          <span class="tag">What this is shaping</span>
+          <h3>Thinking impact</h3>
+          <p>${escapeHtml(data.thinking_impact || "")}</p>
+          ${
+            typeof data.emotional_temperature_score === "number"
+              ? `
+              <div class="progress" aria-label="Emotional temperature">
+                <span style="--width:${Math.max(0, Math.min(100, data.emotional_temperature_score))}%"></span>
               </div>
-              <blockquote>${escapeHtml(verse.text)}</blockquote>
-              <p>${escapeHtml(verse.relevance_reason)}</p>
-            </article>`;
-          }).join('')}
+              <p>Emotional temperature: ${Math.round(data.emotional_temperature_score)}/100</p>
+            `
+              : ""
+          }
         </div>
 
         <div class="result-card">
-          <span class="tag">What Scripture helps me notice</span>
-          <p>${escapeHtml(data.exegesis)}</p>
+          <span class="tag">Truth check</span>
+          <h3>Discernment notes</h3>
+          <p>${escapeHtml(data.truth_check || "")}</p>
+          ${data.exegesis ? `<p>${escapeHtml(data.exegesis)}</p>` : ""}
+          ${data.jesus_lens ? `<p><strong>Jesus lens:</strong> ${escapeHtml(data.jesus_lens)}</p>` : ""}
         </div>
 
-        <div class="result-card highlight">
-          <span class="tag">Christ-centered response</span>
-          <p>${escapeHtml(data.jesus_lens)}</p>
-        </div>
+        ${
+          prayerPoints.length
+            ? `
+            <div class="result-card">
+              <span class="tag">Prayer points</span>
+              <ol>
+                ${prayerPoints.map((point) => `<li>${escapeHtml(point)}</li>`).join("")}
+              </ol>
+            </div>
+          `
+            : ""
+        }
 
-        <div class="result-card">
-          <span class="tag">Pray before reacting</span>
-          <ol>${prayers.map((item) => `<li>${escapeHtml(item)}</li>`).join('')}</ol>
-        </div>
+        ${
+          verses.length
+            ? `
+            <div class="verse-grid">
+              ${verses.slice(0, 3).map((verse) => `
+                <article class="verse-card">
+                  <span class="tag">Reflection verse</span>
+                  <blockquote>${escapeHtml(verse.text || "")}</blockquote>
+                  <p><strong>${escapeHtml(verse.reference || "")}</strong></p>
+                  ${verse.application ? `<p>${escapeHtml(verse.application)}</p>` : ""}
+                </article>
+              `).join("")}
+            </div>
+          `
+            : ""
+        }
       `;
     }
 
     function renderSharePanel() {
       return `
         <div class="share-panel">
-          <h3>Save or share this Socials & News check</h3>
+          <h3>Save or share this Signal check</h3>
           <p>
             Save privately to your account, or create a public RootedByte link
             that anyone with the link can view.
           </p>
 
           <div class="share-panel__actions">
-            <button class="primary-action rainbow-action" type="button" id="saveNewsOutput">
-              Save
+            <button class="primary-button" type="button" id="saveNewsOutput">
+              Save privately
             </button>
 
-            <button class="secondary-action rainbow-action" type="button" id="shareNewsOutput">
-              Share
+            <button class="secondary-button" type="button" id="shareNewsOutput">
+              Share publicly
             </button>
           </div>
 
@@ -1279,13 +897,12 @@ function escapeHtml(value) {
     }
 
     async function createSharedOutput({ appType, title, inputSummary, output, statusElement, linkElement }) {
-      statusElement.textContent = 'Creating share link...';
-      statusElement.className = 'status';
+      statusElement.textContent = "Creating share link...";
 
-      const response = await fetch('/api/share', {
-        method: 'POST',
+      const response = await fetch("/api/share", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json'
+          "Content-Type": "application/json"
         },
         body: JSON.stringify({
           appType,
@@ -1298,7 +915,7 @@ function escapeHtml(value) {
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.error || 'Could not create share link.');
+        throw new Error(data.error || "Could not create share link.");
       }
 
       linkElement.hidden = false;
@@ -1306,9 +923,9 @@ function escapeHtml(value) {
 
       try {
         await navigator.clipboard.writeText(data.shareUrl);
-        statusElement.textContent = 'Share link created and copied.';
+        statusElement.textContent = "Share link created and copied.";
       } catch {
-        statusElement.textContent = 'Share link created.';
+        statusElement.textContent = "Share link created.";
       }
 
       if (navigator.share) {
@@ -1319,51 +936,47 @@ function escapeHtml(value) {
             url: data.shareUrl
           });
         } catch {
-          // User cancelled native share. Link is still created.
+          // user cancelled share
         }
       }
 
       return data;
     }
 
-    function attachNewsSaveButton(outputData, inputSummary) {
-      const button = document.querySelector('#saveNewsOutput');
-      const statusElement = document.querySelector('#newsSaveStatus');
+    function attachNewsSaveButton(outputData) {
+      const button = document.querySelector("#saveNewsOutput");
+      const statusElement = document.querySelector("#newsSaveStatus");
 
       if (!button || !statusElement) return;
 
-      button.addEventListener('click', async () => {
+      button.addEventListener("click", async () => {
         button.disabled = true;
-        statusElement.className = 'status';
-        statusElement.textContent = 'Saving privately...';
+        statusElement.className = "status";
+        statusElement.textContent = "Saving privately...";
 
         try {
           if (!window.RootedByteSaveOutput || !window.RootedByteSaveOutput.save) {
-            throw new Error('Private saving is not ready yet. Please refresh and try again.');
+            throw new Error("Private saving is not ready yet. Please refresh and try again.");
           }
 
-          const title = outputData?.overall_theme
-            ? `Socials & News: ${outputData.overall_theme}`
-            : 'Socials & News Check';
-
           const result = await window.RootedByteSaveOutput.save({
-            appType: 'newsverse',
-            title,
-            inputSummary: inputSummary || 'Private Socials & News check',
+            appType: "newsverse",
+            title: "Signal Truth Check",
+            inputSummary: "Private Signal truth check",
             outputJson: outputData
           });
 
           if (!result.ok) {
-            statusElement.className = 'status error';
-            statusElement.textContent = result.message || 'Could not save privately.';
+            statusElement.className = "status error";
+            statusElement.textContent = result.message || "Could not save privately.";
             return;
           }
 
-          statusElement.className = 'status';
-          statusElement.textContent = 'Saved privately to your account.';
+          statusElement.className = "status";
+          statusElement.textContent = "Saved privately to your account.";
         } catch (error) {
-          statusElement.className = 'status error';
-          statusElement.textContent = error.message || 'Could not save privately.';
+          statusElement.className = "status error";
+          statusElement.textContent = error.message || "Could not save privately.";
         } finally {
           button.disabled = false;
         }
@@ -1371,97 +984,63 @@ function escapeHtml(value) {
     }
 
     function attachNewsShareButton(outputData) {
-      const button = document.querySelector('#shareNewsOutput');
-      const statusElement = document.querySelector('#newsShareStatus');
-      const linkElement = document.querySelector('#newsShareLink');
+      const button = document.querySelector("#shareNewsOutput");
+      const statusElement = document.querySelector("#newsShareStatus");
+      const linkElement = document.querySelector("#newsShareLink");
 
       if (!button || !statusElement || !linkElement) return;
 
-      button.addEventListener('click', async () => {
+      button.addEventListener("click", async () => {
         button.disabled = true;
-        statusElement.className = 'status';
-        statusElement.textContent = 'Creating share link...';
 
         try {
           await createSharedOutput({
-            appType: 'newsverse',
-            title: 'Socials & News Check',
-            inputSummary: 'Shared Socials & News check',
+            appType: "newsverse",
+            title: "Signal Truth Check",
+            inputSummary: "Shared Signal truth check",
             output: outputData,
             statusElement,
             linkElement
           });
         } catch (error) {
-          statusElement.className = 'status error';
-          statusElement.textContent = error.message || 'Could not create share link.';
+          statusElement.className = "status error";
+          statusElement.textContent = error.message;
         } finally {
           button.disabled = false;
         }
       });
     }
 
-    const newsForm = $('#newsForm');
+    $("#newsAnalyzeButton").addEventListener("click", async () => {
+      const newsType = $("#newsType").value || "post";
+      const articleUrl = $("#newsArticleUrl").value.trim();
+      const headline = $("#newsHeadline").value.trim();
+      const status = $("#newsStatus");
+      const result = $("#newsResult");
 
-    if (newsForm) {
-      newsForm.addEventListener('submit', async (event) => {
-        event.preventDefault();
+      if (!articleUrl && !headline) {
+        setStatus(status, "Paste a link or some content before running Signal.", "error");
+        return;
+      }
 
-        const url = $('#articleUrl').value.trim();
-        const status = $('#newsStatus');
-        const result = $('#newsResult');
+      result.innerHTML = "";
+      setStatus(status, "Checking the signal...", "info", true);
 
-        result.innerHTML = '';
-        setStatus(status, 'Checking the link...', 'info', true);
+      try {
+        const data = await postJson("/api/newsverse", {
+          newsType,
+          articleUrl,
+          headline
+        });
 
-        try {
-          let article;
-
-          try {
-            article = await postJson('/api/readarticle', { url });
-          } catch (readError) {
-            article = {
-              url,
-              title: headlineFromUrl(url),
-              text: '',
-              extractionBlocked: true,
-              fallbackReason: readError.message
-            };
-          }
-
-          if (article.extractionBlocked) {
-            setStatus(
-              status,
-              'The full page was blocked. Using the best available public link details instead...',
-              'info',
-              true
-            );
-          } else {
-            setStatus(status, 'Running a Socials & News truth check...', 'info', true);
-          }
-
-          const data = await postJson('/api/newsverse', {
-            title: article.title || headlineFromUrl(url),
-            url: article.url || url,
-            text: article.text || '',
-            sourceMode: article.extractionBlocked ? 'headline_only' : 'article_text',
-            fallbackReason: article.fallbackReason || ''
-          });
-
-          result.innerHTML = renderNews(data) + renderSharePanel();
-          attachNewsSaveButton(data, article.title || headlineFromUrl(url));
-          attachNewsShareButton(data);
-
-          setStatus(
-            status,
-            article.extractionBlocked
-              ? 'Link-based Socials & News check ready.'
-              : 'Socials & News check ready.'
-          );
-        } catch (error) {
-          setStatus(status, error.message, 'error');
-        }
-      });
-    }
+        result.innerHTML = renderNewsResult(data) + renderSharePanel();
+        attachNewsSaveButton(data);
+        attachNewsShareButton(data);
+        setStatus(status, "Signal check ready.");
+      } catch (error) {
+        setStatus(status, error.message, "error");
+      }
+    });
   </script>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
