@@ -417,25 +417,30 @@
     }
 
     function setMode(nextMode) {
-      mode = nextMode;
+  mode = nextMode;
 
-      const signingIn = mode === "signin";
+  const signingIn = mode === "signin";
 
-      signInTab.classList.toggle("active", signingIn);
-      signUpTab.classList.toggle("active", !signingIn);
+  signInTab.classList.toggle("active", signingIn);
+  signUpTab.classList.toggle("active", !signingIn);
 
-      authTitle.textContent = signingIn ? "Sign in" : "Create account";
-      authLead.textContent = signingIn
-        ? "Sign in to save your streaks, reflections, shared outputs, and journal entries."
-        : "Create your RootedByte account to keep your progress connected to you.";
+  authTitle.textContent = signingIn ? "Sign in" : "Create account";
+  authLead.textContent = signingIn
+    ? "Sign in to save your streaks, reflections, shared outputs, and journal entries."
+    : "Create your RootedByte account to keep your progress connected to you.";
 
-      authSubmit.textContent = signingIn ? "Sign In" : "Create Account";
-      confirmPasswordGroup.hidden = signingIn;
-      confirmPasswordInput.required = !signingIn;
-      confirmPasswordInput.value = "";
-      passwordInput.autocomplete = signingIn ? "current-password" : "new-password";
-      setStatus("");
-    }
+  authSubmit.textContent = signingIn ? "Sign In" : "Create Account";
+
+  confirmPasswordGroup.hidden = signingIn;
+  confirmPasswordInput.required = !signingIn;
+
+  if (signingIn) {
+    confirmPasswordInput.value = "";
+  }
+
+  passwordInput.autocomplete = signingIn ? "current-password" : "new-password";
+  setStatus("");
+}
 
     signInTab.addEventListener("click", () => setMode("signin"));
     signUpTab.addEventListener("click", () => setMode("signup"));
