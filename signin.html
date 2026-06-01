@@ -397,26 +397,26 @@
     const $ = (selector) => document.querySelector(selector);
 
     const authTitle = $("#authTitle");
-    const authLead = $("#authLead");
-    const signInTab = $("#signInTab");
-    const signUpTab = $("#signUpTab");
-    const authForm = $("#authForm");
-    const authSubmit = $("#authSubmit");
-    const authStatus = $("#authStatus");
-    const emailInput = $("#email");
-    const passwordInput = $("#password");
-    const confirmPasswordGroup = $("#confirmPasswordGroup");
-    const confirmPasswordInput = $("#confirmPassword");
+const authLead = $("#authLead");
+const signInTab = $("#signInTab");
+const signUpTab = $("#signUpTab");
+const authForm = $("#authForm");
+const authSubmit = $("#authSubmit");
+const authStatus = $("#authStatus");
+const emailInput = $("#email");
+const passwordInput = $("#password");
+const confirmPasswordGroup = $("#confirmPasswordGroup");
+const confirmPasswordInput = $("#confirmPassword");
 
-    let mode = "signin";
-    let supabaseClient = null;
+let mode = "signin";
+let supabaseClient = null;
 
-    function setStatus(message, type = "info") {
-      authStatus.className = type === "error" ? "status error" : "status";
-      authStatus.textContent = message || "";
-    }
+function setStatus(message, type = "info") {
+  authStatus.className = type === "error" ? "status error" : "status";
+  authStatus.textContent = message || "";
+}
 
-    function setMode(nextMode) {
+function setMode(nextMode) {
   mode = nextMode;
 
   const signingIn = mode === "signin";
@@ -439,90 +439,65 @@
   }
 
   passwordInput.autocomplete = signingIn ? "current-password" : "new-password";
+
   setStatus("");
 }
 
-    signInTab.addEventListener("click", () => setMode("signin"));
-    signUpTab.addEventListener("click", () => setMode("signup"));
+signInTab.addEventListener("click", () => setMode("signin"));
+signUpTab.addEventListener("click", () => setMode("signup"));
 
-    function getSupabaseConfig() {
-      const SUPABASE_URL =
-        window.SUPABASE_URL ||
-        document.documentElement.dataset.supabaseUrl ||
-        "";
-      const SUPABASE_ANON_KEY =
-        window.SUPABASE_ANON_KEY ||
-        document.documentElement.dataset.supabaseAnonKey ||
-        "";
+authForm.addEventListener("submit", async (event) => {
+  event.preventDefault();
 
-      return { SUPABASE_URL, SUPABASE_ANON_KEY };
+  const email = emailInput.value.trim();
+  const password = passwordInput.value;
+  const confirmPassword = confirmPasswordInput.value;
+
+  if (!email || !password) {
+    setStatus("Enter your email and password.", "error");
+    return;
+  }
+
+  if (mode === "signup" && password !== confirmPassword) {
+    setStatus("Passwords do not match.", "error");
+    return;
+  }
+
+  authSubmit.disabled = true;
+  setStatus(mode === "signin" ? "Signing you in..." : "Creating your account...");
+
+  try {
+    const client = ensureSupabaseClient();
+
+    if (mode === "signin") {
+      const { error } = await client.auth.signInWithPassword({
+        email,
+        password
+      });
+
+      if (error) throw error;
+
+      setStatus("Signed in. Redirecting...");
+      window.location.href = "account.html";
+      return;
     }
 
-    function ensureSupabaseClient() {
-      if (supabaseClient) return supabaseClient;
-
-      const { SUPABASE_URL, SUPABASE_ANON_KEY } = getSupabaseConfig();
-
-      if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
-        throw new Error("Supabase keys are not connected yet.");
-      }
-
-      supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-      return supabaseClient;
-    }
-
-    authForm.addEventListener("submit", async (event) => {
-      event.preventDefault();
-
-      const email = emailInput.value.trim();
-      const password = passwordInput.value;
-      const confirmPassword = confirmPasswordInput.value;
-
-      if (!email || !password) {
-        setStatus("Enter your email and password.", "error");
-        return;
-      }
-
-      if (mode === "signup" && password !== confirmPassword) {
-        setStatus("Passwords do not match.", "error");
-        return;
-      }
-
-      authSubmit.disabled = true;
-      setStatus(mode === "signin" ? "Signing you in..." : "Creating your account...");
-
-      try {
-        const client = ensureSupabaseClient();
-
-        if (mode === "signin") {
-          const { error } = await client.auth.signInWithPassword({
-            email,
-            password
-          });
-
-          if (error) throw error;
-
-          setStatus("Signed in. Redirecting...");
-          window.location.href = "account.html";
-          return;
-        }
-
-        const { error } = await client.auth.signUp({
-          email,
-          password
-        });
-
-        if (error) throw error;
-
-        setStatus("Account created. Check your email if confirmation is enabled.");
-      } catch (error) {
-        setStatus(error.message || "Something went wrong.", "error");
-      } finally {
-        authSubmit.disabled = false;
-      }
+    const { error } = await client.auth.signUp({
+      email,
+      password
     });
 
-    setMode("signin");
+    if (error) throw error;
+
+    setStatus("Account created. Check your email if confirmation is enabled.");
+  } catch (error) {
+    setStatus(error.message || "Something went wrong.", "error");
+  } finally {
+    authSubmit.disabled = false;
+  }
+});
+
+setMode("signin");
   </script>
 </body>
 </html>
