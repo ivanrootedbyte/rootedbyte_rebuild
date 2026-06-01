@@ -6,43 +6,58 @@
 
   <meta
     name="description"
-    content="Sign in or create a RootedByte account to save reflections, shared outputs, and journal entries."
+    content="Sign in or create your RootedByte account to save streaks, reflections, shared outputs, and journal entries."
   />
 
   <title>Sign In | RootedByte</title>
 
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&display=swap"
+    rel="stylesheet"
+  >
+
   <style>
     :root {
-      --bg: #eef3ea;
-      --bg-soft: #fbf8ef;
-      --card: rgba(255, 252, 244, 0.9);
-      --card-strong: rgba(255, 255, 255, 0.96);
-      --text: #17231b;
-      --muted: #647363;
-      --line: rgba(23, 35, 27, 0.12);
-      --forest: #254d35;
-      --forest-dark: #142a1e;
-      --cream: #fbf8ef;
-      --danger: #a64032;
-      --shadow: 0 24px 70px rgba(34, 48, 37, 0.13);
-      --radius: 30px;
-      --max: 980px;
+      --bg: #111714;
+      --bg-deep: #0b100d;
+      --panel: rgba(24, 32, 27, 0.92);
+      --panel-strong: rgba(27, 37, 31, 0.98);
+      --cream: #f5efe4;
+      --muted: #9fb2a7;
+      --muted-soft: #72857b;
+      --line: rgba(168, 197, 160, 0.16);
+      --sage: #a8c5a0;
+      --amber: #e8c97a;
+      --lavender: #b8a8d8;
+      --danger: #d97965;
+      --shadow: 0 24px 70px rgba(0, 0, 0, 0.34);
+      --radius-xl: 28px;
+      --radius-lg: 22px;
+      --radius-md: 16px;
+      --phone: 420px;
     }
 
     * {
       box-sizing: border-box;
     }
 
+    html {
+      background: var(--bg-deep);
+    }
+
     body {
       margin: 0;
       min-height: 100vh;
+      color: var(--cream);
       font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      color: var(--text);
       background:
-        radial-gradient(circle at top left, rgba(37, 77, 53, 0.14), transparent 30rem),
-        radial-gradient(circle at 86% 12%, rgba(111, 127, 79, 0.15), transparent 30rem),
-        linear-gradient(180deg, #fbf8ef 0%, #eef3ea 52%, #dfe8d9 100%);
-      line-height: 1.6;
+        radial-gradient(circle at 12% 8%, rgba(168, 197, 160, 0.08), transparent 18rem),
+        radial-gradient(circle at 88% 20%, rgba(232, 201, 122, 0.06), transparent 18rem),
+        radial-gradient(circle at 50% 100%, rgba(184, 168, 216, 0.06), transparent 20rem),
+        var(--bg-deep);
+      line-height: 1.55;
     }
 
     a {
@@ -55,49 +70,50 @@
       font: inherit;
     }
 
-    .site-header {
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      backdrop-filter: blur(18px);
-      background: rgba(251, 248, 239, 0.84);
-      border-bottom: 1px solid var(--line);
+    .app-shell {
+      width: min(var(--phone), 100%);
+      min-height: 100vh;
+      margin: 0 auto;
+      background:
+        radial-gradient(circle at 50% -10%, rgba(168, 197, 160, 0.08), transparent 18rem),
+        linear-gradient(180deg, #111714 0%, #0f1512 100%);
+      border-left: 1px solid rgba(168, 197, 160, 0.08);
+      border-right: 1px solid rgba(168, 197, 160, 0.08);
     }
 
-    .nav {
-      width: min(var(--max), 100%);
-      margin: 0 auto;
-      padding: 16px 22px;
+    .app-header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      height: 52px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 20px;
+      padding: 0 16px;
+      background: rgba(17, 23, 20, 0.9);
+      border-bottom: 1px solid rgba(168, 197, 160, 0.1);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
     }
 
     .brand {
       display: inline-flex;
       align-items: center;
-      gap: 10px;
-      color: var(--text);
-      font-weight: 900;
-      letter-spacing: -0.04em;
-      font-size: 1.15rem;
+      gap: 9px;
     }
 
     .brand-mark {
+      width: 34px;
+      height: 34px;
       display: grid;
       place-items: center;
-      width: 46px;
-      height: 46px;
-      padding: 3px;
-      border: 2px solid transparent;
-      border-radius: 17px;
-      background:
-        linear-gradient(var(--cream), var(--cream)) padding-box,
-        linear-gradient(135deg, #ff6b6b, #f7b267, #ffe66d, #4ecdc4, #5b8def, #b388ff) border-box;
       overflow: hidden;
+      border-radius: 12px;
+      background:
+        linear-gradient(var(--bg), var(--bg)) padding-box,
+        linear-gradient(135deg, var(--sage), var(--amber), var(--lavender)) border-box;
+      border: 1px solid transparent;
       flex: 0 0 auto;
-      box-shadow: 0 10px 24px rgba(34, 48, 37, 0.14);
     }
 
     .brand-mark img {
@@ -105,167 +121,163 @@
       height: 118%;
       object-fit: cover;
       object-position: center;
-      display: block;
-      border-radius: 14px;
+      border-radius: 10px;
     }
 
-    .nav-scroll-wrap {
-    display: flex;
-    justify-content: flex-end;
-    min-width: 0;
-    }
- 
-    .nav-links {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      flex-wrap: wrap;
-      justify-content: flex-end;
+    .brand-name {
+      font-family: "Playfair Display", Georgia, serif;
+      font-size: 1rem;
+      font-weight: 700;
+      letter-spacing: -0.04em;
+      color: var(--cream);
+      white-space: nowrap;
     }
 
-    .nav-links a {
+    .header-link {
       color: var(--muted);
-      padding: 9px 13px;
-      border-radius: 999px;
-      transition: background 180ms ease, color 180ms ease;
-      font-size: 0.95rem;
-      font-weight: 850;
-    }
-
-    .nav-links a:hover,
-    .nav-links a.active {
-      color: var(--text);
-      background: rgba(37, 77, 53, 0.1);
+      font-size: 0.84rem;
+      font-weight: 700;
     }
 
     .page {
-      width: min(var(--max), calc(100% - 2rem));
-      margin: 0 auto;
-      padding: clamp(2rem, 5vw, 4rem) 0;
+      min-height: calc(100vh - 52px);
       display: grid;
-      place-items: center;
+      align-items: center;
+      padding: 24px 14px 32px;
     }
 
     .auth-card {
-      width: min(620px, 100%);
       border: 1px solid var(--line);
-      border-radius: 36px;
+      border-radius: var(--radius-xl);
       background:
-        linear-gradient(135deg, rgba(255, 252, 244, 0.94), rgba(255, 255, 255, 0.86)),
-        radial-gradient(circle at top right, rgba(37, 77, 53, 0.1), transparent 18rem);
+        linear-gradient(180deg, rgba(25, 35, 29, 0.94), rgba(20, 28, 24, 0.92));
       box-shadow: var(--shadow);
-      backdrop-filter: blur(22px);
-      padding: clamp(1.5rem, 4vw, 3rem);
+      padding: 22px 18px 18px;
     }
 
     .pill {
       display: inline-flex;
-      margin-bottom: 1rem;
-      padding: 0.5rem 0.85rem;
+      align-items: center;
+      min-height: 30px;
+      padding: 0 12px;
       border-radius: 999px;
-      color: var(--forest-dark);
-      background: rgba(37, 77, 53, 0.1);
-      border: 1px solid rgba(37, 77, 53, 0.16);
-      font-size: 0.82rem;
+      color: var(--sage);
+      background: rgba(168, 197, 160, 0.08);
+      border: 1px solid rgba(168, 197, 160, 0.12);
+      font-size: 0.73rem;
       font-weight: 900;
-      letter-spacing: 0.08em;
+      letter-spacing: 0.1em;
       text-transform: uppercase;
     }
 
     h1 {
-      margin: 0;
-      color: var(--text);
-      font-size: clamp(2.4rem, 7vw, 4.8rem);
-      line-height: 1.02;
+      margin: 16px 0 0;
+      font-family: "Playfair Display", Georgia, serif;
+      font-size: 2.25rem;
+      line-height: 0.98;
       letter-spacing: -0.06em;
-      font-weight: 950;
+      color: var(--cream);
     }
 
     .lead {
-      margin: 1rem 0 0;
+      margin: 10px 0 0;
       color: var(--muted);
-      font-size: 1.05rem;
-      line-height: 1.7;
+      font-size: 0.94rem;
+      line-height: 1.65;
     }
 
     .tabs {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 0.6rem;
-      margin-top: 1.5rem;
-      padding: 0.35rem;
-      border: 1px solid var(--line);
+      gap: 8px;
+      margin-top: 18px;
+      padding: 4px;
+      border: 1px solid rgba(168, 197, 160, 0.12);
       border-radius: 999px;
-      background: rgba(255, 255, 255, 0.5);
+      background: rgba(255, 255, 255, 0.03);
     }
 
     .tab-button {
-      min-height: 46px;
+      min-height: 40px;
       border: 0;
       border-radius: 999px;
       color: var(--muted);
       background: transparent;
-      font-weight: 900;
+      font-weight: 800;
       cursor: pointer;
+      transition: background 180ms ease, color 180ms ease;
     }
 
     .tab-button.active {
-      color: var(--cream);
-      background: linear-gradient(135deg, var(--forest-dark), var(--forest));
+      color: #111714;
+      background: var(--sage);
     }
 
     .auth-form {
       display: grid;
-      gap: 1rem;
-      margin-top: 1.25rem;
+      gap: 14px;
+      margin-top: 18px;
+    }
+
+    .field {
+      display: grid;
+      gap: 8px;
     }
 
     label {
-      color: var(--text);
-      font-weight: 900;
+      color: var(--cream);
+      font-size: 0.91rem;
+      font-weight: 800;
     }
 
     input {
       width: 100%;
-      min-height: 54px;
-      margin-top: 0.4rem;
-      padding: 0 1rem;
-      border: 1px solid var(--line);
-      border-radius: 18px;
-      color: var(--text);
-      background: rgba(255, 255, 255, 0.86);
+      min-height: 46px;
+      padding: 0 14px;
+      border: 1px solid rgba(168, 197, 160, 0.2);
+      border-radius: 12px;
+      color: var(--cream);
+      background: rgba(255, 255, 255, 0.04);
       outline: none;
+      transition: border-color 180ms ease, box-shadow 180ms ease, background 180ms ease;
+    }
+
+    input::placeholder {
+      color: #8ea297;
     }
 
     input:focus {
-      border-color: rgba(37, 77, 53, 0.38);
-      box-shadow: 0 0 0 4px rgba(37, 77, 53, 0.1);
+      border-color: rgba(168, 197, 160, 0.72);
+      box-shadow: 0 0 0 3px rgba(168, 197, 160, 0.08);
+      background: rgba(255, 255, 255, 0.055);
     }
 
     .btn {
-      min-height: 52px;
-      border-radius: 999px;
-      padding: 0 1.25rem;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      border: 1px solid var(--line);
-      color: var(--text);
-      background: rgba(255, 255, 255, 0.78);
+      min-height: 48px;
+      border-radius: 12px;
       font-weight: 900;
       cursor: pointer;
     }
 
     .btn.primary {
-      color: var(--cream);
-      background: linear-gradient(135deg, var(--forest-dark), var(--forest));
       border: 0;
+      color: #111714;
+      background: var(--sage);
+      transition: transform 180ms ease, filter 180ms ease;
+    }
+
+    .btn.primary:hover,
+    .btn.primary:focus-visible {
+      transform: translateY(-1px);
+      filter: brightness(1.04);
+      outline: none;
     }
 
     .status {
       min-height: 24px;
       color: var(--muted);
-      font-weight: 800;
+      font-size: 0.9rem;
+      font-weight: 700;
     }
 
     .status.error {
@@ -273,313 +285,239 @@
     }
 
     .small-note {
-      margin-top: 1rem;
-      color: var(--muted);
-      font-size: 0.92rem;
+      margin-top: 14px;
+      color: var(--muted-soft);
+      font-size: 0.82rem;
+      line-height: 1.5;
     }
 
-    @media (max-width: 720px) {
-  .site-header {
-    padding: 0.7rem 0.85rem;
-  }
+    .auth-footer {
+      margin-top: 18px;
+      padding-top: 16px;
+      border-top: 1px solid rgba(168, 197, 160, 0.1);
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      color: var(--muted-soft);
+      font-size: 0.78rem;
+    }
 
-  .nav {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: flex-start;
-    gap: 0.7rem;
-    width: 100%;
-    padding: 0;
-    overflow: hidden;
-  }
+    .auth-footer a {
+      color: var(--muted);
+    }
 
-  .brand {
-    flex: 0 0 auto;
-    white-space: nowrap;
-  }
+    @media (min-width: 760px) {
+      body {
+        padding: 18px 0;
+      }
 
-  .brand-mark {
-    width: 34px;
-    height: 34px;
-    border-radius: 12px;
-  }
-
-  .brand span:last-child {
-    font-size: 0.95rem;
-  }
-
-  .nav-scroll-wrap {
-    position: relative;
-    flex: 1 1 auto;
-    min-width: 0;
-    max-width: 100%;
-    overflow: hidden;
-  }
-
-  .nav-scroll-wrap::after {
-    content: "›";
-    position: absolute;
-    right: 0.25rem;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 1.6rem;
-    height: 1.6rem;
-    display: grid;
-    place-items: center;
-    border-radius: 999px;
-    color: var(--text);
-    background: rgba(255, 255, 255, 0.7);
-    pointer-events: none;
-    font-size: 1.2rem;
-    font-weight: 900;
-  }
-
-  .nav-links {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: nowrap;
-    justify-content: flex-start;
-    gap: 0.35rem;
-    max-width: 100%;
-    overflow-x: auto;
-    overflow-y: hidden;
-    white-space: nowrap;
-    padding: 0.28rem 2rem 0.28rem 0.28rem;
-    border: 1px solid var(--line);
-    border-radius: 999px;
-    background: rgba(255, 255, 255, 0.48);
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
-  }
-
-  .nav-links::-webkit-scrollbar {
-    display: none;
-  }
-
-  .nav-links a {
-    flex: 0 0 auto;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    white-space: nowrap;
-    min-height: 36px;
-    padding: 0 0.68rem;
-    border-radius: 999px;
-    font-size: 0.8rem;
-    line-height: 1;
-  }
-}
-    
+      .app-shell {
+        min-height: calc(100vh - 36px);
+        border-radius: 30px;
+        box-shadow: 0 28px 90px rgba(0, 0, 0, 0.36);
+      }
+    }
   </style>
 </head>
 
 <body>
-  <header class="site-header">
-    <nav class="nav" aria-label="Primary navigation">
+  <div class="app-shell">
+    <header class="app-header">
       <a class="brand" href="index.html" aria-label="RootedByte home">
         <span class="brand-mark">
-          <img src="images/rootedbyte-icon.png" alt="" />
+          <img src="images/rootedbyte-icon.png" alt="RootedByte logo" />
         </span>
-        <span>RootedByte</span>
+        <span class="brand-name">RootedByte</span>
       </a>
 
-      <div class="nav-scroll-wrap">
-        <div class="nav-links">
-        <a href="index.html">Home</a>
-        <a href="tone.html">Song DiveIn</a>
-        <a href="newsverse.html">NewsVerse</a>
-        <a href="rootedos.html">RootedOS</a>
-        <a href="signin.html" class="active">Sign In</a>
-      </div>
-    </div>
-    </nav>
-  </header>
+      <a class="header-link" href="index.html">Home</a>
+    </header>
 
-  <main class="page">
-    <section class="auth-card">
-      <span class="pill">RootedByte Account</span>
-      <h1 id="authTitle">Sign in</h1>
-      <p class="lead" id="authLead">
-        Sign in to save your generated reflections, shared outputs, and future journal entries.
-      </p>
+    <main class="page">
+      <section class="auth-card">
+        <span class="pill">RootedByte Account</span>
+        <h1 id="authTitle">Sign in</h1>
+        <p class="lead" id="authLead">
+          Sign in to save your streaks, reflections, shared outputs, and journal entries.
+        </p>
 
-      <div class="tabs" role="tablist" aria-label="Authentication mode">
-        <button class="tab-button active" type="button" id="signInTab">Sign In</button>
-        <button class="tab-button" type="button" id="signUpTab">Create Account</button>
-      </div>
-
-      <form class="auth-form" id="authForm">
-        <div>
-          <label for="email">Email</label>
-          <input id="email" name="email" type="email" autocomplete="email" required />
+        <div class="tabs" role="tablist" aria-label="Authentication mode">
+          <button class="tab-button active" type="button" id="signInTab">Sign In</button>
+          <button class="tab-button" type="button" id="signUpTab">Create Account</button>
         </div>
 
-        <div>
-          <label for="password">Password</label>
-          <input id="password" name="password" type="password" autocomplete="current-password" required minlength="6" />
+        <form class="auth-form" id="authForm">
+          <div class="field">
+            <label for="email">Email</label>
+            <input id="email" name="email" type="email" autocomplete="email" required />
+          </div>
+
+          <div class="field">
+            <label for="password">Password</label>
+            <input
+              id="password"
+              name="password"
+              type="password"
+              autocomplete="current-password"
+              required
+              minlength="6"
+            />
+          </div>
+
+          <div class="field" id="confirmPasswordGroup" hidden>
+            <label for="confirmPassword">Confirm password</label>
+            <input
+              id="confirmPassword"
+              name="confirmPassword"
+              type="password"
+              autocomplete="new-password"
+              minlength="6"
+            />
+          </div>
+
+          <button class="btn primary" type="submit" id="authSubmit">Sign In</button>
+          <div class="status" id="authStatus" role="status" aria-live="polite"></div>
+        </form>
+
+        <p class="small-note">
+          Your saved outputs stay private unless you choose to create a share link.
+        </p>
+
+        <div class="auth-footer">
+          <a href="privacy.html">Privacy</a>
+          <a href="mailto:rootedbyte@outlook.com">Contact</a>
         </div>
-
-        <div id="confirmPasswordGroup" hidden>
-  <label for="confirmPassword">Confirm password</label>
-  <input
-    id="confirmPassword"
-    name="confirmPassword"
-    type="password"
-    autocomplete="new-password"
-    minlength="6"
-  />
-</div>
-        
-        <button class="btn primary" type="submit" id="authSubmit">Sign In</button>
-        <div class="status" id="authStatus" role="status" aria-live="polite"></div>
-      </form>
-
-      <p class="small-note">
-        Saved outputs are private unless you choose to share them publicly.
-      </p>
-    </section>
-  </main>
+      </section>
+    </main>
+  </div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <script>
     const $ = (selector) => document.querySelector(selector);
 
-    const authTitle = $('#authTitle');
-    const authLead = $('#authLead');
-    const signInTab = $('#signInTab');
-    const signUpTab = $('#signUpTab');
-    const authForm = $('#authForm');
-    const authSubmit = $('#authSubmit');
-    const authStatus = $('#authStatus');
-    const emailInput = $('#email');
-    const passwordInput = $('#password');
-    const confirmPasswordGroup = $('#confirmPasswordGroup');
-    const confirmPasswordInput = $('#confirmPassword');
+    const authTitle = $("#authTitle");
+    const authLead = $("#authLead");
+    const signInTab = $("#signInTab");
+    const signUpTab = $("#signUpTab");
+    const authForm = $("#authForm");
+    const authSubmit = $("#authSubmit");
+    const authStatus = $("#authStatus");
+    const emailInput = $("#email");
+    const passwordInput = $("#password");
+    const confirmPasswordGroup = $("#confirmPasswordGroup");
+    const confirmPasswordInput = $("#confirmPassword");
 
-    let mode = 'signin';
+    let mode = "signin";
     let supabaseClient = null;
 
-    function setStatus(message, type = 'info') {
-      authStatus.className = type === 'error' ? 'status error' : 'status';
-      authStatus.textContent = message;
+    function setStatus(message, type = "info") {
+      authStatus.className = type === "error" ? "status error" : "status";
+      authStatus.textContent = message || "";
     }
 
     function setMode(nextMode) {
       mode = nextMode;
 
-      const isSignUp = mode === 'signup';
+      const signingIn = mode === "signin";
 
-      signInTab.classList.toggle('active', !isSignUp);
-      signUpTab.classList.toggle('active', isSignUp);
+      signInTab.classList.toggle("active", signingIn);
+      signUpTab.classList.toggle("active", !signingIn);
 
-      authTitle.textContent = isSignUp ? 'Create account' : 'Sign in';
-      authLead.textContent = isSignUp
-        ? 'Create a free RootedByte account to save outputs and journal privately.'
-        : 'Sign in to save your generated reflections, shared outputs, and future journal entries.';
+      authTitle.textContent = signingIn ? "Sign in" : "Create account";
+      authLead.textContent = signingIn
+        ? "Sign in to save your streaks, reflections, shared outputs, and journal entries."
+        : "Create your RootedByte account to keep your progress connected to you.";
 
-      authSubmit.textContent = isSignUp ? 'Create Account' : 'Sign In';
-      passwordInput.autocomplete = isSignUp ? 'new-password' : 'current-password';
-
-if (confirmPasswordGroup && confirmPasswordInput) {
-  confirmPasswordGroup.hidden = !isSignUp;
-  confirmPasswordInput.required = isSignUp;
-
-  if (!isSignUp) {
-    confirmPasswordInput.value = '';
-  }
-}
-
-setStatus('');
+      authSubmit.textContent = signingIn ? "Sign In" : "Create Account";
+      confirmPasswordGroup.hidden = signingIn;
+      confirmPasswordInput.required = !signingIn;
+      confirmPasswordInput.value = "";
+      passwordInput.autocomplete = signingIn ? "current-password" : "new-password";
+      setStatus("");
     }
 
-    async function loadSupabaseClient() {
-      const response = await fetch('/api/public-config');
-      const config = await response.json();
+    signInTab.addEventListener("click", () => setMode("signin"));
+    signUpTab.addEventListener("click", () => setMode("signup"));
 
-      if (!response.ok) {
-        throw new Error(config.error || 'Could not load Supabase config.');
-      }
+    function getSupabaseConfig() {
+      const SUPABASE_URL =
+        window.SUPABASE_URL ||
+        document.documentElement.dataset.supabaseUrl ||
+        "";
+      const SUPABASE_ANON_KEY =
+        window.SUPABASE_ANON_KEY ||
+        document.documentElement.dataset.supabaseAnonKey ||
+        "";
 
-      supabaseClient = window.supabase.createClient(
-        config.supabaseUrl,
-        config.supabaseAnonKey
-      );
-
-      const { data } = await supabaseClient.auth.getSession();
-
-      if (data.session) {
-        window.location.href = 'account.html';
-      }
+      return { SUPABASE_URL, SUPABASE_ANON_KEY };
     }
 
-    signInTab.addEventListener('click', () => setMode('signin'));
-    signUpTab.addEventListener('click', () => setMode('signup'));
+    function ensureSupabaseClient() {
+      if (supabaseClient) return supabaseClient;
 
-    authForm.addEventListener('submit', async (event) => {
+      const { SUPABASE_URL, SUPABASE_ANON_KEY } = getSupabaseConfig();
+
+      if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
+        throw new Error("Supabase keys are not connected yet.");
+      }
+
+      supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+      return supabaseClient;
+    }
+
+    authForm.addEventListener("submit", async (event) => {
       event.preventDefault();
 
-      if (!supabaseClient) {
-        setStatus('Account system is still loading. Please try again.', 'error');
+      const email = emailInput.value.trim();
+      const password = passwordInput.value;
+      const confirmPassword = confirmPasswordInput.value;
+
+      if (!email || !password) {
+        setStatus("Enter your email and password.", "error");
         return;
       }
 
-      const email = emailInput.value.trim();
-const password = passwordInput.value;
-const confirmPassword = confirmPasswordInput?.value || '';
-
-if (!email || !password) {
-  setStatus('Enter your email and password.', 'error');
-  return;
-}
-
-if (mode === 'signup' && password !== confirmPassword) {
-  setStatus('Passwords do not match.', 'error');
-  return;
-}
+      if (mode === "signup" && password !== confirmPassword) {
+        setStatus("Passwords do not match.", "error");
+        return;
+      }
 
       authSubmit.disabled = true;
-      setStatus(mode === 'signup' ? 'Creating your account...' : 'Signing you in...');
+      setStatus(mode === "signin" ? "Signing you in..." : "Creating your account...");
 
       try {
-        if (mode === 'signup') {
-          const { data, error } = await supabaseClient.auth.signUp({
-            email,
-            password,
-            options: {
-              emailRedirectTo: `${window.location.origin}/account.html`
-            }
-          });
+        const client = ensureSupabaseClient();
 
-          if (error) throw error;
-
-          if (data.session) {
-            window.location.href = 'account.html';
-            return;
-          }
-
-          setStatus('Account created. Check your email to confirm your sign in.');
-        } else {
-          const { error } = await supabaseClient.auth.signInWithPassword({
+        if (mode === "signin") {
+          const { error } = await client.auth.signInWithPassword({
             email,
             password
           });
 
           if (error) throw error;
 
-          window.location.href = 'account.html';
+          setStatus("Signed in. Redirecting...");
+          window.location.href = "account.html";
+          return;
         }
+
+        const { error } = await client.auth.signUp({
+          email,
+          password
+        });
+
+        if (error) throw error;
+
+        setStatus("Account created. Check your email if confirmation is enabled.");
       } catch (error) {
-        setStatus(error.message || 'Something went wrong.', 'error');
+        setStatus(error.message || "Something went wrong.", "error");
       } finally {
         authSubmit.disabled = false;
       }
     });
 
-    loadSupabaseClient().catch((error) => {
-      setStatus(error.message || 'Could not load account system.', 'error');
-    });
+    setMode("signin");
   </script>
 </body>
 </html>
