@@ -6,42 +6,57 @@
 
   <meta
     name="description"
-    content="A shared RootedByte reflection created with RootedOS or NewsVerse."
+    content="A shared RootedByte reflection created with Inner Work, Signal, or SoundSense."
   />
 
   <title>Shared Reflection | RootedByte</title>
 
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&display=swap"
+    rel="stylesheet"
+  >
+
   <style>
     :root {
-      --bg: #eef3ea;
-      --bg-soft: #fbf8ef;
-      --card: rgba(255, 252, 244, 0.9);
-      --card-strong: rgba(255, 255, 255, 0.96);
-      --text: #17231b;
-      --muted: #647363;
-      --line: rgba(23, 35, 27, 0.12);
-      --forest: #254d35;
-      --forest-dark: #142a1e;
-      --cream: #fbf8ef;
-      --gold: #c99a52;
-      --shadow: 0 24px 70px rgba(34, 48, 37, 0.13);
-      --radius: 30px;
-      --max: 980px;
+      --bg: #111714;
+      --bg-deep: #0b100d;
+      --panel: rgba(24, 32, 27, 0.92);
+      --panel-strong: rgba(27, 37, 31, 0.98);
+      --cream: #f5efe4;
+      --muted: #9fb2a7;
+      --muted-soft: #72857b;
+      --line: rgba(168, 197, 160, 0.16);
+      --sage: #a8c5a0;
+      --amber: #e8c97a;
+      --lavender: #b8a8d8;
+      --danger: #d97965;
+      --shadow: 0 24px 70px rgba(0, 0, 0, 0.34);
+      --radius-xl: 28px;
+      --radius-lg: 22px;
+      --radius-md: 16px;
+      --phone: 420px;
     }
 
     * {
       box-sizing: border-box;
     }
 
+    html {
+      background: var(--bg-deep);
+    }
+
     body {
       margin: 0;
       min-height: 100vh;
+      color: var(--cream);
       font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      color: var(--text);
       background:
-        radial-gradient(circle at top left, rgba(37, 77, 53, 0.14), transparent 30rem),
-        radial-gradient(circle at 86% 12%, rgba(111, 127, 79, 0.15), transparent 30rem),
-        linear-gradient(180deg, #fbf8ef 0%, #eef3ea 52%, #dfe8d9 100%);
+        radial-gradient(circle at 12% 8%, rgba(168, 197, 160, 0.08), transparent 18rem),
+        radial-gradient(circle at 88% 20%, rgba(232, 201, 122, 0.06), transparent 18rem),
+        radial-gradient(circle at 50% 100%, rgba(184, 168, 216, 0.06), transparent 20rem),
+        var(--bg-deep);
       line-height: 1.6;
     }
 
@@ -50,49 +65,56 @@
       text-decoration: none;
     }
 
-    .site-header {
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      backdrop-filter: blur(18px);
-      background: rgba(251, 248, 239, 0.84);
-      border-bottom: 1px solid var(--line);
+    button {
+      font: inherit;
     }
 
-    .nav {
-      width: min(var(--max), 100%);
+    .app-shell {
+      width: min(var(--phone), 100%);
+      min-height: 100vh;
       margin: 0 auto;
-      padding: 16px 22px;
+      background:
+        radial-gradient(circle at 50% -10%, rgba(168, 197, 160, 0.08), transparent 18rem),
+        linear-gradient(180deg, #111714 0%, #0f1512 100%);
+      border-left: 1px solid rgba(168, 197, 160, 0.08);
+      border-right: 1px solid rgba(168, 197, 160, 0.08);
+      overflow: hidden;
+    }
+
+    .app-header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      height: 52px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 20px;
+      padding: 0 16px;
+      background: rgba(17, 23, 20, 0.9);
+      border-bottom: 1px solid rgba(168, 197, 160, 0.1);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
     }
 
     .brand {
       display: inline-flex;
       align-items: center;
-      gap: 10px;
-      color: var(--text);
-      font-weight: 900;
-      letter-spacing: -0.04em;
-      font-size: 1.15rem;
+      gap: 9px;
+      min-width: 0;
     }
 
     .brand-mark {
+      width: 34px;
+      height: 34px;
       display: grid;
       place-items: center;
-      width: 46px;
-      height: 46px;
-      padding: 3px;
-      border: 2px solid transparent;
-      border-radius: 17px;
-      background:
-        linear-gradient(var(--cream), var(--cream)) padding-box,
-        linear-gradient(135deg, #ff6b6b, #f7b267, #ffe66d, #4ecdc4, #5b8def, #b388ff) border-box;
       overflow: hidden;
+      border-radius: 12px;
+      background:
+        linear-gradient(var(--bg), var(--bg)) padding-box,
+        linear-gradient(135deg, var(--sage), var(--amber), var(--lavender)) border-box;
+      border: 1px solid transparent;
       flex: 0 0 auto;
-      box-shadow: 0 10px 24px rgba(34, 48, 37, 0.14);
     }
 
     .brand-mark img {
@@ -100,36 +122,26 @@
       height: 118%;
       object-fit: cover;
       object-position: center;
-      display: block;
-      border-radius: 14px;
+      border-radius: 10px;
     }
 
-    .nav-links {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      flex-wrap: wrap;
-      justify-content: flex-end;
+    .brand-name {
+      font-family: "Playfair Display", Georgia, serif;
+      font-size: 1rem;
+      font-weight: 700;
+      letter-spacing: -0.04em;
+      color: var(--cream);
+      white-space: nowrap;
     }
 
-    .nav-links a {
+    .header-link {
       color: var(--muted);
-      padding: 9px 13px;
-      border-radius: 999px;
-      transition: background 180ms ease, color 180ms ease;
-      font-size: 0.95rem;
-      font-weight: 850;
-    }
-
-    .nav-links a:hover {
-      color: var(--text);
-      background: rgba(37, 77, 53, 0.1);
+      font-size: 0.84rem;
+      font-weight: 700;
     }
 
     .page {
-      width: min(var(--max), calc(100% - 2rem));
-      margin: 0 auto;
-      padding: clamp(2rem, 5vw, 4rem) 0;
+      padding: 18px 12px 30px;
     }
 
     .hero-card,
@@ -137,100 +149,107 @@
     .area-card,
     .verse-card {
       border: 1px solid var(--line);
-      border-radius: var(--radius);
-      background: var(--card);
+      border-radius: var(--radius-xl);
+      background:
+        linear-gradient(180deg, rgba(25, 35, 29, 0.94), rgba(20, 28, 24, 0.92));
       box-shadow: var(--shadow);
-      backdrop-filter: blur(22px);
     }
 
     .hero-card {
-      padding: clamp(1.5rem, 4vw, 3rem);
-      margin-bottom: 1rem;
-      background:
-        linear-gradient(135deg, rgba(255, 252, 244, 0.94), rgba(255, 255, 255, 0.86)),
-        radial-gradient(circle at top right, rgba(37, 77, 53, 0.1), transparent 18rem);
+      padding: 20px 18px;
     }
 
-    .pill {
+    .pill,
+    .badge,
+    .tag {
       display: inline-flex;
-      margin-bottom: 1rem;
-      padding: 0.5rem 0.85rem;
+      align-items: center;
+      min-height: 30px;
+      padding: 0 12px;
       border-radius: 999px;
-      color: var(--forest-dark);
-      background: rgba(37, 77, 53, 0.1);
-      border: 1px solid rgba(37, 77, 53, 0.16);
-      font-size: 0.82rem;
+      font-size: 0.73rem;
       font-weight: 900;
-      letter-spacing: 0.08em;
+      letter-spacing: 0.1em;
       text-transform: uppercase;
+    }
+
+    .pill,
+    .tag {
+      color: var(--sage);
+      background: rgba(168, 197, 160, 0.08);
+      border: 1px solid rgba(168, 197, 160, 0.12);
+    }
+
+    .badge {
+      color: var(--amber);
+      background: rgba(232, 201, 122, 0.08);
+      border: 1px solid rgba(232, 201, 122, 0.14);
+      letter-spacing: 0.04em;
     }
 
     h1,
     h2,
     h3 {
       margin: 0;
-      line-height: 1.05;
+      color: var(--cream);
+      font-family: "Playfair Display", Georgia, serif;
+      line-height: 1.02;
       letter-spacing: -0.055em;
-      color: var(--text);
     }
 
     h1 {
-      font-size: clamp(2.6rem, 7vw, 5.3rem);
-      font-weight: 950;
+      margin-top: 16px;
+      font-size: 2.2rem;
     }
 
     h2 {
-      font-size: clamp(1.7rem, 4vw, 3rem);
-      font-weight: 950;
+      font-size: 1.45rem;
     }
 
     h3 {
-      font-size: clamp(1.25rem, 3vw, 1.8rem);
-      font-weight: 920;
+      font-size: 1.08rem;
     }
 
     .lead,
     .muted,
     .result-card p,
     .area-body,
-    .verse-card p {
+    .verse-card p,
+    .status {
       color: var(--muted);
     }
 
     .lead {
-      max-width: 760px;
-      margin: 1rem 0 0;
-      font-size: clamp(1.04rem, 2vw, 1.22rem);
+      margin: 12px 0 0;
+      font-size: 0.95rem;
+      line-height: 1.7;
     }
 
     .results {
       display: grid;
-      gap: 1rem;
-      margin-top: 1rem;
+      gap: 14px;
+      margin-top: 14px;
     }
 
     .result-card,
     .verse-card {
-      padding: 1.25rem;
-      background: var(--card-strong);
+      padding: 16px;
     }
 
     .highlight {
-      border-color: rgba(201, 154, 82, 0.32);
+      border-color: rgba(232, 201, 122, 0.22);
       background:
-        linear-gradient(135deg, rgba(201, 154, 82, 0.12), rgba(255, 255, 255, 0.9));
+        linear-gradient(135deg, rgba(232, 201, 122, 0.08), rgba(255, 255, 255, 0.03));
     }
 
     .area-list,
     .verse-grid {
       display: grid;
-      gap: 1rem;
+      gap: 12px;
     }
 
     details.area-card {
-      padding: 0;
       overflow: hidden;
-      background: var(--card-strong);
     }
 
     details.area-card summary {
@@ -238,10 +257,11 @@
       list-style: none;
       display: flex;
       justify-content: space-between;
-      gap: 14px;
+      gap: 12px;
       align-items: center;
-      padding: 18px;
-      font-weight: 900;
+      padding: 16px;
+      color: var(--cream);
+      font-weight: 800;
     }
 
     details.area-card summary::-webkit-details-marker {
@@ -249,473 +269,451 @@
     }
 
     .area-body {
-      padding: 0 18px 18px;
-    }
-
-    .badge {
-      color: var(--cream);
-      background: linear-gradient(135deg, var(--forest-dark), var(--forest));
-      border-radius: 999px;
-      padding: 6px 10px;
-      font-size: 0.78rem;
-      white-space: nowrap;
+      padding: 0 16px 16px;
     }
 
     .plan-grid {
       display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 14px;
-      margin-top: 16px;
+      gap: 10px;
+      margin-top: 12px;
     }
 
     .plan-item {
-      border-radius: 18px;
-      padding: 16px;
-      background: rgba(255, 255, 255, 0.72);
-      border: 1px solid var(--line);
+      border-radius: var(--radius-md);
+      padding: 14px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(168, 197, 160, 0.12);
     }
 
     blockquote {
-      margin: 0.75rem 0;
-      border-left: 4px solid var(--forest);
-      padding-left: 1rem;
-      color: var(--text);
-      font-size: 1.05rem;
-      line-height: 1.7;
+      margin: 10px 0 8px;
+      border-left: 3px solid var(--sage);
+      padding-left: 12px;
+      color: var(--cream);
+      font-size: 0.98rem;
+      line-height: 1.65;
     }
 
     .actions {
-      display: flex;
-      gap: 0.75rem;
-      flex-wrap: wrap;
-      margin-top: 1.5rem;
+      display: grid;
+      gap: 10px;
+      margin-top: 18px;
     }
 
     .btn {
-      min-height: 48px;
-      border-radius: 999px;
-      padding: 0 1.15rem;
+      min-height: 46px;
+      border-radius: 12px;
+      padding: 0 14px;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      border: 1px solid var(--line);
-      color: var(--text);
-      background: rgba(255, 255, 255, 0.78);
-      font-weight: 900;
+      border: 1px solid rgba(168, 197, 160, 0.16);
+      color: var(--cream);
+      background: rgba(255, 255, 255, 0.04);
+      font-weight: 800;
       cursor: pointer;
     }
 
     .btn.primary {
-      color: var(--cream);
-      background: linear-gradient(135deg, var(--forest-dark), var(--forest));
-      border: 0;
+      color: #111714;
+      background: var(--sage);
+      border-color: var(--sage);
     }
 
     .status {
-      margin-top: 1rem;
-      color: var(--muted);
-      font-weight: 800;
+      margin-top: 12px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      min-height: 24px;
     }
 
-    footer {
+    .footer-strip {
+      margin-top: 18px;
+      color: var(--muted-soft);
+      font-size: 0.78rem;
       text-align: center;
-      color: var(--muted);
-      padding: 2rem 1rem 2.5rem;
     }
 
-    @media (max-width: 720px) {
-      .nav {
-        align-items: flex-start;
-        flex-direction: column;
+    .footer-strip a {
+      color: var(--muted);
+    }
+
+    @media (min-width: 760px) {
+      body {
+        padding: 18px 0;
       }
 
-      .nav-links {
-        justify-content: flex-start;
-      }
-
-      .plan-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .btn {
-        width: 100%;
+      .app-shell {
+        min-height: calc(100vh - 36px);
+        border-radius: 30px;
+        box-shadow: 0 28px 90px rgba(0, 0, 0, 0.36);
       }
     }
   </style>
 </head>
 
 <body>
-  <header class="site-header">
-    <nav class="nav" aria-label="Primary navigation">
+  <div class="app-shell">
+    <header class="app-header">
       <a class="brand" href="index.html" aria-label="RootedByte home">
         <span class="brand-mark">
-          <img src="images/rootedbyte-icon.png" alt="" />
+          <img src="images/rootedbyte-icon.png" alt="RootedByte logo" />
         </span>
-        <span>RootedByte</span>
+        <span class="brand-name">RootedByte</span>
       </a>
 
-      <div class="nav-links">
-        <a href="index.html">Home</a>
-        <a href="tone.html">Song DiveIn</a>
-        <a href="newsverse.html">NewsVerse</a>
-        <a href="rootedos.html">RootedOS</a>
-        <a href="signin.html" data-auth-link>Sign In</a>
+      <a class="header-link" href="index.html">Home</a>
+    </header>
+
+    <main class="page">
+      <section class="hero-card">
+        <span class="pill" id="appPill">Shared Reflection</span>
+        <h1 id="shareTitle">Loading shared reflection...</h1>
+        <p class="lead" id="shareIntro">
+          This RootedByte reflection is being loaded.
+        </p>
+
+        <div class="actions" id="shareActions" hidden>
+          <a class="btn primary" id="tryAppLink" href="index.html">Try this app</a>
+          <a class="btn" href="index.html">Visit RootedByte</a>
+        </div>
+
+        <div class="status" id="shareStatus" role="status" aria-live="polite"></div>
+      </section>
+
+      <section class="results" id="sharedResult" aria-live="polite"></section>
+
+      <div class="footer-strip">
+        © <span id="year"></span> RootedByte ·
+        <a href="privacy.html">Privacy</a> ·
+        <a href="mailto:rootedbyte@outlook.com">Contact</a>
       </div>
-    </nav>
-  </header>
-
-  <main class="page">
-    <section class="hero-card">
-      <span class="pill" id="appPill">Shared Reflection</span>
-      <h1 id="shareTitle">Loading shared reflection...</h1>
-      <p class="lead" id="shareIntro">
-        This RootedByte reflection is being loaded.
-      </p>
-
-      <div class="actions" id="shareActions" hidden>
-        <a class="btn primary" id="tryAppLink" href="index.html">Try this app</a>
-        <a class="btn" href="index.html">Visit RootedByte</a>
-      </div>
-
-      <div class="status" id="shareStatus" role="status" aria-live="polite"></div>
-    </section>
-
-    <section class="results" id="sharedResult" aria-live="polite"></section>
-  </main>
-
-  <footer>
-    <p>© <span id="year"></span> RootedByte. Built for digital wisdom rooted in truth.</p>
-  </footer>
+    </main>
+  </div>
 
   <script>
-  const $ = (selector) => document.querySelector(selector);
+    const $ = (selector) => document.querySelector(selector);
 
-  const year = $("#year");
-  if (year) year.textContent = new Date().getFullYear();
+    const year = $("#year");
+    if (year) year.textContent = new Date().getFullYear();
 
-  function escapeHtml(value) {
-    return String(value ?? "")
-      .replace(/&/g, "&amp;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;")
-      .replace(/"/g, "&quot;")
-      .replace(/'/g, "&#039;");
-  }
-
-  function getShareId() {
-    const params = new URLSearchParams(window.location.search);
-    return String(params.get("id") || "").trim();
-  }
-
-  function formatDate(value) {
-    if (!value) return "";
-
-    try {
-      return new Intl.DateTimeFormat(undefined, {
-        year: "numeric",
-        month: "long",
-        day: "numeric"
-      }).format(new Date(value));
-    } catch {
-      return "";
-    }
-  }
-
-  function renderSharedTextBlock(value) {
-    const text = String(value || "").trim();
-
-    if (!text) return "<p>No details available.</p>";
-
-    if (/<\/?[a-z][\s\S]*>/i.test(text)) {
-      return text;
+    function escapeHtml(value) {
+      return String(value ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
     }
 
-    const lines = text
-      .split("\n")
-      .map((line) => line.trim())
-      .filter(Boolean);
-
-    if (lines.length <= 1) {
-      return `<p>${escapeHtml(lines[0])}</p>`;
+    function getShareId() {
+      const params = new URLSearchParams(window.location.search);
+      return String(params.get("id") || "").trim();
     }
 
-    return `
-      <ul>
-        ${lines
-          .map((line) => `<li>${escapeHtml(line.replace(/^[-•*]\s*/, ""))}</li>`)
-          .join("")}
-      </ul>
-    `;
-  }
+    function formatDate(value) {
+      if (!value) return "";
 
-  function renderRootedOS(output) {
-    const areas = Array.isArray(output.areas) ? output.areas : [];
-    const plan = output.daily_plan || {};
-    const verses = Array.isArray(output.reflection_verses) ? output.reflection_verses.slice(0, 3) : [];
+      try {
+        return new Intl.DateTimeFormat(undefined, {
+          year: "numeric",
+          month: "long",
+          day: "numeric"
+        }).format(new Date(value));
+      } catch {
+        return "";
+      }
+    }
 
-    return `
-      <article class="result-card">
-        <span class="pill">RootedOS Summary</span>
-        <h2>Your RootedOS reflection</h2>
-        <p class="lead">${escapeHtml(output.summary || "Shared RootedOS reflection.")}</p>
-      </article>
+    function renderSharedTextBlock(value) {
+      const text = String(value || "").trim();
 
-      ${
-        areas.length
-          ? `<div class="area-list">
-              ${areas.map((area) => `
-                <details class="area-card">
-                  <summary>
-                    <span>${escapeHtml(area.area || "Growth area")}</span>
-                    <span class="badge">${escapeHtml(area.urgency || "Reflect")}</span>
-                  </summary>
-                  <div class="area-body">
-                    <p><strong>Current state:</strong> ${escapeHtml(area.current_state || "")}</p>
-                    <p><strong>Recommendation:</strong> ${escapeHtml(area.recommendation || "")}</p>
-                    <p><strong>Scripture:</strong> ${escapeHtml(area.scripture || "")}</p>
-                    <p><strong>Action step:</strong> ${escapeHtml(area.action_step || "")}</p>
-                  </div>
-                </details>
-              `).join("")}
-            </div>`
-          : ""
+      if (!text) return "<p>No details available.</p>";
+
+      if (/<\/?[a-z][\s\S]*>/i.test(text)) {
+        return text;
       }
 
-      ${
-        Object.keys(plan).length
-          ? `<article class="result-card">
-              <span class="pill">Daily Plan</span>
-              <div class="plan-grid">
-                <div class="plan-item"><strong>Prayer</strong><p>${escapeHtml(plan.prayer_minutes || "")} minutes</p></div>
-                <div class="plan-item"><strong>Bible reading</strong><p>${escapeHtml(plan.bible_reading_minutes || "")} minutes</p></div>
-                <div class="plan-item"><strong>Social media limit</strong><p>${escapeHtml(plan.social_media_limit_minutes || "")} minutes</p></div>
-                <div class="plan-item"><strong>Fasting</strong><p>${escapeHtml(plan.fasting_recommendation || "")}</p></div>
-                <div class="plan-item"><strong>Community</strong><p>${escapeHtml(plan.community_action || "")}</p></div>
-              </div>
-            </article>`
-          : ""
+      const lines = text
+        .split("\n")
+        .map((line) => line.trim())
+        .filter(Boolean);
+
+      if (lines.length <= 1) {
+        return `<p>${escapeHtml(lines[0])}</p>`;
       }
 
-      ${
-        verses.length
-          ? `<article class="result-card highlight">
-              <span class="pill">Verses to Reflect On</span>
-              ${verses.map((verse) => `
-                <blockquote>${escapeHtml(verse.text || "")}</blockquote>
-                <p>
-                  <strong>${escapeHtml(verse.reference || "")}</strong>
-                  ${verse.reflection_prompt ? " — " + escapeHtml(verse.reflection_prompt) : ""}
-                </p>
-              `).join("")}
-            </article>`
-          : ""
-      }
+      return `
+        <ul>
+          ${lines
+            .map((line) => `<li>${escapeHtml(line.replace(/^[-•*]\s*/, ""))}</li>`)
+            .join("")}
+        </ul>
+      `;
+    }
 
-      ${
-        output.encouragement
-          ? `<article class="result-card">
-              <span class="pill">Encouragement</span>
-              <p>${escapeHtml(output.encouragement)}</p>
-            </article>`
-          : ""
-      }
-    `;
-  }
+    function renderRootedOS(output) {
+      const areas = Array.isArray(output.areas) ? output.areas : [];
+      const plan = output.daily_plan || {};
+      const verses = Array.isArray(output.reflection_verses) ? output.reflection_verses.slice(0, 3) : [];
 
-  function renderNewsVerse(output) {
-    const verses = Array.isArray(output.verses) ? output.verses : [];
-    const prayers = Array.isArray(output.prayer_points) ? output.prayer_points : [];
+      return `
+        <article class="result-card">
+          <span class="pill">Inner Work Summary</span>
+          <h2>Your Inner Work reflection</h2>
+          <p class="lead">${escapeHtml(output.summary || "Shared Inner Work reflection.")}</p>
+        </article>
 
-    return `
-      <article class="result-card ${output.source_mode === "headline_only" ? "highlight" : ""}">
-        <span class="pill">${output.source_mode === "headline_only" ? "Headline-Based Reflection" : "Article Summary"}</span>
-        <h2>${escapeHtml(output.overall_theme || "NewsVerse reflection")}</h2>
-        <p>${escapeHtml(output.article_summary || "Shared NewsVerse reflection.")}</p>
-      </article>
-
-      ${
-        verses.length
-          ? `<div class="verse-grid">
-              ${verses.map((verse) => `
-                <article class="verse-card">
-                  <strong>${escapeHtml(verse.reference || "Scripture")}</strong>
-                  <blockquote>${escapeHtml(verse.text || "")}</blockquote>
-                  <p>${escapeHtml(verse.relevance_reason || "")}</p>
-                </article>
-              `).join("")}
-            </div>`
-          : ""
-      }
-
-      ${
-        output.exegesis
-          ? `<article class="result-card">
-              <span class="pill">Exegesis</span>
-              <p>${escapeHtml(output.exegesis)}</p>
-            </article>`
-          : ""
-      }
-
-      ${
-        output.jesus_lens
-          ? `<article class="result-card highlight">
-              <span class="pill">Jesus Lens</span>
-              <p>${escapeHtml(output.jesus_lens)}</p>
-            </article>`
-          : ""
-      }
-
-      ${
-        prayers.length
-          ? `<article class="result-card">
-              <span class="pill">Prayer Points</span>
-              <ol>${prayers.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}</ol>
-            </article>`
-          : ""
-      }
-    `;
-  }
-
-  function renderTone(output) {
-    const song = output.song || "Shared Song DiveIn Prep";
-    const artist = output.artist || "";
-    const title = artist ? `${song} by ${artist}` : song;
-
-    const details = [
-      ["BPM", output.bpm],
-      ["Key", output.key],
-      ["Confidence", output.metadata_confidence],
-      ["Role", output.instrument_label]
-    ].filter((item) => item[1]);
-
-    const cards = [
-      ["Heart Check", output.song_meaning],
-      ["Faith Lens", output.faith_lens],
-      ["Song Flow", output.arrangement_feel],
-      ["Listen Closely", output.listening_guide],
-      ["Rehearsal Moves", output.rehearsal_prep],
-      ["Before You Lead", output.spiritual_reflection],
-      ["Role Coaching", output.instrument_guidance]
-    ].filter((item) => item[1]);
-
-    return `
-      <article class="result-card">
-        <span class="pill">Song DiveIn Summary</span>
-        <h2>${escapeHtml(title)}</h2>
         ${
-          details.length
-            ? `<div class="plan-grid">
-                ${details.map(([label, value]) => `
-                  <div class="plan-item">
-                    <strong>${escapeHtml(label)}</strong>
-                    <p>${escapeHtml(value)}</p>
-                  </div>
+          areas.length
+            ? `<div class="area-list">
+                ${areas.map((area) => `
+                  <details class="area-card">
+                    <summary>
+                      <span>${escapeHtml(area.area || "Growth area")}</span>
+                      <span class="badge">${escapeHtml(area.urgency || "Reflect")}</span>
+                    </summary>
+                    <div class="area-body">
+                      <p><strong>Current state:</strong> ${escapeHtml(area.current_state || "")}</p>
+                      <p><strong>Recommendation:</strong> ${escapeHtml(area.recommendation || "")}</p>
+                      <p><strong>Scripture:</strong> ${escapeHtml(area.scripture || "")}</p>
+                      <p><strong>Action step:</strong> ${escapeHtml(area.action_step || "")}</p>
+                    </div>
+                  </details>
                 `).join("")}
               </div>`
             : ""
         }
-      </article>
 
-      ${cards.map(([label, value], index) => `
-        <article class="result-card ${index === 1 ? "highlight" : ""}">
-          <span class="pill">${escapeHtml(label)}</span>
-          ${renderSharedTextBlock(value)}
+        ${
+          Object.keys(plan).length
+            ? `<article class="result-card">
+                <span class="pill">Daily Plan</span>
+                <div class="plan-grid">
+                  <div class="plan-item"><strong>Prayer</strong><p>${escapeHtml(plan.prayer_minutes || "")} minutes</p></div>
+                  <div class="plan-item"><strong>Reading</strong><p>${escapeHtml(plan.bible_reading_minutes || "")} minutes</p></div>
+                  <div class="plan-item"><strong>Social media limit</strong><p>${escapeHtml(plan.social_media_limit_minutes || "")} minutes</p></div>
+                  <div class="plan-item"><strong>Fasting</strong><p>${escapeHtml(plan.fasting_recommendation || "")}</p></div>
+                  <div class="plan-item"><strong>Community</strong><p>${escapeHtml(plan.community_action || "")}</p></div>
+                </div>
+              </article>`
+            : ""
+        }
+
+        ${
+          verses.length
+            ? `<article class="result-card highlight">
+                <span class="pill">Verses to Reflect On</span>
+                ${verses.map((verse) => `
+                  <blockquote>${escapeHtml(verse.text || "")}</blockquote>
+                  <p>
+                    <strong>${escapeHtml(verse.reference || "")}</strong>
+                    ${verse.reflection_prompt ? " — " + escapeHtml(verse.reflection_prompt) : ""}
+                  </p>
+                `).join("")}
+              </article>`
+            : ""
+        }
+
+        ${
+          output.encouragement
+            ? `<article class="result-card">
+                <span class="pill">Encouragement</span>
+                <p>${escapeHtml(output.encouragement)}</p>
+              </article>`
+            : ""
+        }
+      `;
+    }
+
+    function renderNewsVerse(output) {
+      const verses = Array.isArray(output.verses) ? output.verses : [];
+      const prayers = Array.isArray(output.prayer_points) ? output.prayer_points : [];
+
+      return `
+        <article class="result-card ${output.source_mode === "headline_only" ? "highlight" : ""}">
+          <span class="pill">${output.source_mode === "headline_only" ? "Headline-Based Reflection" : "Signal Summary"}</span>
+          <h2>${escapeHtml(output.overall_theme || "Signal reflection")}</h2>
+          <p>${escapeHtml(output.article_summary || "Shared Signal reflection.")}</p>
         </article>
-      `).join("")}
-    `;
-  }
 
-  function getAppMeta(appType) {
-    if (appType === "rootedos") {
-      return {
-        appName: "RootedOS",
-        tryHref: "rootedos.html",
-        tryLabel: "Try RootedOS",
-        render: renderRootedOS
-      };
+        ${
+          output.thinking_impact
+            ? `<article class="result-card">
+                <span class="pill">Thinking Impact</span>
+                <p>${escapeHtml(output.thinking_impact)}</p>
+              </article>`
+            : ""
+        }
+
+        ${
+          output.truth_check || output.exegesis || output.jesus_lens
+            ? `<article class="result-card">
+                <span class="pill">Truth Check</span>
+                ${output.truth_check ? `<p>${escapeHtml(output.truth_check)}</p>` : ""}
+                ${output.exegesis ? `<p>${escapeHtml(output.exegesis)}</p>` : ""}
+                ${output.jesus_lens ? `<p><strong>Jesus lens:</strong> ${escapeHtml(output.jesus_lens)}</p>` : ""}
+              </article>`
+            : ""
+        }
+
+        ${
+          prayers.length
+            ? `<article class="result-card">
+                <span class="pill">Prayer Points</span>
+                <ul>${prayers.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}</ul>
+              </article>`
+            : ""
+        }
+
+        ${
+          verses.length
+            ? `<div class="verse-grid">
+                ${verses.slice(0, 3).map((verse) => `
+                  <article class="verse-card">
+                    <span class="pill">Reflection Verse</span>
+                    <blockquote>${escapeHtml(verse.text || "")}</blockquote>
+                    <p><strong>${escapeHtml(verse.reference || "")}</strong></p>
+                    ${verse.application ? `<p>${escapeHtml(verse.application)}</p>` : ""}
+                  </article>
+                `).join("")}
+              </div>`
+            : ""
+        }
+      `;
     }
 
-    if (appType === "newsverse") {
-      return {
-        appName: "NewsVerse",
-        tryHref: "newsverse.html",
-        tryLabel: "Try NewsVerse",
-        render: renderNewsVerse
-      };
-    }
-
-    if (appType === "tone") {
-      return {
-        appName: "Song DiveIn",
-        tryHref: "tone.html",
-        tryLabel: "Try Song DiveIn",
-        render: renderTone
-      };
-    }
-
-    return {
-      appName: "RootedByte",
-      tryHref: "index.html",
-      tryLabel: "Visit RootedByte",
-      render: (output) => `
+    function renderTone(output) {
+      return `
         <article class="result-card">
-          <span class="pill">Shared Reflection</span>
-          <pre>${escapeHtml(JSON.stringify(output, null, 2))}</pre>
+          <span class="pill">SoundSense Breakdown</span>
+          <h2>${escapeHtml(output.song || "Song breakdown")}</h2>
+          <p>${output.artist ? `<strong>Artist:</strong> ${escapeHtml(output.artist)}` : ""}</p>
+          ${output.key ? `<p><strong>Key:</strong> ${escapeHtml(output.key)}</p>` : ""}
+          ${output.bpm ? `<p><strong>BPM:</strong> ${escapeHtml(output.bpm)}</p>` : ""}
+          ${output.confidence ? `<p><strong>Confidence:</strong> ${escapeHtml(output.confidence)}</p>` : ""}
         </article>
-      `
-    };
-  }
 
-  async function loadSharedOutput() {
-    const id = getShareId();
-    const status = $("#shareStatus");
-    const result = $("#sharedResult");
+        ${
+          output.song_meaning
+            ? `<article class="result-card">
+                <span class="pill">Meaning</span>
+                ${renderSharedTextBlock(output.song_meaning)}
+              </article>`
+            : ""
+        }
 
-    if (!id) {
-      $("#shareTitle").textContent = "Shared reflection not found";
-      $("#shareIntro").textContent = "This link is missing a shared reflection ID.";
-      status.textContent = "";
-      return;
+        ${
+          output.instrument_guidance
+            ? `<article class="result-card">
+                <span class="pill">Instrument Guidance</span>
+                ${renderSharedTextBlock(output.instrument_guidance)}
+              </article>`
+            : ""
+        }
+
+        ${
+          output.team_prep
+            ? `<article class="result-card">
+                <span class="pill">Team Prep</span>
+                ${renderSharedTextBlock(output.team_prep)}
+              </article>`
+            : ""
+        }
+
+        ${
+          output.faith_lens
+            ? `<article class="result-card">
+                <span class="pill">Reflection</span>
+                ${renderSharedTextBlock(output.faith_lens)}
+              </article>`
+            : ""
+        }
+      `;
     }
 
-    status.textContent = "Loading shared reflection...";
+    function setAppMeta(appType) {
+      const pill = $("#appPill");
+      const tryAppLink = $("#tryAppLink");
 
-    try {
-      const response = await fetch(`/api/shared?id=${encodeURIComponent(id)}`);
-      const data = await response.json();
+      if (appType === "rootedos") {
+        pill.textContent = "Shared Inner Work Reflection";
+        tryAppLink.href = "rootedos.html";
+        tryAppLink.textContent = "Try Inner Work";
+      } else if (appType === "newsverse") {
+        pill.textContent = "Shared Signal Reflection";
+        tryAppLink.href = "newsverse.html";
+        tryAppLink.textContent = "Try Signal";
+      } else if (appType === "tone") {
+        pill.textContent = "Shared SoundSense Breakdown";
+        tryAppLink.href = "tone.html";
+        tryAppLink.textContent = "Try SoundSense";
+      } else {
+        pill.textContent = "Shared Reflection";
+        tryAppLink.href = "index.html";
+        tryAppLink.textContent = "Visit RootedByte";
+      }
+    }
 
-      if (!response.ok) {
-        throw new Error(data.error || "Shared reflection not found.");
+    async function loadSharedReflection() {
+      const shareId = getShareId();
+
+      if (!shareId) {
+        $("#shareTitle").textContent = "Link not found";
+        $("#shareIntro").textContent = "This shared link is missing an ID.";
+        $("#shareStatus").textContent = "Check the URL and try again.";
+        return;
       }
 
-      const meta = getAppMeta(data.appType);
-      const createdDate = formatDate(data.createdAt);
+      $("#shareStatus").textContent = "Loading shared reflection...";
 
-      $("#appPill").textContent = `Shared ${meta.appName}`;
-      $("#shareTitle").textContent = data.title || `Shared ${meta.appName} Reflection`;
-      $("#shareIntro").textContent = createdDate
-        ? `Created with ${meta.appName} by RootedByte on ${createdDate}.`
-        : `Created with ${meta.appName} by RootedByte.`;
+      try {
+        const response = await fetch(`/api/share?id=${encodeURIComponent(shareId)}`);
+        const data = await response.json();
 
-      $("#tryAppLink").href = meta.tryHref;
-      $("#tryAppLink").textContent = meta.tryLabel;
-      $("#shareActions").hidden = false;
+        if (!response.ok) {
+          throw new Error(data.error || "Could not load this shared reflection.");
+        }
 
-      result.innerHTML = meta.render(data.output || {});
-      status.textContent = "";
-    } catch (error) {
-      $("#shareTitle").textContent = "Shared reflection not found";
-      $("#shareIntro").textContent = "This shared link may be incorrect, private, deleted, or expired.";
-      result.innerHTML = "";
-      status.textContent = error.message;
+        const item = data.item || data;
+        const output = item.output || item.output_json || {};
+        const appType = item.app_type || "rootedos";
+
+        setAppMeta(appType);
+
+        $("#shareTitle").textContent = item.title || "Shared RootedByte Reflection";
+        $("#shareIntro").textContent = item.input_summary
+          ? `${item.input_summary}${item.created_at ? " · " + formatDate(item.created_at) : ""}`
+          : item.created_at
+            ? `Shared on ${formatDate(item.created_at)}`
+            : "A shared RootedByte reflection.";
+
+        $("#shareActions").hidden = false;
+
+        if (appType === "rootedos") {
+          $("#sharedResult").innerHTML = renderRootedOS(output);
+        } else if (appType === "newsverse") {
+          $("#sharedResult").innerHTML = renderNewsVerse(output);
+        } else if (appType === "tone") {
+          $("#sharedResult").innerHTML = renderTone(output);
+        } else {
+          $("#sharedResult").innerHTML = `
+            <article class="result-card">
+              <span class="pill">Shared Reflection</span>
+              <p>We loaded this shared content, but do not yet know how to display it.</p>
+            </article>
+          `;
+        }
+
+        $("#shareStatus").textContent = "";
+      } catch (error) {
+        $("#shareTitle").textContent = "Unable to open this link";
+        $("#shareIntro").textContent = "This shared reflection may have been removed or the link may be invalid.";
+        $("#shareStatus").textContent = error.message || "Could not load this shared reflection.";
+      }
     }
-  }
 
-  loadSharedOutput();
-</script>
-
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="js/rootedbyte-auth-nav.js"></script>
-  
+    loadSharedReflection();
+  </script>
 </body>
 </html>
