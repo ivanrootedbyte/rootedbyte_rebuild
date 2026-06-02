@@ -3,6 +3,7 @@ const crypto = require("crypto");
 function sendJson(res, status, data) {
   res.statusCode = status;
   res.setHeader("Content-Type", "application/json");
+  res.setHeader("Cache-Control", "no-store, max-age=0");
   res.end(JSON.stringify(data));
 }
 
@@ -41,12 +42,37 @@ function getBaseUrl(req) {
   return `${protocol}://${host}`;
 }
 
+function normalizeAppType(appType) {
+  const value = String(appType || "").trim().toLowerCase();
+
+  const map = {
+    rootedos: "inner_work",
+    "inner work": "inner_work",
+    inner_work: "inner_work",
+
+    newsverse: "signal",
+    signal: "signal",
+
+    tone: "soundsense",
+    soundsense: "soundsense",
+    "sound sense": "soundsense"
+  };
+
+  return map[value] || "";
+}
+
 function getDefaultTitle(appType) {
-  if (appType === "rootedos") return "RootedOS Reflection";
-  if (appType === "newsverse") return "NewsVerse Reflection";
-  if (appType === "tone") return "Song DiveIn Reflection";
+  const normalized = normalizeAppType(appType);
+
+  if (normalized === "inner_work") return "Inner Work Reflection";
+  if (normalized === "signal") return "Signal Reflection";
+  if (normalized === "soundsense") return "SoundSense Reflection";
 
   return "RootedByte Reflection";
+}
+
+function isValidOutput(output) {
+  return output && typeof output === "object" && !Array.isArray(output);
 }
 
 module.exports = async function handler(req, res) {
@@ -56,7 +82,12 @@ module.exports = async function handler(req, res) {
     });
   }
 
-  const supabaseUrl = String(process.env.SUPABASE_URL || "").replace(/\/+$/, "");
+  const supabaseUrl = String(
+    process.env.SUPABASE_URL ||
+      process.env.NEXT_PUBLIC_SUPABASE_URL ||
+      ""
+  ).replace(/\/+$/, "");
+
   const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
   if (!supabaseUrl || !serviceRoleKey) {
@@ -68,18 +99,20 @@ module.exports = async function handler(req, res) {
   try {
     const body = await parseBody(req);
 
-    const appType = String(body.appType || "").trim();
+    const rawAppType = String(body.appType || "").trim();
+    const appType = normalizeAppType(rawAppType);
     const title = String(body.title || "").trim();
     const inputSummary = String(body.inputSummary || "").trim();
     const output = body.output;
 
-    if (!["rootedos", "newsverse", "tone"].includes(appType)) {
+    if (!["inner_work", "signal", "soundsense"].includes(appType)) {
       return sendJson(res, 400, {
-        error: "Invalid appType. Use rootedos, newsverse, or tone."
+        error:
+          "Invalid appType. Use inner_work, signal, soundsense, rootedos, newsverse, or tone."
       });
     }
 
-    if (!output || typeof output !== "object" || Array.isArray(output)) {
+    if (!isValidOutput(output)) {
       return sendJson(res, 400, {
         error: "Missing output object."
       });
@@ -137,11 +170,14 @@ module.exports = async function handler(req, res) {
     }
 
     const baseUrl = getBaseUrl(req);
-    const shareUrl = `${baseUrl}/share.html?id=${encodeURIComponent(createdRow.share_slug)}`;
+    const shareUrl = `${baseUrl}/share.html?id=${encodeURIComponent(
+      createdRow.share_slug
+    )}`;
 
     return sendJson(res, 200, {
       shareUrl,
-      shareSlug: createdRow.share_slug
+      shareSlug: createdRow.share_slug,
+      appType: createdRow.app_type
     });
   } catch (error) {
     return sendJson(res, 500, {
