@@ -6,7 +6,7 @@
 
   <meta
     name="description"
-    content="SoundSense helps you turn any song or YouTube link into a grounded breakdown with vibe, meaning, instrument guidance, and rehearsal prep."
+    content="SoundSense helps you turn any song or YouTube link into a grounded breakdown with meaning, mood, discernment, and role-based preparation."
   />
 
   <title>SoundSense | RootedByte</title>
@@ -28,9 +28,7 @@
       --muted: #9fb2a7;
       --muted-soft: #72857b;
       --line: rgba(168, 197, 160, 0.16);
-      --line-strong: rgba(184, 168, 216, 0.34);
       --sage: #a8c5a0;
-      --amber: #e8c97a;
       --lavender: #b8a8d8;
       --danger: #d97965;
       --shadow: 0 24px 70px rgba(0, 0, 0, 0.34);
@@ -58,7 +56,7 @@
       background:
         radial-gradient(circle at 12% 8%, rgba(168, 197, 160, 0.06), transparent 18rem),
         radial-gradient(circle at 88% 20%, rgba(184, 168, 216, 0.08), transparent 18rem),
-        radial-gradient(circle at 50% 100%, rgba(232, 201, 122, 0.05), transparent 20rem),
+        radial-gradient(circle at 50% 100%, rgba(168, 197, 160, 0.05), transparent 20rem),
         var(--bg-deep);
       line-height: 1.55;
     }
@@ -131,7 +129,7 @@
       border-radius: 12px;
       background:
         linear-gradient(var(--bg), var(--bg)) padding-box,
-        linear-gradient(135deg, var(--sage), var(--amber), var(--lavender)) border-box;
+        linear-gradient(135deg, var(--sage), var(--lavender)) border-box;
       border: 1px solid transparent;
       flex: 0 0 auto;
     }
@@ -191,13 +189,14 @@
     }
 
     .hero-copy {
-      padding: 8px 6px 18px;
+      padding: 8px 12px 18px;
     }
 
     .hero-copy h1,
     .result-card h2,
     .result-card h3,
-    .share-panel h3 {
+    .share-panel h3,
+    .contact-title {
       font-family: "Playfair Display", Georgia, serif;
       color: var(--cream);
       letter-spacing: -0.06em;
@@ -228,23 +227,18 @@
     }
 
     .tone-card {
-      padding: 18px;
+      padding: 14px;
     }
 
-    .form-card {
-      padding: 16px;
-      border: 1px solid rgba(168, 197, 160, 0.14);
-      border-radius: var(--radius-lg);
-      background: rgba(255, 255, 255, 0.03);
+    .form-block {
+      display: grid;
+      gap: 18px;
+      padding: 10px 0 4px;
     }
 
     .field {
       display: grid;
       gap: 8px;
-    }
-
-    .field + .field {
-      margin-top: 18px;
     }
 
     .field label {
@@ -301,6 +295,9 @@
       border-radius: 12px;
       font-weight: 800;
       cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
     }
 
     .primary-button {
@@ -327,7 +324,6 @@
     }
 
     .ghost-note {
-      margin-top: 10px;
       color: var(--muted-soft);
       font-size: 0.82rem;
       line-height: 1.45;
@@ -335,7 +331,6 @@
 
     .status {
       min-height: 24px;
-      margin-top: 14px;
       color: var(--sage);
       display: flex;
       align-items: center;
@@ -362,42 +357,6 @@
       to {
         transform: rotate(360deg);
       }
-    }
-
-    .song-tabs {
-      display: flex;
-      gap: 8px;
-      overflow-x: auto;
-      padding-bottom: 2px;
-      margin-top: 18px;
-      scrollbar-width: none;
-    }
-
-    .song-tabs::-webkit-scrollbar {
-      display: none;
-    }
-
-    .song-tab-button {
-      flex: 0 0 auto;
-      min-height: 34px;
-      padding: 0 14px;
-      border: 1px solid rgba(168, 197, 160, 0.16);
-      border-radius: 999px;
-      background: transparent;
-      color: var(--muted);
-      font-size: 0.82rem;
-      cursor: pointer;
-      transition: border-color 180ms ease, background 180ms ease, color 180ms ease;
-    }
-
-    .song-tab-button.active {
-      color: #111714;
-      background: var(--lavender);
-      border-color: var(--lavender);
-    }
-
-    .song-tab-panel[hidden] {
-      display: none !important;
     }
 
     .results {
@@ -437,6 +396,12 @@
       margin-bottom: 10px;
     }
 
+    .tag.warn {
+      color: #111714;
+      background: var(--sage);
+      border-color: var(--sage);
+    }
+
     .verified-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -468,21 +433,21 @@
       line-height: 1.25;
     }
 
-    .resource-results {
+    .resource-results,
+    .prep-cards {
       display: grid;
       gap: 10px;
       margin-top: 12px;
     }
 
-    .resource-panel {
+    .resource-panel,
+    .prep-card {
       padding: 14px;
       border: 1px solid rgba(168, 197, 160, 0.12);
       border-radius: 14px;
       background: rgba(255, 255, 255, 0.025);
     }
 
-    .resource-title-link,
-    .resource-output,
     .resource-link {
       color: var(--cream);
       font-size: 0.96rem;
@@ -490,46 +455,24 @@
       overflow-wrap: anywhere;
     }
 
-    .meaning-output,
-    .prep-card__body {
+    .prep-card h3 {
+      margin-bottom: 8px;
+      font-size: 1.25rem;
+    }
+
+    .prep-body,
+    .meaning-output {
       color: var(--muted);
       line-height: 1.65;
     }
 
-    .prep-cards {
-      display: grid;
-      gap: 10px;
-    }
-
-    .prep-card {
-      border: 1px solid rgba(168, 197, 160, 0.12);
-      border-radius: 14px;
-      background: rgba(255, 255, 255, 0.025);
-      overflow: hidden;
-    }
-
-    .prep-card summary {
-      list-style: none;
-      cursor: pointer;
-      padding: 14px;
-      color: var(--cream);
-      font-weight: 800;
-    }
-
-    .prep-card summary::-webkit-details-marker {
-      display: none;
-    }
-
-    .prep-card__body {
-      padding: 0 14px 14px;
-    }
-
-    .prep-card__body ul,
+    .prep-body ul,
     .meaning-output ul {
       margin: 10px 0 0;
       padding-left: 18px;
     }
 
+    .action-row,
     .share-panel__actions {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -582,6 +525,15 @@
     .footer-links {
       display: flex;
       gap: 14px;
+      align-items: center;
+    }
+
+    .footer-link-button {
+      padding: 0;
+      border: 0;
+      background: transparent;
+      cursor: pointer;
+      color: var(--muted);
     }
 
     .bottom-nav {
@@ -626,6 +578,67 @@
       background: rgba(168, 197, 160, 0.08);
     }
 
+    .contact-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      display: grid;
+      place-items: center;
+      padding: 22px;
+      background: rgba(3, 7, 5, 0.72);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 220ms ease;
+    }
+
+    .contact-modal.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .contact-card-modal {
+      position: relative;
+      width: min(360px, 100%);
+      border: 1px solid rgba(168, 197, 160, 0.24);
+      border-radius: 18px;
+      background: rgba(25, 35, 29, 0.98);
+      box-shadow: 0 30px 90px rgba(0, 0, 0, 0.48);
+      padding: 24px 18px 18px;
+    }
+
+    .contact-close {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      border: 0;
+      background: transparent;
+      color: var(--muted);
+      font-size: 1.35rem;
+      cursor: pointer;
+    }
+
+    .contact-copy {
+      margin-top: 12px;
+      color: var(--muted);
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+
+    .contact-form {
+      display: grid;
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .contact-note {
+      margin-top: 12px;
+      color: var(--muted-soft);
+      font-size: 0.8rem;
+      line-height: 1.45;
+    }
+
     @media (min-width: 760px) {
       body {
         padding: 18px 0;
@@ -645,7 +658,8 @@
 
     @media (max-width: 380px) {
       .verified-grid,
-      .share-panel__actions {
+      .share-panel__actions,
+      .action-row {
         grid-template-columns: 1fr;
       }
     }
@@ -681,17 +695,17 @@
       <section class="screen-block">
         <div class="hero-copy">
           <h1>SoundSense</h1>
-          <p>Any song. Full breakdown. Ready to play, reflect on, and share with your team.</p>
+          <p>Any song. Full breakdown. Ready to play, reflect on, and share with wisdom.</p>
         </div>
 
         <article class="card tone-card">
-          <div class="form-card">
+          <div class="form-block">
             <div class="field">
               <label for="songInput">Song title + artist, or YouTube link</label>
               <input
                 id="songInput"
                 type="text"
-                placeholder="e.g. Good Grace — Hillsong UNITED, or paste a YouTube link"
+                placeholder="e.g. Good Grace — Hillsong UNITED"
               />
             </div>
 
@@ -707,109 +721,109 @@
               </select>
             </div>
 
-            <button class="primary-button" type="button" id="toneAnalyzeButton">Dive into this song</button>
+            <button class="primary-button" type="button" id="toneAnalyzeButton">
+              Dive into this song
+            </button>
 
             <div class="status" id="toneStatus" role="status" aria-live="polite"></div>
-            <p class="ghost-note">
-              SoundSense helps you listen deeper: meaning, mood, musical feel, and practical prep.
-            </p>
           </div>
 
-          <div id="songTabs" class="song-tabs" hidden></div>
-
           <div class="results" id="songResultsArea" hidden>
-            <div id="songTabPanels">
-              <section class="song-tab-panel" id="songPanel-0">
-                <article class="result-card">
-                  <span class="tag">Song snapshot</span>
-                  <h2>The essentials</h2>
+            <article class="result-card">
+              <span class="tag">Song snapshot</span>
+              <h2>The essentials</h2>
 
-                  <div class="verified-grid">
-                    <div class="verified-item">
-                      <span>Song</span>
-                      <strong id="verifiedSongName">—</strong>
-                    </div>
-                    <div class="verified-item">
-                      <span>Artist</span>
-                      <strong id="verifiedArtist">—</strong>
-                    </div>
-                    <div class="verified-item">
-                      <span>BPM</span>
-                      <strong id="verifiedBpm">—</strong>
-                    </div>
-                    <div class="verified-item">
-                      <span>Key</span>
-                      <strong id="verifiedKey">—</strong>
-                    </div>
-                    <div class="verified-item" style="grid-column: 1 / -1;">
-                      <span>Confidence</span>
-                      <strong id="verifiedConfidence">—</strong>
-                    </div>
-                  </div>
-                </article>
-
-                <article class="result-card">
-                  <span class="tag">Quick links</span>
-                  <h3>Lyrics, chords, and tutorial help</h3>
-
-                  <div class="resource-results">
-                    <div class="resource-panel">
-                      <div id="lyricsResult" class="resource-output resource-title-link">Find Lyrics</div>
-                    </div>
-                    <div class="resource-panel">
-                      <div id="chordsResult" class="resource-output resource-title-link">Find Chords</div>
-                    </div>
-                    <div class="resource-panel">
-                      <div id="tutorialResult" class="resource-output resource-title-link">Find Instrument Tutorial</div>
-                    </div>
-                  </div>
-                </article>
-
-                <article class="result-card">
-                  <span class="tag">Heart check</span>
-                  <h3>What the song is saying</h3>
-                  <div id="songMeaningResult" class="meaning-output"></div>
-                </article>
-
-                <section class="prep-cards" id="prepCards">
-                  <details class="prep-card" open>
-                    <summary>Instrument guidance</summary>
-                    <div class="prep-card__body" id="instrumentGuidanceResult"></div>
-                  </details>
-
-                  <details class="prep-card">
-                    <summary>Team rehearsal prep</summary>
-                    <div class="prep-card__body" id="teamPrepResult"></div>
-                  </details>
-
-                  <details class="prep-card">
-                    <summary>Reflection + application</summary>
-                    <div class="prep-card__body" id="faithLensResult"></div>
-                  </details>
-                </section>
-
-                <div class="share-panel" id="toneSharePanel" hidden>
-                  <h3>Save or share this SoundSense breakdown</h3>
-                  <p>
-                    Save privately to your account, or create a public RootedByte link
-                    that anyone with the link can view.
-                  </p>
-
-                  <div class="share-panel__actions">
-                    <button class="primary-button" type="button" id="saveToneOutput">
-                      Save
-                    </button>
-
-                    <button class="secondary-button" type="button" id="shareToneOutput">
-                      Share
-                    </button>
-                  </div>
-
-                  <div class="status" id="toneSaveStatus" role="status" aria-live="polite"></div>
-                  <div class="status" id="toneShareStatus" role="status" aria-live="polite"></div>
-                  <div class="share-link-box" id="toneShareLink" hidden></div>
+              <div class="verified-grid">
+                <div class="verified-item">
+                  <span>Song</span>
+                  <strong id="verifiedSongName">—</strong>
                 </div>
-              </section>
+                <div class="verified-item">
+                  <span>Artist</span>
+                  <strong id="verifiedArtist">—</strong>
+                </div>
+                <div class="verified-item">
+                  <span>BPM</span>
+                  <strong id="verifiedBpm">—</strong>
+                </div>
+                <div class="verified-item">
+                  <span>Key</span>
+                  <strong id="verifiedKey">—</strong>
+                </div>
+                <div class="verified-item" style="grid-column: 1 / -1;">
+                  <span>Confidence</span>
+                  <strong id="verifiedConfidence">—</strong>
+                </div>
+              </div>
+            </article>
+
+            <article class="result-card">
+              <span class="tag">Mood + wisdom</span>
+              <h3>Listen with discernment</h3>
+              <div class="meaning-output" id="discernmentResult"></div>
+            </article>
+
+            <article class="result-card">
+              <span class="tag">Meaning</span>
+              <h3>What this song may be carrying</h3>
+              <div id="songMeaningResult" class="meaning-output"></div>
+            </article>
+
+            <article class="result-card">
+              <span class="tag">Quick links</span>
+              <h3>Lyrics, chords, and tutorial help</h3>
+
+              <div class="resource-results">
+                <div class="resource-panel">
+                  <div id="lyricsResult"></div>
+                </div>
+                <div class="resource-panel">
+                  <div id="chordsResult"></div>
+                </div>
+                <div class="resource-panel">
+                  <div id="tutorialResult"></div>
+                </div>
+              </div>
+            </article>
+
+            <section class="prep-cards">
+              <article class="prep-card">
+                <h3>Your role prep</h3>
+                <div class="prep-body" id="instrumentGuidanceResult"></div>
+              </article>
+
+              <article class="prep-card">
+                <h3>Song flow</h3>
+                <div class="prep-body" id="teamPrepResult"></div>
+              </article>
+
+              <article class="prep-card">
+                <h3>Wisdom lens</h3>
+                <div class="prep-body" id="faithLensResult"></div>
+              </article>
+            </section>
+
+            <div class="action-row">
+              <button class="secondary-button" type="button" id="journalToneOutput">
+                Write journal
+              </button>
+              <button class="secondary-button" type="button" id="resetToneOutput">
+                Explore another song
+              </button>
+            </div>
+
+            <div class="share-panel" id="toneSharePanel" hidden>
+              <h3>Save or share</h3>
+              <p>Keep this privately, or create a public link.</p>
+
+              <div class="share-panel__actions">
+                <button class="primary-button" type="button" id="saveToneOutput">Save</button>
+                <button class="secondary-button" type="button" id="shareToneOutput">Share</button>
+              </div>
+
+              <div class="status" id="toneSaveStatus" role="status" aria-live="polite"></div>
+              <div class="status" id="toneShareStatus" role="status" aria-live="polite"></div>
+              <div class="share-link-box" id="toneShareLink" hidden></div>
             </div>
           </div>
         </article>
@@ -843,7 +857,7 @@
           <div class="footer-bottom">
             <p>© <span id="year"></span> RootedByte</p>
             <div class="footer-links">
-              <a href="mailto:rootedbyte@outlook.com">Contact</a>
+              <button class="footer-link-button" type="button" id="openContactModal">Contact</button>
               <a href="privacy.html">Privacy</a>
             </div>
           </div>
@@ -886,305 +900,420 @@
     </a>
   </nav>
 
+  <div class="contact-modal" id="contactModal" aria-hidden="true">
+    <section class="contact-card-modal" role="dialog" aria-modal="true" aria-labelledby="contactModalTitle">
+      <button class="contact-close" type="button" id="closeContactModal" aria-label="Close contact form">×</button>
+
+      <h2 class="contact-title" id="contactModalTitle">Contact RootedByte</h2>
+      <p class="contact-copy">
+        Send a message and keep the direct email visible here too.
+      </p>
+
+      <form class="contact-form" id="contactForm">
+        <input type="text" id="contactName" placeholder="Your name" />
+        <input type="email" id="contactEmail" placeholder="Your email" />
+        <textarea id="contactMessage" placeholder="Your message"></textarea>
+        <button class="primary-button" type="submit">Send message</button>
+      </form>
+
+      <p class="contact-note">
+        Direct email: <a href="mailto:rootedbyte@outlook.com">rootedbyte@outlook.com</a>
+      </p>
+    </section>
+  </div>
+
   <script>
-  const $ = (selector) => document.querySelector(selector);
-  const $$ = (selector) => Array.from(document.querySelectorAll(selector));
+    const $ = (selector) => document.querySelector(selector);
 
-  const year = $("#year");
-  if (year) year.textContent = new Date().getFullYear();
+    const year = $("#year");
+    if (year) year.textContent = new Date().getFullYear();
 
-  let latestToneOutput = null;
+    let latestToneOutput = null;
 
-  function escapeHtml(value) {
-    return String(value ?? "")
-      .replace(/&/g, "&amp;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;")
-      .replace(/"/g, "&quot;")
-      .replace(/'/g, "&#039;");
-  }
-
-  function setStatus(element, message, type = "info", loading = false) {
-    if (!element) return;
-
-    element.className = type === "error" ? "status error" : "status";
-    element.innerHTML = loading
-      ? '<span class="spinner" aria-hidden="true"></span><span>' + escapeHtml(message) + "</span>"
-      : escapeHtml(message);
-  }
-
-  async function postJson(url, body) {
-    const response = await fetch(url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(body)
-    });
-
-    const data = await response.json().catch(() => ({}));
-
-    if (!response.ok) {
-      throw new Error(data.error || "Something went wrong. Please try again.");
+    function escapeHtml(value) {
+      return String(value ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
     }
 
-    return data;
-  }
+    function setStatus(element, message, type = "info", loading = false) {
+      if (!element) return;
 
-  function renderListOrParagraph(value) {
-    if (!value) return "<p>No details available yet.</p>";
-
-    if (Array.isArray(value)) {
-      return `<ul>${value.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}</ul>`;
+      element.className = type === "error" ? "status error" : "status";
+      element.innerHTML = loading
+        ? '<span class="spinner" aria-hidden="true"></span><span>' + escapeHtml(message) + "</span>"
+        : escapeHtml(message);
     }
 
-    const text = String(value).trim();
-    if (!text) return "<p>No details available yet.</p>";
+    async function postJson(url, body) {
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(body)
+      });
 
-    const lines = text
-      .split("\n")
-      .map((line) => line.trim())
-      .filter(Boolean);
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok) throw new Error(data.error || "Something went wrong. Please try again.");
+      return data;
+    }
 
-    if (lines.length > 1) {
+    function renderListOrParagraph(value) {
+      if (!value) return "<p>No details available yet.</p>";
+
+      if (Array.isArray(value)) {
+        return `<ul>${value.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}</ul>`;
+      }
+
+      const text = String(value).trim();
+      if (!text) return "<p>No details available yet.</p>";
+
+      const lines = text
+        .split("\n")
+        .map((line) => line.trim())
+        .filter(Boolean);
+
+      if (lines.length > 1) {
+        return `<ul>${lines.map((line) => `<li>${escapeHtml(line.replace(/^[-•*]\s*/, ""))}</li>`).join("")}</ul>`;
+      }
+
+      return `<p>${escapeHtml(text)}</p>`;
+    }
+
+    function buildSearchUrl(query) {
+      const cleanQuery = String(query || "").trim();
+      if (!cleanQuery) return "";
+      return `https://www.google.com/search?q=${encodeURIComponent(cleanQuery)}`;
+    }
+
+    function renderSearchLink(label, query) {
+      const cleanQuery = String(query || "").trim();
+      if (!cleanQuery) return `<span>${escapeHtml(label)} unavailable</span>`;
+
+      const href = buildSearchUrl(cleanQuery);
+
       return `
-        <ul>
-          ${lines
-            .map((line) => `<li>${escapeHtml(line.replace(/^[-•*]\s*/, ""))}</li>`)
-            .join("")}
-        </ul>
+        <a class="resource-link" href="${escapeHtml(href)}" target="_blank" rel="noopener">
+          ${escapeHtml(label)}
+        </a>
+        <p class="ghost-note">${escapeHtml(cleanQuery)}</p>
       `;
     }
 
-    return `<p>${escapeHtml(text)}</p>`;
-  }
+    function renderDiscernment(data) {
+      const cautionTag = data.is_heavy_content
+        ? `<span class="tag warn">Use wisdom here</span>`
+        : "";
 
-  function buildSearchUrl(query) {
-    const cleanQuery = String(query || "").trim();
-
-    if (!cleanQuery) {
-      return "";
+      return `
+        ${cautionTag}
+        <p><strong>Mood:</strong> ${escapeHtml(data.mood_summary || "Not clearly detected.")}</p>
+        <p><strong>Discernment:</strong> ${escapeHtml(data.discernment_note || "Listen with wisdom. Notice what the song strengthens in your thoughts and mood.")}</p>
+        ${data.content_caution ? `<p><strong>Caution:</strong> ${escapeHtml(data.content_caution)}</p>` : ""}
+      `;
     }
 
-    return `https://www.google.com/search?q=${encodeURIComponent(cleanQuery)}`;
-  }
+    function renderToneResult(data) {
+      latestToneOutput = data;
 
-  function renderSearchLink(label, query) {
-    const cleanQuery = String(query || "").trim();
+      $("#verifiedSongName").textContent = data.song || "Unable to verify";
+      $("#verifiedArtist").textContent = data.artist || "Unable to verify";
+      $("#verifiedBpm").textContent = data.bpm || "Unable to verify";
+      $("#verifiedKey").textContent = data.key || "Unable to verify";
+      $("#verifiedConfidence").textContent = data.metadata_confidence || "Not detected";
 
-    if (!cleanQuery) {
-      return `<span>${escapeHtml(label)} unavailable</span>`;
+      $("#lyricsResult").innerHTML = renderSearchLink("Find lyrics", data.lyrics_search_query);
+      $("#chordsResult").innerHTML = renderSearchLink("Find chords", data.chord_search_query);
+      $("#tutorialResult").innerHTML = renderSearchLink("Find tutorial", data.tutorial_search_query);
+
+      $("#discernmentResult").innerHTML = renderDiscernment(data);
+      $("#songMeaningResult").innerHTML = renderListOrParagraph(data.song_meaning);
+      $("#instrumentGuidanceResult").innerHTML = renderListOrParagraph(data.instrument_guidance);
+      $("#teamPrepResult").innerHTML = renderListOrParagraph(
+        [data.arrangement_feel, data.listening_guide, data.rehearsal_prep].filter(Boolean)
+      );
+      $("#faithLensResult").innerHTML = renderListOrParagraph(
+        [data.faith_lens, data.spiritual_reflection].filter(Boolean)
+      );
+
+      $("#songResultsArea").hidden = false;
+      $("#toneSharePanel").hidden = false;
     }
 
-    const href = buildSearchUrl(cleanQuery);
-
-    return `
-      <a class="resource-link" href="${escapeHtml(href)}" target="_blank" rel="noopener">
-        ${escapeHtml(label)}
-      </a>
-      <p class="ghost-note">${escapeHtml(cleanQuery)}</p>
-    `;
-  }
-
-  function renderToneResult(data) {
-    latestToneOutput = data;
-
-    $("#verifiedSongName").textContent = data.song || "Unable to verify";
-    $("#verifiedArtist").textContent = data.artist || "Unable to verify";
-    $("#verifiedBpm").textContent = data.bpm || "Unable to verify";
-    $("#verifiedKey").textContent = data.key || "Unable to verify";
-    $("#verifiedConfidence").textContent = data.metadata_confidence || data.confidence || "Not detected";
-
-    $("#lyricsResult").innerHTML = renderSearchLink("Find lyrics", data.lyrics_search_query);
-    $("#chordsResult").innerHTML = renderSearchLink("Find chords", data.chord_search_query);
-    $("#tutorialResult").innerHTML = renderSearchLink("Find tutorial", data.tutorial_search_query);
-
-    $("#songMeaningResult").innerHTML = renderListOrParagraph(data.song_meaning || data.summary);
-    $("#instrumentGuidanceResult").innerHTML = renderListOrParagraph(data.instrument_guidance);
-
-    $("#teamPrepResult").innerHTML = renderListOrParagraph(
-      data.rehearsal_prep || data.team_prep || data.arrangement_feel || data.listening_guide
-    );
-
-    $("#faithLensResult").innerHTML = renderListOrParagraph(
-      data.faith_lens || data.spiritual_reflection || data.reflection
-    );
-
-    $("#songResultsArea").hidden = false;
-    $("#toneSharePanel").hidden = false;
-  }
-
-  async function createSharedOutput({ appType, title, inputSummary, output, statusElement, linkElement }) {
-    statusElement.className = "status";
-    statusElement.textContent = "Creating share link...";
-
-    const response = await fetch("/api/share", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        appType,
-        title,
-        inputSummary,
-        output
-      })
-    });
-
-    const data = await response.json().catch(() => ({}));
-
-    if (!response.ok) {
-      throw new Error(data.error || "Could not create share link.");
-    }
-
-    linkElement.hidden = false;
-    linkElement.textContent = data.shareUrl;
-
-    try {
-      await navigator.clipboard.writeText(data.shareUrl);
-      statusElement.textContent = "Share link created and copied.";
-    } catch {
-      statusElement.textContent = "Share link created.";
-    }
-
-    if (navigator.share) {
-      try {
-        await navigator.share({
-          title,
-          text: `View this ${title} from RootedByte.`,
-          url: data.shareUrl
-        });
-      } catch {
-        // User cancelled native share.
-      }
-    }
-
-    return data;
-  }
-
-  function attachToneSaveButton() {
-    const button = $("#saveToneOutput");
-    const statusElement = $("#toneSaveStatus");
-
-    if (!button || !statusElement) return;
-
-    button.onclick = async () => {
-      if (!latestToneOutput) {
-        setStatus(statusElement, "Run SoundSense before saving.", "error");
-        return;
-      }
-
-      button.disabled = true;
+    async function createSharedOutput({ appType, title, inputSummary, output, statusElement, linkElement }) {
       statusElement.className = "status";
-      statusElement.textContent = "Saving privately...";
+      statusElement.textContent = "Creating share link...";
+
+      const response = await fetch("/api/share", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          appType,
+          title,
+          inputSummary,
+          output
+        })
+      });
+
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok) throw new Error(data.error || "Could not create share link.");
+
+      linkElement.hidden = false;
+      linkElement.textContent = data.shareUrl;
 
       try {
-        if (!window.RootedByteSaveOutput || !window.RootedByteSaveOutput.save) {
-          throw new Error("Private saving is not ready yet. Please refresh and try again.");
-        }
+        await navigator.clipboard.writeText(data.shareUrl);
+        statusElement.textContent = "Share link created and copied.";
+      } catch {
+        statusElement.textContent = "Share link created.";
+      }
 
-        const result = await window.RootedByteSaveOutput.save({
-          appType: "soundsense",
-          title: "SoundSense Breakdown",
-          inputSummary: "Private SoundSense breakdown",
-          outputJson: latestToneOutput
-        });
+      return data;
+    }
 
-        if (!result.ok) {
-          statusElement.className = "status error";
+    function attachToneSaveButton() {
+      const button = $("#saveToneOutput");
+      const statusElement = $("#toneSaveStatus");
 
-          if (result.reason === "not_signed_in") {
-            statusElement.innerHTML = `
-              <span>Please sign in to save this privately.</span>
-              <a href="signin.html" style="color: var(--sage); font-weight: 900; text-decoration: underline;">Sign in</a>
-            `;
-            return;
-          }
+      if (!button || !statusElement) return;
 
-          statusElement.textContent = result.message || "Could not save privately.";
+      button.onclick = async () => {
+        if (!latestToneOutput) {
+          setStatus(statusElement, "Run SoundSense before saving.", "error");
           return;
         }
 
+        button.disabled = true;
         statusElement.className = "status";
-        statusElement.textContent = "Saved privately to your account.";
-      } catch (error) {
-        statusElement.className = "status error";
-        statusElement.textContent = error.message || "Could not save privately.";
-      } finally {
-        button.disabled = false;
-      }
-    };
-  }
+        statusElement.textContent = "Saving...";
 
-  function attachToneShareButton() {
-    const button = $("#shareToneOutput");
-    const statusElement = $("#toneShareStatus");
-    const linkElement = $("#toneShareLink");
+        try {
+          if (!window.RootedByteSaveOutput || !window.RootedByteSaveOutput.save) {
+            throw new Error("Private saving is not ready yet. Please refresh and try again.");
+          }
 
-    if (!button || !statusElement || !linkElement) return;
+          const result = await window.RootedByteSaveOutput.save({
+            appType: "soundsense",
+            title: "SoundSense Breakdown",
+            inputSummary: `SoundSense for ${latestToneOutput.song || "song"}`,
+            outputJson: latestToneOutput
+          });
 
-    button.onclick = async () => {
-      if (!latestToneOutput) {
-        setStatus(statusElement, "Run SoundSense before sharing.", "error");
+          if (!result.ok) {
+            statusElement.className = "status error";
+
+            if (result.reason === "not_signed_in") {
+              statusElement.innerHTML = `
+                <span>Please sign in to save this.</span>
+                <a href="signin.html" style="color: var(--sage); font-weight: 900; text-decoration: underline;">Sign in</a>
+              `;
+              return;
+            }
+
+            statusElement.textContent = result.message || "Could not save.";
+            return;
+          }
+
+          statusElement.className = "status";
+          statusElement.textContent = "Saved.";
+        } catch (error) {
+          statusElement.className = "status error";
+          statusElement.textContent = error.message || "Could not save.";
+        } finally {
+          button.disabled = false;
+        }
+      };
+    }
+
+    function attachToneShareButton() {
+      const button = $("#shareToneOutput");
+      const statusElement = $("#toneShareStatus");
+      const linkElement = $("#toneShareLink");
+
+      if (!button || !statusElement || !linkElement) return;
+
+      button.onclick = async () => {
+        if (!latestToneOutput) {
+          setStatus(statusElement, "Run SoundSense before sharing.", "error");
+          return;
+        }
+
+        button.disabled = true;
+        statusElement.className = "status";
+
+        try {
+          await createSharedOutput({
+            appType: "soundsense",
+            title: "SoundSense Breakdown",
+            inputSummary: `SoundSense for ${latestToneOutput.song || "song"}`,
+            output: latestToneOutput,
+            statusElement,
+            linkElement
+          });
+        } catch (error) {
+          statusElement.className = "status error";
+          statusElement.textContent = error.message || "Could not create share link.";
+        } finally {
+          button.disabled = false;
+        }
+      };
+    }
+
+    function attachToneJournalButton() {
+      const button = $("#journalToneOutput");
+      if (!button) return;
+
+      button.onclick = () => {
+        if (!latestToneOutput) return;
+
+        const draft = [
+          "SoundSense reflection",
+          "",
+          `Song: ${latestToneOutput.song || ""}`,
+          `Artist: ${latestToneOutput.artist || ""}`,
+          "",
+          "Mood:",
+          latestToneOutput.mood_summary || "",
+          "",
+          "Discernment:",
+          latestToneOutput.discernment_note || "",
+          "",
+          "What this song is saying:",
+          latestToneOutput.song_meaning || "",
+          "",
+          "What I want to remember:",
+          ""
+        ].join("\n");
+
+        try {
+          localStorage.setItem("rootedbyte_prefill_journal", draft);
+        } catch {}
+        window.location.href = "index.html#screen-journal";
+      };
+    }
+
+    function attachToneResetButton() {
+      const button = $("#resetToneOutput");
+      if (!button) return;
+
+      button.onclick = () => {
+        latestToneOutput = null;
+        $("#songInput").value = "";
+        $("#songResultsArea").hidden = true;
+        $("#toneSharePanel").hidden = true;
+        $("#toneShareLink").hidden = true;
+        $("#toneShareLink").textContent = "";
+        $("#toneSaveStatus").textContent = "";
+        $("#toneShareStatus").textContent = "";
+        $("#toneStatus").textContent = "";
+        $("#songInput").focus();
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      };
+    }
+
+    $("#toneAnalyzeButton").addEventListener("click", async () => {
+      const button = $("#toneAnalyzeButton");
+      const songInput = $("#songInput").value.trim();
+      const instrument = $("#instrumentSelect").value;
+      const status = $("#toneStatus");
+      const resultsArea = $("#songResultsArea");
+
+      if (!songInput) {
+        setStatus(status, "Paste a song title or YouTube link before running SoundSense.", "error");
+        status.scrollIntoView({ behavior: "smooth", block: "center" });
         return;
       }
 
       button.disabled = true;
-      statusElement.className = "status";
+      button.textContent = "Loading...";
+
+      resultsArea.hidden = true;
+      $("#toneSharePanel").hidden = true;
+      $("#toneShareLink").hidden = true;
+      $("#toneShareLink").textContent = "";
+      $("#toneSaveStatus").textContent = "";
+      $("#toneShareStatus").textContent = "";
+
+      setStatus(status, "Listening for the signal in this song...", "info", true);
+      status.scrollIntoView({ behavior: "smooth", block: "center" });
 
       try {
-        await createSharedOutput({
-          appType: "soundsense",
-          title: "SoundSense Breakdown",
-          inputSummary: "Shared SoundSense breakdown",
-          output: latestToneOutput,
-          statusElement,
-          linkElement
+        const data = await postJson("/api/tone", {
+          songInput,
+          instrument
         });
+
+        renderToneResult(data);
+        attachToneSaveButton();
+        attachToneShareButton();
+        attachToneJournalButton();
+        attachToneResetButton();
+
+        setStatus(status, "SoundSense breakdown ready.");
+        resultsArea.scrollIntoView({ behavior: "smooth", block: "start" });
       } catch (error) {
-        statusElement.className = "status error";
-        statusElement.textContent = error.message || "Could not create share link.";
+        setStatus(status, error.message, "error");
+        status.scrollIntoView({ behavior: "smooth", block: "center" });
       } finally {
         button.disabled = false;
+        button.textContent = "Dive into this song";
       }
-    };
-  }
+    });
 
-  $("#toneAnalyzeButton").addEventListener("click", async () => {
-    const songInput = $("#songInput").value.trim();
-    const instrument = $("#instrumentSelect").value;
-    const status = $("#toneStatus");
+    const contactModal = $("#contactModal");
+    const openContactModal = $("#openContactModal");
+    const closeContactModal = $("#closeContactModal");
+    const contactForm = $("#contactForm");
 
-    if (!songInput) {
-      setStatus(status, "Paste a song title or YouTube link before running SoundSense.", "error");
-      return;
+    function showContactModal() {
+      contactModal.classList.add("active");
+      contactModal.setAttribute("aria-hidden", "false");
     }
 
-    $("#songResultsArea").hidden = true;
-    $("#toneSharePanel").hidden = true;
-    $("#toneShareLink").hidden = true;
-    $("#toneShareLink").textContent = "";
-    $("#toneSaveStatus").textContent = "";
-    $("#toneShareStatus").textContent = "";
+    function hideContactModal() {
+      contactModal.classList.remove("active");
+      contactModal.setAttribute("aria-hidden", "true");
+    }
 
-    setStatus(status, "Listening for the signal in this song...", "info", true);
+    if (openContactModal) {
+      openContactModal.addEventListener("click", showContactModal);
+    }
 
-    try {
-      const data = await postJson("/api/tone", {
-        songInput,
-        instrument
+    if (closeContactModal) {
+      closeContactModal.addEventListener("click", hideContactModal);
+    }
+
+    if (contactModal) {
+      contactModal.addEventListener("click", (event) => {
+        if (event.target === contactModal) {
+          hideContactModal();
+        }
       });
-
-      renderToneResult(data);
-      attachToneSaveButton();
-      attachToneShareButton();
-
-      setStatus(status, "SoundSense breakdown ready.");
-    } catch (error) {
-      setStatus(status, error.message, "error");
     }
-  });
-</script>
+
+    if (contactForm) {
+      contactForm.addEventListener("submit", (event) => {
+        event.preventDefault();
+
+        const name = $("#contactName").value.trim();
+        const email = $("#contactEmail").value.trim();
+        const message = $("#contactMessage").value.trim();
+
+        const subject = encodeURIComponent("RootedByte Contact Form");
+        const body = encodeURIComponent(
+          `Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`
+        );
+
+        window.location.href = `mailto:rootedbyte@outlook.com?subject=${subject}&body=${body}`;
+      });
+    }
+  </script>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="js/rootedbyte-auth-nav.js"></script>
