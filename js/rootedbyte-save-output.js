@@ -1,69 +1,112 @@
 (function () {
-  let rootedByteSaveClient = null;
-  let rootedByteSaveConfigPromise = null;
-
-  async function loadRootedByteSaveConfig() {
-    if (!rootedByteSaveConfigPromise) {
-      rootedByteSaveConfigPromise = fetch("/api/public-config")
-        .then(function (res) {
-          if (!res.ok) {
-            throw new Error("Could not load public Supabase config.");
-          }
-          return res.json();
-        })
-        .then(function (config) {
-          const supabaseUrl = config.supabaseUrl || config.SUPABASE_URL;
-          const supabaseAnonKey =
-            config.supabaseAnonKey || config.SUPABASE_ANON_KEY;
-
-          if (!supabaseUrl || !supabaseAnonKey) {
-            throw new Error("Missing Supabase public config.");
-          }
-
-          return {
-            supabaseUrl: supabaseUrl,
-            supabaseAnonKey: supabaseAnonKey
-          };
-        });
+  async function getRootedByteSaveClient() {
+    if (
+      window.RootedByteAuth &&
+      typeof window.RootedByteAuth.getClient === 'function'
+    ) {
+      return window.RootedByteAuth.getClient();
     }
 
-    return rootedByteSaveConfigPromise;
-  }
-
-  async function getRootedByteSaveClient() {
-    if (rootedByteSaveClient) {
-      return rootedByteSaveClient;
+    if (window.rootedbyteSupabase) {
+      return window.rootedbyteSupabase;
     }
 
     if (!window.supabase || !window.supabase.createClient) {
-      throw new Error("Supabase browser client is not loaded.");
+      throw new Error('Supabase browser client is not loaded.');
     }
 
-    const config = await loadRootedByteSaveConfig();
+    const response = await fetch('/api/public-config', {
+      method: 'GET',
+      cache: 'no-store'
+    });
 
-    rootedByteSaveClient = window.supabase.createClient(
+    const config = await response.json().catch(() => ({}));
+
+    if (!response.ok) {
+      throw new Error(config.error || 'Could not load public Supabase config.');
+    }
+
+    if (!config.supabaseUrl || !config.supabaseAnonKey) {
+      throw new Error('Missing Supabase public config.');
+    }
+
+    window.rootedbyteSupabase = window.supabase.createClient(
       config.supabaseUrl,
       config.supabaseAnonKey
     );
 
-    return rootedByteSaveClient;
+    return window.rootedbyteSupabase;
   }
 
   async function getCurrentRootedByteUser() {
     const client = await getRootedByteSaveClient();
-    const result = await client.auth.getSession();
 
-    if (result.error) {
-      throw result.error;
+    const { data, error } = await client.auth.getSession();
+
+    if (error) {
+      throw error;
     }
 
-    const session = result.data && result.data.session;
+    const session = data && data.session;
 
     if (!session || !session.user) {
       return null;
     }
 
     return session.user;
+  }
+
+  function normalizeAppType(appType) {
+    const value = String(appType || '').trim().toLowerCase();
+
+    const map = {
+      rootedos: 'inner_work',
+      'inner work': 'inner_work',
+      inner_work: 'inner_work',
+
+      newsverse: 'signal',
+      signal: 'signal',
+
+      tone: 'soundsense',
+      soundsense: 'soundsense',
+      'sound sense': 'soundsense'
+    };
+
+    return map[value] || value || 'rootedbyte';
+  }
+
+  function normalizeTitle(title, appType) {
+    const cleanTitle = String(title || '').trim();
+
+    if (cleanTitle) {
+      return cleanTitle;
+    }
+
+    const normalizedApp = normalizeAppType(appType);
+
+    if (normalizedApp === 'inner_work') return 'Inner Work Reflection';
+    if (normalizedApp === 'signal') return 'Signal Check';
+    if (normalizedApp === 'soundsense') return 'SoundSense Result';
+
+    return 'RootedByte Output';
+  }
+
+  function normalizeOutputJson(outputJson) {
+    if (!outputJson) {
+      return null;
+    }
+
+    if (typeof outputJson === 'object') {
+      return outputJson;
+    }
+
+    try {
+      return JSON.parse(outputJson);
+    } catch {
+      return {
+        content: String(outputJson)
+      };
+    }
   }
 
   async function saveRootedByteOutput(options) {
@@ -73,46 +116,55 @@
     if (!user) {
       return {
         ok: false,
-        reason: "not_signed_in",
-        message: "Please sign in to save this privately."
+        reason: 'not_signed_in',
+        message: 'Please sign in to save this privately.'
       };
     }
 
-    if (!options || !options.appType || !options.title || !options.outputJson) {
+    const outputJson = normalizeOutputJson(options && options.outputJson);
+
+    if (!options || !outputJson) {
       return {
         ok: false,
-        reason: "missing_data",
-        message: "Could not save yet. Missing output details."
+        reason: 'missing_data',
+        message: 'Could not save yet. Missing output details.'
       };
     }
+
+    const appType = normalizeAppType(options.appType);
+    const title = normalizeTitle(options.title, appType);
 
     const payload = {
       user_id: user.id,
-      app_type: options.appType,
-      title: options.title,
-      input_summary: options.inputSummary || "",
-      output_json: options.outputJson
+      app_type: appType,
+      title: title,
+      input_summary: String(options.inputSummary || '').trim(),
+      output_json: outputJson
     };
 
-    const insertResult = await client
-      .from("saved_outputs")
+    const { data, error } = await client
+      .from('saved_outputs')
       .insert(payload)
-      .select("id")
+      .select('id, app_type, title, created_at')
       .single();
 
-    if (insertResult.error) {
-      throw insertResult.error;
+    if (error) {
+      throw error;
     }
 
     return {
       ok: true,
-      id: insertResult.data.id,
-      message: "Saved privately to your account."
+      id: data.id,
+      appType: data.app_type,
+      title: data.title,
+      createdAt: data.created_at,
+      message: 'Saved privately to your account.'
     };
   }
 
   window.RootedByteSaveOutput = {
     save: saveRootedByteOutput,
-    getUser: getCurrentRootedByteUser
+    getUser: getCurrentRootedByteUser,
+    getClient: getRootedByteSaveClient
   };
 })();
