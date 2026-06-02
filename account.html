@@ -581,9 +581,9 @@
    <div class="nav-scroll-wrap">
       <div class="nav-links">
       <a href="index.html">Home</a>
-      <a href="tone.html">Song DiveIn</a>
-      <a href="newsverse.html">NewsVerse</a>
-      <a href="rootedos.html">RootedOS</a>
+      <a href="tone.html">SoundSense</a>
+      <a href="newsverse.html">Signal</a>
+      <a href="rootedos.html">Inner Work</a>
       <a href="account.html" class="active">My Account</a>
       <button type="button" id="signOutButton">Sign Out</button>
     </div>
@@ -637,6 +637,8 @@
   const accountContent = $('#accountContent');
   const signOutButton = $('#signOutButton');
 
+  const SIGNED_IN_FLAG = 'rootedbyte_user_signed_in';
+
   let supabaseClient = null;
   let currentUser = null;
   let currentTab = 'saved';
@@ -667,269 +669,335 @@
   function setStatus(message, type = 'info') {
     if (!accountStatus) return;
     accountStatus.className = type === 'error' ? 'status error' : 'status';
-    accountStatus.textContent = message;
+    accountStatus.textContent = message || '';
+  }
+
+  function setLocalSignedInFlag(isSignedIn) {
+    try {
+      if (isSignedIn) {
+        localStorage.setItem(SIGNED_IN_FLAG, 'true');
+      } else {
+        localStorage.removeItem(SIGNED_IN_FLAG);
+      }
+    } catch {
+      // Ignore localStorage issues.
+    }
+  }
+
+  function normalizeAppType(appType) {
+    const value = String(appType || '').trim().toLowerCase();
+
+    const map = {
+      rootedos: 'inner_work',
+      'inner work': 'inner_work',
+      inner_work: 'inner_work',
+
+      newsverse: 'signal',
+      signal: 'signal',
+
+      tone: 'soundsense',
+      soundsense: 'soundsense',
+      'sound sense': 'soundsense'
+    };
+
+    return map[value] || value || 'rootedbyte';
   }
 
   function getAppLabel(appType) {
-    if (appType === 'rootedos') return 'RootedOS';
-    if (appType === 'newsverse') return 'NewsVerse';
-    if (appType === 'tone') return 'Song DiveIn';
+    const normalized = normalizeAppType(appType);
+
+    if (normalized === 'inner_work') return 'Inner Work';
+    if (normalized === 'signal') return 'Signal';
+    if (normalized === 'soundsense') return 'SoundSense';
+
     return 'RootedByte';
   }
 
   function renderSavedOutputBody(outputJson) {
-  const data = outputJson || {};
+    const data = outputJson || {};
 
-  const areas = Array.isArray(data.areas) ? data.areas : [];
-  const plan = data.daily_plan || {};
-  const rootedVerses = Array.isArray(data.reflection_verses)
-    ? data.reflection_verses.slice(0, 3)
-    : [];
+    const areas = Array.isArray(data.areas) ? data.areas : [];
+    const plan = data.daily_plan || {};
+    const rootedVerses = Array.isArray(data.reflection_verses)
+      ? data.reflection_verses.slice(0, 3)
+      : [];
 
-  const newsVerses = Array.isArray(data.verses) ? data.verses : [];
-  const prayerPoints = Array.isArray(data.prayer_points) ? data.prayer_points : [];
+    const newsVerses = Array.isArray(data.verses) ? data.verses : [];
+    const prayerPoints = Array.isArray(data.prayer_points) ? data.prayer_points : [];
 
-  const isSongDiveIn =
-    data.song ||
-    data.artist ||
-    data.song_meaning ||
-    data.faith_lens ||
-    data.instrument_guidance;
+    const isSoundSense =
+      data.song ||
+      data.artist ||
+      data.song_meaning ||
+      data.faith_lens ||
+      data.instrument_guidance ||
+      data.rehearsal_prep ||
+      data.spiritual_reflection;
 
-  const isNewsVerse =
-    data.article_summary ||
-    data.overall_theme ||
-    data.exegesis ||
-    data.jesus_lens ||
-    newsVerses.length;
+    const isSignal =
+      data.article_summary ||
+      data.overall_theme ||
+      data.exegesis ||
+      data.jesus_lens ||
+      newsVerses.length;
 
-  const rootedHtml = `
-    ${
-      data.summary
-        ? `<div class="saved-output-block">
-            <span class="tag">Summary</span>
-            <p>${escapeHtml(data.summary)}</p>
-          </div>`
-        : ''
-    }
+    const innerWorkHtml = `
+      ${
+        data.summary
+          ? `<div class="saved-output-block">
+              <span class="tag">Summary</span>
+              <p>${escapeHtml(data.summary)}</p>
+            </div>`
+          : ''
+      }
 
-    ${
-      areas.length
-        ? areas.map((area) => `
-          <div class="saved-output-block">
-            <span class="tag">${escapeHtml(area.area || 'Reflection area')}</span>
-            ${area.urgency ? `<p><strong>Urgency:</strong> ${escapeHtml(area.urgency)}</p>` : ''}
-            ${area.current_state ? `<p><strong>Current state:</strong> ${escapeHtml(area.current_state)}</p>` : ''}
-            ${area.recommendation ? `<p><strong>Recommendation:</strong> ${escapeHtml(area.recommendation)}</p>` : ''}
-            ${area.scripture ? `<p><strong>Scripture:</strong> ${escapeHtml(area.scripture)}</p>` : ''}
-            ${area.action_step ? `<p><strong>Action step:</strong> ${escapeHtml(area.action_step)}</p>` : ''}
-          </div>
-        `).join('')
-        : ''
-    }
-
-    ${
-      Object.keys(plan).length
-        ? `<div class="saved-output-block">
-            <span class="tag">Daily plan</span>
-            <div class="saved-output-grid">
-              ${plan.prayer_minutes ? `<div><strong>Prayer</strong><p>${escapeHtml(plan.prayer_minutes)} minutes</p></div>` : ''}
-              ${plan.bible_reading_minutes ? `<div><strong>Bible reading</strong><p>${escapeHtml(plan.bible_reading_minutes)} minutes</p></div>` : ''}
-              ${plan.social_media_limit_minutes ? `<div><strong>Social media limit</strong><p>${escapeHtml(plan.social_media_limit_minutes)} minutes</p></div>` : ''}
-              ${plan.fasting_recommendation ? `<div><strong>Fasting</strong><p>${escapeHtml(plan.fasting_recommendation)}</p></div>` : ''}
-              ${plan.community_action ? `<div><strong>Community</strong><p>${escapeHtml(plan.community_action)}</p></div>` : ''}
+      ${
+        areas.length
+          ? areas.map((area) => `
+            <div class="saved-output-block">
+              <span class="tag">${escapeHtml(area.area || 'Reflection area')}</span>
+              ${area.urgency ? `<p><strong>Urgency:</strong> ${escapeHtml(area.urgency)}</p>` : ''}
+              ${area.current_state ? `<p><strong>Current state:</strong> ${escapeHtml(area.current_state)}</p>` : ''}
+              ${area.recommendation ? `<p><strong>Recommendation:</strong> ${escapeHtml(area.recommendation)}</p>` : ''}
+              ${area.scripture ? `<p><strong>Scripture:</strong> ${escapeHtml(area.scripture)}</p>` : ''}
+              ${area.action_step ? `<p><strong>Action step:</strong> ${escapeHtml(area.action_step)}</p>` : ''}
             </div>
-          </div>`
-        : ''
+          `).join('')
+          : ''
+      }
+
+      ${
+        Object.keys(plan).length
+          ? `<div class="saved-output-block">
+              <span class="tag">Daily plan</span>
+              <div class="saved-output-grid">
+                ${plan.prayer_minutes ? `<div><strong>Prayer</strong><p>${escapeHtml(plan.prayer_minutes)} minutes</p></div>` : ''}
+                ${plan.bible_reading_minutes ? `<div><strong>Bible reading</strong><p>${escapeHtml(plan.bible_reading_minutes)} minutes</p></div>` : ''}
+                ${plan.social_media_limit_minutes ? `<div><strong>Social media limit</strong><p>${escapeHtml(plan.social_media_limit_minutes)} minutes</p></div>` : ''}
+                ${plan.fasting_recommendation ? `<div><strong>Fasting</strong><p>${escapeHtml(plan.fasting_recommendation)}</p></div>` : ''}
+                ${plan.community_action ? `<div><strong>Community</strong><p>${escapeHtml(plan.community_action)}</p></div>` : ''}
+              </div>
+            </div>`
+          : ''
+      }
+
+      ${
+        rootedVerses.length
+          ? `<div class="saved-output-block">
+              <span class="tag">Verses to reflect on</span>
+              ${rootedVerses.map((verse) => `
+                <blockquote class="saved-output-quote">${escapeHtml(verse.text || '')}</blockquote>
+                <p>
+                  <strong>${escapeHtml(verse.reference || '')}</strong>
+                  ${verse.reflection_prompt ? ' — ' + escapeHtml(verse.reflection_prompt) : ''}
+                </p>
+              `).join('')}
+            </div>`
+          : ''
+      }
+
+      ${
+        data.encouragement
+          ? `<div class="saved-output-block">
+              <span class="tag">Encouragement</span>
+              <p>${escapeHtml(data.encouragement)}</p>
+            </div>`
+          : ''
+      }
+    `;
+
+    const signalHtml = `
+      ${
+        data.overall_theme || data.article_summary
+          ? `<div class="saved-output-block">
+              <span class="tag">Signal summary</span>
+              ${data.overall_theme ? `<h3>${escapeHtml(data.overall_theme)}</h3>` : ''}
+              ${data.article_summary ? `<p>${escapeHtml(data.article_summary)}</p>` : ''}
+            </div>`
+          : ''
+      }
+
+      ${
+        data.thinking_impact
+          ? `<div class="saved-output-block">
+              <span class="tag">Thinking impact</span>
+              <p>${escapeHtml(data.thinking_impact)}</p>
+            </div>`
+          : ''
+      }
+
+      ${
+        data.truth_check
+          ? `<div class="saved-output-block">
+              <span class="tag">Truth check</span>
+              <p>${escapeHtml(data.truth_check)}</p>
+            </div>`
+          : ''
+      }
+
+      ${
+        newsVerses.length
+          ? `<div class="saved-output-block">
+              <span class="tag">Relevant verses</span>
+              ${newsVerses.map((verse) => `
+                <blockquote class="saved-output-quote">${escapeHtml(verse.text || '')}</blockquote>
+                <p>
+                  <strong>${escapeHtml(verse.reference || '')}</strong>
+                  ${verse.relevance_percent ? ` • ${escapeHtml(verse.relevance_percent)}% relevant` : ''}
+                </p>
+                ${verse.relevance_reason ? `<p>${escapeHtml(verse.relevance_reason)}</p>` : ''}
+                ${verse.application ? `<p>${escapeHtml(verse.application)}</p>` : ''}
+              `).join('')}
+            </div>`
+          : ''
+      }
+
+      ${
+        data.exegesis
+          ? `<div class="saved-output-block">
+              <span class="tag">Exegesis</span>
+              <p>${escapeHtml(data.exegesis)}</p>
+            </div>`
+          : ''
+      }
+
+      ${
+        data.jesus_lens
+          ? `<div class="saved-output-block">
+              <span class="tag">Jesus lens</span>
+              <p>${escapeHtml(data.jesus_lens)}</p>
+            </div>`
+          : ''
+      }
+
+      ${
+        prayerPoints.length
+          ? `<div class="saved-output-block">
+              <span class="tag">Prayer points</span>
+              <ul>
+                ${prayerPoints.map((item) => `<li>${escapeHtml(item)}</li>`).join('')}
+              </ul>
+            </div>`
+          : ''
+      }
+    `;
+
+    const soundSenseHtml = `
+      ${
+        data.song || data.artist || data.bpm || data.key || data.instrument_label
+          ? `<div class="saved-output-block">
+              <span class="tag">SoundSense snapshot</span>
+              <div class="saved-output-grid">
+                ${data.song ? `<div><strong>Song</strong><p>${escapeHtml(data.song)}</p></div>` : ''}
+                ${data.artist ? `<div><strong>Artist</strong><p>${escapeHtml(data.artist)}</p></div>` : ''}
+                ${data.bpm ? `<div><strong>BPM</strong><p>${escapeHtml(data.bpm)}</p></div>` : ''}
+                ${data.key ? `<div><strong>Key</strong><p>${escapeHtml(data.key)}</p></div>` : ''}
+                ${data.instrument_label ? `<div><strong>Role</strong><p>${escapeHtml(data.instrument_label)}</p></div>` : ''}
+                ${data.metadata_confidence ? `<div><strong>Confidence</strong><p>${escapeHtml(data.metadata_confidence)}</p></div>` : ''}
+                ${data.confidence ? `<div><strong>Confidence</strong><p>${escapeHtml(data.confidence)}</p></div>` : ''}
+              </div>
+            </div>`
+          : ''
+      }
+
+      ${
+        data.song_meaning
+          ? `<div class="saved-output-block">
+              <span class="tag">Meaning</span>
+              <p>${escapeHtml(data.song_meaning)}</p>
+            </div>`
+          : ''
+      }
+
+      ${
+        data.faith_lens
+          ? `<div class="saved-output-block">
+              <span class="tag">Reflection</span>
+              <p>${escapeHtml(data.faith_lens)}</p>
+            </div>`
+          : ''
+      }
+
+      ${
+        data.arrangement_feel
+          ? `<div class="saved-output-block">
+              <span class="tag">Song flow</span>
+              <p>${escapeHtml(data.arrangement_feel)}</p>
+            </div>`
+          : ''
+      }
+
+      ${
+        data.listening_guide
+          ? `<div class="saved-output-block">
+              <span class="tag">Listen closely</span>
+              <p>${escapeHtml(data.listening_guide)}</p>
+            </div>`
+          : ''
+      }
+
+      ${
+        data.rehearsal_prep
+          ? `<div class="saved-output-block">
+              <span class="tag">Rehearsal moves</span>
+              <p>${escapeHtml(data.rehearsal_prep)}</p>
+            </div>`
+          : ''
+      }
+
+      ${
+        data.spiritual_reflection
+          ? `<div class="saved-output-block">
+              <span class="tag">Before you lead</span>
+              <p>${escapeHtml(data.spiritual_reflection)}</p>
+            </div>`
+          : ''
+      }
+
+      ${
+        data.instrument_guidance
+          ? `<div class="saved-output-block">
+              <span class="tag">Role coaching</span>
+              <p>${escapeHtml(data.instrument_guidance)}</p>
+            </div>`
+          : ''
+      }
+
+      ${
+        data.team_prep
+          ? `<div class="saved-output-block">
+              <span class="tag">Team prep</span>
+              <p>${escapeHtml(data.team_prep)}</p>
+            </div>`
+          : ''
+      }
+    `;
+
+    if (isSoundSense) {
+      return soundSenseHtml;
     }
 
-    ${
-      rootedVerses.length
-        ? `<div class="saved-output-block">
-            <span class="tag">Verses to reflect on</span>
-            ${rootedVerses.map((verse) => `
-              <blockquote class="saved-output-quote">${escapeHtml(verse.text || '')}</blockquote>
-              <p>
-                <strong>${escapeHtml(verse.reference || '')}</strong>
-                ${verse.reflection_prompt ? ' — ' + escapeHtml(verse.reflection_prompt) : ''}
-              </p>
-            `).join('')}
-          </div>`
-        : ''
+    if (isSignal) {
+      return signalHtml;
     }
 
-    ${
-      data.encouragement
-        ? `<div class="saved-output-block">
-            <span class="tag">Encouragement</span>
-            <p>${escapeHtml(data.encouragement)}</p>
-          </div>`
-        : ''
-    }
-  `;
-
-  const newsHtml = `
-    ${
-      data.overall_theme || data.article_summary
-        ? `<div class="saved-output-block">
-            <span class="tag">NewsVerse summary</span>
-            ${data.overall_theme ? `<h3>${escapeHtml(data.overall_theme)}</h3>` : ''}
-            ${data.article_summary ? `<p>${escapeHtml(data.article_summary)}</p>` : ''}
-          </div>`
-        : ''
+    if (innerWorkHtml.trim()) {
+      return innerWorkHtml;
     }
 
-    ${
-      newsVerses.length
-        ? `<div class="saved-output-block">
-            <span class="tag">Relevant verses</span>
-            ${newsVerses.map((verse) => `
-              <blockquote class="saved-output-quote">${escapeHtml(verse.text || '')}</blockquote>
-              <p>
-                <strong>${escapeHtml(verse.reference || '')}</strong>
-                ${verse.relevance_percent ? ` • ${escapeHtml(verse.relevance_percent)}% relevant` : ''}
-              </p>
-              ${verse.relevance_reason ? `<p>${escapeHtml(verse.relevance_reason)}</p>` : ''}
-            `).join('')}
-          </div>`
-        : ''
-    }
-
-    ${
-      data.exegesis
-        ? `<div class="saved-output-block">
-            <span class="tag">Exegesis</span>
-            <p>${escapeHtml(data.exegesis)}</p>
-          </div>`
-        : ''
-    }
-
-    ${
-      data.jesus_lens
-        ? `<div class="saved-output-block">
-            <span class="tag">Jesus Lens</span>
-            <p>${escapeHtml(data.jesus_lens)}</p>
-          </div>`
-        : ''
-    }
-
-    ${
-      prayerPoints.length
-        ? `<div class="saved-output-block">
-            <span class="tag">Prayer points</span>
-            <ul>
-              ${prayerPoints.map((item) => `<li>${escapeHtml(item)}</li>`).join('')}
-            </ul>
-          </div>`
-        : ''
-    }
-  `;
-
-  const songHtml = `
-    ${
-      data.song || data.artist || data.bpm || data.key || data.instrument_label
-        ? `<div class="saved-output-block">
-            <span class="tag">Song Snapshot</span>
-            <div class="saved-output-grid">
-              ${data.song ? `<div><strong>Song</strong><p>${escapeHtml(data.song)}</p></div>` : ''}
-              ${data.artist ? `<div><strong>Artist</strong><p>${escapeHtml(data.artist)}</p></div>` : ''}
-              ${data.bpm ? `<div><strong>BPM</strong><p>${escapeHtml(data.bpm)}</p></div>` : ''}
-              ${data.key ? `<div><strong>Key</strong><p>${escapeHtml(data.key)}</p></div>` : ''}
-              ${data.instrument_label ? `<div><strong>Role</strong><p>${escapeHtml(data.instrument_label)}</p></div>` : ''}
-              ${data.metadata_confidence ? `<div><strong>Confidence</strong><p>${escapeHtml(data.metadata_confidence)}</p></div>` : ''}
-            </div>
-          </div>`
-        : ''
-    }
-
-    ${
-      data.song_meaning
-        ? `<div class="saved-output-block">
-            <span class="tag">What the song is saying</span>
-            <p>${escapeHtml(data.song_meaning)}</p>
-          </div>`
-        : ''
-    }
-
-    ${
-      data.faith_lens
-        ? `<div class="saved-output-block">
-            <span class="tag">Faith Lens</span>
-            <p>${escapeHtml(data.faith_lens)}</p>
-          </div>`
-        : ''
-    }
-
-    ${
-      data.arrangement_feel
-        ? `<div class="saved-output-block">
-            <span class="tag">Song Flow</span>
-            <p>${escapeHtml(data.arrangement_feel)}</p>
-          </div>`
-        : ''
-    }
-
-    ${
-      data.listening_guide
-        ? `<div class="saved-output-block">
-            <span class="tag">Listen Closely</span>
-            <p>${escapeHtml(data.listening_guide)}</p>
-          </div>`
-        : ''
-    }
-
-    ${
-      data.rehearsal_prep
-        ? `<div class="saved-output-block">
-            <span class="tag">Rehearsal Moves</span>
-            <p>${escapeHtml(data.rehearsal_prep)}</p>
-          </div>`
-        : ''
-    }
-
-    ${
-      data.spiritual_reflection
-        ? `<div class="saved-output-block">
-            <span class="tag">Before You Lead</span>
-            <p>${escapeHtml(data.spiritual_reflection)}</p>
-          </div>`
-        : ''
-    }
-
-    ${
-      data.instrument_guidance
-        ? `<div class="saved-output-block">
-            <span class="tag">Role Coaching</span>
-            <p>${escapeHtml(data.instrument_guidance)}</p>
-          </div>`
-        : ''
-    }
-  `;
-
-  if (isSongDiveIn) {
-    return songHtml;
+    return `
+      <div class="saved-output-block">
+        <span class="tag">Saved output</span>
+        <pre>${escapeHtml(JSON.stringify(data, null, 2))}</pre>
+      </div>
+    `;
   }
-
-  if (isNewsVerse) {
-    return newsHtml;
-  }
-
-  if (rootedHtml.trim()) {
-    return rootedHtml;
-  }
-
-  return `
-    <div class="saved-output-block">
-      <span class="tag">Saved output</span>
-      <pre>${escapeHtml(JSON.stringify(data, null, 2))}</pre>
-    </div>
-  `;
-}
 
   async function fetchSavedOutputs() {
     const { data, error } = await supabaseClient
       .from('saved_outputs')
       .select('id, app_type, title, input_summary, output_json, created_at')
+      .eq('user_id', currentUser.id)
       .order('created_at', { ascending: false });
 
     if (error) throw error;
@@ -940,7 +1008,19 @@
     const { data, error } = await supabaseClient
       .from('journal_entries')
       .select('id, saved_output_id, entry_text, created_at, updated_at')
+      .eq('user_id', currentUser.id)
       .order('updated_at', { ascending: false });
+
+    if (error) throw error;
+    return data || [];
+  }
+
+  async function fetchSharedLinks() {
+    const { data, error } = await supabaseClient
+      .from('shared_outputs')
+      .select('share_slug, app_type, title, input_summary, created_at, expires_at, is_public')
+      .eq('is_public', true)
+      .order('created_at', { ascending: false });
 
     if (error) throw error;
     return data || [];
@@ -957,7 +1037,7 @@
         accountContent.innerHTML = `
           <h2>Saved Outputs</h2>
           <div class="empty-state">
-            No saved outputs yet. Generate a RootedOS, NewsVerse, or Song DiveIn result, then choose Save privately.
+            No saved outputs yet. Generate an Inner Work, Signal, or SoundSense result, then choose Save privately.
           </div>
         `;
         setStatus('');
@@ -1025,15 +1105,60 @@
   }
 
   async function renderSharedTab() {
-    accountContent.innerHTML = `
-      <h2>Shared Links</h2>
-      <div class="empty-state">
-        Shared links are public by design, so anyone with the link can view them.
-        Private saves stay connected to your signed-in account.
-      </div>
-    `;
+    setStatus('Loading shared links...');
+    accountContent.innerHTML = '';
 
-    setStatus('');
+    try {
+      const links = await fetchSharedLinks();
+
+      if (!links.length) {
+        accountContent.innerHTML = `
+          <h2>Shared Links</h2>
+          <div class="empty-state">
+            No shared links yet. Create a public share link from one of your generated outputs.
+          </div>
+        `;
+        setStatus('');
+        return;
+      }
+
+      accountContent.innerHTML = `
+        <h2>Shared Links</h2>
+        <div class="saved-list">
+          ${links.map((item) => {
+            const shareSlug = escapeHtml(item.share_slug);
+            const appLabel = getAppLabel(item.app_type);
+            const title = item.title || `${appLabel} Shared Link`;
+            const shareUrl = `${window.location.origin}/share.html?id=${encodeURIComponent(item.share_slug)}`;
+
+            return `
+              <article class="saved-card">
+                <span class="pill">${escapeHtml(appLabel)}</span>
+                <h3>${escapeHtml(title)}</h3>
+
+                <p class="saved-card__meta">
+                  Shared ${escapeHtml(formatDate(item.created_at))}
+                  ${item.input_summary ? ` • ${escapeHtml(item.input_summary)}` : ''}
+                </p>
+
+                <div class="saved-card__actions">
+                  <a class="btn primary" href="${escapeHtml(shareUrl)}" target="_blank" rel="noopener">
+                    Open Link
+                  </a>
+                  <button class="btn" type="button" data-copy-share="${shareSlug}">
+                    Copy Link
+                  </button>
+                </div>
+              </article>
+            `;
+          }).join('')}
+        </div>
+      `;
+
+      setStatus('');
+    } catch (error) {
+      setStatus(error.message || 'Could not load shared links.', 'error');
+    }
   }
 
   async function renderJournalTab() {
@@ -1101,6 +1226,7 @@
     const journalButton = event.target.closest('[data-journal-for]');
     const saveJournalButton = event.target.closest('[data-save-journal]');
     const deleteButton = event.target.closest('[data-delete-output]');
+    const copyShareButton = event.target.closest('[data-copy-share]');
 
     if (openButton) {
       const id = openButton.dataset.openOutput;
@@ -1155,6 +1281,7 @@
         return;
       }
 
+      saveJournalButton.disabled = true;
       setStatus('Saving journal entry...');
 
       const { error } = await supabaseClient
@@ -1164,6 +1291,8 @@
           saved_output_id: savedOutputId,
           entry_text: entryText
         });
+
+      saveJournalButton.disabled = false;
 
       if (error) {
         setStatus(error.message || 'Could not save journal entry.', 'error');
@@ -1178,18 +1307,39 @@
     if (deleteButton) {
       const id = deleteButton.dataset.deleteOutput;
 
+      const confirmDelete = window.confirm('Delete this saved output? This cannot be undone.');
+      if (!confirmDelete) return;
+
+      deleteButton.disabled = true;
+      setStatus('Deleting saved output...');
+
       const { error } = await supabaseClient
         .from('saved_outputs')
         .delete()
-        .eq('id', id);
+        .eq('id', id)
+        .eq('user_id', currentUser.id);
 
       if (error) {
+        deleteButton.disabled = false;
         setStatus(error.message || 'Could not delete saved output.', 'error');
         return;
       }
 
       setStatus('Saved output deleted.');
       renderSavedTab();
+      return;
+    }
+
+    if (copyShareButton) {
+      const shareSlug = copyShareButton.dataset.copyShare;
+      const shareUrl = `${window.location.origin}/share.html?id=${encodeURIComponent(shareSlug)}`;
+
+      try {
+        await navigator.clipboard.writeText(shareUrl);
+        setStatus('Share link copied.');
+      } catch {
+        setStatus(shareUrl);
+      }
     }
   });
 
@@ -1201,7 +1351,11 @@
     signOutButton.addEventListener('click', async () => {
       if (!supabaseClient) return;
 
+      signOutButton.disabled = true;
+
       await supabaseClient.auth.signOut();
+      setLocalSignedInFlag(false);
+
       window.location.href = 'signin.html';
     });
   }
@@ -1210,21 +1364,35 @@
     try {
       setStatus('Connecting to your account...');
 
-      const response = await fetch('/api/public-config');
-      const config = await response.json();
+      const response = await fetch('/api/public-config', {
+        method: 'GET',
+        cache: 'no-store'
+      });
+
+      const config = await response.json().catch(() => ({}));
 
       if (!response.ok) {
         throw new Error(config.error || 'Could not load Supabase config.');
+      }
+
+      if (!config.supabaseUrl || !config.supabaseAnonKey) {
+        throw new Error('Supabase configuration is incomplete.');
       }
 
       if (!window.supabase || !window.supabase.createClient) {
         throw new Error('Supabase browser client did not load.');
       }
 
-      supabaseClient = window.supabase.createClient(
-        config.supabaseUrl,
-        config.supabaseAnonKey
-      );
+      if (window.rootedbyteSupabase) {
+        supabaseClient = window.rootedbyteSupabase;
+      } else {
+        supabaseClient = window.supabase.createClient(
+          config.supabaseUrl,
+          config.supabaseAnonKey
+        );
+
+        window.rootedbyteSupabase = supabaseClient;
+      }
 
       const { data, error } = await supabaseClient.auth.getSession();
 
@@ -1233,20 +1401,25 @@
       }
 
       if (!data.session) {
+        setLocalSignedInFlag(false);
         window.location.href = 'signin.html';
         return;
       }
 
       currentUser = data.session.user;
+      setLocalSignedInFlag(true);
+
       accountLead.textContent = `Signed in as ${currentUser.email}. Saved outputs are private unless you share them publicly.`;
 
       renderCurrentTab();
     } catch (error) {
+      setLocalSignedInFlag(false);
       setStatus(error.message || 'Could not load account system.', 'error');
     }
   }
 
   loadSupabaseClient();
 </script>
+  
 </body>
 </html>
