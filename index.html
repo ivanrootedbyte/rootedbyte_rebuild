@@ -1161,7 +1161,7 @@
         <span class="brand-name">RootedByte</span>
       </a>
 
-      <a class="profile-button" href="signin.html" aria-label="Open account">
+      <a class="profile-button" href="signin.html" data-auth-link aria-label="Open account">
         <svg viewBox="0 0 24 24" width="18" height="18" fill="none" aria-hidden="true">
           <path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z" stroke="currentColor" stroke-width="1.8"/>
           <path d="M4.5 20a7.5 7.5 0 0 1 15 0" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
@@ -1623,20 +1623,22 @@
     </section>
   </div>
 
-  <div class="contact-modal" id="signinPromptModal" aria-hidden="true">
-  <section class="contact-card-modal" role="dialog" aria-modal="true" aria-labelledby="signinPromptTitle">
-    <button class="contact-close" type="button" id="closeSigninPrompt" aria-label="Close sign-in prompt">×</button>
+    <div class="contact-modal" id="signinPromptModal" aria-hidden="true">
+    <section class="contact-card-modal" role="dialog" aria-modal="true" aria-labelledby="signinPromptTitle">
+      <button class="contact-close" type="button" id="closeSigninPrompt" aria-label="Close sign-in prompt">×</button>
 
-    <h2 class="contact-title" id="signinPromptTitle">Save your check-in</h2>
-    <p class="contact-copy">
-      Sign in to keep your mood check-in, streak, and growth progress connected to your account.
-    </p>
+      <h2 class="contact-title" id="signinPromptTitle">Save your check-in</h2>
+      <p class="contact-copy">
+        Sign in to keep your mood check-in, streak, and growth progress connected to your account.
+      </p>
 
-    <div class="onboarding-actions" style="margin-top: 20px;">
-      <a class="primary-button" href="signin.html">Sign in</a>
-      <button class="skip-button" type="button" id="maybeLaterSigninPrompt">Maybe later</button>
-    </div>
-  
+      <div class="onboarding-actions" style="margin-top: 20px;">
+        <a class="primary-button" href="signin.html">Sign in</a>
+        <button class="skip-button" type="button" id="maybeLaterSigninPrompt">Maybe later</button>
+      </div>
+    </section>
+  </div>
+
   <script>
     const $ = (selector) => document.querySelector(selector);
     const $$ = (selector) => Array.from(document.querySelectorAll(selector));
@@ -1663,6 +1665,15 @@
 
     let state = loadState();
 
+    function escapeHtml(value) {
+      return String(value ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
     function loadState() {
       try {
         return { ...defaultState, ...JSON.parse(localStorage.getItem(storageKey) || "{}") };
@@ -1677,6 +1688,14 @@
 
     function todayKey() {
       return new Date().toISOString().slice(0, 10);
+    }
+
+    function userLooksSignedIn() {
+      try {
+        return localStorage.getItem("rootedbyte_user_signed_in") === "true";
+      } catch {
+        return false;
+      }
     }
 
     function setScreen(name) {
@@ -1740,13 +1759,17 @@
 
     function renderOnboarding() {
       const step = onboardingSteps[onboardingIndex];
+
       $("#onboardingIcon").textContent = step.icon;
       $("#onboardingTitle").textContent = step.title;
       $("#onboardingCopy").textContent = step.copy;
+
       $$(".progress-pill").forEach((pill, index) => {
         pill.classList.toggle("active", index === onboardingIndex);
       });
-      $("#nextOnboarding").textContent = onboardingIndex === onboardingSteps.length - 1 ? "Start" : "Next";
+
+      $("#nextOnboarding").textContent =
+        onboardingIndex === onboardingSteps.length - 1 ? "Start" : "Next";
     }
 
     function openOnboarding() {
@@ -1777,6 +1800,38 @@
 
     if (!state.onboarded) {
       window.setTimeout(openOnboarding, 450);
+    }
+
+    const signinPromptModal = $("#signinPromptModal");
+    const closeSigninPrompt = $("#closeSigninPrompt");
+    const maybeLaterSigninPrompt = $("#maybeLaterSigninPrompt");
+
+    function showSigninPrompt() {
+      if (!signinPromptModal) return;
+      signinPromptModal.classList.add("active");
+      signinPromptModal.setAttribute("aria-hidden", "false");
+    }
+
+    function hideSigninPrompt() {
+      if (!signinPromptModal) return;
+      signinPromptModal.classList.remove("active");
+      signinPromptModal.setAttribute("aria-hidden", "true");
+    }
+
+    if (closeSigninPrompt) {
+      closeSigninPrompt.addEventListener("click", hideSigninPrompt);
+    }
+
+    if (maybeLaterSigninPrompt) {
+      maybeLaterSigninPrompt.addEventListener("click", hideSigninPrompt);
+    }
+
+    if (signinPromptModal) {
+      signinPromptModal.addEventListener("click", (event) => {
+        if (event.target === signinPromptModal) {
+          hideSigninPrompt();
+        }
+      });
     }
 
     function updateMoodUI() {
@@ -1831,78 +1886,53 @@
       }
 
       $("#streakMessage").textContent = count
-        ? `Day ${count}. Everything starts here.`
+        ? `Day ${count}. Keep showing up with honesty.`
         : "Day one. Everything starts here.";
 
       $("#currentStreakStat").textContent = `${count}d`;
     }
 
     $$(".mood-button").forEach((button) => {
-  button.addEventListener("click", () => {
-    if (!userLooksSignedIn()) {
-      showSigninPrompt();
-      return;
-    }
+      button.addEventListener("click", () => {
+        if (!userLooksSignedIn()) {
+          showSigninPrompt();
+          return;
+        }
 
-    state.mood = button.dataset.mood;
+        state.mood = button.dataset.mood;
 
-    const today = todayKey();
-    if (!state.streak.includes(today)) {
-      state.streak.push(today);
-    }
+        const today = todayKey();
+        if (!state.streak.includes(today)) {
+          state.streak.push(today);
+        }
 
-    saveState();
-    updateMoodUI();
-    updateStreakUI();
-  });
-});
+        saveState();
+        updateMoodUI();
+        updateStreakUI();
+      });
+    });
 
     function showTool(tool) {
-      setScreen("tool-detail");
+      if (tool === "inner") {
+        window.location.href = "rootedos.html";
+        return;
+      }
 
-      $("#toolInner").hidden = tool !== "inner";
-      $("#toolSignal").hidden = tool !== "signal";
-      $("#toolSound").hidden = tool !== "sound";
+      if (tool === "signal") {
+        window.location.href = "newsverse.html";
+        return;
+      }
+
+      if (tool === "sound") {
+        window.location.href = "tone.html";
+        return;
+      }
+
+      setScreen("tools");
     }
 
     $$("[data-open-tool]").forEach((button) => {
       button.addEventListener("click", () => showTool(button.dataset.openTool));
-    });
-
-    $("#innerChoices").addEventListener("click", (event) => {
-      const choice = event.target.closest(".choice");
-      if (!choice) return;
-
-      $$("#innerChoices .choice").forEach((item) => item.classList.remove("active"));
-      choice.classList.add("active");
-    });
-
-    $("#signalKinds").addEventListener("click", (event) => {
-      const button = event.target.closest(".pill-button");
-      if (!button) return;
-
-      $$("#signalKinds .pill-button").forEach((item) => item.classList.remove("active"));
-      button.classList.add("active");
-    });
-
-    $("#innerSubmit").addEventListener("click", () => {
-      const selected = $("#innerChoices .choice.active")?.dataset.focus || "Pressure";
-      state.reflections += 1;
-      state.focus[selected] = (state.focus[selected] || 0) + 1;
-      saveState();
-      updateGrowthUI();
-    });
-
-    $("#signalSubmit").addEventListener("click", () => {
-      state.signals += 1;
-      saveState();
-      updateGrowthUI();
-    });
-
-    $("#soundSubmit").addEventListener("click", () => {
-      state.songs += 1;
-      saveState();
-      updateGrowthUI();
     });
 
     const journalEditor = $("#journalEditor");
@@ -1924,6 +1954,11 @@
     $("#saveJournalEntry").addEventListener("click", () => {
       const text = journalText.value.trim();
       if (!text) return;
+
+      if (!userLooksSignedIn()) {
+        showSigninPrompt();
+        return;
+      }
 
       state.journal.unshift({
         text,
@@ -2041,60 +2076,13 @@
       });
     }
 
-    function escapeHtml(value) {
-      return String(value ?? "")
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
-    }
-
-    const signinPromptModal = $("#signinPromptModal");
-const closeSigninPrompt = $("#closeSigninPrompt");
-const maybeLaterSigninPrompt = $("#maybeLaterSigninPrompt");
-
-function showSigninPrompt() {
-  signinPromptModal.classList.add("active");
-  signinPromptModal.setAttribute("aria-hidden", "false");
-}
-
-function hideSigninPrompt() {
-  signinPromptModal.classList.remove("active");
-  signinPromptModal.setAttribute("aria-hidden", "true");
-}
-
-if (closeSigninPrompt) {
-  closeSigninPrompt.addEventListener("click", hideSigninPrompt);
-}
-
-if (maybeLaterSigninPrompt) {
-  maybeLaterSigninPrompt.addEventListener("click", hideSigninPrompt);
-}
-
-if (signinPromptModal) {
-  signinPromptModal.addEventListener("click", (event) => {
-    if (event.target === signinPromptModal) {
-      hideSigninPrompt();
-    }
-  });
-}
-
-function userLooksSignedIn() {
-  const value = localStorage.getItem("rootedbyte_user_signed_in");
-  return value === "true";
-}
-    
     updateMoodUI();
     updateStreakUI();
     renderJournal();
     updateGrowthUI();
   </script>
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="js/rootedbyte-auth-nav.js"></script>
-
-  </section>
-</div>
-  
 </body>
 </html>
