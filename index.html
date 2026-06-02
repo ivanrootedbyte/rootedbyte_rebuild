@@ -2044,7 +2044,8 @@ if (signinPromptModal) {
 }
 
 function userLooksSignedIn() {
-  return Boolean(localStorage.getItem("rootedbyte_user_signed_in"));
+  const value = localStorage.getItem("rootedbyte_user_signed_in");
+  return value === "true";
 }
     
     updateMoodUI();
