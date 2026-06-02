@@ -1,5 +1,29 @@
 (function () {
   const AUTH_LINK_SELECTOR = '[data-auth-link]';
+  const SIGNED_IN_FLAG = 'rootedbyte_user_signed_in';
+
+  let cachedClient = null;
+
+  function setLocalSignedInFlag(isSignedIn) {
+    try {
+      if (isSignedIn) {
+        localStorage.setItem(SIGNED_IN_FLAG, 'true');
+      } else {
+        localStorage.removeItem(SIGNED_IN_FLAG);
+      }
+    } catch {
+      // Ignore localStorage issues.
+    }
+  }
+
+  function updateBodyAuthState(isSignedIn) {
+    if (!document.body) return;
+
+    document.body.setAttribute(
+      'data-auth-state',
+      isSignedIn ? 'signed-in' : 'signed-out'
+    );
+  }
 
   function updateAuthLinks(isSignedIn) {
     const authLinks = document.querySelectorAll(AUTH_LINK_SELECTOR);
@@ -17,15 +41,55 @@
     });
   }
 
+  function applyAuthState(isSignedIn) {
+    updateAuthLinks(isSignedIn);
+    updateBodyAuthState(isSignedIn);
+    setLocalSignedInFlag(isSignedIn);
+  }
+
   async function getPublicConfig() {
-    const response = await fetch('/api/public-config');
+    const response = await fetch('/api/public-config', {
+      method: 'GET',
+      cache: 'no-store'
+    });
+
     const config = await response.json().catch(() => ({}));
 
     if (!response.ok) {
       throw new Error(config.error || 'Could not load account configuration.');
     }
 
+    if (!config.supabaseUrl || !config.supabaseAnonKey) {
+      throw new Error('Supabase configuration is incomplete.');
+    }
+
     return config;
+  }
+
+  async function getSupabaseClient() {
+    if (cachedClient) {
+      return cachedClient;
+    }
+
+    if (window.rootedbyteSupabase) {
+      cachedClient = window.rootedbyteSupabase;
+      return cachedClient;
+    }
+
+    if (!window.supabase || !window.supabase.createClient) {
+      throw new Error('Supabase client library is not loaded.');
+    }
+
+    const config = await getPublicConfig();
+
+    cachedClient = window.supabase.createClient(
+      config.supabaseUrl,
+      config.supabaseAnonKey
+    );
+
+    window.rootedbyteSupabase = cachedClient;
+
+    return cachedClient;
   }
 
   async function initAuthNav() {
@@ -35,31 +99,31 @@
       return;
     }
 
-    updateAuthLinks(false);
-
-    if (!window.supabase) {
-      return;
-    }
+    applyAuthState(false);
 
     try {
-      const config = await getPublicConfig();
+      const supabaseClient = await getSupabaseClient();
 
-      const supabaseClient = window.supabase.createClient(
-        config.supabaseUrl,
-        config.supabaseAnonKey
-      );
+      const { data, error } = await supabaseClient.auth.getSession();
 
-      const { data } = await supabaseClient.auth.getSession();
+      if (error) {
+        throw error;
+      }
 
-      updateAuthLinks(Boolean(data.session));
+      applyAuthState(Boolean(data && data.session));
 
       supabaseClient.auth.onAuthStateChange((_event, session) => {
-        updateAuthLinks(Boolean(session));
+        applyAuthState(Boolean(session));
       });
-    } catch {
-      updateAuthLinks(false);
+    } catch (error) {
+      console.warn('[RootedByte auth nav]', error.message || error);
+      applyAuthState(false);
     }
   }
+
+  window.RootedByteAuth = window.RootedByteAuth || {};
+  window.RootedByteAuth.getClient = getSupabaseClient;
+  window.RootedByteAuth.refreshNav = initAuthNav;
 
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initAuthNav);
