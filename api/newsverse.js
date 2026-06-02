@@ -1,11 +1,11 @@
 const GEMINI_URL =
   'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent';
 
-const SYSTEM_PROMPT = `You are a warm, truth-rooted reflection guide for RootedByte's Signal tool.
+const SYSTEM_PROMPT = `You are a warm, grounded reflection guide for RootedByte's Signal tool.
 
 Signal helps people pause before reacting to posts, headlines, reels, trends, threads, and news. Your role is to help the user notice what the content may be doing to their thinking, emotions, assumptions, attention, and response.
 
-Your wisdom is grounded in the moral and spiritual truth of the Bible, especially the kind of truth expressed in NIV, NASB, and KJV wording, but your output should be accessible to people who may not identify as Christian.
+Your wisdom is rooted in timeless truth, discernment, humility, courage, peace, love, patience, self-control, justice, and hope. Your output must be accessible to people who may not identify as Christian.
 
 Return ONLY raw JSON with no markdown, no code fences. Structure:
 {
@@ -29,17 +29,20 @@ Content rules:
 - Do not sound churchy, preachy, sensational, political, or fear-driven.
 - Do not assume the user is Christian.
 - Do not pressure the user to believe something.
-- Express biblical truth naturally as timeless truth, wisdom, discernment, humility, courage, peace, love, patience, self-control, justice, and hope.
 - Avoid direct Bible verse references unless truly necessary.
-- In "verses", provide 3-5 short truth anchors inspired by NIV/NASB/KJV biblical truth. Use labels like "Truth Anchor 1" unless a direct reference is genuinely helpful.
-- In "verses.text", avoid long direct Bible quotations. Use natural, paraphrased, Bible-rooted truth.
-- In "exegesis", explain the deeper truth principle in plain language. Do not make it academic.
-- In "jesus_lens", do not write "Jesus would..." unless it naturally fits. Prefer a grounded response like: "A grounded response would be..."
-- In "prayer_points", provide practical reflection steps. They can be quiet reflection, journaling prompts, relational repair, checking sources, slowing down, or choosing a wise response.
-- emotional_temperature_score must be 0-100.
+- In "verses", provide 3 to 5 short grounding points inspired by biblical truth. Use labels like "Grounding Point 1" unless a direct reference is genuinely helpful.
+- In "verses.text", avoid long direct quotations. Keep them short, natural, and calm.
+- "article_summary" must be 2 to 4 sentences max.
+- "thinking_impact" must be 2 to 4 sentences max.
+- "truth_check" must be 2 to 4 sentences max.
+- "exegesis" must be 2 to 4 sentences max.
+- "jesus_lens" must be 1 to 3 sentences max and should read more like "A grounded response..." than a sermon.
+- "prayer_points" should actually function like reflection steps or response steps, not necessarily prayer.
+- emotional_temperature_score must be 0 to 100.
 - If only a headline, short post, or URL fallback was available, clearly say the reflection is limited and based only on available information.
-- Do not pretend the full article/post was read if only a headline, pasted text, or URL was provided.
-- Make the output feel like a calm, premium reflection app, not a sermon.`;
+- Do not pretend the full article or post was read if only a headline, pasted text, or URL was provided.
+- Make the output feel like a calm premium reflection app, not a sermon.
+- Keep every field concise and UI-ready.`;
 
 function setCors(res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -54,6 +57,13 @@ function safeParse(raw) {
     const cleaned = String(raw || '')
       .replace(/```json|```/g, '')
       .trim();
+
+    const firstBrace = cleaned.indexOf('{');
+    const lastBrace = cleaned.lastIndexOf('}');
+
+    if (firstBrace !== -1 && lastBrace !== -1) {
+      return JSON.parse(cleaned.slice(firstBrace, lastBrace + 1));
+    }
 
     return JSON.parse(cleaned);
   }
@@ -72,6 +82,13 @@ function clampPercent(value) {
   return Number.isFinite(number)
     ? Math.min(100, Math.max(0, Math.round(number)))
     : 0;
+}
+
+function shortenText(value, fallback, maxChars = 320) {
+  const text = String(value || fallback || '').replace(/\s+/g, ' ').trim();
+  if (!text) return fallback;
+  if (text.length <= maxChars) return text;
+  return `${text.slice(0, maxChars).trim()}...`;
 }
 
 function getBaseUrl(req) {
@@ -145,16 +162,113 @@ async function readArticleFromUrl(req, articleUrl) {
   }
 }
 
-function normalizeNewsVerse(data) {
+function extractModelText(data) {
+  const candidates = Array.isArray(data?.candidates) ? data.candidates : [];
+
+  for (const candidate of candidates) {
+    const parts = Array.isArray(candidate?.content?.parts)
+      ? candidate.content.parts
+      : [];
+
+    const joined = parts
+      .map((part) => (typeof part?.text === 'string' ? part.text : ''))
+      .filter(Boolean)
+      .join('\n')
+      .trim();
+
+    if (joined) {
+      return joined;
+    }
+  }
+
+  return '';
+}
+
+function buildFallbackSignal(contentType, title, sourceMode) {
+  return {
+    article_summary: `This ${contentType} may be shaping perception quickly, but the available information is limited.`,
+    thinking_impact:
+      'Fast content can amplify reaction, flatten nuance, and push you toward quick assumptions before careful understanding.',
+    emotional_temperature_score: 58,
+    truth_check:
+      'Pause before reacting. Ask what is verified, what is assumed, and what this content is strengthening in your attention, emotion, and response.',
+    verses: [
+      {
+        reference: 'Grounding Point 1',
+        text: 'Slowing down protects clarity when strong emotion is rising.',
+        relevance_percent: 88,
+        relevance_reason: 'This helps the user resist impulsive reaction.',
+        application: 'Wait, breathe, and separate fact from feeling before responding.'
+      },
+      {
+        reference: 'Grounding Point 2',
+        text: 'Wisdom pays attention to tone, motive, and truth, not just urgency.',
+        relevance_percent: 84,
+        relevance_reason: 'This helps the user notice how content may be shaping perspective.',
+        application: 'Ask what this content is training you to admire, fear, excuse, or repeat.'
+      },
+      {
+        reference: 'Grounding Point 3',
+        text: 'A grounded response values truth, restraint, and compassion together.',
+        relevance_percent: 82,
+        relevance_reason: 'This keeps the user from swinging between panic and indifference.',
+        application: 'Choose a response that is both honest and steady.'
+      }
+    ],
+    exegesis:
+      'Quick content often bypasses thoughtful reflection. Clarity grows when you slow down enough to test what is actually true and what response is worth carrying forward.',
+    jesus_lens:
+      'A grounded response would slow the moment down, refuse panic, and move toward clarity, honesty, and wise restraint.',
+    prayer_points: [
+      'What is verified here, and what am I assuming?',
+      'What is this shaping in my emotions and mindset right now?',
+      'What would a wise, steady response look like here?'
+    ],
+    overall_theme: title || 'Signal reflection',
+    source_mode: sourceMode || 'headline_only'
+  };
+}
+
+function normalizeNewsVerse(data, fallback) {
   const result = data && typeof data === 'object' ? data : {};
 
-  result.article_summary = String(result.article_summary || '');
-  result.thinking_impact = String(result.thinking_impact || '');
-  result.truth_check = String(result.truth_check || '');
-  result.exegesis = String(result.exegesis || '');
-  result.jesus_lens = String(result.jesus_lens || '');
-  result.overall_theme = String(result.overall_theme || '');
-  result.source_mode = String(result.source_mode || '');
+  result.article_summary = shortenText(
+    result.article_summary,
+    fallback.article_summary,
+    420
+  );
+
+  result.thinking_impact = shortenText(
+    result.thinking_impact,
+    fallback.thinking_impact,
+    360
+  );
+
+  result.truth_check = shortenText(
+    result.truth_check,
+    fallback.truth_check,
+    360
+  );
+
+  result.exegesis = shortenText(
+    result.exegesis,
+    fallback.exegesis,
+    360
+  );
+
+  result.jesus_lens = shortenText(
+    result.jesus_lens,
+    fallback.jesus_lens,
+    240
+  );
+
+  result.overall_theme = shortenText(
+    result.overall_theme,
+    fallback.overall_theme,
+    120
+  );
+
+  result.source_mode = String(result.source_mode || fallback.source_mode || '');
 
   result.emotional_temperature_score = clampPercent(
     result.emotional_temperature_score
@@ -162,24 +276,32 @@ function normalizeNewsVerse(data) {
 
   const anchors = Array.isArray(result.verses)
     ? result.verses.slice(0, 5)
-    : [];
+    : fallback.verses;
 
   result.verses = anchors.map((anchor, index) => ({
-    reference: String(anchor.reference || `Truth Anchor ${index + 1}`),
-    text: String(anchor.text || ''),
+    reference: shortenText(anchor.reference, `Grounding Point ${index + 1}`, 40),
+    text: shortenText(anchor.text, '', 180),
     relevance_percent: clampPercent(anchor.relevance_percent),
-    relevance_reason: String(anchor.relevance_reason || ''),
-    application: String(anchor.application || '')
+    relevance_reason: shortenText(anchor.relevance_reason, '', 140),
+    application: shortenText(anchor.application, '', 160)
   }));
 
   result.prayer_points = Array.isArray(result.prayer_points)
-    ? result.prayer_points.slice(0, 3).map(String)
-    : [];
+    ? result.prayer_points.slice(0, 3).map((item) => shortenText(item, '', 120))
+    : fallback.prayer_points;
+
+  if (!result.verses.length) {
+    result.verses = fallback.verses;
+  }
+
+  if (!result.prayer_points.length) {
+    result.prayer_points = fallback.prayer_points;
+  }
 
   return result;
 }
 
-async function callGemini(userPrompt) {
+async function callGemini(userPrompt, fallback) {
   if (!process.env.GEMINI_KEY) {
     throw new Error('GEMINI_KEY is not configured.');
   }
@@ -220,16 +342,20 @@ async function callGemini(userPrompt) {
   try {
     data = JSON.parse(responseBody);
   } catch {
-    throw new Error('Signal returned an unreadable response.');
+    return fallback;
   }
 
-  const raw = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+  const raw = extractModelText(data);
 
   if (!raw) {
-    throw new Error('Signal returned an empty response.');
+    return fallback;
   }
 
-  return normalizeNewsVerse(safeParse(raw));
+  try {
+    return normalizeNewsVerse(safeParse(raw), fallback);
+  } catch {
+    return fallback;
+  }
 }
 
 module.exports = async function handler(req, res) {
@@ -321,16 +447,19 @@ module.exports = async function handler(req, res) {
             ? 'pasted content'
             : 'headline, short text, or URL fallback';
 
+    const fallback = buildFallbackSignal(newsType, title, sourceMode);
+
     const userPrompt = `Analyze this ${newsType} using the ${basisLabel}.
 
 Important:
-- If this is based only on a headline, short post, public link preview, or URL fallback, clearly say that the Signal check is limited.
+- If this is based only on a headline, short post, public link preview, or URL fallback, clearly say the Signal check is limited.
 - Do not pretend you read the full article or post if only a headline, short text, or URL was available.
 - Help the user pause before reacting.
 - Focus on what this content may be doing to attention, fear, anger, comparison, assumptions, compassion, truth, and response.
 - Keep the response careful, grounded, practical, and not sensational.
-- Use Bible-rooted truth expressed naturally, without making the result feel like a sermon.
-- Prefer phrases like "A grounded response..." or "A truth-rooted way to respond..." instead of overtly religious wording.
+- Use timeless truth expressed naturally, without making the result feel like a sermon.
+- Prefer phrases like "A grounded response..." instead of overtly religious wording.
+- Keep every field concise and UI-ready.
 
 Content type:
 ${newsType}
@@ -344,7 +473,7 @@ ${sourceUrl || 'Not provided'}
 Available content:
 ${contentToAnalyze}`;
 
-    const analysis = await callGemini(userPrompt);
+    const analysis = await callGemini(userPrompt, fallback);
 
     analysis.source_mode = analysis.source_mode || sourceMode;
 
