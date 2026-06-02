@@ -6,7 +6,7 @@
 
   <meta
     name="description"
-    content="Signal helps you pause before reacting to posts, reels, headlines, threads, and news by checking what they are doing to your thinking."
+    content="Signal helps you pause before reacting by checking what a post, headline, or trend may really be shaping in your thinking."
   />
 
   <title>Signal | RootedByte</title>
@@ -22,16 +22,12 @@
     :root {
       --bg: #111714;
       --bg-deep: #0b100d;
-      --panel: rgba(24, 32, 27, 0.9);
-      --panel-strong: rgba(27, 37, 31, 0.98);
       --cream: #f5efe4;
       --muted: #9fb2a7;
       --muted-soft: #72857b;
       --line: rgba(168, 197, 160, 0.16);
-      --line-strong: rgba(232, 201, 122, 0.34);
       --sage: #a8c5a0;
       --amber: #e8c97a;
-      --lavender: #b8a8d8;
       --danger: #d97965;
       --shadow: 0 24px 70px rgba(0, 0, 0, 0.34);
       --radius-xl: 28px;
@@ -58,7 +54,7 @@
       background:
         radial-gradient(circle at 12% 8%, rgba(168, 197, 160, 0.06), transparent 18rem),
         radial-gradient(circle at 88% 20%, rgba(232, 201, 122, 0.08), transparent 18rem),
-        radial-gradient(circle at 50% 100%, rgba(184, 168, 216, 0.05), transparent 20rem),
+        radial-gradient(circle at 50% 100%, rgba(168, 197, 160, 0.05), transparent 20rem),
         var(--bg-deep);
       line-height: 1.55;
     }
@@ -70,7 +66,6 @@
 
     button,
     input,
-    select,
     textarea {
       font: inherit;
     }
@@ -94,7 +89,7 @@
       margin: 0 auto;
       overflow: hidden;
       background:
-        radial-gradient(circle at 50% -10%, rgba(168, 197, 160, 0.08), transparent 18rem),
+        radial-gradient(circle at 50% -10%, rgba(232, 201, 122, 0.08), transparent 18rem),
         linear-gradient(180deg, #111714 0%, #0f1512 100%);
       border-left: 1px solid rgba(168, 197, 160, 0.08);
       border-right: 1px solid rgba(168, 197, 160, 0.08);
@@ -131,7 +126,7 @@
       border-radius: 12px;
       background:
         linear-gradient(var(--bg), var(--bg)) padding-box,
-        linear-gradient(135deg, var(--sage), var(--amber), var(--lavender)) border-box;
+        linear-gradient(135deg, var(--sage), var(--amber)) border-box;
       border: 1px solid transparent;
       flex: 0 0 auto;
     }
@@ -191,12 +186,14 @@
     }
 
     .hero-copy {
-      padding: 8px 6px 18px;
+      padding: 8px 12px 18px;
     }
 
     .hero-copy h1,
     .result-card h2,
-    .share-panel h3 {
+    .result-card h3,
+    .share-panel h3,
+    .contact-title {
       font-family: "Playfair Display", Georgia, serif;
       color: var(--cream);
       letter-spacing: -0.06em;
@@ -213,7 +210,7 @@
       color: var(--muted);
       font-size: 0.98rem;
       line-height: 1.55;
-      max-width: 330px;
+      max-width: 340px;
     }
 
     .card {
@@ -227,23 +224,18 @@
     }
 
     .signal-card {
-      padding: 18px;
+      padding: 14px;
     }
 
-    .form-card {
-      padding: 16px;
-      border: 1px solid rgba(168, 197, 160, 0.14);
-      border-radius: var(--radius-lg);
-      background: rgba(255, 255, 255, 0.03);
+    .form-block {
+      display: grid;
+      gap: 18px;
+      padding: 10px 0 4px;
     }
 
     .field {
       display: grid;
       gap: 8px;
-    }
-
-    .field + .field {
-      margin-top: 18px;
     }
 
     .field label {
@@ -252,7 +244,7 @@
       font-weight: 800;
     }
 
-    .kind-row {
+    .pill-row {
       display: flex;
       flex-wrap: wrap;
       gap: 8px;
@@ -268,12 +260,6 @@
       font-size: 0.82rem;
       cursor: pointer;
       transition: border-color 180ms ease, background 180ms ease, color 180ms ease;
-    }
-
-    .kind-button:hover,
-    .kind-button:focus-visible {
-      border-color: rgba(232, 201, 122, 0.42);
-      outline: none;
     }
 
     .kind-button.active {
@@ -299,7 +285,7 @@
     }
 
     textarea {
-      min-height: 96px;
+      min-height: 110px;
       padding: 13px 14px;
       resize: vertical;
     }
@@ -311,7 +297,7 @@
 
     input:focus,
     textarea:focus {
-      border-color: rgba(232, 201, 122, 0.56);
+      border-color: rgba(232, 201, 122, 0.6);
       box-shadow: 0 0 0 3px rgba(232, 201, 122, 0.08);
       background: rgba(255, 255, 255, 0.055);
     }
@@ -322,6 +308,9 @@
       border-radius: 12px;
       font-weight: 800;
       cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
     }
 
     .primary-button {
@@ -347,16 +336,8 @@
       outline: none;
     }
 
-    .ghost-note {
-      margin-top: 10px;
-      color: var(--muted-soft);
-      font-size: 0.82rem;
-      line-height: 1.45;
-    }
-
     .status {
       min-height: 24px;
-      margin-top: 14px;
       color: var(--sage);
       display: flex;
       align-items: center;
@@ -392,40 +373,19 @@
     }
 
     .result-card,
-    .verse-card,
     .share-panel {
       border: 1px solid var(--line);
       border-radius: var(--radius-lg);
       background: rgba(255, 255, 255, 0.04);
       overflow: hidden;
-    }
-
-    .result-card,
-    .verse-card,
-    .share-panel {
       padding: 16px;
     }
 
-    .result-card h2,
-    .result-card h3,
-    .verse-card h3 {
-      margin: 0;
-      font-family: "Playfair Display", Georgia, serif;
-      color: var(--cream);
-      letter-spacing: -0.04em;
-    }
-
     .result-card p,
-    .verse-card p,
-    .share-panel p {
+    .share-panel p,
+    .result-card li {
       color: var(--muted);
       line-height: 1.65;
-    }
-
-    .highlight {
-      border-color: rgba(232, 201, 122, 0.26);
-      background:
-        linear-gradient(135deg, rgba(232, 201, 122, 0.08), rgba(255, 255, 255, 0.03));
     }
 
     .tag {
@@ -444,45 +404,26 @@
       margin-bottom: 10px;
     }
 
-    .progress {
-      height: 8px;
-      border-radius: 999px;
-      overflow: hidden;
-      background: rgba(232, 201, 122, 0.1);
-      margin: 10px 0 4px;
-    }
-
-    .progress span {
-      display: block;
-      height: 100%;
-      width: var(--width, 0%);
-      background: var(--amber);
-      border-radius: inherit;
-    }
-
     .verse-grid {
       display: grid;
-      gap: 12px;
+      gap: 10px;
+    }
+
+    .verse-card {
+      padding: 14px;
+      border: 1px solid rgba(168, 197, 160, 0.12);
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.025);
     }
 
     .verse-card blockquote {
       margin: 8px 0;
       color: var(--cream);
-      line-height: 1.65;
       font-size: 1rem;
+      line-height: 1.55;
     }
 
-    .result-card ol,
-    .result-card ul {
-      margin: 10px 0 0;
-      padding-left: 18px;
-      color: var(--muted);
-    }
-
-    .result-card li + li {
-      margin-top: 6px;
-    }
-
+    .action-row,
     .share-panel__actions {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -535,6 +476,15 @@
     .footer-links {
       display: flex;
       gap: 14px;
+      align-items: center;
+    }
+
+    .footer-link-button {
+      padding: 0;
+      border: 0;
+      background: transparent;
+      cursor: pointer;
+      color: var(--muted);
     }
 
     .bottom-nav {
@@ -579,6 +529,67 @@
       background: rgba(168, 197, 160, 0.08);
     }
 
+    .contact-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      display: grid;
+      place-items: center;
+      padding: 22px;
+      background: rgba(3, 7, 5, 0.72);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 220ms ease;
+    }
+
+    .contact-modal.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .contact-card-modal {
+      position: relative;
+      width: min(360px, 100%);
+      border: 1px solid rgba(168, 197, 160, 0.24);
+      border-radius: 18px;
+      background: rgba(25, 35, 29, 0.98);
+      box-shadow: 0 30px 90px rgba(0, 0, 0, 0.48);
+      padding: 24px 18px 18px;
+    }
+
+    .contact-close {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      border: 0;
+      background: transparent;
+      color: var(--muted);
+      font-size: 1.35rem;
+      cursor: pointer;
+    }
+
+    .contact-copy {
+      margin-top: 12px;
+      color: var(--muted);
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+
+    .contact-form {
+      display: grid;
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .contact-note {
+      margin-top: 12px;
+      color: var(--muted-soft);
+      font-size: 0.8rem;
+      line-height: 1.45;
+    }
+
     @media (min-width: 760px) {
       body {
         padding: 18px 0;
@@ -597,7 +608,8 @@
     }
 
     @media (max-width: 380px) {
-      .share-panel__actions {
+      .share-panel__actions,
+      .action-row {
         grid-template-columns: 1fr;
       }
     }
@@ -637,10 +649,10 @@
         </div>
 
         <article class="card signal-card">
-          <div class="form-card">
+          <div class="form-block">
             <div class="field">
               <label>What kind of content?</label>
-              <div class="kind-row" id="newsTypeButtons">
+              <div class="pill-row" id="newsTypeButtons">
                 <button class="kind-button active" type="button" data-type="post">Post</button>
                 <button class="kind-button" type="button" data-type="headline">Headline</button>
                 <button class="kind-button" type="button" data-type="thread">Thread</button>
@@ -652,20 +664,13 @@
             </div>
 
             <div class="field">
-              <label for="newsArticleUrl">Paste the link</label>
-              <input
-                id="newsArticleUrl"
-                type="url"
-                placeholder="https://example.com/article or public post link"
-              />
+              <label for="newsArticleUrl">Paste a public link</label>
+              <input id="newsArticleUrl" type="text" placeholder="Paste a public article or post link" />
             </div>
 
             <div class="field">
-              <label for="newsHeadline">Or paste the headline / post text</label>
-              <textarea
-                id="newsHeadline"
-                placeholder="Paste a public link, headline, or copy the post text here..."
-              ></textarea>
+              <label for="newsHeadline">Or paste the content</label>
+              <textarea id="newsHeadline" placeholder="Paste a public link, headline, or copy the post text here..."></textarea>
             </div>
 
             <button class="primary-button" type="button" id="newsAnalyzeButton">
@@ -673,12 +678,9 @@
             </button>
 
             <div class="status" id="newsStatus" role="status" aria-live="polite"></div>
-            <p class="ghost-note">
-  Signal helps you pause, test the tone, and respond from truth instead of reaction.
-</p>
           </div>
 
-          <div class="results" id="newsResult" aria-live="polite"></div>
+          <div class="results" id="newsResult"></div>
         </article>
 
         <footer class="footer-card">
@@ -710,7 +712,7 @@
           <div class="footer-bottom">
             <p>© <span id="year"></span> RootedByte</p>
             <div class="footer-links">
-              <a href="mailto:rootedbyte@outlook.com">Contact</a>
+              <button class="footer-link-button" type="button" id="openContactModal">Contact</button>
               <a href="privacy.html">Privacy</a>
             </div>
           </div>
@@ -753,324 +755,402 @@
     </a>
   </nav>
 
+  <div class="contact-modal" id="contactModal" aria-hidden="true">
+    <section class="contact-card-modal" role="dialog" aria-modal="true" aria-labelledby="contactModalTitle">
+      <button class="contact-close" type="button" id="closeContactModal" aria-label="Close contact form">×</button>
+
+      <h2 class="contact-title" id="contactModalTitle">Contact RootedByte</h2>
+      <p class="contact-copy">
+        Send a message and keep the direct email visible here too.
+      </p>
+
+      <form class="contact-form" id="contactForm">
+        <input type="text" id="contactName" placeholder="Your name" />
+        <input type="email" id="contactEmail" placeholder="Your email" />
+        <textarea id="contactMessage" placeholder="Your message"></textarea>
+        <button class="primary-button" type="submit">Send message</button>
+      </form>
+
+      <p class="contact-note">
+        Direct email: <a href="mailto:rootedbyte@outlook.com">rootedbyte@outlook.com</a>
+      </p>
+    </section>
+  </div>
+
   <script>
-  const $ = (selector) => document.querySelector(selector);
-  const $$ = (selector) => Array.from(document.querySelectorAll(selector));
+    const $ = (selector) => document.querySelector(selector);
 
-  const year = $("#year");
-  if (year) year.textContent = new Date().getFullYear();
+    const year = $("#year");
+    if (year) year.textContent = new Date().getFullYear();
 
-  function escapeHtml(value) {
-    return String(value ?? "")
-      .replace(/&/g, "&amp;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;")
-      .replace(/"/g, "&quot;")
-      .replace(/'/g, "&#039;");
-  }
+    let latestSignalOutput = null;
 
-  function setStatus(element, message, type = "info", loading = false) {
-    if (!element) return;
-
-    element.className = type === "error" ? "status error" : "status";
-    element.innerHTML = loading
-      ? '<span class="spinner" aria-hidden="true"></span><span>' + escapeHtml(message) + "</span>"
-      : escapeHtml(message);
-  }
-
-  async function postJson(url, body) {
-    const response = await fetch(url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(body)
-    });
-
-    const data = await response.json().catch(() => ({}));
-
-    if (!response.ok) {
-      throw new Error(data.error || "Something went wrong. Please try again.");
+    function escapeHtml(value) {
+      return String(value ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
     }
 
-    return data;
-  }
+    function setStatus(element, message, type = "info", loading = false) {
+      if (!element) return;
 
-  $$("#newsTypeButtons .kind-button").forEach((button) => {
-    button.addEventListener("click", () => {
-      $$("#newsTypeButtons .kind-button").forEach((item) => {
-        item.classList.remove("active");
+      element.className = type === "error" ? "status error" : "status";
+      element.innerHTML = loading
+        ? '<span class="spinner" aria-hidden="true"></span><span>' + escapeHtml(message) + "</span>"
+        : escapeHtml(message);
+    }
+
+    async function postJson(url, body) {
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(body)
       });
 
-      button.classList.add("active");
-      $("#newsType").value = button.dataset.type || "post";
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok) throw new Error(data.error || "Something went wrong. Please try again.");
+      return data;
+    }
+
+    document.querySelectorAll("#newsTypeButtons .kind-button").forEach((button) => {
+      button.addEventListener("click", () => {
+        document.querySelectorAll("#newsTypeButtons .kind-button").forEach((item) => {
+          item.classList.remove("active");
+        });
+        button.classList.add("active");
+        $("#newsType").value = button.dataset.type || "post";
+      });
     });
-  });
 
-  function renderNewsResult(data) {
-    const anchors = Array.isArray(data.verses) ? data.verses : [];
-    const reflectionSteps = Array.isArray(data.prayer_points)
-      ? data.prayer_points
-      : [];
+    function renderNewsResult(data) {
+      latestSignalOutput = data;
+      const anchors = Array.isArray(data.verses) ? data.verses : [];
+      const reflectionSteps = Array.isArray(data.prayer_points) ? data.prayer_points : [];
+      const publicPath = data.source_mode === "headline_only";
+      const emotionalScore = Number(data.emotional_temperature_score);
+      const hasEmotionalScore = Number.isFinite(emotionalScore);
 
-    const publicPath = data.source_mode === "headline_only";
-    const emotionalScore = Number(data.emotional_temperature_score);
-    const hasEmotionalScore = Number.isFinite(emotionalScore);
-
-    return `
-      <div class="result-card ${publicPath ? "highlight" : ""}">
-        <span class="tag">${publicPath ? "Headline-based check" : "Signal summary"}</span>
-        <h2>${escapeHtml(data.overall_theme || "Signal reflection")}</h2>
-        <p>${escapeHtml(data.article_summary || "")}</p>
-      </div>
-
-      <div class="result-card">
-        <span class="tag">What this may shape</span>
-        <h3>Thinking impact</h3>
-        <p>${escapeHtml(data.thinking_impact || "")}</p>
-
-        ${
-          hasEmotionalScore
-            ? `
-              <div class="progress" aria-label="Emotional temperature">
-                <span style="--width:${Math.max(0, Math.min(100, emotionalScore))}%"></span>
-              </div>
-              <p>Emotional temperature: ${Math.round(emotionalScore)}/100</p>
-            `
-            : ""
-        }
-      </div>
-
-      <div class="result-card">
-        <span class="tag">Truth check</span>
-        <h3>Discernment notes</h3>
-        <p>${escapeHtml(data.truth_check || "")}</p>
-        ${data.exegesis ? `<p>${escapeHtml(data.exegesis)}</p>` : ""}
-        ${
-          data.jesus_lens
-            ? `<p><strong>Grounded response:</strong> ${escapeHtml(data.jesus_lens)}</p>`
-            : ""
-        }
-      </div>
-
-      ${
-        reflectionSteps.length
-          ? `
-            <div class="result-card">
-              <span class="tag">Reflection steps</span>
-              <ol>
-                ${reflectionSteps.map((point) => `<li>${escapeHtml(point)}</li>`).join("")}
-              </ol>
-            </div>
-          `
-          : ""
-      }
-
-      ${
-        anchors.length
-          ? `
-            <div class="verse-grid">
-              ${anchors.slice(0, 3).map((anchor, index) => `
-                <article class="verse-card">
-                  <span class="tag">Truth anchor</span>
-                  <blockquote>${escapeHtml(anchor.text || "")}</blockquote>
-                  <p><strong>${escapeHtml(anchor.reference || `Truth Anchor ${index + 1}`)}</strong></p>
-                  ${anchor.application ? `<p>${escapeHtml(anchor.application)}</p>` : ""}
-                  ${anchor.relevance_reason ? `<p>${escapeHtml(anchor.relevance_reason)}</p>` : ""}
-                </article>
-              `).join("")}
-            </div>
-          `
-          : ""
-      }
-    `;
-  }
-
-  function renderSharePanel() {
-    return `
-      <div class="share-panel">
-        <h3>Save or share this Signal check</h3>
-        <p>
-          Save privately to your account, or create a public RootedByte link
-          that anyone with the link can view.
-        </p>
-
-        <div class="share-panel__actions">
-          <button class="primary-button" type="button" id="saveNewsOutput">
-            Save privately
-          </button>
-
-          <button class="secondary-button" type="button" id="shareNewsOutput">
-            Share publicly
-          </button>
+      return `
+        <div class="result-card ${publicPath ? "highlight" : ""}">
+          <span class="tag">${publicPath ? "Headline-based check" : "Signal summary"}</span>
+          <h2>${escapeHtml(data.overall_theme || "Signal reflection")}</h2>
+          <p>${escapeHtml(data.article_summary || "")}</p>
         </div>
 
-        <div class="status" id="newsSaveStatus" role="status" aria-live="polite"></div>
-        <div class="status" id="newsShareStatus" role="status" aria-live="polite"></div>
-        <div class="share-link-box" id="newsShareLink" hidden></div>
-      </div>
-    `;
-  }
+        <div class="result-card">
+          <span class="tag">What this may shape</span>
+          <h3>Thinking impact</h3>
+          <p>${escapeHtml(data.thinking_impact || "")}</p>
+          ${hasEmotionalScore ? `<p><strong>Emotional temperature:</strong> ${Math.round(emotionalScore)}/100</p>` : ""}
+        </div>
 
-  async function createSharedOutput({ appType, title, inputSummary, output, statusElement, linkElement }) {
-    statusElement.className = "status";
-    statusElement.textContent = "Creating share link...";
+        <div class="result-card">
+          <span class="tag">Truth check</span>
+          <h3>Discernment notes</h3>
+          <p>${escapeHtml(data.truth_check || "")}</p>
+          ${data.exegesis ? `<p>${escapeHtml(data.exegesis)}</p>` : ""}
+          ${data.jesus_lens ? `<p><strong>Grounded response:</strong> ${escapeHtml(data.jesus_lens)}</p>` : ""}
+        </div>
 
-    const response = await fetch("/api/share", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        appType,
-        title,
-        inputSummary,
-        output
-      })
-    });
-
-    const data = await response.json().catch(() => ({}));
-
-    if (!response.ok) {
-      throw new Error(data.error || "Could not create share link.");
-    }
-
-    linkElement.hidden = false;
-    linkElement.textContent = data.shareUrl;
-
-    try {
-      await navigator.clipboard.writeText(data.shareUrl);
-      statusElement.textContent = "Share link created and copied.";
-    } catch {
-      statusElement.textContent = "Share link created.";
-    }
-
-    if (navigator.share) {
-      try {
-        await navigator.share({
-          title,
-          text: `View this ${title} from RootedByte.`,
-          url: data.shareUrl
-        });
-      } catch {
-        // User cancelled native share.
-      }
-    }
-
-    return data;
-  }
-
-  function attachNewsSaveButton(outputData) {
-    const button = document.querySelector("#saveNewsOutput");
-    const statusElement = document.querySelector("#newsSaveStatus");
-
-    if (!button || !statusElement) return;
-
-    button.addEventListener("click", async () => {
-      button.disabled = true;
-      statusElement.className = "status";
-      statusElement.textContent = "Saving privately...";
-
-      try {
-        if (!window.RootedByteSaveOutput || !window.RootedByteSaveOutput.save) {
-          throw new Error("Private saving is not ready yet. Please refresh and try again.");
+        ${
+          reflectionSteps.length
+            ? `<div class="result-card">
+                <span class="tag">Reflection steps</span>
+                <ol>${reflectionSteps.map((point) => `<li>${escapeHtml(point)}</li>`).join("")}</ol>
+              </div>`
+            : ""
         }
 
-        const result = await window.RootedByteSaveOutput.save({
-          appType: "signal",
-          title: "Signal Truth Check",
-          inputSummary: "Private Signal truth check",
-          outputJson: outputData
-        });
+        ${
+          anchors.length
+            ? `<div class="verse-grid">
+                ${anchors.slice(0, 3).map((anchor, index) => `
+                  <article class="verse-card">
+                    <span class="tag">Truth anchor</span>
+                    <blockquote>${escapeHtml(anchor.text || "")}</blockquote>
+                    <p><strong>${escapeHtml(anchor.reference || `Truth Anchor ${index + 1}`)}</strong></p>
+                    ${anchor.application ? `<p>${escapeHtml(anchor.application)}</p>` : ""}
+                    ${anchor.relevance_reason ? `<p>${escapeHtml(anchor.relevance_reason)}</p>` : ""}
+                  </article>
+                `).join("")}
+              </div>`
+            : ""
+        }
 
-        if (!result.ok) {
-          statusElement.className = "status error";
+        <div class="action-row">
+          <button class="secondary-button" type="button" id="journalSignalOutput">Write journal</button>
+          <button class="secondary-button" type="button" id="resetSignalOutput">Check something else</button>
+        </div>
 
-          if (result.reason === "not_signed_in") {
-            statusElement.innerHTML = `
-              <span>Please sign in to save this privately.</span>
-              <a href="signin.html" style="color: var(--sage); font-weight: 900; text-decoration: underline;">Sign in</a>
-            `;
+        <div class="share-panel">
+          <h3>Save or share</h3>
+          <p>Keep this privately, or create a public link.</p>
+
+          <div class="share-panel__actions">
+            <button class="primary-button" type="button" id="saveNewsOutput">Save</button>
+            <button class="secondary-button" type="button" id="shareNewsOutput">Share</button>
+          </div>
+
+          <div class="status" id="newsSaveStatus" role="status" aria-live="polite"></div>
+          <div class="status" id="newsShareStatus" role="status" aria-live="polite"></div>
+          <div class="share-link-box" id="newsShareLink" hidden></div>
+        </div>
+      `;
+    }
+
+    async function createSharedOutput({ appType, title, inputSummary, output, statusElement, linkElement }) {
+      statusElement.className = "status";
+      statusElement.textContent = "Creating share link...";
+
+      const response = await fetch("/api/share", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          appType,
+          title,
+          inputSummary,
+          output
+        })
+      });
+
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok) throw new Error(data.error || "Could not create share link.");
+
+      linkElement.hidden = false;
+      linkElement.textContent = data.shareUrl;
+
+      try {
+        await navigator.clipboard.writeText(data.shareUrl);
+        statusElement.textContent = "Share link created and copied.";
+      } catch {
+        statusElement.textContent = "Share link created.";
+      }
+
+      return data;
+    }
+
+    function attachSignalSaveButton() {
+      const button = $("#saveNewsOutput");
+      const statusElement = $("#newsSaveStatus");
+
+      if (!button || !statusElement) return;
+
+      button.onclick = async () => {
+        if (!latestSignalOutput) return;
+
+        button.disabled = true;
+        statusElement.className = "status";
+        statusElement.textContent = "Saving...";
+
+        try {
+          if (!window.RootedByteSaveOutput || !window.RootedByteSaveOutput.save) {
+            throw new Error("Private saving is not ready yet. Please refresh and try again.");
+          }
+
+          const result = await window.RootedByteSaveOutput.save({
+            appType: "signal",
+            title: "Signal Truth Check",
+            inputSummary: "Signal truth check",
+            outputJson: latestSignalOutput
+          });
+
+          if (!result.ok) {
+            statusElement.className = "status error";
+
+            if (result.reason === "not_signed_in") {
+              statusElement.innerHTML = `
+                <span>Please sign in to save this.</span>
+                <a href="signin.html" style="color: var(--sage); font-weight: 900; text-decoration: underline;">Sign in</a>
+              `;
+              return;
+            }
+
+            statusElement.textContent = result.message || "Could not save.";
             return;
           }
 
-          statusElement.textContent = result.message || "Could not save privately.";
-          return;
+          statusElement.className = "status";
+          statusElement.textContent = "Saved.";
+        } catch (error) {
+          statusElement.className = "status error";
+          statusElement.textContent = error.message || "Could not save.";
+        } finally {
+          button.disabled = false;
         }
+      };
+    }
 
+    function attachSignalShareButton() {
+      const button = $("#shareNewsOutput");
+      const statusElement = $("#newsShareStatus");
+      const linkElement = $("#newsShareLink");
+
+      if (!button || !statusElement || !linkElement) return;
+
+      button.onclick = async () => {
+        if (!latestSignalOutput) return;
+
+        button.disabled = true;
         statusElement.className = "status";
-        statusElement.textContent = "Saved privately to your account.";
-      } catch (error) {
-        statusElement.className = "status error";
-        statusElement.textContent = error.message || "Could not save privately.";
-      } finally {
-        button.disabled = false;
+
+        try {
+          await createSharedOutput({
+            appType: "signal",
+            title: "Signal Truth Check",
+            inputSummary: "Signal truth check",
+            output: latestSignalOutput,
+            statusElement,
+            linkElement
+          });
+        } catch (error) {
+          statusElement.className = "status error";
+          statusElement.textContent = error.message || "Could not create share link.";
+        } finally {
+          button.disabled = false;
+        }
+      };
+    }
+
+    function attachSignalJournalButton() {
+      const button = $("#journalSignalOutput");
+      if (!button) return;
+
+      button.onclick = () => {
+        if (!latestSignalOutput) return;
+
+        const draft = [
+          "Signal reflection",
+          "",
+          "Overall theme:",
+          latestSignalOutput.overall_theme || "",
+          "",
+          "Thinking impact:",
+          latestSignalOutput.thinking_impact || "",
+          "",
+          "Truth check:",
+          latestSignalOutput.truth_check || "",
+          "",
+          "Reflection steps:",
+          ...(Array.isArray(latestSignalOutput.prayer_points) ? latestSignalOutput.prayer_points : [])
+        ].join("\n");
+
+        try {
+          localStorage.setItem("rootedbyte_prefill_journal", draft);
+        } catch {}
+        window.location.href = "index.html#screen-journal";
+      };
+    }
+
+    function attachSignalResetButton() {
+      const button = $("#resetSignalOutput");
+      if (!button) return;
+
+      button.onclick = () => {
+        latestSignalOutput = null;
+        $("#newsArticleUrl").value = "";
+        $("#newsHeadline").value = "";
+        $("#newsResult").innerHTML = "";
+        $("#newsStatus").textContent = "";
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      };
+    }
+
+    $("#newsAnalyzeButton").addEventListener("click", async () => {
+      const button = $("#newsAnalyzeButton");
+      const newsType = $("#newsType").value || "post";
+      const articleUrl = $("#newsArticleUrl").value.trim();
+      const headline = $("#newsHeadline").value.trim();
+      const status = $("#newsStatus");
+      const result = $("#newsResult");
+
+      if (!articleUrl && !headline) {
+        setStatus(status, "Paste a link or some content before running Signal.", "error");
+        return;
       }
-    });
-  }
 
-  function attachNewsShareButton(outputData) {
-    const button = document.querySelector("#shareNewsOutput");
-    const statusElement = document.querySelector("#newsShareStatus");
-    const linkElement = document.querySelector("#newsShareLink");
-
-    if (!button || !statusElement || !linkElement) return;
-
-    button.addEventListener("click", async () => {
       button.disabled = true;
-      statusElement.className = "status";
+      button.textContent = "Checking...";
+      result.innerHTML = "";
+      setStatus(status, "Checking the signal...", "info", true);
 
       try {
-        await createSharedOutput({
-          appType: "signal",
-          title: "Signal Truth Check",
-          inputSummary: "Shared Signal truth check",
-          output: outputData,
-          statusElement,
-          linkElement
+        const data = await postJson("/api/newsverse", {
+          newsType,
+          articleUrl,
+          headline
         });
+
+        result.innerHTML = renderNewsResult(data);
+        attachSignalSaveButton();
+        attachSignalShareButton();
+        attachSignalJournalButton();
+        attachSignalResetButton();
+
+        setStatus(status, "Signal check ready.");
+        result.scrollIntoView({ behavior: "smooth", block: "start" });
       } catch (error) {
-        statusElement.className = "status error";
-        statusElement.textContent = error.message || "Could not create share link.";
+        setStatus(status, error.message, "error");
       } finally {
         button.disabled = false;
+        button.textContent = "Run truth check";
       }
     });
-  }
 
-  $("#newsAnalyzeButton").addEventListener("click", async () => {
-    const newsType = $("#newsType").value || "post";
-    const articleUrl = $("#newsArticleUrl").value.trim();
-    const headline = $("#newsHeadline").value.trim();
-    const status = $("#newsStatus");
-    const result = $("#newsResult");
+    const contactModal = $("#contactModal");
+    const openContactModal = $("#openContactModal");
+    const closeContactModal = $("#closeContactModal");
+    const contactForm = $("#contactForm");
 
-    if (!articleUrl && !headline) {
-      setStatus(status, "Paste a link or some content before running Signal.", "error");
-      return;
+    function showContactModal() {
+      contactModal.classList.add("active");
+      contactModal.setAttribute("aria-hidden", "false");
     }
 
-    result.innerHTML = "";
-    setStatus(status, "Checking the signal...", "info", true);
+    function hideContactModal() {
+      contactModal.classList.remove("active");
+      contactModal.setAttribute("aria-hidden", "true");
+    }
 
-    try {
-      const data = await postJson("/api/newsverse", {
-        newsType,
-        articleUrl,
-        headline
+    if (openContactModal) {
+      openContactModal.addEventListener("click", showContactModal);
+    }
+
+    if (closeContactModal) {
+      closeContactModal.addEventListener("click", hideContactModal);
+    }
+
+    if (contactModal) {
+      contactModal.addEventListener("click", (event) => {
+        if (event.target === contactModal) {
+          hideContactModal();
+        }
       });
-
-      result.innerHTML = renderNewsResult(data) + renderSharePanel();
-
-      attachNewsSaveButton(data);
-      attachNewsShareButton(data);
-
-      setStatus(status, "Signal check ready.");
-    } catch (error) {
-      setStatus(status, error.message, "error");
     }
-  });
-</script>
+
+    if (contactForm) {
+      contactForm.addEventListener("submit", (event) => {
+        event.preventDefault();
+
+        const name = $("#contactName").value.trim();
+        const email = $("#contactEmail").value.trim();
+        const message = $("#contactMessage").value.trim();
+
+        const subject = encodeURIComponent("RootedByte Contact Form");
+        const body = encodeURIComponent(
+          `Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`
+        );
+
+        window.location.href = `mailto:rootedbyte@outlook.com?subject=${subject}&body=${body}`;
+      });
+    }
+  </script>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="js/rootedbyte-auth-nav.js"></script>
