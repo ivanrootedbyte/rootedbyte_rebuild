@@ -26,20 +26,33 @@
   }
 
   function updateAuthLinks(isSignedIn) {
-    const authLinks = document.querySelectorAll(AUTH_LINK_SELECTOR);
+  const authLinks = document.querySelectorAll(AUTH_LINK_SELECTOR);
 
-    authLinks.forEach((link) => {
-      if (isSignedIn) {
-        link.href = 'account.html';
+  authLinks.forEach((link) => {
+    const hasVisualIcon =
+      link.classList.contains('profile-button') ||
+      link.querySelector('svg') ||
+      link.querySelector('img');
+
+    if (isSignedIn) {
+      link.href = 'account.html';
+      link.setAttribute('aria-label', 'Go to My Account');
+      link.setAttribute('title', 'My Account');
+
+      if (!hasVisualIcon) {
         link.textContent = 'My Account';
-        link.setAttribute('aria-label', 'Go to My Account');
-      } else {
-        link.href = 'signin.html';
-        link.textContent = 'Sign In';
-        link.setAttribute('aria-label', 'Sign in to RootedByte');
       }
-    });
-  }
+    } else {
+      link.href = 'signin.html';
+      link.setAttribute('aria-label', 'Sign in to RootedByte');
+      link.setAttribute('title', 'Sign In');
+
+      if (!hasVisualIcon) {
+        link.textContent = 'Sign In';
+      }
+    }
+  });
+}
 
   function applyAuthState(isSignedIn) {
     updateAuthLinks(isSignedIn);
