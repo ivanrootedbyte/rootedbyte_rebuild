@@ -1,7 +1,9 @@
 const GEMINI_URL =
   'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent';
 
-const SONG_DIVEIN_SYSTEM_PROMPT = `You are Song DiveIn, a careful worship song research and musician preparation assistant.
+const SOUNDSENSE_SYSTEM_PROMPT = `You are SoundSense, a careful song reflection and musician preparation assistant for RootedByte.
+
+SoundSense helps users understand a song's identity, emotional direction, meaning, musical preparation needs, and truth-rooted reflection without copying lyrics or providing copyrighted material.
 
 Return ONLY raw JSON.
 Do not use markdown.
@@ -47,15 +49,26 @@ Rules:
 - If public meaning sources are not available, infer carefully and say it is an interpretation.
 - metadata_confidence must be "high", "medium", or "low".
 - source_links must contain up to 3 public URLs used for research.
-- Do not invent chords, BPM, key, timestamps, arrangement details, instrument layers, or live worship moments.
+- Do not invent chords, BPM, key, timestamps, arrangement details, instrument layers, or live performance moments.
 - If something is unavailable, say "Unable to verify", "Estimated", or "Not detected".
-- Do not use the heading or wording "Theology".
-- Use "Faith Lens" style language instead.
-- Keep all preparation guidance concise, worship-aware, Scripture-connected, practical, and musician-focused.
 - Avoid denominational bias.
+- Avoid churchy, preachy, overly religious, clinical, or shame-based wording.
+- Do not assume the user is Christian.
+- Express Bible-rooted truth naturally as wisdom, humility, courage, peace, love, self-control, honesty, and hope.
+- Keep the tone age 14+ appropriate and relatable to Gen Z through millennials.
+- Do not use the heading or wording "Theology".
+- Use "Reflection" or "Truth Lens" style language instead.
+- Keep all preparation guidance concise, practical, musician-aware, and truth-rooted.
 - Avoid generic phrases like "This song is emotional" or "This song is uplifting".
 - The selected instrument should shape instrument_guidance.
 - Do not provide guitar gear, amp, pedal, cab, preset, EQ, downloadable preset, or tone settings.
+
+Field guidance:
+- faith_lens should explain the song's truth-rooted or heart-level direction in accessible language. Do not make it sound like a sermon.
+- spiritual_reflection should be a short grounding prompt before listening, rehearsing, or leading.
+- rehearsal_prep should be practical and concise.
+- arrangement_feel should describe high-level movement only when supported or reasonably inferable.
+- listening_guide should help the user listen for dynamics, space, repetition, and emotional direction without quoting lyrics.
 
 Instrument guidance rules:
 - Acoustic Guitar: strumming dynamics, rhythmic support, simplicity, restraint.
@@ -63,7 +76,7 @@ Instrument guidance rules:
 - Bass: groove stability, root-note emphasis, dynamic consistency.
 - Drums: cymbal restraint, groove consistency, transition control.
 - Keys / Piano: pad layering ideas, spacing awareness, atmosphere support.
-- Vocals: phrasing, emotional emphasis, harmony opportunities, clear lyrical delivery.`;
+- Vocals: phrasing, emotional emphasis, harmony opportunities, clear delivery.`;
 
 const VALID_INSTRUMENTS = {
   'acoustic-guitar': 'Acoustic Guitar',
@@ -201,7 +214,7 @@ async function callGemini(userPrompt) {
 
   const body = {
     system_instruction: {
-      parts: [{ text: SONG_DIVEIN_SYSTEM_PROMPT }]
+      parts: [{ text: SOUNDSENSE_SYSTEM_PROMPT }]
     },
     contents: [
       {
@@ -227,15 +240,15 @@ async function callGemini(userPrompt) {
       response.status === 503 ||
       /high demand|overloaded|try again later/i.test(errorText)
     ) {
-      throw new Error('The AI Engine is busy right now. Please try again in a minute.');
+      throw new Error('The SoundSense engine is busy right now. Please try again in a minute.');
     }
 
     if (response.status === 429 || /quota|rate limit/i.test(errorText)) {
-      throw new Error('The AI Engine is temporarily limited. Please try again later.');
+      throw new Error('The SoundSense engine is temporarily limited. Please try again later.');
     }
 
     throw new Error(
-      'The AI Engine could not create this Song DiveIn result right now. Please try again.'
+      'SoundSense could not create this result right now. Please try again.'
     );
   }
 
@@ -243,7 +256,7 @@ async function callGemini(userPrompt) {
   const raw = data?.candidates?.[0]?.content?.parts?.[0]?.text;
 
   if (!raw) {
-    throw new Error('Gemini returned an empty response.');
+    throw new Error('SoundSense returned an empty response.');
   }
 
   return normalizeSourceLinks(safeParse(raw), data);
@@ -273,7 +286,7 @@ function normalizeBpm(value) {
   return Math.round(number);
 }
 
-function normalizeSongDiveInData(data, instrumentLabel) {
+function normalizeSoundSenseData(data, instrumentLabel) {
   const safeData = data && typeof data === 'object' ? data : {};
 
   const song = String(safeData.song || '').trim();
@@ -315,7 +328,7 @@ function normalizeSongDiveInData(data, instrumentLabel) {
       : [],
 
     faith_lens: String(
-      safeData.faith_lens || 'Faith Lens is not available yet.'
+      safeData.faith_lens || 'Truth Lens is not available yet.'
     ).trim(),
 
     arrangement_feel: String(
@@ -327,11 +340,11 @@ function normalizeSongDiveInData(data, instrumentLabel) {
     ).trim(),
 
     rehearsal_prep: String(
-      safeData.rehearsal_prep || 'Rehearsal preparation is not available yet.'
+      safeData.rehearsal_prep || 'Preparation guidance is not available yet.'
     ).trim(),
 
     spiritual_reflection: String(
-      safeData.spiritual_reflection || 'Spiritual reflection is not available yet.'
+      safeData.spiritual_reflection || 'Reflection prompt is not available yet.'
     ).trim(),
 
     instrument_guidance: String(
@@ -341,8 +354,8 @@ function normalizeSongDiveInData(data, instrumentLabel) {
   };
 }
 
-function buildSongDiveInPrompt({ resolvedSong, originalSongInput, instrumentLabel }) {
-  return `Research and create a Song DiveIn worship preparation result.
+function buildSoundSensePrompt({ resolvedSong, originalSongInput, instrumentLabel }) {
+  return `Research and create a SoundSense song reflection and musician preparation result.
 
 Original user input:
 ${originalSongInput}
@@ -361,11 +374,11 @@ Return:
 - a search query for lyrics
 - a search query for chords or tabs
 - a search query for a tutorial for the selected instrument
-- Faith Lens: Scripture connections, God-focus, and worship posture
-- Song Flow: high-level emotional and congregational movement
-- Listen Closely: dynamic lifts, repeated phrases, and places to leave space
-- Rehearsal Moves: practical team preparation, transitions, cues, and restraint
-- Before You Lead: short reflection, prayer prompt, and worship mindset
+- Truth Lens: the song's heart-level direction, values, tensions, or grounding points
+- Song Flow: high-level emotional and musical movement
+- Listen Closely: dynamic lifts, repeated phrases, restraint, and places to leave space
+- Rehearsal Moves: practical preparation, transitions, cues, and restraint
+- Before You Play: short reflection prompt and grounded mindset
 - Role Coaching: concise guidance for the selected instrument
 
 Important:
@@ -374,10 +387,12 @@ Important:
 - Do not provide exact lyrics, chord, or tutorial URLs.
 - Provide search queries only for lyrics, chords, and tutorial resources.
 - Do not create guitar tone settings, gear presets, amp settings, cab settings, pedal settings, or downloadable presets.
-- Do not invent chords, BPM, key, timestamps, arrangement details, instrument layers, or live worship moments.
+- Do not invent chords, BPM, key, timestamps, arrangement details, instrument layers, or live performance moments.
 - If a value cannot be verified, say "Unable to verify", "Estimated", or "Not detected".
-- Keep the language worship-aware, practical, concise, and modern.
+- Keep the language practical, concise, modern, reflective, and accessible.
+- Make it useful for someone who may simply want to understand the song and stay rooted in truth.
 - Avoid denominational bias.
+- Avoid churchy, preachy, or overly religious wording.
 - Do not use the heading or wording "Theology".
 - Return only the required JSON object.`;
 }
@@ -426,8 +441,8 @@ module.exports = async function handler(req, res) {
       resolvedSong = await getYouTubeTitle(resolvedSong);
     }
 
-    const diveIn = await callGemini(
-      buildSongDiveInPrompt({
+    const soundSense = await callGemini(
+      buildSoundSensePrompt({
         resolvedSong,
         originalSongInput,
         instrumentLabel
@@ -436,10 +451,10 @@ module.exports = async function handler(req, res) {
 
     return res
       .status(200)
-      .json(normalizeSongDiveInData(diveIn, instrumentLabel));
+      .json(normalizeSoundSenseData(soundSense, instrumentLabel));
   } catch (error) {
     return res.status(500).json({
-      error: error.message || 'Unable to build that Song DiveIn result right now.'
+      error: error.message || 'Unable to build that SoundSense result right now.'
     });
   }
 };
