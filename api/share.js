@@ -65,8 +65,8 @@ function getDefaultTitle(appType) {
   const normalized = normalizeAppType(appType);
 
   if (normalized === "inner_work") return "Inner Work Reflection";
-  if (normalized === "signal") return "Signal Reflection";
-  if (normalized === "soundsense") return "SoundSense Reflection";
+  if (normalized === "signal") return "Signal Truth Check";
+  if (normalized === "soundsense") return "SoundSense Breakdown";
 
   return "RootedByte Reflection";
 }
