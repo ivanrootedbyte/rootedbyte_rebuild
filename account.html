@@ -759,7 +759,7 @@
               ${area.urgency ? `<p><strong>Urgency:</strong> ${escapeHtml(area.urgency)}</p>` : ''}
               ${area.current_state ? `<p><strong>Current state:</strong> ${escapeHtml(area.current_state)}</p>` : ''}
               ${area.recommendation ? `<p><strong>Recommendation:</strong> ${escapeHtml(area.recommendation)}</p>` : ''}
-              ${area.scripture ? `<p><strong>Scripture:</strong> ${escapeHtml(area.scripture)}</p>` : ''}
+              ${area.scripture ? `<p><strong>Truth anchor:</strong> ${escapeHtml(area.scripture)}</p>` : ''}
               ${area.action_step ? `<p><strong>Action step:</strong> ${escapeHtml(area.action_step)}</p>` : ''}
             </div>
           `).join('')
@@ -769,12 +769,12 @@
       ${
         Object.keys(plan).length
           ? `<div class="saved-output-block">
-              <span class="tag">Daily plan</span>
+              <span class="tag">Daily rhythm</span>
               <div class="saved-output-grid">
-                ${plan.prayer_minutes ? `<div><strong>Prayer</strong><p>${escapeHtml(plan.prayer_minutes)} minutes</p></div>` : ''}
-                ${plan.bible_reading_minutes ? `<div><strong>Bible reading</strong><p>${escapeHtml(plan.bible_reading_minutes)} minutes</p></div>` : ''}
+                ${plan.prayer_minutes ? `<div><strong>Quiet reflection</strong><p>${escapeHtml(plan.prayer_minutes)} minutes</p></div>` : ''}
+                ${plan.bible_reading_minutes ? `<div><strong>Truth reading</strong><p>${escapeHtml(plan.bible_reading_minutes)} minutes</p></div>` : ''}
                 ${plan.social_media_limit_minutes ? `<div><strong>Social media limit</strong><p>${escapeHtml(plan.social_media_limit_minutes)} minutes</p></div>` : ''}
-                ${plan.fasting_recommendation ? `<div><strong>Fasting</strong><p>${escapeHtml(plan.fasting_recommendation)}</p></div>` : ''}
+                ${plan.fasting_recommendation ? `<div><strong>Reset practice</strong><p>${escapeHtml(plan.fasting_recommendation)}</p></div>` : ''}
                 ${plan.community_action ? `<div><strong>Community</strong><p>${escapeHtml(plan.community_action)}</p></div>` : ''}
               </div>
             </div>`
@@ -784,7 +784,7 @@
       ${
         rootedVerses.length
           ? `<div class="saved-output-block">
-              <span class="tag">Verses to reflect on</span>
+              <span class="tag">Truth anchors</span>
               ${rootedVerses.map((verse) => `
                 <blockquote class="saved-output-quote">${escapeHtml(verse.text || '')}</blockquote>
                 <p>
@@ -838,7 +838,7 @@
       ${
         newsVerses.length
           ? `<div class="saved-output-block">
-              <span class="tag">Relevant verses</span>
+              <span class="tag">Truth anchors</span>
               ${newsVerses.map((verse) => `
                 <blockquote class="saved-output-quote">${escapeHtml(verse.text || '')}</blockquote>
                 <p>
@@ -855,7 +855,7 @@
       ${
         data.exegesis
           ? `<div class="saved-output-block">
-              <span class="tag">Exegesis</span>
+              <span class="tag">Deeper truth</span>
               <p>${escapeHtml(data.exegesis)}</p>
             </div>`
           : ''
@@ -864,7 +864,7 @@
       ${
         data.jesus_lens
           ? `<div class="saved-output-block">
-              <span class="tag">Jesus lens</span>
+              <span class="tag">Grounded response</span>
               <p>${escapeHtml(data.jesus_lens)}</p>
             </div>`
           : ''
@@ -873,7 +873,7 @@
       ${
         prayerPoints.length
           ? `<div class="saved-output-block">
-              <span class="tag">Prayer points</span>
+              <span class="tag">Reflection steps</span>
               <ul>
                 ${prayerPoints.map((item) => `<li>${escapeHtml(item)}</li>`).join('')}
               </ul>
@@ -948,7 +948,7 @@
       ${
         data.spiritual_reflection
           ? `<div class="saved-output-block">
-              <span class="tag">Before you lead</span>
+              <span class="tag">Before you play</span>
               <p>${escapeHtml(data.spiritual_reflection)}</p>
             </div>`
           : ''
@@ -957,7 +957,7 @@
       ${
         data.instrument_guidance
           ? `<div class="saved-output-block">
-              <span class="tag">Role coaching</span>
+              <span class="tag">Role guidance</span>
               <p>${escapeHtml(data.instrument_guidance)}</p>
             </div>`
           : ''
@@ -1071,7 +1071,7 @@
 
                   <div class="saved-journal-panel" id="journal-${id}" hidden>
                     <h4>Private Journal</h4>
-                    <p>Reflect on what you want to remember, apply, or pray through from this output.</p>
+                    <p>Reflect on what you want to remember, apply, or keep rooted from this output.</p>
 
                     <textarea placeholder="Write a private journal entry for this saved output..."></textarea>
 
