@@ -1600,6 +1600,20 @@
     </section>
   </div>
 
+  <div class="contact-modal" id="signinPromptModal" aria-hidden="true">
+  <section class="contact-card-modal" role="dialog" aria-modal="true" aria-labelledby="signinPromptTitle">
+    <button class="contact-close" type="button" id="closeSigninPrompt" aria-label="Close sign-in prompt">×</button>
+
+    <h2 class="contact-title" id="signinPromptTitle">Save your check-in</h2>
+    <p class="contact-copy">
+      Sign in to keep your mood check-in, streak, and growth progress connected to your account.
+    </p>
+
+    <div class="onboarding-actions" style="margin-top: 20px;">
+      <a class="primary-button" href="signin.html">Sign in</a>
+      <button class="skip-button" type="button" id="maybeLaterSigninPrompt">Maybe later</button>
+    </div>
+  
   <script>
     const $ = (selector) => document.querySelector(selector);
     const $$ = (selector) => Array.from(document.querySelectorAll(selector));
@@ -2056,19 +2070,6 @@ function userLooksSignedIn() {
 
   <script src="js/rootedbyte-auth-nav.js"></script>
 
-  <div class="contact-modal" id="signinPromptModal" aria-hidden="true">
-  <section class="contact-card-modal" role="dialog" aria-modal="true" aria-labelledby="signinPromptTitle">
-    <button class="contact-close" type="button" id="closeSigninPrompt" aria-label="Close sign-in prompt">×</button>
-
-    <h2 class="contact-title" id="signinPromptTitle">Save your check-in</h2>
-    <p class="contact-copy">
-      Sign in to keep your mood check-in, streak, and growth progress connected to your account.
-    </p>
-
-    <div class="onboarding-actions" style="margin-top: 20px;">
-      <a class="primary-button" href="signin.html">Sign in</a>
-      <button class="skip-button" type="button" id="maybeLaterSigninPrompt">Maybe later</button>
-    </div>
   </section>
 </div>
   
