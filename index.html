@@ -272,7 +272,7 @@
       color: var(--muted-soft);
       font-size: 0.86rem;
     }
-
+    
     .mood-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -670,6 +670,20 @@
       transition: transform 180ms ease, filter 180ms ease;
     }
 
+    #signinPromptModal .primary-button {
+  min-height: 50px;
+  border-radius: 14px;
+}
+
+#signinPromptModal .onboarding-actions {
+  margin-top: 20px;
+  gap: 12px;
+}
+
+#signinPromptModal .skip-button {
+  padding-top: 2px;
+}
+    
     .primary-button:hover,
     .primary-button:focus-visible {
       transform: translateY(-1px);
