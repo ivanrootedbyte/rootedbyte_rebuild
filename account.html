@@ -1015,16 +1015,6 @@
     return data || [];
   }
 
-  async function fetchSharedLinks() {
-    const { data, error } = await supabaseClient
-      .from('shared_outputs')
-      .select('share_slug, app_type, title, input_summary, created_at, expires_at, is_public')
-      .eq('is_public', true)
-      .order('created_at', { ascending: false });
-
-    if (error) throw error;
-    return data || [];
-  }
 
   async function renderSavedTab() {
     setStatus('Loading saved outputs...');
@@ -1105,22 +1095,17 @@
   }
 
   async function renderSharedTab() {
-    setStatus('Loading shared links...');
-    accountContent.innerHTML = '';
+  accountContent.innerHTML = `
+    <h2>Shared Links</h2>
+    <div class="empty-state">
+      Shared links are public by design, so anyone with the link can view them.
+      For now, create shared links from Inner Work, Signal, or SoundSense after generating a result.
+      A personal shared-link history can be added later after we connect shared links to your account.
+    </div>
+  `;
 
-    try {
-      const links = await fetchSharedLinks();
-
-      if (!links.length) {
-        accountContent.innerHTML = `
-          <h2>Shared Links</h2>
-          <div class="empty-state">
-            No shared links yet. Create a public share link from one of your generated outputs.
-          </div>
-        `;
-        setStatus('');
-        return;
-      }
+  setStatus('');
+}
 
       accountContent.innerHTML = `
         <h2>Shared Links</h2>
