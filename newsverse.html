@@ -614,7 +614,7 @@
         <span class="brand-name">RootedByte</span>
       </a>
 
-      <a class="profile-button" href="signin.html" aria-label="Open account">
+      <a class="profile-button" href="signin.html" data-auth-link aria-label="Open account">
         <svg viewBox="0 0 24 24" width="18" height="18" fill="none" aria-hidden="true">
           <path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z" stroke="currentColor" stroke-width="1.8"/>
           <path d="M4.5 20a7.5 7.5 0 0 1 15 0" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
@@ -674,8 +674,8 @@
 
             <div class="status" id="newsStatus" role="status" aria-live="polite"></div>
             <p class="ghost-note">
-              Signal will be fully wired to the API in the JS step next.
-            </p>
+  Signal helps you pause, test the tone, and respond from truth instead of reaction.
+</p>
           </div>
 
           <div class="results" id="newsResult" aria-live="polite"></div>
@@ -754,294 +754,323 @@
   </nav>
 
   <script>
-    const $ = (selector) => document.querySelector(selector);
-    const $$ = (selector) => Array.from(document.querySelectorAll(selector));
+  const $ = (selector) => document.querySelector(selector);
+  const $$ = (selector) => Array.from(document.querySelectorAll(selector));
 
-    const year = $("#year");
-    if (year) year.textContent = new Date().getFullYear();
+  const year = $("#year");
+  if (year) year.textContent = new Date().getFullYear();
 
-    function escapeHtml(value) {
-      return String(value ?? "")
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
-    }
+  function escapeHtml(value) {
+    return String(value ?? "")
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
+  }
 
-    function setStatus(element, message, type = "info", loading = false) {
-      if (!element) return;
+  function setStatus(element, message, type = "info", loading = false) {
+    if (!element) return;
 
-      element.className = type === "error" ? "status error" : "status";
-      element.innerHTML = loading
-        ? '<span class="spinner" aria-hidden="true"></span><span>' + escapeHtml(message) + "</span>"
-        : escapeHtml(message);
-    }
+    element.className = type === "error" ? "status error" : "status";
+    element.innerHTML = loading
+      ? '<span class="spinner" aria-hidden="true"></span><span>' + escapeHtml(message) + "</span>"
+      : escapeHtml(message);
+  }
 
-    async function postJson(url, body) {
-      const response = await fetch(url, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(body)
-      });
-
-      const data = await response.json().catch(() => ({}));
-
-      if (!response.ok) {
-        throw new Error(data.error || "Something went wrong. Please try again.");
-      }
-
-      return data;
-    }
-
-    $$("#newsTypeButtons .kind-button").forEach((button) => {
-      button.addEventListener("click", () => {
-        $$("#newsTypeButtons .kind-button").forEach((item) => item.classList.remove("active"));
-        button.classList.add("active");
-        $("#newsType").value = button.dataset.type || "post";
-      });
+  async function postJson(url, body) {
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(body)
     });
 
-    function renderNewsResult(data) {
-      const verses = Array.isArray(data.verses) ? data.verses : [];
-      const prayerPoints = Array.isArray(data.prayer_points) ? data.prayer_points : [];
-      const publicPath = data.source_mode === "headline_only";
+    const data = await response.json().catch(() => ({}));
 
-      return `
-        <div class="result-card ${publicPath ? "highlight" : ""}">
-          <span class="tag">${publicPath ? "Headline-based reflection" : "Article summary"}</span>
-          <h2>${escapeHtml(data.overall_theme || "Signal reflection")}</h2>
-          <p>${escapeHtml(data.article_summary || "")}</p>
-        </div>
+    if (!response.ok) {
+      throw new Error(data.error || "Something went wrong. Please try again.");
+    }
 
-        <div class="result-card">
-          <span class="tag">What this is shaping</span>
-          <h3>Thinking impact</h3>
-          <p>${escapeHtml(data.thinking_impact || "")}</p>
-          ${
-            typeof data.emotional_temperature_score === "number"
-              ? `
-              <div class="progress" aria-label="Emotional temperature">
-                <span style="--width:${Math.max(0, Math.min(100, data.emotional_temperature_score))}%"></span>
-              </div>
-              <p>Emotional temperature: ${Math.round(data.emotional_temperature_score)}/100</p>
-            `
-              : ""
-          }
-        </div>
+    return data;
+  }
 
-        <div class="result-card">
-          <span class="tag">Truth check</span>
-          <h3>Discernment notes</h3>
-          <p>${escapeHtml(data.truth_check || "")}</p>
-          ${data.exegesis ? `<p>${escapeHtml(data.exegesis)}</p>` : ""}
-          ${data.jesus_lens ? `<p><strong>Jesus lens:</strong> ${escapeHtml(data.jesus_lens)}</p>` : ""}
-        </div>
+  $$("#newsTypeButtons .kind-button").forEach((button) => {
+    button.addEventListener("click", () => {
+      $$("#newsTypeButtons .kind-button").forEach((item) => {
+        item.classList.remove("active");
+      });
+
+      button.classList.add("active");
+      $("#newsType").value = button.dataset.type || "post";
+    });
+  });
+
+  function renderNewsResult(data) {
+    const anchors = Array.isArray(data.verses) ? data.verses : [];
+    const reflectionSteps = Array.isArray(data.prayer_points)
+      ? data.prayer_points
+      : [];
+
+    const publicPath = data.source_mode === "headline_only";
+    const emotionalScore = Number(data.emotional_temperature_score);
+    const hasEmotionalScore = Number.isFinite(emotionalScore);
+
+    return `
+      <div class="result-card ${publicPath ? "highlight" : ""}">
+        <span class="tag">${publicPath ? "Headline-based check" : "Signal summary"}</span>
+        <h2>${escapeHtml(data.overall_theme || "Signal reflection")}</h2>
+        <p>${escapeHtml(data.article_summary || "")}</p>
+      </div>
+
+      <div class="result-card">
+        <span class="tag">What this may shape</span>
+        <h3>Thinking impact</h3>
+        <p>${escapeHtml(data.thinking_impact || "")}</p>
 
         ${
-          prayerPoints.length
+          hasEmotionalScore
             ? `
+              <div class="progress" aria-label="Emotional temperature">
+                <span style="--width:${Math.max(0, Math.min(100, emotionalScore))}%"></span>
+              </div>
+              <p>Emotional temperature: ${Math.round(emotionalScore)}/100</p>
+            `
+            : ""
+        }
+      </div>
+
+      <div class="result-card">
+        <span class="tag">Truth check</span>
+        <h3>Discernment notes</h3>
+        <p>${escapeHtml(data.truth_check || "")}</p>
+        ${data.exegesis ? `<p>${escapeHtml(data.exegesis)}</p>` : ""}
+        ${
+          data.jesus_lens
+            ? `<p><strong>Grounded response:</strong> ${escapeHtml(data.jesus_lens)}</p>`
+            : ""
+        }
+      </div>
+
+      ${
+        reflectionSteps.length
+          ? `
             <div class="result-card">
-              <span class="tag">Prayer points</span>
+              <span class="tag">Reflection steps</span>
               <ol>
-                ${prayerPoints.map((point) => `<li>${escapeHtml(point)}</li>`).join("")}
+                ${reflectionSteps.map((point) => `<li>${escapeHtml(point)}</li>`).join("")}
               </ol>
             </div>
           `
-            : ""
-        }
+          : ""
+      }
 
-        ${
-          verses.length
-            ? `
+      ${
+        anchors.length
+          ? `
             <div class="verse-grid">
-              ${verses.slice(0, 3).map((verse) => `
+              ${anchors.slice(0, 3).map((anchor, index) => `
                 <article class="verse-card">
-                  <span class="tag">Reflection verse</span>
-                  <blockquote>${escapeHtml(verse.text || "")}</blockquote>
-                  <p><strong>${escapeHtml(verse.reference || "")}</strong></p>
-                  ${verse.application ? `<p>${escapeHtml(verse.application)}</p>` : ""}
+                  <span class="tag">Truth anchor</span>
+                  <blockquote>${escapeHtml(anchor.text || "")}</blockquote>
+                  <p><strong>${escapeHtml(anchor.reference || `Truth Anchor ${index + 1}`)}</strong></p>
+                  ${anchor.application ? `<p>${escapeHtml(anchor.application)}</p>` : ""}
+                  ${anchor.relevance_reason ? `<p>${escapeHtml(anchor.relevance_reason)}</p>` : ""}
                 </article>
               `).join("")}
             </div>
           `
-            : ""
-        }
-      `;
-    }
-
-    function renderSharePanel() {
-      return `
-        <div class="share-panel">
-          <h3>Save or share this Signal check</h3>
-          <p>
-            Save privately to your account, or create a public RootedByte link
-            that anyone with the link can view.
-          </p>
-
-          <div class="share-panel__actions">
-            <button class="primary-button" type="button" id="saveNewsOutput">
-              Save privately
-            </button>
-
-            <button class="secondary-button" type="button" id="shareNewsOutput">
-              Share publicly
-            </button>
-          </div>
-
-          <div class="status" id="newsSaveStatus" role="status" aria-live="polite"></div>
-          <div class="status" id="newsShareStatus" role="status" aria-live="polite"></div>
-          <div class="share-link-box" id="newsShareLink" hidden></div>
-        </div>
-      `;
-    }
-
-    async function createSharedOutput({ appType, title, inputSummary, output, statusElement, linkElement }) {
-      statusElement.textContent = "Creating share link...";
-
-      const response = await fetch("/api/share", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          appType,
-          title,
-          inputSummary,
-          output
-        })
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error || "Could not create share link.");
+          : ""
       }
+    `;
+  }
 
-      linkElement.hidden = false;
-      linkElement.textContent = data.shareUrl;
+  function renderSharePanel() {
+    return `
+      <div class="share-panel">
+        <h3>Save or share this Signal check</h3>
+        <p>
+          Save privately to your account, or create a public RootedByte link
+          that anyone with the link can view.
+        </p>
+
+        <div class="share-panel__actions">
+          <button class="primary-button" type="button" id="saveNewsOutput">
+            Save privately
+          </button>
+
+          <button class="secondary-button" type="button" id="shareNewsOutput">
+            Share publicly
+          </button>
+        </div>
+
+        <div class="status" id="newsSaveStatus" role="status" aria-live="polite"></div>
+        <div class="status" id="newsShareStatus" role="status" aria-live="polite"></div>
+        <div class="share-link-box" id="newsShareLink" hidden></div>
+      </div>
+    `;
+  }
+
+  async function createSharedOutput({ appType, title, inputSummary, output, statusElement, linkElement }) {
+    statusElement.className = "status";
+    statusElement.textContent = "Creating share link...";
+
+    const response = await fetch("/api/share", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        appType,
+        title,
+        inputSummary,
+        output
+      })
+    });
+
+    const data = await response.json().catch(() => ({}));
+
+    if (!response.ok) {
+      throw new Error(data.error || "Could not create share link.");
+    }
+
+    linkElement.hidden = false;
+    linkElement.textContent = data.shareUrl;
+
+    try {
+      await navigator.clipboard.writeText(data.shareUrl);
+      statusElement.textContent = "Share link created and copied.";
+    } catch {
+      statusElement.textContent = "Share link created.";
+    }
+
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title,
+          text: `View this ${title} from RootedByte.`,
+          url: data.shareUrl
+        });
+      } catch {
+        // User cancelled native share.
+      }
+    }
+
+    return data;
+  }
+
+  function attachNewsSaveButton(outputData) {
+    const button = document.querySelector("#saveNewsOutput");
+    const statusElement = document.querySelector("#newsSaveStatus");
+
+    if (!button || !statusElement) return;
+
+    button.addEventListener("click", async () => {
+      button.disabled = true;
+      statusElement.className = "status";
+      statusElement.textContent = "Saving privately...";
 
       try {
-        await navigator.clipboard.writeText(data.shareUrl);
-        statusElement.textContent = "Share link created and copied.";
-      } catch {
-        statusElement.textContent = "Share link created.";
-      }
-
-      if (navigator.share) {
-        try {
-          await navigator.share({
-            title,
-            text: `View this ${title} from RootedByte.`,
-            url: data.shareUrl
-          });
-        } catch {
-          // user cancelled share
+        if (!window.RootedByteSaveOutput || !window.RootedByteSaveOutput.save) {
+          throw new Error("Private saving is not ready yet. Please refresh and try again.");
         }
-      }
 
-      return data;
-    }
+        const result = await window.RootedByteSaveOutput.save({
+          appType: "signal",
+          title: "Signal Truth Check",
+          inputSummary: "Private Signal truth check",
+          outputJson: outputData
+        });
 
-    function attachNewsSaveButton(outputData) {
-      const button = document.querySelector("#saveNewsOutput");
-      const statusElement = document.querySelector("#newsSaveStatus");
+        if (!result.ok) {
+          statusElement.className = "status error";
 
-      if (!button || !statusElement) return;
-
-      button.addEventListener("click", async () => {
-        button.disabled = true;
-        statusElement.className = "status";
-        statusElement.textContent = "Saving privately...";
-
-        try {
-          if (!window.RootedByteSaveOutput || !window.RootedByteSaveOutput.save) {
-            throw new Error("Private saving is not ready yet. Please refresh and try again.");
-          }
-
-          const result = await window.RootedByteSaveOutput.save({
-            appType: "newsverse",
-            title: "Signal Truth Check",
-            inputSummary: "Private Signal truth check",
-            outputJson: outputData
-          });
-
-          if (!result.ok) {
-            statusElement.className = "status error";
-            statusElement.textContent = result.message || "Could not save privately.";
+          if (result.reason === "not_signed_in") {
+            statusElement.innerHTML = `
+              <span>Please sign in to save this privately.</span>
+              <a href="signin.html" style="color: var(--sage); font-weight: 900; text-decoration: underline;">Sign in</a>
+            `;
             return;
           }
 
-          statusElement.className = "status";
-          statusElement.textContent = "Saved privately to your account.";
-        } catch (error) {
-          statusElement.className = "status error";
-          statusElement.textContent = error.message || "Could not save privately.";
-        } finally {
-          button.disabled = false;
+          statusElement.textContent = result.message || "Could not save privately.";
+          return;
         }
-      });
-    }
 
-    function attachNewsShareButton(outputData) {
-      const button = document.querySelector("#shareNewsOutput");
-      const statusElement = document.querySelector("#newsShareStatus");
-      const linkElement = document.querySelector("#newsShareLink");
-
-      if (!button || !statusElement || !linkElement) return;
-
-      button.addEventListener("click", async () => {
-        button.disabled = true;
-
-        try {
-          await createSharedOutput({
-            appType: "newsverse",
-            title: "Signal Truth Check",
-            inputSummary: "Shared Signal truth check",
-            output: outputData,
-            statusElement,
-            linkElement
-          });
-        } catch (error) {
-          statusElement.className = "status error";
-          statusElement.textContent = error.message;
-        } finally {
-          button.disabled = false;
-        }
-      });
-    }
-
-    $("#newsAnalyzeButton").addEventListener("click", async () => {
-      const newsType = $("#newsType").value || "post";
-      const articleUrl = $("#newsArticleUrl").value.trim();
-      const headline = $("#newsHeadline").value.trim();
-      const status = $("#newsStatus");
-      const result = $("#newsResult");
-
-      if (!articleUrl && !headline) {
-        setStatus(status, "Paste a link or some content before running Signal.", "error");
-        return;
-      }
-
-      result.innerHTML = "";
-      setStatus(status, "Checking the signal...", "info", true);
-
-      try {
-        const data = await postJson("/api/newsverse", {
-          newsType,
-          articleUrl,
-          headline
-        });
-
-        result.innerHTML = renderNewsResult(data) + renderSharePanel();
-        attachNewsSaveButton(data);
-        attachNewsShareButton(data);
-        setStatus(status, "Signal check ready.");
+        statusElement.className = "status";
+        statusElement.textContent = "Saved privately to your account.";
       } catch (error) {
-        setStatus(status, error.message, "error");
+        statusElement.className = "status error";
+        statusElement.textContent = error.message || "Could not save privately.";
+      } finally {
+        button.disabled = false;
       }
     });
-  </script>
+  }
+
+  function attachNewsShareButton(outputData) {
+    const button = document.querySelector("#shareNewsOutput");
+    const statusElement = document.querySelector("#newsShareStatus");
+    const linkElement = document.querySelector("#newsShareLink");
+
+    if (!button || !statusElement || !linkElement) return;
+
+    button.addEventListener("click", async () => {
+      button.disabled = true;
+      statusElement.className = "status";
+
+      try {
+        await createSharedOutput({
+          appType: "signal",
+          title: "Signal Truth Check",
+          inputSummary: "Shared Signal truth check",
+          output: outputData,
+          statusElement,
+          linkElement
+        });
+      } catch (error) {
+        statusElement.className = "status error";
+        statusElement.textContent = error.message || "Could not create share link.";
+      } finally {
+        button.disabled = false;
+      }
+    });
+  }
+
+  $("#newsAnalyzeButton").addEventListener("click", async () => {
+    const newsType = $("#newsType").value || "post";
+    const articleUrl = $("#newsArticleUrl").value.trim();
+    const headline = $("#newsHeadline").value.trim();
+    const status = $("#newsStatus");
+    const result = $("#newsResult");
+
+    if (!articleUrl && !headline) {
+      setStatus(status, "Paste a link or some content before running Signal.", "error");
+      return;
+    }
+
+    result.innerHTML = "";
+    setStatus(status, "Checking the signal...", "info", true);
+
+    try {
+      const data = await postJson("/api/newsverse", {
+        newsType,
+        articleUrl,
+        headline
+      });
+
+      result.innerHTML = renderNewsResult(data) + renderSharePanel();
+
+      attachNewsSaveButton(data);
+      attachNewsShareButton(data);
+
+      setStatus(status, "Signal check ready.");
+    } catch (error) {
+      setStatus(status, error.message, "error");
+    }
+  });
+</script>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="js/rootedbyte-auth-nav.js"></script>
