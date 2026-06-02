@@ -222,7 +222,47 @@ function extractModelText(data) {
   return '';
 }
 
-async function callGemini(userPrompt) {
+function buildFallbackSoundSenseData(resolvedSong, instrumentLabel) {
+  const label = String(resolvedSong || 'this song').trim();
+
+  return {
+    song: label || 'Unable to verify',
+    artist: 'Unable to verify',
+    bpm: 0,
+    key: 'Unable to verify',
+    metadata_confidence: 'low',
+    lyrics_search_query: `${label} lyrics`,
+    chord_search_query: `${label} chords`,
+    tutorial_search_query: `${label} ${instrumentLabel} tutorial`,
+    source_links: [],
+    song_meaning:
+      'A fully verified public breakdown was not available yet, so this is a light reflection based on the title or input you gave.',
+    faith_lens:
+      'Pay attention to what this song keeps pulling your heart toward. Notice whether it stirs peace, honesty, hope, humility, or deeper dependence on what is true.',
+    arrangement_feel:
+      'Start simple. Listen for repetition, dynamic lifts, and where the song leaves room to breathe before adding complexity.',
+    listening_guide:
+      'Listen for the emotional center of the song, where it builds, where it softens, and where restraint matters more than filling space.',
+    rehearsal_prep:
+      'Practice the main structure first, mark repeats, and focus on consistency before trying to add extra texture.',
+    spiritual_reflection:
+      'Before you play, ask yourself what kind of atmosphere you are helping create and whether your part supports clarity rather than distraction.',
+    instrument_guidance:
+      instrumentLabel === 'Acoustic Guitar'
+        ? 'Hold steady rhythm, keep your strumming intentional, and do not rush to fill every space.'
+        : instrumentLabel === 'Electric Guitar'
+          ? 'Support the pocket, stay restrained, and add texture only where it actually helps the song breathe.'
+          : instrumentLabel === 'Bass'
+            ? 'Lock in the foundation, keep the pulse steady, and let consistency carry more than complexity.'
+            : instrumentLabel === 'Drums'
+              ? 'Keep transitions clean, avoid overplaying, and let the groove serve the song’s shape.'
+              : instrumentLabel === 'Keys / Piano'
+                ? 'Think in layers, leave room, and use texture to support the atmosphere rather than dominate it.'
+                : 'Focus on clear delivery, emotional honesty, and phrasing that supports the song instead of forcing it.'
+  };
+}
+
+async function callGemini(userPrompt, resolvedSong, instrumentLabel) {
   if (!process.env.GEMINI_KEY) {
     throw new Error('GEMINI_KEY is not configured.');
   }
@@ -270,18 +310,20 @@ async function callGemini(userPrompt) {
   try {
     data = JSON.parse(responseText);
   } catch {
-    throw new Error('SoundSense returned an unreadable response.');
+    return buildFallbackSoundSenseData(resolvedSong, instrumentLabel);
   }
 
   const raw = extractModelText(data);
 
   if (!raw) {
-    throw new Error(
-      'SoundSense could not generate a usable result for that song yet. Try the song title and artist instead of a link, or try a different version of the song.'
-    );
+    return buildFallbackSoundSenseData(resolvedSong, instrumentLabel);
   }
 
-  return normalizeSourceLinks(safeParse(raw), data);
+  try {
+    return normalizeSourceLinks(safeParse(raw), data);
+  } catch {
+    return buildFallbackSoundSenseData(resolvedSong, instrumentLabel);
+  }
 }
 
 function normalizeConfidence(value) {
@@ -468,7 +510,9 @@ module.exports = async function handler(req, res) {
         resolvedSong,
         originalSongInput,
         instrumentLabel
-      })
+      }),
+      resolvedSong,
+      instrumentLabel
     );
 
     return res
