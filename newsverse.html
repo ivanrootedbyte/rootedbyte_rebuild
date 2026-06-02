@@ -645,7 +645,7 @@
       <section class="screen-block">
         <div class="hero-copy">
           <h1>Signal</h1>
-          <p>Don’t let the feed disciple you. Paste what you saw. See what it’s really doing.</p>
+          <p>Don’t let the feed shape you without noticing. Paste what you saw. See what it’s really doing.</p>
         </div>
 
         <article class="card signal-card">
@@ -844,13 +844,13 @@
 
         <div class="result-card">
           <span class="tag">What this may shape</span>
-          <h3>Thinking impact</h3>
+          <h3>How this may affect you</h3>
           <p>${escapeHtml(data.thinking_impact || "")}</p>
           ${hasEmotionalScore ? `<p><strong>Emotional temperature:</strong> ${Math.round(emotionalScore)}/100</p>` : ""}
         </div>
 
         <div class="result-card">
-          <span class="tag">Truth check</span>
+          <span class="tag">Clarity check</span>
           <h3>Discernment notes</h3>
           <p>${escapeHtml(data.truth_check || "")}</p>
           ${data.exegesis ? `<p>${escapeHtml(data.exegesis)}</p>` : ""}
@@ -871,7 +871,7 @@
             ? `<div class="verse-grid">
                 ${anchors.slice(0, 3).map((anchor, index) => `
                   <article class="verse-card">
-                    <span class="tag">Truth anchor</span>
+                    <span class="tag">Grounding point</span>
                     <blockquote>${escapeHtml(anchor.text || "")}</blockquote>
                     <p><strong>${escapeHtml(anchor.reference || `Truth Anchor ${index + 1}`)}</strong></p>
                     ${anchor.application ? `<p>${escapeHtml(anchor.application)}</p>` : ""}
