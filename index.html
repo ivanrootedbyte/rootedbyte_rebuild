@@ -2016,16 +2016,22 @@
     });
 
     function showTool(tool) {
-      setScreen("tool-detail");
+  if (tool === "signal") {
+    window.location.href = "newsverse.html";
+    return;
+  }
 
-      $("#toolInner").hidden = tool !== "inner";
-      $("#toolSignal").hidden = tool !== "signal";
-      $("#toolSound").hidden = tool !== "sound";
+  if (tool === "sound") {
+    window.location.href = "tone.html";
+    return;
+  }
 
-      if (tool === "inner") {
-        resetInnerWorkMiniFlow();
-      }
-    }
+  setScreen("tool-detail");
+
+  $("#toolInner").hidden = false;
+
+  resetInnerWorkMiniFlow();
+}
 
     function resetInnerWorkMiniFlow() {
       latestInnerQuickOutput = null;
