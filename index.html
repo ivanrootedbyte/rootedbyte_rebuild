@@ -1801,19 +1801,24 @@
     }
 
     $$(".mood-button").forEach((button) => {
-      button.addEventListener("click", () => {
-        state.mood = button.dataset.mood;
+  button.addEventListener("click", () => {
+    if (!userLooksSignedIn()) {
+      showSigninPrompt();
+      return;
+    }
 
-        const today = todayKey();
-        if (!state.streak.includes(today)) {
-          state.streak.push(today);
-        }
+    state.mood = button.dataset.mood;
 
-        saveState();
-        updateMoodUI();
-        updateStreakUI();
-      });
-    });
+    const today = todayKey();
+    if (!state.streak.includes(today)) {
+      state.streak.push(today);
+    }
+
+    saveState();
+    updateMoodUI();
+    updateStreakUI();
+  });
+});
 
     function showTool(tool) {
       setScreen("tool-detail");
@@ -2008,6 +2013,40 @@
         .replace(/'/g, "&#039;");
     }
 
+    const signinPromptModal = $("#signinPromptModal");
+const closeSigninPrompt = $("#closeSigninPrompt");
+const maybeLaterSigninPrompt = $("#maybeLaterSigninPrompt");
+
+function showSigninPrompt() {
+  signinPromptModal.classList.add("active");
+  signinPromptModal.setAttribute("aria-hidden", "false");
+}
+
+function hideSigninPrompt() {
+  signinPromptModal.classList.remove("active");
+  signinPromptModal.setAttribute("aria-hidden", "true");
+}
+
+if (closeSigninPrompt) {
+  closeSigninPrompt.addEventListener("click", hideSigninPrompt);
+}
+
+if (maybeLaterSigninPrompt) {
+  maybeLaterSigninPrompt.addEventListener("click", hideSigninPrompt);
+}
+
+if (signinPromptModal) {
+  signinPromptModal.addEventListener("click", (event) => {
+    if (event.target === signinPromptModal) {
+      hideSigninPrompt();
+    }
+  });
+}
+
+function userLooksSignedIn() {
+  return Boolean(localStorage.getItem("rootedbyte_user_signed_in"));
+}
+    
     updateMoodUI();
     updateStreakUI();
     renderJournal();
@@ -2015,5 +2054,22 @@
   </script>
 
   <script src="js/rootedbyte-auth-nav.js"></script>
+
+  <div class="contact-modal" id="signinPromptModal" aria-hidden="true">
+  <section class="contact-card-modal" role="dialog" aria-modal="true" aria-labelledby="signinPromptTitle">
+    <button class="contact-close" type="button" id="closeSigninPrompt" aria-label="Close sign-in prompt">×</button>
+
+    <h2 class="contact-title" id="signinPromptTitle">Save your check-in</h2>
+    <p class="contact-copy">
+      Sign in to keep your mood check-in, streak, and growth progress connected to your account.
+    </p>
+
+    <div class="onboarding-actions" style="margin-top: 20px;">
+      <a class="primary-button" href="signin.html">Sign in</a>
+      <button class="skip-button" type="button" id="maybeLaterSigninPrompt">Maybe later</button>
+    </div>
+  </section>
+</div>
+  
 </body>
 </html>
