@@ -662,7 +662,7 @@
         <span class="brand-name">RootedByte</span>
       </a>
 
-      <a class="profile-button" href="signin.html" aria-label="Open account">
+      <a class="profile-button" href="signin.html" data-auth-link aria-label="Open account">
         <svg viewBox="0 0 24 24" width="18" height="18" fill="none" aria-hidden="true">
           <path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z" stroke="currentColor" stroke-width="1.8"/>
           <path d="M4.5 20a7.5 7.5 0 0 1 15 0" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
@@ -713,7 +713,7 @@
 
             <div class="status" id="toneStatus" role="status" aria-live="polite"></div>
             <p class="ghost-note">
-              SoundSense will be fully wired to the API in the JS step next.
+              SoundSense helps you listen deeper: meaning, mood, musical feel, and practical prep.
             </p>
           </div>
 
@@ -889,238 +889,304 @@
   </nav>
 
   <script>
-    const $ = (selector) => document.querySelector(selector);
-    const $$ = (selector) => Array.from(document.querySelectorAll(selector));
+  const $ = (selector) => document.querySelector(selector);
+  const $$ = (selector) => Array.from(document.querySelectorAll(selector));
 
-    const year = $("#year");
-    if (year) year.textContent = new Date().getFullYear();
+  const year = $("#year");
+  if (year) year.textContent = new Date().getFullYear();
 
-    function escapeHtml(value) {
-      return String(value ?? "")
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
+  let latestToneOutput = null;
+
+  function escapeHtml(value) {
+    return String(value ?? "")
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
+  }
+
+  function setStatus(element, message, type = "info", loading = false) {
+    if (!element) return;
+
+    element.className = type === "error" ? "status error" : "status";
+    element.innerHTML = loading
+      ? '<span class="spinner" aria-hidden="true"></span><span>' + escapeHtml(message) + "</span>"
+      : escapeHtml(message);
+  }
+
+  async function postJson(url, body) {
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(body)
+    });
+
+    const data = await response.json().catch(() => ({}));
+
+    if (!response.ok) {
+      throw new Error(data.error || "Something went wrong. Please try again.");
     }
 
-    function setStatus(element, message, type = "info", loading = false) {
-      if (!element) return;
+    return data;
+  }
 
-      element.className = type === "error" ? "status error" : "status";
-      element.innerHTML = loading
-        ? '<span class="spinner" aria-hidden="true"></span><span>' + escapeHtml(message) + "</span>"
-        : escapeHtml(message);
+  function renderListOrParagraph(value) {
+    if (!value) return "<p>No details available yet.</p>";
+
+    if (Array.isArray(value)) {
+      return `<ul>${value.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}</ul>`;
     }
 
-    async function postJson(url, body) {
-      const response = await fetch(url, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(body)
-      });
+    const text = String(value).trim();
+    if (!text) return "<p>No details available yet.</p>";
 
-      const data = await response.json().catch(() => ({}));
+    const lines = text
+      .split("\n")
+      .map((line) => line.trim())
+      .filter(Boolean);
 
-      if (!response.ok) {
-        throw new Error(data.error || "Something went wrong. Please try again.");
-      }
-
-      return data;
+    if (lines.length > 1) {
+      return `
+        <ul>
+          ${lines
+            .map((line) => `<li>${escapeHtml(line.replace(/^[-•*]\s*/, ""))}</li>`)
+            .join("")}
+        </ul>
+      `;
     }
 
-    function renderListOrParagraph(value) {
-      if (!value) return "<p>No details available yet.</p>";
+    return `<p>${escapeHtml(text)}</p>`;
+  }
 
-      if (Array.isArray(value)) {
-        return `<ul>${value.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}</ul>`;
-      }
+  function buildSearchUrl(query) {
+    const cleanQuery = String(query || "").trim();
 
-      const text = String(value).trim();
-      if (!text) return "<p>No details available yet.</p>";
-
-      const lines = text
-        .split("\n")
-        .map((line) => line.trim())
-        .filter(Boolean);
-
-      if (lines.length > 1) {
-        return `<ul>${lines.map((line) => `<li>${escapeHtml(line.replace(/^[-•*]\s*/, ""))}</li>`).join("")}</ul>`;
-      }
-
-      return `<p>${escapeHtml(text)}</p>`;
+    if (!cleanQuery) {
+      return "";
     }
 
-    function renderLink(title, href) {
-      if (!href) return `<span>${escapeHtml(title)}</span>`;
+    return `https://www.google.com/search?q=${encodeURIComponent(cleanQuery)}`;
+  }
 
-      return `<a class="resource-link" href="${escapeHtml(href)}" target="_blank" rel="noopener">${escapeHtml(title)}</a>`;
+  function renderSearchLink(label, query) {
+    const cleanQuery = String(query || "").trim();
+
+    if (!cleanQuery) {
+      return `<span>${escapeHtml(label)} unavailable</span>`;
     }
 
-    function renderToneResult(data) {
-      $("#verifiedSongName").textContent = data.song || "Unable to verify";
-      $("#verifiedArtist").textContent = data.artist || "Unable to verify";
-      $("#verifiedBpm").textContent = data.bpm || "Unable to verify";
-      $("#verifiedKey").textContent = data.key || "Unable to verify";
-      $("#verifiedConfidence").textContent = data.confidence || "Not detected";
+    const href = buildSearchUrl(cleanQuery);
 
-      $("#lyricsResult").innerHTML = renderLink("Open lyrics", data.lyrics_link);
-      $("#chordsResult").innerHTML = renderLink("Open chords", data.chords_link);
-      $("#tutorialResult").innerHTML = renderLink("Open tutorial", data.tutorial_link);
+    return `
+      <a class="resource-link" href="${escapeHtml(href)}" target="_blank" rel="noopener">
+        ${escapeHtml(label)}
+      </a>
+      <p class="ghost-note">${escapeHtml(cleanQuery)}</p>
+    `;
+  }
 
-      $("#songMeaningResult").innerHTML = renderListOrParagraph(data.song_meaning || data.summary);
-      $("#instrumentGuidanceResult").innerHTML = renderListOrParagraph(data.instrument_guidance);
-      $("#teamPrepResult").innerHTML = renderListOrParagraph(data.team_prep);
-      $("#faithLensResult").innerHTML = renderListOrParagraph(data.faith_lens || data.reflection);
+  function renderToneResult(data) {
+    latestToneOutput = data;
 
-      $("#songResultsArea").hidden = false;
-      $("#toneSharePanel").hidden = false;
+    $("#verifiedSongName").textContent = data.song || "Unable to verify";
+    $("#verifiedArtist").textContent = data.artist || "Unable to verify";
+    $("#verifiedBpm").textContent = data.bpm || "Unable to verify";
+    $("#verifiedKey").textContent = data.key || "Unable to verify";
+    $("#verifiedConfidence").textContent = data.metadata_confidence || data.confidence || "Not detected";
+
+    $("#lyricsResult").innerHTML = renderSearchLink("Find lyrics", data.lyrics_search_query);
+    $("#chordsResult").innerHTML = renderSearchLink("Find chords", data.chord_search_query);
+    $("#tutorialResult").innerHTML = renderSearchLink("Find tutorial", data.tutorial_search_query);
+
+    $("#songMeaningResult").innerHTML = renderListOrParagraph(data.song_meaning || data.summary);
+    $("#instrumentGuidanceResult").innerHTML = renderListOrParagraph(data.instrument_guidance);
+
+    $("#teamPrepResult").innerHTML = renderListOrParagraph(
+      data.rehearsal_prep || data.team_prep || data.arrangement_feel || data.listening_guide
+    );
+
+    $("#faithLensResult").innerHTML = renderListOrParagraph(
+      data.faith_lens || data.spiritual_reflection || data.reflection
+    );
+
+    $("#songResultsArea").hidden = false;
+    $("#toneSharePanel").hidden = false;
+  }
+
+  async function createSharedOutput({ appType, title, inputSummary, output, statusElement, linkElement }) {
+    statusElement.className = "status";
+    statusElement.textContent = "Creating share link...";
+
+    const response = await fetch("/api/share", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        appType,
+        title,
+        inputSummary,
+        output
+      })
+    });
+
+    const data = await response.json().catch(() => ({}));
+
+    if (!response.ok) {
+      throw new Error(data.error || "Could not create share link.");
     }
 
-    async function createSharedOutput({ appType, title, inputSummary, output, statusElement, linkElement }) {
-      statusElement.textContent = "Creating share link...";
+    linkElement.hidden = false;
+    linkElement.textContent = data.shareUrl;
 
-      const response = await fetch("/api/share", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          appType,
-          title,
-          inputSummary,
-          output
-        })
-      });
+    try {
+      await navigator.clipboard.writeText(data.shareUrl);
+      statusElement.textContent = "Share link created and copied.";
+    } catch {
+      statusElement.textContent = "Share link created.";
+    }
 
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error || "Could not create share link.");
-      }
-
-      linkElement.hidden = false;
-      linkElement.textContent = data.shareUrl;
-
+    if (navigator.share) {
       try {
-        await navigator.clipboard.writeText(data.shareUrl);
-        statusElement.textContent = "Share link created and copied.";
+        await navigator.share({
+          title,
+          text: `View this ${title} from RootedByte.`,
+          url: data.shareUrl
+        });
       } catch {
-        statusElement.textContent = "Share link created.";
+        // User cancelled native share.
       }
-
-      if (navigator.share) {
-        try {
-          await navigator.share({
-            title,
-            text: `View this ${title} from RootedByte.`,
-            url: data.shareUrl
-          });
-        } catch {
-          // user cancelled share
-        }
-      }
-
-      return data;
     }
 
-    function attachToneSaveButton(outputData) {
-      const button = $("#saveToneOutput");
-      const statusElement = $("#toneSaveStatus");
+    return data;
+  }
 
-      if (!button || !statusElement) return;
+  function attachToneSaveButton() {
+    const button = $("#saveToneOutput");
+    const statusElement = $("#toneSaveStatus");
 
-      button.addEventListener("click", async () => {
-        button.disabled = true;
-        statusElement.className = "status";
-        statusElement.textContent = "Saving privately...";
+    if (!button || !statusElement) return;
 
-        try {
-          if (!window.RootedByteSaveOutput || !window.RootedByteSaveOutput.save) {
-            throw new Error("Private saving is not ready yet. Please refresh and try again.");
-          }
-
-          const result = await window.RootedByteSaveOutput.save({
-            appType: "tone",
-            title: "SoundSense Breakdown",
-            inputSummary: "Private SoundSense breakdown",
-            outputJson: outputData
-          });
-
-          if (!result.ok) {
-            statusElement.className = "status error";
-            statusElement.textContent = result.message || "Could not save privately.";
-            return;
-          }
-
-          statusElement.className = "status";
-          statusElement.textContent = "Saved privately to your account.";
-        } catch (error) {
-          statusElement.className = "status error";
-          statusElement.textContent = error.message || "Could not save privately.";
-        } finally {
-          button.disabled = false;
-        }
-      });
-    }
-
-    function attachToneShareButton(outputData) {
-      const button = $("#shareToneOutput");
-      const statusElement = $("#toneShareStatus");
-      const linkElement = $("#toneShareLink");
-
-      if (!button || !statusElement || !linkElement) return;
-
-      button.addEventListener("click", async () => {
-        button.disabled = true;
-
-        try {
-          await createSharedOutput({
-            appType: "tone",
-            title: "SoundSense Breakdown",
-            inputSummary: "Shared SoundSense breakdown",
-            output: outputData,
-            statusElement,
-            linkElement
-          });
-        } catch (error) {
-          statusElement.className = "status error";
-          statusElement.textContent = error.message;
-        } finally {
-          button.disabled = false;
-        }
-      });
-    }
-
-    $("#toneAnalyzeButton").addEventListener("click", async () => {
-      const songInput = $("#songInput").value.trim();
-      const instrument = $("#instrumentSelect").value;
-      const status = $("#toneStatus");
-
-      if (!songInput) {
-        setStatus(status, "Paste a song title or YouTube link before running SoundSense.", "error");
+    button.onclick = async () => {
+      if (!latestToneOutput) {
+        setStatus(statusElement, "Run SoundSense before saving.", "error");
         return;
       }
 
-      $("#songResultsArea").hidden = true;
-      $("#toneSharePanel").hidden = true;
-      setStatus(status, "Listening for the signal in this song...", "info", true);
+      button.disabled = true;
+      statusElement.className = "status";
+      statusElement.textContent = "Saving privately...";
 
       try {
-        const data = await postJson("/api/tone", {
-          songInput,
-          instrument
+        if (!window.RootedByteSaveOutput || !window.RootedByteSaveOutput.save) {
+          throw new Error("Private saving is not ready yet. Please refresh and try again.");
+        }
+
+        const result = await window.RootedByteSaveOutput.save({
+          appType: "soundsense",
+          title: "SoundSense Breakdown",
+          inputSummary: "Private SoundSense breakdown",
+          outputJson: latestToneOutput
         });
 
-        renderToneResult(data);
-        attachToneSaveButton(data);
-        attachToneShareButton(data);
-        setStatus(status, "SoundSense breakdown ready.");
+        if (!result.ok) {
+          statusElement.className = "status error";
+
+          if (result.reason === "not_signed_in") {
+            statusElement.innerHTML = `
+              <span>Please sign in to save this privately.</span>
+              <a href="signin.html" style="color: var(--sage); font-weight: 900; text-decoration: underline;">Sign in</a>
+            `;
+            return;
+          }
+
+          statusElement.textContent = result.message || "Could not save privately.";
+          return;
+        }
+
+        statusElement.className = "status";
+        statusElement.textContent = "Saved privately to your account.";
       } catch (error) {
-        setStatus(status, error.message, "error");
+        statusElement.className = "status error";
+        statusElement.textContent = error.message || "Could not save privately.";
+      } finally {
+        button.disabled = false;
       }
-    });
-  </script>
+    };
+  }
+
+  function attachToneShareButton() {
+    const button = $("#shareToneOutput");
+    const statusElement = $("#toneShareStatus");
+    const linkElement = $("#toneShareLink");
+
+    if (!button || !statusElement || !linkElement) return;
+
+    button.onclick = async () => {
+      if (!latestToneOutput) {
+        setStatus(statusElement, "Run SoundSense before sharing.", "error");
+        return;
+      }
+
+      button.disabled = true;
+      statusElement.className = "status";
+
+      try {
+        await createSharedOutput({
+          appType: "soundsense",
+          title: "SoundSense Breakdown",
+          inputSummary: "Shared SoundSense breakdown",
+          output: latestToneOutput,
+          statusElement,
+          linkElement
+        });
+      } catch (error) {
+        statusElement.className = "status error";
+        statusElement.textContent = error.message || "Could not create share link.";
+      } finally {
+        button.disabled = false;
+      }
+    };
+  }
+
+  $("#toneAnalyzeButton").addEventListener("click", async () => {
+    const songInput = $("#songInput").value.trim();
+    const instrument = $("#instrumentSelect").value;
+    const status = $("#toneStatus");
+
+    if (!songInput) {
+      setStatus(status, "Paste a song title or YouTube link before running SoundSense.", "error");
+      return;
+    }
+
+    $("#songResultsArea").hidden = true;
+    $("#toneSharePanel").hidden = true;
+    $("#toneShareLink").hidden = true;
+    $("#toneShareLink").textContent = "";
+    $("#toneSaveStatus").textContent = "";
+    $("#toneShareStatus").textContent = "";
+
+    setStatus(status, "Listening for the signal in this song...", "info", true);
+
+    try {
+      const data = await postJson("/api/tone", {
+        songInput,
+        instrument
+      });
+
+      renderToneResult(data);
+      attachToneSaveButton();
+      attachToneShareButton();
+
+      setStatus(status, "SoundSense breakdown ready.");
+    } catch (error) {
+      setStatus(status, error.message, "error");
+    }
+  });
+</script>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="js/rootedbyte-auth-nav.js"></script>
