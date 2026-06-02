@@ -272,7 +272,7 @@
       color: var(--muted-soft);
       font-size: 0.86rem;
     }
-    
+
     .mood-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -669,7 +669,7 @@
       cursor: pointer;
       transition: transform 180ms ease, filter 180ms ease;
     }
-    
+
     .primary-button:hover,
     .primary-button:focus-visible {
       transform: translateY(-1px);
@@ -1098,6 +1098,84 @@
       line-height: 1.45;
     }
 
+    .mini-result {
+      display: grid;
+      gap: 14px;
+      margin-top: 20px;
+    }
+
+    .mini-result-card {
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      background: rgba(25, 35, 29, 0.82);
+      padding: 20px;
+    }
+
+    .mini-result-card h3 {
+      margin: 0;
+      color: var(--cream);
+      font-family: "Playfair Display", Georgia, serif;
+      font-size: 1.25rem;
+      letter-spacing: -0.045em;
+    }
+
+    .mini-result-card p {
+      margin-top: 10px;
+      color: var(--muted);
+      line-height: 1.7;
+      font-size: 0.95rem;
+    }
+
+    .mini-result-actions {
+      display: grid;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .mini-result-actions .primary-button,
+    .mini-result-actions .secondary-mini-button {
+      width: 100%;
+      min-height: 48px;
+      border-radius: 12px;
+      font-weight: 900;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .secondary-mini-button {
+      border: 1px solid var(--line);
+      color: var(--cream);
+      background: rgba(255, 255, 255, 0.04);
+    }
+
+    .mini-share-box {
+      width: 100%;
+      min-height: 44px;
+      margin-top: 10px;
+      padding: 11px 12px;
+      border: 1px solid rgba(168, 197, 160, 0.16);
+      border-radius: 12px;
+      color: var(--cream);
+      background: rgba(255, 255, 255, 0.03);
+      overflow-wrap: anywhere;
+      font-size: 0.88rem;
+      font-weight: 700;
+    }
+
+    .mini-status {
+      min-height: 24px;
+      margin-top: 12px;
+      color: var(--sage);
+      font-size: 0.9rem;
+      font-weight: 800;
+    }
+
+    .mini-status.error {
+      color: var(--danger);
+    }
+
     @media (min-width: 760px) {
       body {
         padding: 18px 0;
@@ -1127,27 +1205,26 @@
     }
 
     #signinPromptModal .primary-button {
-  display: grid !important;
-  place-items: center !important;
-  width: 100% !important;
-  min-height: 50px !important;
-  padding: 0 !important;
-  margin: 0 !important;
-  text-align: center !important;
-  line-height: 1 !important;
-  border-radius: 14px !important;
-  text-decoration: none !important;
-}
+      display: grid !important;
+      place-items: center !important;
+      width: 100% !important;
+      min-height: 50px !important;
+      padding: 0 !important;
+      margin: 0 !important;
+      text-align: center !important;
+      line-height: 1 !important;
+      border-radius: 14px !important;
+      text-decoration: none !important;
+    }
 
-#signinPromptModal .onboarding-actions {
-  margin-top: 20px;
-  gap: 12px;
-}
+    #signinPromptModal .onboarding-actions {
+      margin-top: 20px;
+      gap: 12px;
+    }
 
-#signinPromptModal .skip-button {
-  padding-top: 2px;
-}
-    
+    #signinPromptModal .skip-button {
+      padding-top: 2px;
+    }
   </style>
 </head>
 
@@ -1361,11 +1438,11 @@
             <p>Reflect honestly. Take one intentional step forward.</p>
           </div>
 
-          <div class="form-panel">
+          <div class="form-panel" id="innerMiniForm">
             <div class="field">
               <label>What’s pressing on you?</label>
               <div class="choice-grid" id="innerChoices">
-                <button class="choice active" type="button" data-focus="Pressure">🏋️ Pressure</button>
+                <button class="choice" type="button" data-focus="Pressure">🏋️ Pressure</button>
                 <button class="choice" type="button" data-focus="Identity">💡 Identity</button>
                 <button class="choice" type="button" data-focus="Comparison">⚖️ Comparison</button>
                 <button class="choice" type="button" data-focus="Digital Habits">📱 Digital Habits</button>
@@ -1374,14 +1451,21 @@
               </div>
             </div>
 
-            <div class="field">
+            <div class="field" id="innerInputField" hidden>
               <label for="innerInput">Tell me more.</label>
               <textarea id="innerInput" placeholder="Be as honest as you want. This is your space."></textarea>
             </div>
 
-            <button class="primary-button" type="button" id="innerSubmit">Get honest insight</button>
-            <p class="ghost-note">API response will be connected later in the JavaScript step.</p>
+            <button class="primary-button" type="button" id="innerSubmit" hidden>
+              Get honest insight
+            </button>
+
+            <p class="ghost-note" id="innerMiniNote">
+              Choose what feels loudest first. Then write one honest sentence.
+            </p>
           </div>
+
+          <div class="mini-result" id="innerMiniResult" hidden></div>
         </div>
 
         <div id="toolSignal" class="tool-panel" hidden>
@@ -1409,7 +1493,7 @@
             </div>
 
             <button class="primary-button amber" type="button" id="signalSubmit">Run truth check</button>
-            <p class="ghost-note">API response will be connected later in the JavaScript step.</p>
+            <p class="ghost-note">Open the full Signal tool for the full result.</p>
           </div>
         </div>
 
@@ -1438,7 +1522,7 @@
             </div>
 
             <button class="primary-button lavender" type="button" id="soundSubmit">Dive into this song</button>
-            <p class="ghost-note">API response will be connected later in the JavaScript step.</p>
+            <p class="ghost-note">Open the full SoundSense tool for the full result.</p>
           </div>
         </div>
       </section>
@@ -1623,7 +1707,7 @@
     </section>
   </div>
 
-    <div class="contact-modal" id="signinPromptModal" aria-hidden="true">
+  <div class="contact-modal" id="signinPromptModal" aria-hidden="true">
     <section class="contact-card-modal" role="dialog" aria-modal="true" aria-labelledby="signinPromptTitle">
       <button class="contact-close" type="button" id="closeSigninPrompt" aria-label="Close sign-in prompt">×</button>
 
@@ -1664,6 +1748,7 @@
     };
 
     let state = loadState();
+    let latestInnerQuickOutput = null;
 
     function escapeHtml(value) {
       return String(value ?? "")
@@ -1696,6 +1781,24 @@
       } catch {
         return false;
       }
+    }
+
+    async function postJson(url, body) {
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(body)
+      });
+
+      const data = await response.json().catch(() => ({}));
+
+      if (!response.ok) {
+        throw new Error(data.error || "Something went wrong. Please try again.");
+      }
+
+      return data;
     }
 
     function setScreen(name) {
@@ -1913,26 +2016,323 @@
     });
 
     function showTool(tool) {
+      setScreen("tool-detail");
+
+      $("#toolInner").hidden = tool !== "inner";
+      $("#toolSignal").hidden = tool !== "signal";
+      $("#toolSound").hidden = tool !== "sound";
+
       if (tool === "inner") {
-        window.location.href = "rootedos.html";
-        return;
+        resetInnerWorkMiniFlow();
+      }
+    }
+
+    function resetInnerWorkMiniFlow() {
+      latestInnerQuickOutput = null;
+
+      const inputField = $("#innerInputField");
+      const input = $("#innerInput");
+      const submit = $("#innerSubmit");
+      const note = $("#innerMiniNote");
+      const result = $("#innerMiniResult");
+      const form = $("#innerMiniForm");
+
+      $$("#innerChoices .choice").forEach((item) => {
+        item.classList.remove("active");
+      });
+
+      if (inputField) inputField.hidden = true;
+      if (submit) submit.hidden = true;
+      if (input) input.value = "";
+      if (result) {
+        result.hidden = true;
+        result.innerHTML = "";
+      }
+      if (form) form.hidden = false;
+
+      if (note) {
+        note.className = "ghost-note";
+        note.textContent = "Choose what feels loudest first. Then write one honest sentence.";
+      }
+    }
+
+    function renderInnerQuickResult(data) {
+      latestInnerQuickOutput = data;
+
+      const result = $("#innerMiniResult");
+      const form = $("#innerMiniForm");
+
+      if (form) form.hidden = true;
+
+      result.hidden = false;
+      result.innerHTML = `
+        <article class="mini-result-card">
+          <h3>What I’m hearing</h3>
+          <p>${escapeHtml(data.hearing || "You are carrying something that deserves honesty and care.")}</p>
+        </article>
+
+        <article class="mini-result-card">
+          <h3>A deeper perspective</h3>
+          <p>${escapeHtml(data.deeper_perspective || "This moment can become a place to slow down, tell the truth, and choose one wise step.")}</p>
+        </article>
+
+        <article class="mini-result-card">
+          <h3>One step you can take today</h3>
+          <p>${escapeHtml(data.one_step || "Choose one small action that brings clarity instead of pressure.")}</p>
+        </article>
+
+        <article class="mini-result-card">
+          <h3>Sit with this</h3>
+          <p>${escapeHtml(data.reflection_prompt || "What is one honest thing this situation is revealing about what you need?")}</p>
+        </article>
+
+        ${
+          data.encouragement
+            ? `<article class="mini-result-card">
+                <h3>Remember this</h3>
+                <p>${escapeHtml(data.encouragement)}</p>
+              </article>`
+            : ""
+        }
+
+        <div class="mini-result-actions">
+          <button class="primary-button" type="button" id="journalMiniInner">
+            Write journal
+          </button>
+
+          <button class="secondary-mini-button" type="button" id="shareMiniInner">
+            Share
+          </button>
+
+          <button class="secondary-mini-button" type="button" id="resetMiniInner">
+            Reflect on something else
+          </button>
+
+          <a class="secondary-mini-button" id="fullInnerWorkLink" href="rootedos.html">
+            Continue deeper
+          </a>
+        </div>
+
+        <div class="mini-status" id="innerMiniActionStatus" role="status" aria-live="polite"></div>
+        <div class="mini-share-box" id="innerMiniShareLink" hidden></div>
+      `;
+
+      attachInnerMiniResultActions();
+    }
+
+    function attachInnerMiniResultActions() {
+      const journalButton = $("#journalMiniInner");
+      const shareButton = $("#shareMiniInner");
+      const resetButton = $("#resetMiniInner");
+      const status = $("#innerMiniActionStatus");
+      const shareBox = $("#innerMiniShareLink");
+
+      if (journalButton) {
+        journalButton.addEventListener("click", () => {
+          if (!latestInnerQuickOutput) return;
+
+          if (!userLooksSignedIn()) {
+            showSigninPrompt();
+            return;
+          }
+
+          const quickJournalText = [
+            "Inner Work quick reflection",
+            "",
+            `Focus: ${latestInnerQuickOutput.focus || ""}`,
+            "",
+            "What I’m hearing:",
+            latestInnerQuickOutput.hearing || "",
+            "",
+            "A deeper perspective:",
+            latestInnerQuickOutput.deeper_perspective || "",
+            "",
+            "One step:",
+            latestInnerQuickOutput.one_step || "",
+            "",
+            "Sit with this:",
+            latestInnerQuickOutput.reflection_prompt || ""
+          ].join("\n");
+
+          const editor = $("#journalEditor");
+          const textarea = $("#journalText");
+
+          setScreen("journal");
+
+          if (editor) editor.classList.add("active");
+          if (textarea) {
+            textarea.value = quickJournalText + "\n\nMy own thoughts:\n";
+            textarea.focus();
+          }
+        });
       }
 
-      if (tool === "signal") {
-        window.location.href = "newsverse.html";
-        return;
+      if (shareButton) {
+        shareButton.addEventListener("click", async () => {
+          if (!latestInnerQuickOutput) return;
+
+          shareButton.disabled = true;
+          status.className = "mini-status";
+          status.textContent = "Creating share link...";
+
+          try {
+            const response = await fetch("/api/share", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json"
+              },
+              body: JSON.stringify({
+                appType: "inner_work",
+                title: "Inner Work Quick Reflection",
+                inputSummary: latestInnerQuickOutput.focus
+                  ? `Quick reflection on ${latestInnerQuickOutput.focus}`
+                  : "Quick Inner Work reflection",
+                output: {
+                  summary: latestInnerQuickOutput.hearing || "",
+                  areas: [
+                    {
+                      area: latestInnerQuickOutput.focus || "Reflection",
+                      current_state: latestInnerQuickOutput.hearing || "",
+                      recommendation: latestInnerQuickOutput.deeper_perspective || "",
+                      scripture: "A truth-rooted reminder for this moment.",
+                      action_step: latestInnerQuickOutput.one_step || "",
+                      urgency: "this week"
+                    }
+                  ],
+                  reflection_verses: [
+                    {
+                      reference: "Truth Anchor",
+                      text: latestInnerQuickOutput.reflection_prompt || "",
+                      reflection_prompt: latestInnerQuickOutput.reflection_prompt || ""
+                    }
+                  ],
+                  encouragement: latestInnerQuickOutput.encouragement || ""
+                }
+              })
+            });
+
+            const data = await response.json().catch(() => ({}));
+
+            if (!response.ok) {
+              throw new Error(data.error || "Could not create share link.");
+            }
+
+            shareBox.hidden = false;
+            shareBox.textContent = data.shareUrl;
+
+            try {
+              await navigator.clipboard.writeText(data.shareUrl);
+              status.textContent = "Share link created and copied.";
+            } catch {
+              status.textContent = "Share link created.";
+            }
+          } catch (error) {
+            status.className = "mini-status error";
+            status.textContent = error.message || "Could not create share link.";
+          } finally {
+            shareButton.disabled = false;
+          }
+        });
       }
 
-      if (tool === "sound") {
-        window.location.href = "tone.html";
-        return;
+      if (resetButton) {
+        resetButton.addEventListener("click", resetInnerWorkMiniFlow);
       }
-
-      setScreen("tools");
     }
 
     $$("[data-open-tool]").forEach((button) => {
       button.addEventListener("click", () => showTool(button.dataset.openTool));
+    });
+
+    $("#innerChoices").addEventListener("click", (event) => {
+      const choice = event.target.closest(".choice");
+      if (!choice) return;
+
+      $$("#innerChoices .choice").forEach((item) => {
+        item.classList.remove("active");
+      });
+
+      choice.classList.add("active");
+
+      $("#innerInputField").hidden = false;
+      $("#innerInput").focus();
+
+      const note = $("#innerMiniNote");
+      if (note) {
+        note.textContent = "Name it honestly. You do not have to explain everything perfectly.";
+      }
+    });
+
+    $("#innerInput").addEventListener("input", () => {
+      const hasText = $("#innerInput").value.trim().length > 0;
+      $("#innerSubmit").hidden = !hasText;
+
+      const note = $("#innerMiniNote");
+      if (note) {
+        note.textContent = hasText
+          ? "Ready when you are. I’ll turn this into a grounded reflection."
+          : "Name it honestly. You do not have to explain everything perfectly.";
+      }
+    });
+
+    $("#innerSubmit").addEventListener("click", async () => {
+      const selected = $("#innerChoices .choice.active")?.dataset.focus || "";
+      const text = $("#innerInput").value.trim();
+      const submit = $("#innerSubmit");
+      const note = $("#innerMiniNote");
+
+      if (!selected) {
+        if (note) note.textContent = "Choose what feels loudest first.";
+        return;
+      }
+
+      if (!text) {
+        if (note) note.textContent = "Write one honest sentence before getting insight.";
+        return;
+      }
+
+      if (submit) submit.disabled = true;
+
+      if (note) {
+        note.textContent = "Creating your quick reflection...";
+      }
+
+      try {
+        const data = await postJson("/api/inner-quick", {
+          focus: selected,
+          note: text
+        });
+
+        state.reflections += 1;
+        state.focus[selected] = (state.focus[selected] || 0) + 1;
+        saveState();
+        updateGrowthUI();
+
+        renderInnerQuickResult(data);
+      } catch (error) {
+        if (note) {
+          note.className = "ghost-note";
+          note.textContent = error.message || "Could not create this reflection right now.";
+        }
+      } finally {
+        if (submit) submit.disabled = false;
+      }
+    });
+
+    $("#signalKinds").addEventListener("click", (event) => {
+      const button = event.target.closest(".pill-button");
+      if (!button) return;
+
+      $$("#signalKinds .pill-button").forEach((item) => item.classList.remove("active"));
+      button.classList.add("active");
+    });
+
+    $("#signalSubmit").addEventListener("click", () => {
+      window.location.href = "newsverse.html";
+    });
+
+    $("#soundSubmit").addEventListener("click", () => {
+      window.location.href = "tone.html";
     });
 
     const journalEditor = $("#journalEditor");
