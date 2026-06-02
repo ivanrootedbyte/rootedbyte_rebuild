@@ -11,7 +11,8 @@ Do not use code fences.
 Do not add explanation text outside the JSON.
 
 Use Google Search grounding when available to research public sources for:
-- song identity
+- likely song identity
+- likely artist
 - BPM and key
 - general song meaning
 - useful search queries for lyrics, chords, and instrument tutorials
@@ -33,7 +34,11 @@ Return this exact JSON structure:
   "listening_guide": "",
   "rehearsal_prep": "",
   "spiritual_reflection": "",
-  "instrument_guidance": ""
+  "instrument_guidance": "",
+  "mood_summary": "",
+  "discernment_note": "",
+  "content_caution": "",
+  "is_heavy_content": false
 }
 
 Rules:
@@ -45,6 +50,8 @@ Rules:
 - chord_search_query should search for the exact song chords or tabs.
 - tutorial_search_query should search for the exact song tutorial for the selected instrument.
 - Search queries should include the song title, artist, and selected instrument when known.
+- If the user only enters a song title, try to infer the most likely artist from public sources.
+- If multiple songs share the same title, choose the most likely match and set metadata_confidence accordingly.
 - song_meaning should be concise and written in original wording based on public context when available.
 - If public meaning sources are not available, infer carefully and say it is an interpretation.
 - metadata_confidence must be "high", "medium", or "low".
@@ -62,6 +69,14 @@ Rules:
 - Avoid generic phrases like "This song is emotional" or "This song is uplifting".
 - The selected instrument should shape instrument_guidance.
 - Do not provide guitar gear, amp, pedal, cab, preset, EQ, downloadable preset, or tone settings.
+
+Discernment rules:
+- mood_summary should briefly describe the emotional tone of the song.
+- If the song leans dark, seductive, despair-heavy, angry, numbing, prideful, revenge-driven, or spiritually draining, say so plainly but calmly.
+- content_caution should be short and practical.
+- is_heavy_content should be true when the song appears to have a heavier or unhealthy emotional/spiritual pull.
+- discernment_note should help the user listen with wisdom, not fear or shame.
+- Do not be dramatic. Be sober, grounded, and practical.
 
 Instrument guidance rules:
 - Acoustic Guitar: strumming dynamics, rhythmic support, simplicity, restraint.
@@ -238,7 +253,7 @@ function buildFallbackSoundSenseData(resolvedSong, instrumentLabel) {
     song_meaning:
       'A fully verified public breakdown was not available yet, so this is a light reflection based on the title or input you gave.',
     faith_lens:
-      'Pay attention to what this song keeps pulling your heart toward. Notice whether it stirs peace, honesty, hope, humility, or deeper dependence on what is true.',
+      'Pay attention to what this song keeps pulling your heart toward. Notice whether it stirs peace, honesty, hope, humility, or something more draining.',
     arrangement_feel:
       'Start simple. Listen for repetition, dynamic lifts, and where the song leaves room to breathe before adding complexity.',
     listening_guide:
@@ -258,7 +273,13 @@ function buildFallbackSoundSenseData(resolvedSong, instrumentLabel) {
               ? 'Keep transitions clean, avoid overplaying, and let the groove serve the song’s shape.'
               : instrumentLabel === 'Keys / Piano'
                 ? 'Think in layers, leave room, and use texture to support the atmosphere rather than dominate it.'
-                : 'Focus on clear delivery, emotional honesty, and phrasing that supports the song instead of forcing it.'
+                : 'Focus on clear delivery, emotional honesty, and phrasing that supports the song instead of forcing it.',
+    mood_summary: 'Reflective and unresolved.',
+    discernment_note:
+      'If a song leaves you more numb, restless, hopeless, or pulled toward unhealthy patterns, listen with wisdom and limits.',
+    content_caution:
+      'Pause and check what this song is reinforcing in your mind and mood before looping it.',
+    is_heavy_content: true
   };
 }
 
@@ -350,6 +371,10 @@ function normalizeBpm(value) {
   return Math.round(number);
 }
 
+function normalizeBoolean(value) {
+  return value === true;
+}
+
 function normalizeSoundSenseData(data, instrumentLabel) {
   const safeData = data && typeof data === 'object' ? data : {};
 
@@ -414,7 +439,21 @@ function normalizeSoundSenseData(data, instrumentLabel) {
     instrument_guidance: String(
       safeData.instrument_guidance ||
         `${instrumentLabel} guidance is not available yet.`
-    ).trim()
+    ).trim(),
+
+    mood_summary: String(
+      safeData.mood_summary || 'Mood not clearly detected.'
+    ).trim(),
+
+    discernment_note: String(
+      safeData.discernment_note || 'Listen with wisdom. Notice what the song strengthens in your thoughts and mood.'
+    ).trim(),
+
+    content_caution: String(
+      safeData.content_caution || ''
+    ).trim(),
+
+    is_heavy_content: normalizeBoolean(safeData.is_heavy_content)
   };
 }
 
@@ -431,13 +470,18 @@ Selected instrument:
 ${instrumentLabel}
 
 Return:
-- song identity
+- likely song identity
+- likely artist, even if the user only entered the title
 - BPM and key only when verifiable through public sources
 - metadata confidence as "high", "medium", or "low"
 - concise song meaning
 - a search query for lyrics
 - a search query for chords or tabs
 - a search query for a tutorial for the selected instrument
+- mood summary
+- discernment note
+- content caution
+- whether the content is heavier or unhealthy to sit under for long periods
 - Truth Lens: the song's heart-level direction, values, tensions, or grounding points
 - Song Flow: high-level emotional and musical movement
 - Listen Closely: dynamic lifts, repeated phrases, restraint, and places to leave space
@@ -457,6 +501,8 @@ Important:
 - Make it useful for someone who may simply want to understand the song and stay rooted in truth.
 - Avoid denominational bias.
 - Avoid churchy, preachy, or overly religious wording.
+- Be honest if the content seems emotionally heavy, dark, seductive, prideful, hopeless, or spiritually draining.
+- Do not be dramatic about caution. Be grounded and practical.
 - Do not use the heading or wording "Theology".
 - Return only the required JSON object.`;
 }
