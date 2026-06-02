@@ -3,7 +3,7 @@ const GEMINI_URL =
 
 const SOUNDSENSE_SYSTEM_PROMPT = `You are SoundSense, a careful song reflection and musician preparation assistant for RootedByte.
 
-SoundSense helps users understand a song's identity, emotional direction, meaning, musical preparation needs, and truth-rooted reflection without copying lyrics or providing copyrighted material.
+SoundSense helps users understand a song's identity, emotional direction, meaning, musical preparation needs, and grounded reflection without copying lyrics or providing copyrighted material.
 
 Return ONLY raw JSON.
 Do not use markdown.
@@ -46,35 +46,34 @@ Rules:
 - Do not include chord charts.
 - Do not provide exact lyrics, chord, or tutorial URLs.
 - Provide search queries instead.
-- lyrics_search_query should search for the exact song lyrics.
-- chord_search_query should search for the exact song chords or tabs.
-- tutorial_search_query should search for the exact song tutorial for the selected instrument.
-- Search queries should include the song title, artist, and selected instrument when known.
 - If the user only enters a song title, try to infer the most likely artist from public sources.
 - If multiple songs share the same title, choose the most likely match and set metadata_confidence accordingly.
-- song_meaning should be concise and written in original wording based on public context when available.
-- If public meaning sources are not available, infer carefully and say it is an interpretation.
-- metadata_confidence must be "high", "medium", or "low".
-- source_links must contain up to 3 public URLs used for research.
+- If you are unsure, still return the best match, but use metadata_confidence="low".
+- song_meaning must be 2 to 4 sentences max.
+- mood_summary must be 1 to 2 sentences max.
+- discernment_note must be 1 to 3 sentences max.
+- content_caution must be 1 sentence max.
+- faith_lens must be 2 to 4 sentences max.
+- arrangement_feel must be 2 to 4 sentences max.
+- listening_guide must be 2 to 4 sentences max.
+- rehearsal_prep must be 2 to 4 sentences max.
+- spiritual_reflection must be 1 to 3 sentences max.
+- instrument_guidance must be 2 to 4 sentences max.
+- Keep every section concise, specific, and ready to drop into a clean UI card.
 - Do not invent chords, BPM, key, timestamps, arrangement details, instrument layers, or live performance moments.
 - If something is unavailable, say "Unable to verify", "Estimated", or "Not detected".
 - Avoid denominational bias.
 - Avoid churchy, preachy, overly religious, clinical, or shame-based wording.
 - Do not assume the user is Christian.
-- Express Bible-rooted truth naturally as wisdom, humility, courage, peace, love, self-control, honesty, and hope.
+- Express truth-rooted wisdom naturally as humility, courage, peace, love, self-control, honesty, and hope.
 - Keep the tone age 14+ appropriate and relatable to Gen Z through millennials.
 - Do not use the heading or wording "Theology".
-- Use "Reflection" or "Truth Lens" style language instead.
-- Keep all preparation guidance concise, practical, musician-aware, and truth-rooted.
-- Avoid generic phrases like "This song is emotional" or "This song is uplifting".
-- The selected instrument should shape instrument_guidance.
 - Do not provide guitar gear, amp, pedal, cab, preset, EQ, downloadable preset, or tone settings.
 
 Discernment rules:
-- mood_summary should briefly describe the emotional tone of the song.
+- mood_summary should briefly describe the emotional tone.
 - If the song leans dark, seductive, despair-heavy, angry, numbing, prideful, revenge-driven, or spiritually draining, say so plainly but calmly.
-- content_caution should be short and practical.
-- is_heavy_content should be true when the song appears to have a heavier or unhealthy emotional/spiritual pull.
+- is_heavy_content should be true when the song appears to have a heavier or unhealthy emotional pull.
 - discernment_note should help the user listen with wisdom, not fear or shame.
 - Do not be dramatic. Be sober, grounded, and practical.
 
@@ -169,9 +168,7 @@ async function getYouTubeTitle(url) {
         return cleanYouTubeTitle(oembedData.title);
       }
     }
-  } catch {
-    // Continue to fallback.
-  }
+  } catch {}
 
   const response = await fetch(url, {
     headers: {
@@ -237,19 +234,60 @@ function extractModelText(data) {
   return '';
 }
 
-function buildFallbackSoundSenseData(resolvedSong, instrumentLabel) {
-  const label = String(resolvedSong || 'this song').trim();
+function normalizeConfidence(value) {
+  const confidence = String(value || '').trim().toLowerCase();
+  return ['high', 'medium', 'low'].includes(confidence) ? confidence : 'low';
+}
+
+function normalizeBpm(value) {
+  const number = Number(value);
+
+  if (!Number.isFinite(number)) return 0;
+  if (number < 40 || number > 260) return 0;
+
+  return Math.round(number);
+}
+
+function normalizeBoolean(value) {
+  return value === true;
+}
+
+function shortenText(value, fallback, maxChars = 320) {
+  const text = String(value || fallback || '').replace(/\s+/g, ' ').trim();
+  if (!text) return fallback;
+  if (text.length <= maxChars) return text;
+  return `${text.slice(0, maxChars).trim()}...`;
+}
+
+function titleCaseLoose(value) {
+  return String(value || '')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .replace(/\b\w/g, (c) => c.toUpperCase());
+}
+
+function buildSearchQueries(song, artist, instrumentLabel) {
+  const base = [song, artist].filter(Boolean).join(' ').trim() || song || 'song';
 
   return {
-    song: label || 'Unable to verify',
+    lyrics_search_query: `${base} lyrics`,
+    chord_search_query: `${base} chords`,
+    tutorial_search_query: `${base} ${instrumentLabel} tutorial`
+  };
+}
+
+function buildFallbackSoundSenseData(resolvedSong, instrumentLabel) {
+  const cleanSong = titleCaseLoose(resolvedSong || 'This Song');
+  const queries = buildSearchQueries(cleanSong, '', instrumentLabel);
+
+  return {
+    song: cleanSong || 'Unable to verify',
     artist: 'Unable to verify',
     bpm: 0,
     key: 'Unable to verify',
     metadata_confidence: 'low',
-    lyrics_search_query: `${label} lyrics`,
-    chord_search_query: `${label} chords`,
-    tutorial_search_query: `${label} ${instrumentLabel} tutorial`,
     source_links: [],
+    ...queries,
     song_meaning:
       'A fully verified public breakdown was not available yet, so this is a light reflection based on the title or input you gave.',
     faith_lens:
@@ -280,6 +318,23 @@ function buildFallbackSoundSenseData(resolvedSong, instrumentLabel) {
     content_caution:
       'Pause and check what this song is reinforcing in your mind and mood before looping it.',
     is_heavy_content: true
+  };
+}
+
+async function resolveSongGuess(songInput) {
+  const cleanInput = String(songInput || '').replace(/\s+/g, ' ').trim();
+  if (!cleanInput) {
+    return {
+      resolvedSong: '',
+      resolvedArtist: '',
+      confidence: 'low'
+    };
+  }
+
+  return {
+    resolvedSong: cleanInput,
+    resolvedArtist: '',
+    confidence: cleanInput.includes(' - ') || cleanInput.includes(' by ') ? 'medium' : 'low'
   };
 }
 
@@ -347,67 +402,51 @@ async function callGemini(userPrompt, resolvedSong, instrumentLabel) {
   }
 }
 
-function normalizeConfidence(value) {
-  const confidence = String(value || '').trim().toLowerCase();
-
-  if (['high', 'medium', 'low'].includes(confidence)) {
-    return confidence;
-  }
-
-  return 'low';
-}
-
-function normalizeBpm(value) {
-  const number = Number(value);
-
-  if (!Number.isFinite(number)) {
-    return 0;
-  }
-
-  if (number < 40 || number > 260) {
-    return 0;
-  }
-
-  return Math.round(number);
-}
-
-function normalizeBoolean(value) {
-  return value === true;
-}
-
-function normalizeSoundSenseData(data, instrumentLabel) {
+function normalizeSoundSenseData(data, instrumentLabel, resolutionGuess) {
   const safeData = data && typeof data === 'object' ? data : {};
 
-  const song = String(safeData.song || '').trim();
-  const artist = String(safeData.artist || '').trim();
-  const songArtist = `${song} ${artist}`.trim() || 'song';
+  const rawSong = String(safeData.song || '').trim() || resolutionGuess.resolvedSong;
+  const rawArtist = String(safeData.artist || '').trim() || resolutionGuess.resolvedArtist;
+
+  const song = rawSong ? titleCaseLoose(rawSong) : 'Unable to verify';
+  const artist = rawArtist ? titleCaseLoose(rawArtist) : 'Unable to verify';
+
+  const derivedConfidence = normalizeConfidence(
+    safeData.metadata_confidence || resolutionGuess.confidence
+  );
+
+  const queries = buildSearchQueries(
+    song !== 'Unable to verify' ? song : resolutionGuess.resolvedSong,
+    artist !== 'Unable to verify' ? artist : resolutionGuess.resolvedArtist,
+    instrumentLabel
+  );
 
   return {
-    song: song || 'Unable to verify',
-    artist: artist || 'Unable to verify',
+    song,
+    artist,
     bpm: normalizeBpm(safeData.bpm),
     key:
       typeof safeData.key === 'string' && safeData.key.trim()
         ? safeData.key.trim()
         : 'Unable to verify',
-    metadata_confidence: normalizeConfidence(safeData.metadata_confidence),
+    metadata_confidence: derivedConfidence,
 
-    song_meaning: String(
-      safeData.song_meaning ||
-        safeData.meaning_summary ||
-        'Song meaning is not available yet.'
-    ).trim(),
+    song_meaning: shortenText(
+      safeData.song_meaning || safeData.meaning_summary,
+      'Song meaning is not available yet.',
+      420
+    ),
 
     lyrics_search_query: String(
-      safeData.lyrics_search_query || `${songArtist} lyrics`
+      safeData.lyrics_search_query || queries.lyrics_search_query
     ).trim(),
 
     chord_search_query: String(
-      safeData.chord_search_query || `${songArtist} chords`
+      safeData.chord_search_query || queries.chord_search_query
     ).trim(),
 
     tutorial_search_query: String(
-      safeData.tutorial_search_query || `${songArtist} ${instrumentLabel} tutorial`
+      safeData.tutorial_search_query || queries.tutorial_search_query
     ).trim(),
 
     source_links: Array.isArray(safeData.source_links)
@@ -416,52 +455,79 @@ function normalizeSoundSenseData(data, instrumentLabel) {
           .slice(0, 3)
       : [],
 
-    faith_lens: String(
-      safeData.faith_lens || 'Reflection is not available yet.'
-    ).trim(),
+    faith_lens: shortenText(
+      safeData.faith_lens,
+      'Reflection is not available yet.',
+      360
+    ),
 
-    arrangement_feel: String(
-      safeData.arrangement_feel || 'Song flow guidance is not available yet.'
-    ).trim(),
+    arrangement_feel: shortenText(
+      safeData.arrangement_feel,
+      'Song flow guidance is not available yet.',
+      280
+    ),
 
-    listening_guide: String(
-      safeData.listening_guide || 'Listening guidance is not available yet.'
-    ).trim(),
+    listening_guide: shortenText(
+      safeData.listening_guide,
+      'Listening guidance is not available yet.',
+      280
+    ),
 
-    rehearsal_prep: String(
-      safeData.rehearsal_prep || 'Rehearsal preparation is not available yet.'
-    ).trim(),
+    rehearsal_prep: shortenText(
+      safeData.rehearsal_prep,
+      'Rehearsal preparation is not available yet.',
+      280
+    ),
 
-    spiritual_reflection: String(
-      safeData.spiritual_reflection || 'Reflection prompt is not available yet.'
-    ).trim(),
+    spiritual_reflection: shortenText(
+      safeData.spiritual_reflection,
+      'Reflection prompt is not available yet.',
+      220
+    ),
 
-    instrument_guidance: String(
-      safeData.instrument_guidance ||
-        `${instrumentLabel} guidance is not available yet.`
-    ).trim(),
+    instrument_guidance: shortenText(
+      safeData.instrument_guidance,
+      `${instrumentLabel} guidance is not available yet.`,
+      320
+    ),
 
-    mood_summary: String(
-      safeData.mood_summary || 'Mood not clearly detected.'
-    ).trim(),
+    mood_summary: shortenText(
+      safeData.mood_summary,
+      'Mood not clearly detected.',
+      180
+    ),
 
-    discernment_note: String(
-      safeData.discernment_note || 'Listen with wisdom. Notice what the song strengthens in your thoughts and mood.'
-    ).trim(),
+    discernment_note: shortenText(
+      safeData.discernment_note,
+      'Listen with wisdom. Notice what the song strengthens in your thoughts and mood.',
+      240
+    ),
 
-    content_caution: String(
-      safeData.content_caution || ''
-    ).trim(),
+    content_caution: shortenText(
+      safeData.content_caution,
+      '',
+      140
+    ),
 
     is_heavy_content: normalizeBoolean(safeData.is_heavy_content)
   };
 }
 
-function buildSoundSensePrompt({ resolvedSong, originalSongInput, instrumentLabel }) {
+function buildSoundSensePrompt({
+  resolvedSong,
+  originalSongInput,
+  instrumentLabel,
+  resolutionGuess
+}) {
   return `Research and create a SoundSense song reflection and musician preparation result.
 
 Original user input:
 ${originalSongInput}
+
+Working match guess:
+Song: ${resolutionGuess.resolvedSong || resolvedSong || 'Unknown'}
+Artist: ${resolutionGuess.resolvedArtist || 'Unknown'}
+Confidence: ${resolutionGuess.confidence || 'low'}
 
 Resolved song input:
 ${resolvedSong}
@@ -490,6 +556,9 @@ Return:
 - Role Guidance: concise guidance for the selected instrument
 
 Important:
+- Treat title-only input seriously and try to identify the most likely artist from public search.
+- If multiple songs share the same title, pick the most likely one and lower confidence when needed.
+- Keep every field concise and UI-ready.
 - Do not quote full lyrics.
 - Do not include chord charts.
 - Do not provide exact lyrics, chord, or tutorial URLs.
@@ -551,19 +620,22 @@ module.exports = async function handler(req, res) {
       resolvedSong = await getYouTubeTitle(resolvedSong);
     }
 
+    const resolutionGuess = await resolveSongGuess(resolvedSong);
+
     const soundSense = await callGemini(
       buildSoundSensePrompt({
         resolvedSong,
         originalSongInput,
-        instrumentLabel
+        instrumentLabel,
+        resolutionGuess
       }),
       resolvedSong,
       instrumentLabel
     );
 
-    return res
-      .status(200)
-      .json(normalizeSoundSenseData(soundSense, instrumentLabel));
+    return res.status(200).json(
+      normalizeSoundSenseData(soundSense, instrumentLabel, resolutionGuess)
+    );
   } catch (error) {
     return res.status(500).json({
       error: error.message || 'Unable to build that SoundSense result right now.'
