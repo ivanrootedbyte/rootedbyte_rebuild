@@ -497,7 +497,7 @@
                   <div class="area-body">
                     <p><strong>Current state:</strong> ${escapeHtml(area.current_state || "")}</p>
                     <p><strong>Recommendation:</strong> ${escapeHtml(area.recommendation || "")}</p>
-                    <p><strong>Scripture:</strong> ${escapeHtml(area.scripture || "")}</p>
+                    <p><strong>Truth anchor:</strong> ${escapeHtml(area.scripture || "")}</p>
                     <p><strong>Action step:</strong> ${escapeHtml(area.action_step || "")}</p>
                   </div>
                 </details>
@@ -509,12 +509,12 @@
       ${
         Object.keys(plan).length
           ? `<article class="result-card">
-              <span class="pill">Daily Plan</span>
+              <span class="pill">Daily Rhythm</span>
               <div class="plan-grid">
-                <div class="plan-item"><strong>Prayer</strong><p>${escapeHtml(plan.prayer_minutes || "")} minutes</p></div>
-                <div class="plan-item"><strong>Reading</strong><p>${escapeHtml(plan.bible_reading_minutes || "")} minutes</p></div>
+                <div class="plan-item"><strong>Quiet reflection</strong><p>${escapeHtml(plan.prayer_minutes || "")} minutes</p></div>
+                <div class="plan-item"><strong>Truth reading</strong><p>${escapeHtml(plan.bible_reading_minutes || "")} minutes</p></div>
                 <div class="plan-item"><strong>Social media limit</strong><p>${escapeHtml(plan.social_media_limit_minutes || "")} minutes</p></div>
-                <div class="plan-item"><strong>Fasting</strong><p>${escapeHtml(plan.fasting_recommendation || "")}</p></div>
+                <div class="plan-item"><strong>Reset practice</strong><p>${escapeHtml(plan.fasting_recommendation || "")}</p></div>
                 <div class="plan-item"><strong>Community</strong><p>${escapeHtml(plan.community_action || "")}</p></div>
               </div>
             </article>`
@@ -524,7 +524,7 @@
       ${
         verses.length
           ? `<article class="result-card highlight">
-              <span class="pill">Verses to Reflect On</span>
+              <span class="pill">Truth Anchors</span>
               ${verses.map((verse) => `
                 <blockquote>${escapeHtml(verse.text || "")}</blockquote>
                 <p>
@@ -553,7 +553,7 @@
 
     return `
       <article class="result-card ${output.source_mode === "headline_only" ? "highlight" : ""}">
-        <span class="pill">${output.source_mode === "headline_only" ? "Headline-Based Reflection" : "Signal Summary"}</span>
+        <span class="pill">${output.source_mode === "headline_only" ? "Headline-Based Check" : "Signal Summary"}</span>
         <h2>${escapeHtml(output.overall_theme || "Signal reflection")}</h2>
         <p>${escapeHtml(output.article_summary || "Shared Signal reflection.")}</p>
       </article>
@@ -573,7 +573,7 @@
               <span class="pill">Truth Check</span>
               ${output.truth_check ? `<p>${escapeHtml(output.truth_check)}</p>` : ""}
               ${output.exegesis ? `<p>${escapeHtml(output.exegesis)}</p>` : ""}
-              ${output.jesus_lens ? `<p><strong>Jesus lens:</strong> ${escapeHtml(output.jesus_lens)}</p>` : ""}
+              ${output.jesus_lens ? `<p><strong>Grounded response:</strong> ${escapeHtml(output.jesus_lens)}</p>` : ""}
             </article>`
           : ""
       }
@@ -581,7 +581,7 @@
       ${
         prayers.length
           ? `<article class="result-card">
-              <span class="pill">Prayer Points</span>
+              <span class="pill">Reflection Steps</span>
               <ul>${prayers.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}</ul>
             </article>`
           : ""
@@ -592,7 +592,7 @@
           ? `<div class="verse-grid">
               ${verses.slice(0, 3).map((verse) => `
                 <article class="verse-card">
-                  <span class="pill">Reflection Verse</span>
+                  <span class="pill">Truth Anchor</span>
                   <blockquote>${escapeHtml(verse.text || "")}</blockquote>
                   <p><strong>${escapeHtml(verse.reference || "")}</strong></p>
                   ${verse.application ? `<p>${escapeHtml(verse.application)}</p>` : ""}
@@ -612,7 +612,11 @@
         <p>${output.artist ? `<strong>Artist:</strong> ${escapeHtml(output.artist)}` : ""}</p>
         ${output.key ? `<p><strong>Key:</strong> ${escapeHtml(output.key)}</p>` : ""}
         ${output.bpm ? `<p><strong>BPM:</strong> ${escapeHtml(output.bpm)}</p>` : ""}
-        ${output.confidence ? `<p><strong>Confidence:</strong> ${escapeHtml(output.confidence)}</p>` : ""}
+        ${
+  output.metadata_confidence || output.confidence
+    ? `<p><strong>Confidence:</strong> ${escapeHtml(output.metadata_confidence || output.confidence)}</p>`
+    : ""
+}
       </article>
 
       ${
@@ -627,7 +631,7 @@
       ${
         output.instrument_guidance
           ? `<article class="result-card">
-              <span class="pill">Instrument Guidance</span>
+              <span class="pill">Role Guidance</span>
               ${renderSharedTextBlock(output.instrument_guidance)}
             </article>`
           : ""
