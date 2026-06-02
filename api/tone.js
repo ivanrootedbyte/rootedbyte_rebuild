@@ -63,13 +63,6 @@ Rules:
 - The selected instrument should shape instrument_guidance.
 - Do not provide guitar gear, amp, pedal, cab, preset, EQ, downloadable preset, or tone settings.
 
-Field guidance:
-- faith_lens should explain the song's truth-rooted or heart-level direction in accessible language. Do not make it sound like a sermon.
-- spiritual_reflection should be a short grounding prompt before listening, rehearsing, or leading.
-- rehearsal_prep should be practical and concise.
-- arrangement_feel should describe high-level movement only when supported or reasonably inferable.
-- listening_guide should help the user listen for dynamics, space, repetition, and emotional direction without quoting lyrics.
-
 Instrument guidance rules:
 - Acoustic Guitar: strumming dynamics, rhythmic support, simplicity, restraint.
 - Electric Guitar: ambient support, rhythmic pocket awareness, avoid overplaying.
@@ -207,6 +200,28 @@ function normalizeSourceLinks(parsed, data) {
   return parsed;
 }
 
+function extractModelText(data) {
+  const candidates = Array.isArray(data?.candidates) ? data.candidates : [];
+
+  for (const candidate of candidates) {
+    const parts = Array.isArray(candidate?.content?.parts)
+      ? candidate.content.parts
+      : [];
+
+    const joined = parts
+      .map((part) => (typeof part?.text === 'string' ? part.text : ''))
+      .filter(Boolean)
+      .join('\n')
+      .trim();
+
+    if (joined) {
+      return joined;
+    }
+  }
+
+  return '';
+}
+
 async function callGemini(userPrompt) {
   if (!process.env.GEMINI_KEY) {
     throw new Error('GEMINI_KEY is not configured.');
@@ -233,30 +248,37 @@ async function callGemini(userPrompt) {
     body: JSON.stringify(body)
   });
 
-  if (!response.ok) {
-    const errorText = await response.text().catch(() => '');
+  const responseText = await response.text().catch(() => '');
 
+  if (!response.ok) {
     if (
       response.status === 503 ||
-      /high demand|overloaded|try again later/i.test(errorText)
+      /high demand|overloaded|try again later/i.test(responseText)
     ) {
       throw new Error('The SoundSense engine is busy right now. Please try again in a minute.');
     }
 
-    if (response.status === 429 || /quota|rate limit/i.test(errorText)) {
+    if (response.status === 429 || /quota|rate limit/i.test(responseText)) {
       throw new Error('The SoundSense engine is temporarily limited. Please try again later.');
     }
 
-    throw new Error(
-      'SoundSense could not create this result right now. Please try again.'
-    );
+    throw new Error('SoundSense could not create this result right now. Please try again.');
   }
 
-  const data = await response.json();
-  const raw = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+  let data = {};
+
+  try {
+    data = JSON.parse(responseText);
+  } catch {
+    throw new Error('SoundSense returned an unreadable response.');
+  }
+
+  const raw = extractModelText(data);
 
   if (!raw) {
-    throw new Error('SoundSense returned an empty response.');
+    throw new Error(
+      'SoundSense could not generate a usable result for that song yet. Try the song title and artist instead of a link, or try a different version of the song.'
+    );
   }
 
   return normalizeSourceLinks(safeParse(raw), data);
@@ -328,11 +350,11 @@ function normalizeSoundSenseData(data, instrumentLabel) {
       : [],
 
     faith_lens: String(
-      safeData.faith_lens || 'Truth Lens is not available yet.'
+      safeData.faith_lens || 'Reflection is not available yet.'
     ).trim(),
 
     arrangement_feel: String(
-      safeData.arrangement_feel || 'Song Flow guidance is not available yet.'
+      safeData.arrangement_feel || 'Song flow guidance is not available yet.'
     ).trim(),
 
     listening_guide: String(
@@ -340,7 +362,7 @@ function normalizeSoundSenseData(data, instrumentLabel) {
     ).trim(),
 
     rehearsal_prep: String(
-      safeData.rehearsal_prep || 'Preparation guidance is not available yet.'
+      safeData.rehearsal_prep || 'Rehearsal preparation is not available yet.'
     ).trim(),
 
     spiritual_reflection: String(
@@ -379,7 +401,7 @@ Return:
 - Listen Closely: dynamic lifts, repeated phrases, restraint, and places to leave space
 - Rehearsal Moves: practical preparation, transitions, cues, and restraint
 - Before You Play: short reflection prompt and grounded mindset
-- Role Coaching: concise guidance for the selected instrument
+- Role Guidance: concise guidance for the selected instrument
 
 Important:
 - Do not quote full lyrics.
