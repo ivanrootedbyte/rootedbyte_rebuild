@@ -745,7 +745,7 @@
         <span class="brand-name">RootedByte</span>
       </a>
 
-      <a class="profile-button" href="signin.html" aria-label="Open account">
+      <a class="profile-button" href="signin.html" data-auth-link aria-label="Open account">
         <svg viewBox="0 0 24 24" width="18" height="18" fill="none" aria-hidden="true">
           <path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z" stroke="currentColor" stroke-width="1.8"/>
           <path d="M4.5 20a7.5 7.5 0 0 1 15 0" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
@@ -878,432 +878,456 @@
   </nav>
 
   <script>
-    const $ = (selector) => document.querySelector(selector);
+  const $ = (selector) => document.querySelector(selector);
 
-    const year = $("#year");
-    if (year) year.textContent = new Date().getFullYear();
+  const year = $("#year");
+  if (year) year.textContent = new Date().getFullYear();
 
-    function escapeHtml(value) {
-      return String(value ?? "")
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
+  function escapeHtml(value) {
+    return String(value ?? "")
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
+  }
+
+  function setStatus(element, message, type = "info", loading = false) {
+    if (!element) return;
+
+    element.className = type === "error" ? "status error" : "status";
+    element.innerHTML = loading
+      ? '<span class="spinner" aria-hidden="true"></span><span>' + escapeHtml(message) + "</span>"
+      : escapeHtml(message);
+  }
+
+  async function postJson(url, body) {
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(body)
+    });
+
+    const data = await response.json().catch(() => ({}));
+
+    if (!response.ok) {
+      throw new Error(data.error || "Something went wrong. Please try again.");
     }
 
-    function setStatus(element, message, type = "info", loading = false) {
-      if (!element) return;
+    return data;
+  }
 
-      element.className = type === "error" ? "status error" : "status";
-      element.innerHTML = loading
-        ? '<span class="spinner" aria-hidden="true"></span><span>' + escapeHtml(message) + "</span>"
-        : escapeHtml(message);
+  const rootedQuestions = [
+    {
+      key: "stressDefault",
+      text: "When your day gets loud, stressful, or lonely, what do you usually reach for first?",
+      type: "choice",
+      choices: ["Music or videos", "Friends or group chats", "Prayer or quiet", "Games or scrolling", "I am not sure"]
+    },
+    {
+      key: "scriptureRhythm",
+      text: "In a normal week, how often do you slow down to reflect, pray, or listen for what is true?",
+      type: "choice",
+      choices: ["Most days", "A few times", "About once", "Rarely right now"]
+    },
+    {
+      key: "scrollAftereffect",
+      text: "After scrolling, streaming, or short videos, how do you usually feel inside?",
+      type: "choice",
+      choices: ["Rested", "Inspired", "Numb or distracted", "Anxious or behind", "It depends"]
+    },
+    {
+      key: "pressureVoice",
+      text: "Which pressure feels loudest lately?",
+      type: "choice",
+      choices: ["School or work", "Family expectations", "Fitting in", "Body image or comparison", "Future plans", "Hidden stress"]
+    },
+    {
+      key: "safeConversation",
+      text: "When something is heavy, who could you honestly talk to?",
+      type: "choice",
+      choices: ["A parent or guardian", "Partner or spouse", "Sibling", "A mentor", "A close friend", "No one yet"]
+    },
+    {
+      key: "identitySource",
+      text: "What most often shapes how you see yourself?",
+      type: "choice",
+      choices: ["What is true", "What friends think", "Likes, comments, or attention", "Performance or achievements", "My mistakes", "I am still figuring that out"]
+    },
+    {
+      key: "purposeClarity",
+      text: "When you think about your future, what best describes your heart?",
+      type: "choice",
+      choices: ["Clear and hopeful", "Curious but unsure", "Pressured to decide", "Avoiding it", "Worried or overwhelmed"]
+    },
+    {
+      key: "generosityPractice",
+      text: "When you have time, money, attention, or influence, how often do you use some of it to bless someone else?",
+      type: "choice",
+      choices: ["Often", "Sometimes", "Only when asked", "Rarely right now", "I have not thought about it"]
     }
+  ];
 
-    async function postJson(url, body) {
-      const response = await fetch(url, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(body)
-      });
+  let rootedIndex = 0;
+  const rootedAnswers = {};
 
-      const data = await response.json().catch(() => ({}));
+  function renderRootedStep() {
+    const question = rootedQuestions[rootedIndex];
+    const saved = rootedAnswers[question.key] ?? "";
 
-      if (!response.ok) {
-        throw new Error(data.error || "Something went wrong. Please try again.");
-      }
-
-      return data;
-    }
-
-    const rootedQuestions = [
-      {
-        key: "stressDefault",
-        text: "When your day gets loud, stressful, or lonely, what do you usually reach for first?",
-        type: "choice",
-        choices: ["Music or videos", "Friends or group chats", "Prayer or quiet", "Games or scrolling", "I am not sure"]
-      },
-      {
-        key: "scriptureRhythm",
-        text: "In a normal week, how often do you slow down to reflect, pray, or listen for what is true?",
-        type: "choice",
-        choices: ["Most days", "A few times", "About once", "Rarely right now"]
-      },
-      {
-        key: "scrollAftereffect",
-        text: "After scrolling, streaming, or short videos, how do you usually feel inside?",
-        type: "choice",
-        choices: ["Rested", "Inspired", "Numb or distracted", "Anxious or behind", "It depends"]
-      },
-      {
-        key: "pressureVoice",
-        text: "Which pressure feels loudest lately?",
-        type: "choice",
-        choices: ["School or work", "Family expectations", "Fitting in", "Body image or comparison", "Future plans", "Hidden stress"]
-      },
-      {
-        key: "safeConversation",
-        text: "When something is heavy, who could you honestly talk to?",
-        type: "choice",
-        choices: ["A parent or guardian", "Partner or spouse", "Sibling", "A mentor", "A close friend", "No one yet"]
-      },
-      {
-        key: "identitySource",
-        text: "What most often shapes how you see yourself?",
-        type: "choice",
-        choices: ["What is true", "What friends think", "Likes, comments, or attention", "Performance or achievements", "My mistakes", "I am still figuring that out"]
-      },
-      {
-        key: "purposeClarity",
-        text: "When you think about your future, what best describes your heart?",
-        type: "choice",
-        choices: ["Clear and hopeful", "Curious but unsure", "Pressured to decide", "Avoiding it", "Worried or overwhelmed"]
-      },
-      {
-        key: "generosityPractice",
-        text: "When you have time, money, attention, or influence, how often do you use some of it to bless someone else?",
-        type: "choice",
-        choices: ["Often", "Sometimes", "Only when asked", "Rarely right now", "I have not thought about it"]
-      }
-    ];
-
-    let rootedIndex = 0;
-    const rootedAnswers = {};
-
-    function renderRootedStep() {
-      const question = rootedQuestions[rootedIndex];
-      const saved = rootedAnswers[question.key] ?? "";
-
-      $("#rootedStep").innerHTML = `
-        <div>
-          <div class="step-count">Question ${rootedIndex + 1} of ${rootedQuestions.length}</div>
-          <h3>${escapeHtml(question.text)}</h3>
-          <div class="choice-grid">
-            ${question.choices.map((choice) => `
-              <button
-                type="button"
-                class="choice-button ${saved === choice ? "selected" : ""}"
-                data-value="${escapeHtml(choice)}"
-              >${escapeHtml(choice)}</button>
-            `).join("")}
-          </div>
-        </div>
-      `;
-
-      $("#rootedBack").disabled = rootedIndex === 0;
-      $("#rootedNext").textContent = rootedIndex === rootedQuestions.length - 1 ? "Generate plan" : "Next";
-
-      if (saved) {
-        $("#rootedNext").classList.remove("needs-answer");
-        $("#rootedNext").classList.add("ready");
-      } else {
-        $("#rootedNext").classList.remove("ready");
-        $("#rootedNext").classList.add("needs-answer");
-      }
-
-      $("#rootedStatus").textContent = "";
-
-      document.querySelectorAll(".choice-button").forEach((button) => {
-        button.addEventListener("click", () => {
-          rootedAnswers[question.key] = button.dataset.value;
-          renderRootedStep();
-        });
-      });
-    }
-
-    function renderRootedPlan(data) {
-      const areas = Array.isArray(data.areas) ? data.areas : [];
-      const plan = data.daily_plan || {};
-      const score = Math.max(0, Math.min(100, Number(data.spiritual_health_score) || 0));
-
-      return `
-        <div class="result-card">
-          <div class="score-wrap">
-            <div class="score-circle" style="--score:${score}">
-              <strong>${Math.round(score)}</strong>
-            </div>
-
-            <div>
-              <h2>Your Inner Work summary</h2>
-              <p>${escapeHtml(data.summary || "Your reflection summary will appear here.")}</p>
-            </div>
-          </div>
-        </div>
-
-        <div class="area-list">
-          ${areas.map((area) => `
-            <details class="area-card">
-              <summary>
-                <span>${escapeHtml(area.area || "Focus area")}</span>
-                <span class="badge">${escapeHtml(area.urgency || "Reflect")}</span>
-              </summary>
-              <div class="area-body">
-                <p><strong>Current state:</strong> ${escapeHtml(area.current_state || "")}</p>
-                <p><strong>Recommendation:</strong> ${escapeHtml(area.recommendation || "")}</p>
-                <p><strong>Scripture:</strong> ${escapeHtml(area.scripture || "")}</p>
-                <p><strong>Action step:</strong> ${escapeHtml(area.action_step || "")}</p>
-              </div>
-            </details>
+    $("#rootedStep").innerHTML = `
+      <div>
+        <div class="step-count">Question ${rootedIndex + 1} of ${rootedQuestions.length}</div>
+        <h3>${escapeHtml(question.text)}</h3>
+        <div class="choice-grid">
+          ${question.choices.map((choice) => `
+            <button
+              type="button"
+              class="choice-button ${saved === choice ? "selected" : ""}"
+              data-value="${escapeHtml(choice)}"
+            >${escapeHtml(choice)}</button>
           `).join("")}
         </div>
+      </div>
+    `;
 
-        <div class="result-card">
-          <span class="tag">Daily plan</span>
-          <div class="plan-grid">
-            <div class="plan-item">
-              <strong>Prayer</strong>
-              <p>${escapeHtml(plan.prayer_minutes || "")} minutes</p>
-            </div>
-            <div class="plan-item">
-              <strong>Reading</strong>
-              <p>${escapeHtml(plan.bible_reading_minutes || "")} minutes</p>
-            </div>
-            <div class="plan-item">
-              <strong>Social media limit</strong>
-              <p>${escapeHtml(plan.social_media_limit_minutes || "")} minutes</p>
-            </div>
-            <div class="plan-item">
-              <strong>Fasting</strong>
-              <p>${escapeHtml(plan.fasting_recommendation || "")}</p>
-            </div>
-            <div class="plan-item">
-              <strong>Community</strong>
-              <p>${escapeHtml(plan.community_action || "")}</p>
-            </div>
-          </div>
-        </div>
+    $("#rootedBack").disabled = rootedIndex === 0;
+    $("#rootedNext").textContent =
+      rootedIndex === rootedQuestions.length - 1 ? "Generate reflection" : "Next";
 
-        <div class="result-card highlight">
-          <span class="tag">3 verses to reflect on</span>
-          ${(Array.isArray(data.reflection_verses) ? data.reflection_verses.slice(0, 3) : []).map((verse) => `
-            <blockquote class="quote">${escapeHtml(verse.text || "")}</blockquote>
-            <p>
-              <strong>${escapeHtml(verse.reference || "")}</strong>
-              ${verse.reflection_prompt ? " — " + escapeHtml(verse.reflection_prompt) : ""}
-            </p>
-          `).join("")}
-        </div>
-
-        <div class="result-card">
-          <span class="tag">Encouragement</span>
-          <p>${escapeHtml(data.encouragement || "")}</p>
-        </div>
-      `;
+    if (saved) {
+      $("#rootedNext").classList.remove("needs-answer");
+      $("#rootedNext").classList.add("ready");
+    } else {
+      $("#rootedNext").classList.remove("ready");
+      $("#rootedNext").classList.add("needs-answer");
     }
 
-    function renderSharePanel(appType) {
-      const appLabel = appType === "rootedos" ? "Inner Work reflection" : "reflection";
+    $("#rootedStatus").textContent = "";
 
-      return `
-        <div class="share-panel">
-          <h3>Save or share this ${appLabel}</h3>
+    document.querySelectorAll(".choice-button").forEach((button) => {
+      button.addEventListener("click", () => {
+        rootedAnswers[question.key] = button.dataset.value;
+        renderRootedStep();
+      });
+    });
+  }
+
+  function renderRootedPlan(data) {
+    const areas = Array.isArray(data.areas) ? data.areas : [];
+    const plan = data.daily_plan || {};
+    const anchors = Array.isArray(data.reflection_verses)
+      ? data.reflection_verses.slice(0, 3)
+      : [];
+
+    const score = Math.max(0, Math.min(100, Number(data.spiritual_health_score) || 0));
+
+    return `
+      <div class="result-card">
+        <div class="score-wrap">
+          <div class="score-circle" style="--score:${score}">
+            <strong>${Math.round(score)}</strong>
+          </div>
+
+          <div>
+            <h2>Your Inner Work summary</h2>
+            <p>${escapeHtml(data.summary || "Your reflection summary will appear here.")}</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="area-list">
+        ${areas.map((area) => `
+          <details class="area-card">
+            <summary>
+              <span>${escapeHtml(area.area || "Focus area")}</span>
+              <span class="badge">${escapeHtml(area.urgency || "Reflect")}</span>
+            </summary>
+            <div class="area-body">
+              <p><strong>Current state:</strong> ${escapeHtml(area.current_state || "")}</p>
+              <p><strong>Recommendation:</strong> ${escapeHtml(area.recommendation || "")}</p>
+              <p><strong>Truth anchor:</strong> ${escapeHtml(area.scripture || "")}</p>
+              <p><strong>Action step:</strong> ${escapeHtml(area.action_step || "")}</p>
+            </div>
+          </details>
+        `).join("")}
+      </div>
+
+      <div class="result-card">
+        <span class="tag">Daily rhythm</span>
+        <div class="plan-grid">
+          <div class="plan-item">
+            <strong>Quiet reflection</strong>
+            <p>${escapeHtml(plan.prayer_minutes || "")} minutes</p>
+          </div>
+          <div class="plan-item">
+            <strong>Truth reading</strong>
+            <p>${escapeHtml(plan.bible_reading_minutes || "")} minutes</p>
+          </div>
+          <div class="plan-item">
+            <strong>Social media limit</strong>
+            <p>${escapeHtml(plan.social_media_limit_minutes || "")} minutes</p>
+          </div>
+          <div class="plan-item">
+            <strong>Reset practice</strong>
+            <p>${escapeHtml(plan.fasting_recommendation || "")}</p>
+          </div>
+          <div class="plan-item">
+            <strong>Community</strong>
+            <p>${escapeHtml(plan.community_action || "")}</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="result-card highlight">
+        <span class="tag">3 truth anchors</span>
+        ${anchors.map((anchor, index) => `
+          <blockquote class="quote">${escapeHtml(anchor.text || "")}</blockquote>
           <p>
-            Save privately to your account, or create a public RootedByte link
-            that anyone with the link can view.
+            <strong>${escapeHtml(anchor.reference || `Truth Anchor ${index + 1}`)}</strong>
+            ${anchor.reflection_prompt ? " — " + escapeHtml(anchor.reflection_prompt) : ""}
           </p>
+        `).join("")}
+      </div>
 
-          <div class="share-panel__actions">
-            <button class="primary-button" type="button" id="saveRootedOutput">
-              Save privately
-            </button>
+      <div class="result-card">
+        <span class="tag">Encouragement</span>
+        <p>${escapeHtml(data.encouragement || "")}</p>
+      </div>
+    `;
+  }
 
-            <button class="secondary-button" type="button" id="shareRootedOutput">
-              Share publicly
-            </button>
-          </div>
+  function renderSharePanel() {
+    return `
+      <div class="share-panel">
+        <h3>Save or share this Inner Work reflection</h3>
+        <p>
+          Save privately to your account, or create a public RootedByte link
+          that anyone with the link can view.
+        </p>
 
-          <div class="status" id="rootedSaveStatus" role="status" aria-live="polite"></div>
-          <div class="status" id="rootedShareStatus" role="status" aria-live="polite"></div>
-          <div class="share-link-box" id="rootedShareLink" hidden></div>
+        <div class="share-panel__actions">
+          <button class="primary-button" type="button" id="saveRootedOutput">
+            Save privately
+          </button>
+
+          <button class="secondary-button" type="button" id="shareRootedOutput">
+            Share publicly
+          </button>
         </div>
-      `;
+
+        <div class="status" id="rootedSaveStatus" role="status" aria-live="polite"></div>
+        <div class="status" id="rootedShareStatus" role="status" aria-live="polite"></div>
+        <div class="share-link-box" id="rootedShareLink" hidden></div>
+      </div>
+    `;
+  }
+
+  async function createSharedOutput({ appType, title, inputSummary, output, statusElement, linkElement }) {
+    statusElement.className = "status";
+    statusElement.textContent = "Creating share link...";
+
+    const response = await fetch("/api/share", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        appType,
+        title,
+        inputSummary,
+        output
+      })
+    });
+
+    const data = await response.json().catch(() => ({}));
+
+    if (!response.ok) {
+      throw new Error(data.error || "Could not create share link.");
     }
 
-    async function createSharedOutput({ appType, title, inputSummary, output, statusElement, linkElement }) {
-      statusElement.textContent = "Creating share link...";
+    linkElement.hidden = false;
+    linkElement.textContent = data.shareUrl;
 
-      const response = await fetch("/api/share", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          appType,
+    try {
+      await navigator.clipboard.writeText(data.shareUrl);
+      statusElement.textContent = "Share link created and copied.";
+    } catch {
+      statusElement.textContent = "Share link created.";
+    }
+
+    if (navigator.share) {
+      try {
+        await navigator.share({
           title,
-          inputSummary,
-          output
-        })
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error || "Could not create share link.");
+          text: `View this ${title} from RootedByte.`,
+          url: data.shareUrl
+        });
+      } catch {
+        // User cancelled native share.
       }
+    }
 
-      linkElement.hidden = false;
-      linkElement.textContent = data.shareUrl;
+    return data;
+  }
+
+  function attachRootedSaveButton(outputData) {
+    const button = document.querySelector("#saveRootedOutput");
+    const statusElement = document.querySelector("#rootedSaveStatus");
+
+    if (!button || !statusElement) return;
+
+    button.addEventListener("click", async () => {
+      button.disabled = true;
+      statusElement.className = "status";
+      statusElement.textContent = "Saving privately...";
 
       try {
-        await navigator.clipboard.writeText(data.shareUrl);
-        statusElement.textContent = "Share link created and copied.";
-      } catch {
-        statusElement.textContent = "Share link created.";
-      }
-
-      if (navigator.share) {
-        try {
-          await navigator.share({
-            title,
-            text: `View this ${title} from RootedByte.`,
-            url: data.shareUrl
-          });
-        } catch {
-          // user cancelled share
+        if (!window.RootedByteSaveOutput || !window.RootedByteSaveOutput.save) {
+          throw new Error("Private saving is not ready yet. Please refresh and try again.");
         }
-      }
 
-      return data;
-    }
+        const result = await window.RootedByteSaveOutput.save({
+          appType: "inner_work",
+          title: "Inner Work Reflection",
+          inputSummary: "Private Inner Work reflection",
+          outputJson: outputData
+        });
 
-    function attachRootedSaveButton(outputData) {
-      const button = document.querySelector("#saveRootedOutput");
-      const statusElement = document.querySelector("#rootedSaveStatus");
+        if (!result.ok) {
+          statusElement.className = "status error";
 
-      if (!button || !statusElement) return;
-
-      button.addEventListener("click", async () => {
-        button.disabled = true;
-        statusElement.className = "status";
-        statusElement.textContent = "Saving privately...";
-
-        try {
-          if (!window.RootedByteSaveOutput || !window.RootedByteSaveOutput.save) {
-            throw new Error("Private saving is not ready yet. Please refresh and try again.");
-          }
-
-          const result = await window.RootedByteSaveOutput.save({
-            appType: "rootedos",
-            title: "Inner Work Reflection",
-            inputSummary: "Private Inner Work reflection",
-            outputJson: outputData
-          });
-
-          if (!result.ok) {
-            statusElement.className = "status error";
-            statusElement.textContent = result.message || "Could not save privately.";
+          if (result.reason === "not_signed_in") {
+            statusElement.innerHTML = `
+              <span>Please sign in to save this privately.</span>
+              <a href="signin.html" style="color: var(--sage); font-weight: 900; text-decoration: underline;">Sign in</a>
+            `;
             return;
           }
 
-          statusElement.className = "status";
-          statusElement.textContent = "Saved privately to your account.";
-        } catch (error) {
-          statusElement.className = "status error";
-          statusElement.textContent = error.message || "Could not save privately.";
-        } finally {
-          button.disabled = false;
+          statusElement.textContent = result.message || "Could not save privately.";
+          return;
         }
-      });
-    }
 
-    function attachRootedShareButton(outputData) {
-      const button = document.querySelector("#shareRootedOutput");
-      const statusElement = document.querySelector("#rootedShareStatus");
-      const linkElement = document.querySelector("#rootedShareLink");
+        statusElement.className = "status";
+        statusElement.textContent = "Saved privately to your account.";
+      } catch (error) {
+        statusElement.className = "status error";
+        statusElement.textContent = error.message || "Could not save privately.";
+      } finally {
+        button.disabled = false;
+      }
+    });
+  }
 
-      if (!button || !statusElement || !linkElement) return;
+  function attachRootedShareButton(outputData) {
+    const button = document.querySelector("#shareRootedOutput");
+    const statusElement = document.querySelector("#rootedShareStatus");
+    const linkElement = document.querySelector("#rootedShareLink");
 
-      button.addEventListener("click", async () => {
-        button.disabled = true;
+    if (!button || !statusElement || !linkElement) return;
 
-        try {
-          await createSharedOutput({
-            appType: "rootedos",
-            title: "Inner Work Reflection",
-            inputSummary: "Shared Inner Work reflection",
-            output: outputData,
-            statusElement,
-            linkElement
-          });
-        } catch (error) {
-          statusElement.className = "status error";
-          statusElement.textContent = error.message;
-        } finally {
-          button.disabled = false;
-        }
-      });
-    }
-
-    async function generateRootedPlan() {
-      const nextButton = $("#rootedNext");
-      const backButton = $("#rootedBack");
-      const result = $("#rootedResult");
-
-      nextButton.disabled = true;
-      backButton.disabled = true;
-      result.innerHTML = "";
-
-      setStatus($("#rootedStatus"), "Creating your Inner Work plan...", "info", true);
+    button.addEventListener("click", async () => {
+      button.disabled = true;
+      statusElement.className = "status";
 
       try {
-        const data = await postJson("/api/rootedos", { answers: rootedAnswers });
-        result.innerHTML = renderRootedPlan(data) + renderSharePanel("rootedos");
-        attachRootedSaveButton(data);
-        attachRootedShareButton(data);
-        setStatus($("#rootedStatus"), "Inner Work plan ready.");
+        await createSharedOutput({
+          appType: "inner_work",
+          title: "Inner Work Reflection",
+          inputSummary: "Shared Inner Work reflection",
+          output: outputData,
+          statusElement,
+          linkElement
+        });
       } catch (error) {
-        setStatus($("#rootedStatus"), error.message, "error");
+        statusElement.className = "status error";
+        statusElement.textContent = error.message || "Could not create share link.";
       } finally {
-        nextButton.disabled = false;
-        backButton.disabled = rootedIndex === 0;
+        button.disabled = false;
       }
-    }
+    });
+  }
 
-    const rootedIntro = document.querySelector("#rootedosIntro");
-    const rootedReflectionSection = document.querySelector("#try-it");
-    const startRootedOSButton = document.querySelector("#startRootedOS");
+  async function generateRootedPlan() {
+    const nextButton = $("#rootedNext");
+    const backButton = $("#rootedBack");
+    const result = $("#rootedResult");
 
-    if (startRootedOSButton && rootedIntro && rootedReflectionSection) {
-      startRootedOSButton.addEventListener("click", () => {
-        rootedIntro.hidden = true;
-        rootedReflectionSection.hidden = false;
-        rootedIndex = 0;
-        renderRootedStep();
-        rootedReflectionSection.scrollIntoView({ behavior: "smooth", block: "start" });
+    nextButton.disabled = true;
+    backButton.disabled = true;
+    result.innerHTML = "";
+
+    setStatus($("#rootedStatus"), "Creating your Inner Work reflection...", "info", true);
+
+    try {
+      const data = await postJson("/api/rootedos", {
+        answers: rootedAnswers
       });
+
+      result.innerHTML = renderRootedPlan(data) + renderSharePanel();
+
+      attachRootedSaveButton(data);
+      attachRootedShareButton(data);
+
+      setStatus($("#rootedStatus"), "Inner Work reflection ready.");
+    } catch (error) {
+      setStatus($("#rootedStatus"), error.message, "error");
+    } finally {
+      nextButton.disabled = false;
+      backButton.disabled = rootedIndex === 0;
+    }
+  }
+
+  const rootedIntro = document.querySelector("#rootedosIntro");
+  const rootedReflectionSection = document.querySelector("#try-it");
+  const startRootedOSButton = document.querySelector("#startRootedOS");
+
+  if (startRootedOSButton && rootedIntro && rootedReflectionSection) {
+    startRootedOSButton.addEventListener("click", () => {
+      rootedIntro.hidden = true;
+      rootedReflectionSection.hidden = false;
+      rootedIndex = 0;
+      renderRootedStep();
+      rootedReflectionSection.scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+      });
+    });
+  }
+
+  $("#rootedNext").addEventListener("click", async () => {
+    const question = rootedQuestions[rootedIndex];
+
+    if (!rootedAnswers[question.key]) {
+      setStatus($("#rootedStatus"), "Choose the answer that fits best before continuing.", "error");
+      return;
     }
 
-    $("#rootedNext").addEventListener("click", async () => {
-      const question = rootedQuestions[rootedIndex];
-
-      if (!rootedAnswers[question.key]) {
-        setStatus($("#rootedStatus"), "Choose the answer that fits best before continuing.", "error");
-        return;
-      }
-
-      if (rootedIndex < rootedQuestions.length - 1) {
-        rootedIndex += 1;
-        renderRootedStep();
-      } else {
-        await generateRootedPlan();
-      }
-    });
-
-    $("#rootedBack").addEventListener("click", () => {
-      if (rootedIndex > 0) {
-        rootedIndex -= 1;
-        renderRootedStep();
-      }
-    });
-
-    $("#rootedReset").addEventListener("click", () => {
-      Object.keys(rootedAnswers).forEach((key) => delete rootedAnswers[key]);
-      rootedIndex = 0;
-      $("#rootedResult").innerHTML = "";
+    if (rootedIndex < rootedQuestions.length - 1) {
+      rootedIndex += 1;
       renderRootedStep();
-    });
-  </script>
+    } else {
+      await generateRootedPlan();
+    }
+  });
+
+  $("#rootedBack").addEventListener("click", () => {
+    if (rootedIndex > 0) {
+      rootedIndex -= 1;
+      renderRootedStep();
+    }
+  });
+
+  $("#rootedReset").addEventListener("click", () => {
+    Object.keys(rootedAnswers).forEach((key) => delete rootedAnswers[key]);
+    rootedIndex = 0;
+    $("#rootedResult").innerHTML = "";
+    renderRootedStep();
+  });
+</script>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="js/rootedbyte-auth-nav.js"></script>
