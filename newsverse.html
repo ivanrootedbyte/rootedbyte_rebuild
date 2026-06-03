@@ -777,6 +777,22 @@
     </section>
   </div>
 
+  <div class="contact-modal" id="signinPromptModal" aria-hidden="true">
+  <section class="contact-card-modal" role="dialog" aria-modal="true" aria-labelledby="signinPromptTitle">
+    <button class="contact-close" type="button" id="closeSigninPrompt" aria-label="Close sign-in prompt">×</button>
+
+    <h2 class="contact-title" id="signinPromptTitle">Save your check-in</h2>
+    <p class="contact-copy">
+      Sign in to keep your mood check-in, streak, and growth progress connected to your account.
+    </p>
+
+    <div style="display:grid; gap:12px; margin-top:20px;">
+      <a class="primary-button" href="signin.html">Sign in</a>
+      <button class="footer-link-button" type="button" id="maybeLaterSigninPrompt">Maybe later</button>
+    </div>
+  </section>
+</div>
+  
   <script>
     const $ = (selector) => document.querySelector(selector);
 
@@ -1202,21 +1218,7 @@ if (signinPromptModal) {
   <script src="js/rootedbyte-auth-nav.js"></script>
   <script src="js/rootedbyte-save-output.js"></script>
 
-<div class="contact-modal" id="signinPromptModal" aria-hidden="true">
-  <section class="contact-card-modal" role="dialog" aria-modal="true" aria-labelledby="signinPromptTitle">
-    <button class="contact-close" type="button" id="closeSigninPrompt" aria-label="Close sign-in prompt">×</button>
 
-    <h2 class="contact-title" id="signinPromptTitle">Save your check-in</h2>
-    <p class="contact-copy">
-      Sign in to keep your mood check-in, streak, and growth progress connected to your account.
-    </p>
-
-    <div style="display:grid; gap:12px; margin-top:20px;">
-      <a class="primary-button" href="signin.html">Sign in</a>
-      <button class="footer-link-button" type="button" id="maybeLaterSigninPrompt">Maybe later</button>
-    </div>
-  </section>
-</div>
   
 </body>
 </html>
