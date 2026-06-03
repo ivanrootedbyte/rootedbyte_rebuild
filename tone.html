@@ -930,6 +930,46 @@
 
     let latestToneOutput = null;
 
+    function userLooksSignedIn() {
+  try {
+    return localStorage.getItem("rootedbyte_user_signed_in") === "true";
+  } catch {
+    return false;
+  }
+}
+
+const signinPromptModal = $("#signinPromptModal");
+const closeSigninPrompt = $("#closeSigninPrompt");
+const maybeLaterSigninPrompt = $("#maybeLaterSigninPrompt");
+
+function showSigninPrompt() {
+  if (!signinPromptModal) return;
+  signinPromptModal.classList.add("active");
+  signinPromptModal.setAttribute("aria-hidden", "false");
+}
+
+function hideSigninPrompt() {
+  if (!signinPromptModal) return;
+  signinPromptModal.classList.remove("active");
+  signinPromptModal.setAttribute("aria-hidden", "true");
+}
+
+if (closeSigninPrompt) {
+  closeSigninPrompt.addEventListener("click", hideSigninPrompt);
+}
+
+if (maybeLaterSigninPrompt) {
+  maybeLaterSigninPrompt.addEventListener("click", hideSigninPrompt);
+}
+
+if (signinPromptModal) {
+  signinPromptModal.addEventListener("click", (event) => {
+    if (event.target === signinPromptModal) {
+      hideSigninPrompt();
+    }
+  });
+}
+    
     function escapeHtml(value) {
       return String(value ?? "")
         .replace(/&/g, "&amp;")
@@ -1166,37 +1206,43 @@
     }
 
     function attachToneJournalButton() {
-      const button = $("#journalToneOutput");
-      if (!button) return;
+  const button = $("#journalToneOutput");
+  if (!button) return;
 
-      button.onclick = () => {
-        if (!latestToneOutput) return;
+  button.onclick = () => {
+    if (!latestToneOutput) return;
 
-        const draft = [
-          "SoundSense reflection",
-          "",
-          `Song: ${latestToneOutput.song || ""}`,
-          `Artist: ${latestToneOutput.artist || ""}`,
-          "",
-          "Mood:",
-          latestToneOutput.mood_summary || "",
-          "",
-          "Discernment:",
-          latestToneOutput.discernment_note || "",
-          "",
-          "What this song is saying:",
-          latestToneOutput.song_meaning || "",
-          "",
-          "What I want to remember:",
-          ""
-        ].join("\n");
-
-        try {
-          localStorage.setItem("rootedbyte_prefill_journal", draft);
-        } catch {}
-        window.location.href = "index.html#screen-journal";
-      };
+    if (!userLooksSignedIn()) {
+      showSigninPrompt();
+      return;
     }
+
+    const draft = [
+      "SoundSense reflection",
+      "",
+      `Song: ${latestToneOutput.song || ""}`,
+      `Artist: ${latestToneOutput.artist || ""}`,
+      "",
+      "Mood:",
+      latestToneOutput.mood_summary || "",
+      "",
+      "Discernment:",
+      latestToneOutput.discernment_note || "",
+      "",
+      "What this song is saying:",
+      latestToneOutput.song_meaning || "",
+      "",
+      "What I want to remember:",
+      ""
+    ].join("\n");
+
+    try {
+      localStorage.setItem("rootedbyte_prefill_journal", draft);
+    } catch {}
+
+    window.location.href = "index.html#screen-journal";
+  };
+}
 
     function attachToneResetButton() {
       const button = $("#resetToneOutput");
@@ -1318,5 +1364,22 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="js/rootedbyte-auth-nav.js"></script>
   <script src="js/rootedbyte-save-output.js"></script>
+
+  <div class="contact-modal" id="signinPromptModal" aria-hidden="true">
+  <section class="contact-card-modal" role="dialog" aria-modal="true" aria-labelledby="signinPromptTitle">
+    <button class="contact-close" type="button" id="closeSigninPrompt" aria-label="Close sign-in prompt">×</button>
+
+    <h2 class="contact-title" id="signinPromptTitle">Save your check-in</h2>
+    <p class="contact-copy">
+      Sign in to keep your mood check-in, streak, and growth progress connected to your account.
+    </p>
+
+    <div style="display:grid; gap:12px; margin-top:20px;">
+      <a class="primary-button" href="signin.html">Sign in</a>
+      <button class="footer-link-button" type="button" id="maybeLaterSigninPrompt">Maybe later</button>
+    </div>
+  </section>
+</div>
+  
 </body>
 </html>
