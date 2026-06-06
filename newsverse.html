@@ -196,9 +196,12 @@
     .contact-title {
       font-family: "Playfair Display", Georgia, serif;
       color: var(--cream);
-      letter-spacing: -0.06em;
-      line-height: 0.98;
+      font-weight: 700;
+      letter-spacing: -0.055em;
+      line-height: 1.05;
       margin: 0;
+      overflow-wrap: anywhere;
+      word-break: normal;
     }
 
     .hero-copy h1 {
@@ -381,11 +384,26 @@
       padding: 16px;
     }
 
-    .result-card p,
+        .result-card p,
     .share-panel p,
     .result-card li {
       color: var(--muted);
       line-height: 1.65;
+      overflow-wrap: anywhere;
+      word-break: normal;
+      white-space: normal;
+    }
+
+    .result-card,
+    .share-panel,
+    .verse-card,
+    .verse-card blockquote,
+    .share-link-box,
+    .status {
+      max-width: 100%;
+      overflow-wrap: anywhere;
+      word-break: normal;
+      white-space: normal;
     }
 
     .tag {
@@ -416,11 +434,14 @@
       background: rgba(255, 255, 255, 0.025);
     }
 
-    .verse-card blockquote {
+      .verse-card blockquote {
       margin: 8px 0;
       color: var(--cream);
       font-size: 1rem;
       line-height: 1.55;
+      overflow-wrap: anywhere;
+      word-break: normal;
+      white-space: normal;
     }
 
     .action-row,
