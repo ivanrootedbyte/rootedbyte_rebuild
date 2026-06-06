@@ -259,6 +259,13 @@ function shortenText(value, fallback, maxChars = 320) {
   return `${text.slice(0, maxChars).trim()}...`;
 }
 
+function cleanText(value, maxLength = 2000) {
+  return String(value || '')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .slice(0, maxLength);
+}
+
 function titleCaseLoose(value) {
   return String(value || '')
     .replace(/\s+/g, ' ')
