@@ -431,83 +431,73 @@ function normalizeSoundSenseData(data, instrumentLabel, resolutionGuess) {
         : 'Unable to verify',
     metadata_confidence: derivedConfidence,
 
-    song_meaning: shortenText(
-      safeData.song_meaning || safeData.meaning_summary,
-      'Song meaning is not available yet.',
-      420
-    ),
+    song_meaning: cleanText(
+  safeData.song_meaning || safeData.meaning_summary || 'Song meaning is not available yet.',
+  2000
+),
 
-    lyrics_search_query: String(
-      safeData.lyrics_search_query || queries.lyrics_search_query
-    ).trim(),
+lyrics_search_query: String(
+  safeData.lyrics_search_query || queries.lyrics_search_query
+).trim(),
 
-    chord_search_query: String(
-      safeData.chord_search_query || queries.chord_search_query
-    ).trim(),
+chord_search_query: String(
+  safeData.chord_search_query || queries.chord_search_query
+).trim(),
 
-    tutorial_search_query: String(
-      safeData.tutorial_search_query || queries.tutorial_search_query
-    ).trim(),
+tutorial_search_query: String(
+  safeData.tutorial_search_query || queries.tutorial_search_query
+).trim(),
 
-    source_links: Array.isArray(safeData.source_links)
-      ? safeData.source_links
-          .filter((url) => /^https?:\/\//i.test(String(url || '')))
-          .slice(0, 3)
-      : [],
+source_links: Array.isArray(safeData.source_links)
+  ? safeData.source_links
+      .filter((url) => /^https?:\/\//i.test(String(url || '')))
+      .slice(0, 3)
+  : [],
 
-    faith_lens: shortenText(
-      safeData.faith_lens,
-      'Reflection is not available yet.',
-      360
-    ),
+faith_lens: cleanText(
+  safeData.faith_lens || 'Reflection is not available yet.',
+  2000
+),
 
-    arrangement_feel: shortenText(
-      safeData.arrangement_feel,
-      'Song flow guidance is not available yet.',
-      280
-    ),
+arrangement_feel: cleanText(
+  safeData.arrangement_feel || 'Song flow guidance is not available yet.',
+  1600
+),
 
-    listening_guide: shortenText(
-      safeData.listening_guide,
-      'Listening guidance is not available yet.',
-      280
-    ),
+listening_guide: cleanText(
+  safeData.listening_guide || 'Listening guidance is not available yet.',
+  1600
+),
 
-    rehearsal_prep: shortenText(
-      safeData.rehearsal_prep,
-      'Rehearsal preparation is not available yet.',
-      280
-    ),
+rehearsal_prep: cleanText(
+  safeData.rehearsal_prep || 'Rehearsal preparation is not available yet.',
+  1600
+),
 
-    spiritual_reflection: shortenText(
-      safeData.spiritual_reflection,
-      'Reflection prompt is not available yet.',
-      220
-    ),
+spiritual_reflection: cleanText(
+  safeData.spiritual_reflection || 'Reflection prompt is not available yet.',
+  1200
+),
 
-    instrument_guidance: shortenText(
-      safeData.instrument_guidance,
-      `${instrumentLabel} guidance is not available yet.`,
-      320
-    ),
+instrument_guidance: cleanText(
+  safeData.instrument_guidance || `${instrumentLabel} guidance is not available yet.`,
+  1800
+),
 
-    mood_summary: shortenText(
-      safeData.mood_summary,
-      'Mood not clearly detected.',
-      180
-    ),
+mood_summary: cleanText(
+  safeData.mood_summary || 'Mood not clearly detected.',
+  800
+),
 
-    discernment_note: shortenText(
-      safeData.discernment_note,
-      'Listen with wisdom. Notice what the song strengthens in your thoughts and mood.',
-      240
-    ),
+discernment_note: cleanText(
+  safeData.discernment_note || 'Listen with wisdom. Notice what the song strengthens in your thoughts and mood.',
+  1200
+),
 
-    content_caution: shortenText(
-      safeData.content_caution,
-      '',
-      140
-    ),
+content_caution: cleanText(
+  safeData.content_caution || '',
+  800
+),
 
     is_heavy_content: normalizeBoolean(safeData.is_heavy_content)
   };
