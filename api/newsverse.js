@@ -244,28 +244,34 @@ function normalizeNewsVerse(data, fallback) {
     360
   );
 
-  result.truth_check = shortenText(
-    result.truth_check,
-    fallback.truth_check,
-    360
+   result.article_summary = cleanText(
+    result.article_summary || fallback.article_summary,
+    2000
   );
 
-  result.exegesis = shortenText(
-    result.exegesis,
-    fallback.exegesis,
-    360
+  result.thinking_impact = cleanText(
+    result.thinking_impact || fallback.thinking_impact,
+    2000
   );
 
-  result.jesus_lens = shortenText(
-    result.jesus_lens,
-    fallback.jesus_lens,
+  result.truth_check = cleanText(
+    result.truth_check || fallback.truth_check,
+    2000
+  );
+
+  result.exegesis = cleanText(
+    result.exegesis || fallback.exegesis,
+    2000
+  );
+
+  result.jesus_lens = cleanText(
+    result.jesus_lens || fallback.jesus_lens,
+    1200
+  );
+
+  result.overall_theme = cleanText(
+    result.overall_theme || fallback.overall_theme,
     240
-  );
-
-  result.overall_theme = shortenText(
-    result.overall_theme,
-    fallback.overall_theme,
-    120
   );
 
   result.source_mode = String(result.source_mode || fallback.source_mode || '');
