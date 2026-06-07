@@ -55,6 +55,13 @@ function safeParse(raw) {
       .replace(/```json|```/g, '')
       .trim();
 
+    const firstBrace = cleaned.indexOf('{');
+    const lastBrace = cleaned.lastIndexOf('}');
+
+    if (firstBrace !== -1 && lastBrace !== -1) {
+      return JSON.parse(cleaned.slice(firstBrace, lastBrace + 1));
+    }
+
     return JSON.parse(cleaned);
   }
 }
@@ -85,21 +92,28 @@ function normalizeNumber(value) {
     : 0;
 }
 
+function cleanText(value, maxLength = 2000) {
+  return String(value || '')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .slice(0, maxLength);
+}
+
 function normalizeResult(data) {
   const result = data && typeof data === 'object' ? data : {};
 
   result.spiritual_health_score = clampScore(result.spiritual_health_score);
 
   result.areas = Array.isArray(result.areas)
-    ? result.areas.slice(0, 5).map((area) => ({
-        area: String(area.area || ''),
-        current_state: String(area.current_state || ''),
-        recommendation: String(area.recommendation || ''),
-        scripture: String(area.scripture || ''),
-        action_step: String(area.action_step || ''),
-        urgency: normalizeUrgency(area.urgency)
-      }))
-    : [];
+  ? result.areas.slice(0, 5).map((area) => ({
+      area: cleanText(area.area, 80),
+      current_state: cleanText(area.current_state, 500),
+      recommendation: cleanText(area.recommendation, 700),
+      scripture: cleanText(area.scripture, 320),
+      action_step: cleanText(area.action_step, 320),
+      urgency: normalizeUrgency(area.urgency)
+    }))
+  : [];
 
   const plan =
     result.daily_plan && typeof result.daily_plan === 'object'
@@ -107,20 +121,20 @@ function normalizeResult(data) {
       : {};
 
   result.daily_plan = {
-    prayer_minutes: normalizeNumber(plan.prayer_minutes),
-    bible_reading_minutes: normalizeNumber(plan.bible_reading_minutes),
-    social_media_limit_minutes: normalizeNumber(plan.social_media_limit_minutes),
-    fasting_recommendation: String(plan.fasting_recommendation || ''),
-    community_action: String(plan.community_action || '')
-  };
+  prayer_minutes: normalizeNumber(plan.prayer_minutes),
+  bible_reading_minutes: normalizeNumber(plan.bible_reading_minutes),
+  social_media_limit_minutes: normalizeNumber(plan.social_media_limit_minutes),
+  fasting_recommendation: cleanText(plan.fasting_recommendation, 240),
+  community_action: cleanText(plan.community_action, 240)
+};
 
   result.reflection_verses = Array.isArray(result.reflection_verses)
-    ? result.reflection_verses.slice(0, 3).map((verse, index) => ({
-        reference: String(verse.reference || `Truth Anchor ${index + 1}`),
-        text: String(verse.text || ''),
-        reflection_prompt: String(verse.reflection_prompt || '')
-      }))
-    : [];
+  ? result.reflection_verses.slice(0, 3).map((verse, index) => ({
+      reference: cleanText(verse.reference || `Truth Anchor ${index + 1}`, 60),
+      text: cleanText(verse.text, 220),
+      reflection_prompt: cleanText(verse.reflection_prompt, 220)
+    }))
+  : [];
 
   while (result.reflection_verses.length < 3) {
     const nextNumber = result.reflection_verses.length + 1;
@@ -132,8 +146,8 @@ function normalizeResult(data) {
     });
   }
 
-  result.summary = String(result.summary || '');
-  result.encouragement = String(result.encouragement || '');
+  result.summary = cleanText(result.summary, 1200);
+result.encouragement = cleanText(result.encouragement, 500);
 
   return result;
 }
