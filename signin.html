@@ -112,9 +112,25 @@
     }
 
     .hero-copy {
-      text-align: center;
-      margin-bottom: 24px;
-    }
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.auth-kicker {
+  display: inline-flex;
+  align-items: center;
+  min-height: 30px;
+  padding: 0 12px;
+  margin-bottom: 14px;
+  border-radius: 999px;
+  color: var(--sage);
+  background: rgba(168, 197, 160, 0.08);
+  border: 1px solid rgba(168, 197, 160, 0.12);
+  font-size: 0.73rem;
+  font-weight: 900;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
 
     .hero-copy h1 {
       margin: 0;
@@ -132,58 +148,14 @@
     }
 
     .auth-card {
-      width: 100%;
-      border: 1px solid var(--line);
-      border-radius: var(--radius-xl);
-      background:
-        linear-gradient(180deg, rgba(21, 31, 26, 0.94), rgba(16, 24, 21, 0.96));
-      box-shadow: var(--shadow);
-      padding: 18px 16px 18px;
-    }
-
-    .google-button {
-      width: 100%;
-      min-height: 48px;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 12px;
-      border: 1px solid rgba(168, 197, 160, 0.16);
-      border-radius: 14px;
-      background: rgba(255, 255, 255, 0.02);
-      color: var(--text);
-      font-weight: 700;
-      cursor: pointer;
-    }
-
-    .google-g {
-      font-weight: 900;
-      font-size: 1.1rem;
-      line-height: 1;
-      background: linear-gradient(90deg, #4285f4 0 25%, #ea4335 25% 50%, #fbbc05 50% 75%, #34a853 75% 100%);
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-    }
-
-    .divider {
-      display: grid;
-      grid-template-columns: 1fr auto 1fr;
-      align-items: center;
-      gap: 14px;
-      margin: 16px 0 16px;
-      color: var(--muted-soft);
-      font-size: 0.78rem;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-    }
-
-    .divider::before,
-    .divider::after {
-      content: "";
-      height: 1px;
-      background: rgba(168, 197, 160, 0.12);
-    }
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-xl);
+  background:
+    linear-gradient(180deg, rgba(21, 31, 26, 0.96), rgba(16, 24, 21, 0.98));
+  box-shadow: var(--shadow);
+  padding: 22px 18px 20px;
+}
 
     .tabs {
       display: none;
@@ -378,15 +350,21 @@
   }
 
   .hero-copy h1 {
-    font-size: clamp(3.2rem, 6vw, 4.8rem);
-    line-height: 0.95;
-  }
+  margin: 0;
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: 2.4rem;
+  line-height: 0.96;
+  letter-spacing: -0.06em;
+  font-weight: 700;
+  color: var(--text);
+}
 
-  .hero-copy p {
-    margin-top: 14px;
-    font-size: 1.04rem;
-    max-width: 440px;
-  }
+.hero-copy p {
+  margin: 12px 0 0;
+  color: var(--muted);
+  font-size: 0.98rem;
+  line-height: 1.6;
+}
 
   .auth-card {
     max-width: 500px;
@@ -422,17 +400,12 @@
       </div>
 
       <div class="hero-copy">
-        <h1 id="authTitle">Welcome back</h1>
-        <p id="authLead">Log in to your account</p>
-      </div>
+  <span class="auth-kicker">Private account access</span>
+  <h1 id="authTitle">Welcome back</h1>
+  <p id="authLead">Sign in to save reflections, journal privately, and follow your growth.</p>
+</div>
 
       <section class="auth-card">
-        <button type="button" class="google-button" id="googleSignInButton">
-          <span class="google-g">G</span>
-          <span>Continue with Google</span>
-        </button>
-
-        <div class="divider">or</div>
 
         <form class="auth-form" id="authForm">
           <div class="field">
@@ -499,8 +472,8 @@
       </div>
 
       <p class="small-note">
-        Your saved outputs stay private unless you choose to create a share link.
-      </p>
+  Your reflections, saved outputs, and journal entries stay private unless you choose to share something yourself.
+</p>
     </main>
   </div>
 
@@ -521,7 +494,6 @@
   const switchText = $("#switchText");
   const switchModeButton = $("#switchModeButton");
   const forgotPasswordLink = $("#forgotPasswordLink");
-  const googleSignInButton = $("#googleSignInButton");
 
   const SIGNED_IN_FLAG = "rootedbyte_user_signed_in";
 
@@ -601,7 +573,7 @@
 
     authTitle.textContent = signingIn ? "Welcome back" : "Create account";
     authLead.textContent = signingIn
-      ? "Log in to your account"
+      ? "Sign in to save reflections, journal privately, and follow your growth."
       : "Create your RootedByte account";
 
     authSubmit.textContent = signingIn ? "Log in" : "Create account";
@@ -674,27 +646,6 @@
       setStatus(error.message || "Could not send reset email.", "error");
     } finally {
       forgotPasswordLink.style.pointerEvents = "";
-    }
-  });
-
-  googleSignInButton.addEventListener("click", async () => {
-    googleSignInButton.disabled = true;
-    setStatus("Opening Google sign-in...");
-
-    try {
-      const client = await ensureSupabaseClient();
-
-      const { error } = await client.auth.signInWithOAuth({
-        provider: "google",
-        options: {
-          redirectTo: window.location.origin + "/account.html"
-        }
-      });
-
-      if (error) throw error;
-    } catch (error) {
-      googleSignInButton.disabled = false;
-      setStatus(error.message || "Google sign-in is not ready.", "error");
     }
   });
 
