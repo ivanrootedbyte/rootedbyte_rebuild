@@ -685,6 +685,41 @@
       background: var(--lavender);
     }
 
+    .growth-signin-button {
+  min-height: 50px;
+  padding: 0 18px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  border: 0;
+  border-radius: 14px;
+  background: var(--sage);
+  color: #111714;
+  font-size: 0.95rem;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  cursor: pointer;
+  transition:
+    transform 180ms ease,
+    filter 180ms ease,
+    box-shadow 180ms ease;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.16);
+}
+
+.growth-signin-button:hover,
+.growth-signin-button:focus-visible {
+  transform: translateY(-1px);
+  filter: brightness(1.03);
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.2);
+  outline: none;
+}
+
+.growth-signin-button span:last-child {
+  font-size: 1rem;
+  line-height: 1;
+}
+    
     .ghost-note {
       color: var(--muted-soft);
       font-size: 0.82rem;
@@ -2096,8 +2131,8 @@
       </article>
 
       <article class="focus-card growth-signin-note" style="grid-column: 1 / -1;">
-        <div class="focus-card-top" style="align-items: flex-start;">
-          <div>
+        <div class="focus-card-top" style="align-items: flex-start; justify-content: space-between; gap: 20px;">
+          <div style="max-width: 680px;">
             <strong>Sign in to view your real growth</strong>
             <div style="margin-top: 8px; color: var(--muted); font-size: 0.9rem; font-weight: 500; line-height: 1.6;">
               Track your reflections, journal entries, streak, and focus patterns across RootedByte.
@@ -2106,11 +2141,12 @@
           <span>Private account feature</span>
         </div>
 
-        <div style="margin-top: 16px;">
-          <button class="primary-button" type="button" id="growthSigninButton">
-            Sign in to continue
-          </button>
-        </div>
+        <div style="margin-top: 18px;">
+  <button class="growth-signin-button" type="button" id="growthSigninButton">
+    <span>Sign in to track progress</span>
+    <span aria-hidden="true">→</span>
+  </button>
+</div>
       </article>
     `;
   }
