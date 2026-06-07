@@ -661,6 +661,113 @@
       }
     }
 
+    @media (min-width: 980px) {
+  :root {
+    --phone: 1180px;
+  }
+
+  body {
+    padding: 0;
+  }
+
+  .app-shell {
+    width: min(1180px, calc(100% - 48px));
+    min-height: 100vh;
+    border-left: 0;
+    border-right: 0;
+    border-radius: 0;
+    box-shadow: none;
+  }
+
+  .app-header {
+    height: 72px;
+    padding: 0 28px;
+  }
+
+  .brand-name {
+    font-size: 1.15rem;
+  }
+
+  .profile-button {
+    width: 42px;
+    height: 42px;
+  }
+
+  .page {
+    padding: 34px 28px 140px;
+  }
+
+  .tool-topbar {
+    margin-bottom: 24px;
+    font-size: 0.96rem;
+  }
+
+  .screen-block {
+    padding-top: 24px;
+  }
+
+  .hero-copy {
+    padding: 10px 0 24px;
+    max-width: 760px;
+  }
+
+  .hero-copy h1 {
+    font-size: clamp(3.8rem, 7vw, 5.4rem);
+    color: #9fc2ff;
+  }
+
+  .hero-copy p {
+    max-width: 680px;
+    font-size: 1.02rem;
+  }
+
+  .signal-card {
+    padding: 26px;
+  }
+
+  .form-block {
+    max-width: 860px;
+  }
+
+  .results {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+    margin-top: 26px;
+  }
+
+  .results .result-card:first-child {
+    grid-column: 1 / -1;
+  }
+
+  .verse-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .share-panel {
+    grid-column: 1 / -1;
+  }
+
+  .footer-card {
+    margin-top: 52px;
+  }
+
+  .bottom-nav {
+    left: 50%;
+    bottom: 24px;
+    width: min(820px, calc(100% - 80px));
+    border-radius: 999px;
+    padding: 10px 14px;
+    background: rgba(13, 18, 15, 0.76);
+    border: 1px solid rgba(168, 197, 160, 0.12);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.28);
+  }
+
+  .bottom-nav a {
+    min-height: 54px;
+    font-size: 0.76rem;
+  }
+}
+    
     @media (max-width: 380px) {
       .share-panel__actions,
       .action-row {
