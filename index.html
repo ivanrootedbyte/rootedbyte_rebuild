@@ -2173,6 +2173,92 @@
     }
   }
 
+    async function loadGrowthFromSupabase() {
+  const client = await getSupabaseClientSafe();
+  const user = await getCurrentUserSafe();
+
+  if (!client || !user) {
+    return null;
+  }
+
+  const [savedOutputsResult, journalEntriesResult] = await Promise.all([
+    client
+      .from("saved_outputs")
+      .select("id, app_type, title, created_at, output_json")
+      .eq("user_id", user.id)
+      .order("created_at", { ascending: false }),
+
+    client
+      .from("journal_entries")
+      .select("id, entry_text, created_at, updated_at")
+      .eq("user_id", user.id)
+      .order("updated_at", { ascending: false })
+  ]);
+
+  if (savedOutputsResult.error) {
+    throw savedOutputsResult.error;
+  }
+
+  if (journalEntriesResult.error) {
+    throw journalEntriesResult.error;
+  }
+
+  const savedOutputs = Array.isArray(savedOutputsResult.data)
+    ? savedOutputsResult.data
+    : [];
+
+  const journalEntries = Array.isArray(journalEntriesResult.data)
+    ? journalEntriesResult.data
+    : [];
+
+  const focusCounts = {
+    Identity: 0,
+    "Digital Habits": 0,
+    Relationships: 0,
+    Purpose: 0,
+    Pressure: 0,
+    Comparison: 0
+  };
+
+  let reflections = 0;
+  let signals = 0;
+  let songs = 0;
+
+  savedOutputs.forEach((item) => {
+    const appType = String(item.app_type || "").trim().toLowerCase();
+
+    if (appType === "inner_work") {
+      reflections += 1;
+
+      const areas = Array.isArray(item.output_json?.areas)
+        ? item.output_json.areas
+        : [];
+
+      const firstArea = areas[0]?.area;
+      if (firstArea && Object.prototype.hasOwnProperty.call(focusCounts, firstArea)) {
+        focusCounts[firstArea] += 1;
+      }
+    }
+
+    if (appType === "signal") {
+      signals += 1;
+    }
+
+    if (appType === "soundsense") {
+      songs += 1;
+    }
+  });
+
+  return {
+    reflections,
+    signals,
+    songs,
+    journalEntriesCount: journalEntries.length,
+    focusCounts,
+    journalEntries
+  };
+}
+    
   async function postJson(url, body) {
     const response = await fetch(url, {
       method: "POST",
@@ -2291,16 +2377,17 @@
     });
 
     if (name === "growth") {
-      if (userLooksSignedIn()) {
-        updateGrowthUI();
-      } else {
-        showGrowthLockedState();
-      }
-    }
+  if (userLooksSignedIn()) {
+    updateGrowthUI();
+  } else {
+    showGrowthLockedState();
+  }
+}
 
-    if (name === "journal") {
-      hydrateJournalDraft();
-    }
+if (name === "journal") {
+  hydrateJournalDraft();
+  renderJournal();
+}
 
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
@@ -2503,8 +2590,8 @@
       }
 
       saveState();
-      updateMoodUI();
-      updateStreakUI();
+await renderJournal();
+await updateGrowthUI();
     });
   });
 
@@ -2923,12 +3010,13 @@
     }
   });
 
-  function renderJournal() {
-    const list = $("#journalList");
-    const empty = $("#journalEmpty");
+  async function renderJournal() {
+  const list = $("#journalList");
+  const empty = $("#journalEmpty");
 
-    list.innerHTML = "";
+  list.innerHTML = "";
 
+  if (!userLooksSignedIn()) {
     if (!state.journal.length) {
       empty.style.display = "grid";
       return;
@@ -2950,23 +3038,73 @@
       `;
       list.appendChild(article);
     });
+
+    return;
   }
 
-  function updateGrowthUI() {
-    if (!userLooksSignedIn()) {
+  try {
+    const growthData = await loadGrowthFromSupabase();
+    const entries = growthData?.journalEntries || [];
+
+    if (!entries.length) {
+      empty.style.display = "grid";
+      return;
+    }
+
+    empty.style.display = "none";
+
+    entries.forEach((entry) => {
+      const date = new Intl.DateTimeFormat(undefined, {
+        month: "short",
+        day: "numeric"
+      }).format(new Date(entry.updated_at || entry.created_at));
+
+      const text = String(entry.entry_text || "").trim();
+
+      const article = document.createElement("article");
+      article.className = "journal-entry";
+      article.innerHTML = `
+        <strong>${date}</strong>
+        <p>${escapeHtml(text).slice(0, 180)}${text.length > 180 ? "..." : ""}</p>
+      `;
+      list.appendChild(article);
+    });
+  } catch (error) {
+    console.warn("[RootedByte journal render]", error.message || error);
+
+    if (!state.journal.length) {
+      empty.style.display = "grid";
+      return;
+    }
+
+    empty.style.display = "none";
+  }
+}
+
+  async function updateGrowthUI() {
+  if (!userLooksSignedIn()) {
+    showGrowthLockedState();
+    return;
+  }
+
+  try {
+    const growthData = await loadGrowthFromSupabase();
+
+    if (!growthData) {
       showGrowthLockedState();
       return;
     }
 
-    $("#reflectionsStat").textContent = state.reflections || 0;
-    $("#signalStat").textContent = state.signals || 0;
-    $("#soundStat").textContent = state.songs || 0;
-    $("#journalStat").textContent = state.journal.length || 0;
+    $("#reflectionsStat").textContent = growthData.reflections || 0;
+    $("#signalStat").textContent = growthData.signals || 0;
+    $("#soundStat").textContent = growthData.songs || 0;
+    $("#journalStat").textContent = growthData.journalEntriesCount || 0;
 
     const focusList = $("#focusList");
-    const max = Math.max(1, ...Object.values(state.focus || {}));
+    const focusCounts = growthData.focusCounts || defaultState.focus;
+    const max = Math.max(1, ...Object.values(focusCounts));
 
-    focusList.innerHTML = Object.entries(state.focus || defaultState.focus).map(([name, count]) => {
+    focusList.innerHTML = Object.entries(focusCounts).map(([name, count]) => {
       const width = Math.min(100, Math.round((count / max) * 100));
 
       return `
@@ -2981,7 +3119,11 @@
     }).join("");
 
     updateStreakUI();
+  } catch (error) {
+    console.warn("[RootedByte growth]", error.message || error);
+    showGrowthLockedState();
   }
+}
 
   const contactModal = $("#contactModal");
   const openContactModal = $("#openContactModal");
@@ -3047,10 +3189,11 @@
   });
 
   updateMoodUI();
-  updateStreakUI();
-  renderJournal();
-  hydrateJournalDraft();
-  updateGrowthUI();
+updateStreakUI();
+renderJournal();
+hydrateJournalDraft();
+updateGrowthUI();
+    
 </script>
   
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
