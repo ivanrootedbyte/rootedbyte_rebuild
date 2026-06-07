@@ -349,6 +349,82 @@
         box-shadow: 0 28px 90px rgba(0, 0, 0, 0.36);
       }
     }
+
+    @media (min-width: 980px) {
+  :root {
+    --phone: 1180px;
+  }
+
+  body {
+    padding: 0;
+  }
+
+  .app-shell {
+    width: min(1180px, calc(100% - 48px));
+    min-height: 100vh;
+    border-left: 0;
+    border-right: 0;
+    border-radius: 0;
+    box-shadow: none;
+  }
+
+  .app-header {
+    height: 72px;
+    padding: 0 28px;
+  }
+
+  .brand-name {
+    font-size: 1.15rem;
+  }
+
+  .header-link {
+    font-size: 0.92rem;
+  }
+
+  .page {
+    padding: 42px 28px 60px;
+  }
+
+  .hero-card {
+    padding: 30px 28px;
+    max-width: 960px;
+  }
+
+  h1 {
+    font-size: clamp(3rem, 6vw, 4.8rem);
+    max-width: 780px;
+  }
+
+  .lead {
+    max-width: 760px;
+    font-size: 1rem;
+  }
+
+  .actions {
+    grid-template-columns: 220px 220px;
+    align-items: start;
+    justify-content: start;
+  }
+
+  .results {
+    margin-top: 18px;
+    gap: 16px;
+  }
+
+  .plan-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .verse-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .footer-strip {
+    margin-top: 28px;
+    text-align: left;
+  }
+}
+    
   </style>
 </head>
 
