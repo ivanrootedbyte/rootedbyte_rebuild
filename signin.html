@@ -330,6 +330,78 @@
         min-height: calc(100vh - 126px);
       }
     }
+
+    @media (min-width: 980px) {
+  :root {
+    --phone: 1180px;
+  }
+
+  body {
+    padding: 0;
+  }
+
+  .app-shell {
+    width: min(1180px, calc(100% - 48px));
+    min-height: 100vh;
+    padding: 34px 28px 44px;
+    border-left: 0;
+    border-right: 0;
+    border-radius: 0;
+    box-shadow: none;
+  }
+
+  .top-link {
+    margin-bottom: 34px;
+    font-size: 0.94rem;
+  }
+
+  .auth-wrap {
+    min-height: calc(100vh - 140px);
+    grid-template-columns: minmax(0, 1fr) minmax(420px, 500px);
+    align-items: center;
+    justify-items: stretch;
+    column-gap: 56px;
+    padding-top: 0;
+  }
+
+  .hero-icon {
+    width: 68px;
+    height: 68px;
+    margin-bottom: 22px;
+    border-radius: 20px;
+  }
+
+  .hero-copy {
+    text-align: left;
+    margin-bottom: 0;
+    max-width: 520px;
+  }
+
+  .hero-copy h1 {
+    font-size: clamp(3.2rem, 6vw, 4.8rem);
+    line-height: 0.95;
+  }
+
+  .hero-copy p {
+    margin-top: 14px;
+    font-size: 1.04rem;
+    max-width: 440px;
+  }
+
+  .auth-card {
+    max-width: 500px;
+    margin-left: auto;
+    padding: 24px 22px 22px;
+  }
+
+  .bottom-switch,
+  .small-note {
+    max-width: 500px;
+    margin-left: auto;
+    text-align: center;
+  }
+}
+    
   </style>
 </head>
 
