@@ -83,7 +83,8 @@ Instrument guidance rules:
 - Bass: groove stability, root-note emphasis, dynamic consistency.
 - Drums: cymbal restraint, groove consistency, transition control.
 - Keys / Piano: pad layering ideas, spacing awareness, atmosphere support.
-- Vocals: phrasing, emotional emphasis, harmony opportunities, clear delivery.`;
+- Vocals: phrasing, emotional emphasis, harmony opportunities, clear delivery.
+- Listener: emotional direction, message, repeated themes, what the song may be normalizing, and whether it leaves the listener more clear, numb, restless, grounded, hopeful, or compromised.
 
 const VALID_INSTRUMENTS = {
   'acoustic-guitar': 'Acoustic Guitar',
@@ -91,7 +92,8 @@ const VALID_INSTRUMENTS = {
   bass: 'Bass',
   drums: 'Drums',
   'keys-piano': 'Keys / Piano',
-  vocals: 'Vocals'
+  vocals: 'Vocals',
+  listener: 'Listener'
 };
 
 function setCors(res) {
@@ -252,13 +254,6 @@ function normalizeBoolean(value) {
   return value === true;
 }
 
-function shortenText(value, fallback, maxChars = 320) {
-  const text = String(value || fallback || '').replace(/\s+/g, ' ').trim();
-  if (!text) return fallback;
-  if (text.length <= maxChars) return text;
-  return `${text.slice(0, maxChars).trim()}...`;
-}
-
 function cleanText(value, maxLength = 2000) {
   return String(value || '')
     .replace(/\s+/g, ' ')
@@ -308,17 +303,19 @@ function buildFallbackSoundSenseData(resolvedSong, instrumentLabel) {
     spiritual_reflection:
       'Before you play, ask yourself what kind of atmosphere you are helping create and whether your part supports clarity rather than distraction.',
     instrument_guidance:
-      instrumentLabel === 'Acoustic Guitar'
-        ? 'Hold steady rhythm, keep your strumming intentional, and do not rush to fill every space.'
-        : instrumentLabel === 'Electric Guitar'
-          ? 'Support the pocket, stay restrained, and add texture only where it actually helps the song breathe.'
-          : instrumentLabel === 'Bass'
-            ? 'Lock in the foundation, keep the pulse steady, and let consistency carry more than complexity.'
-            : instrumentLabel === 'Drums'
-              ? 'Keep transitions clean, avoid overplaying, and let the groove serve the song’s shape.'
-              : instrumentLabel === 'Keys / Piano'
-                ? 'Think in layers, leave room, and use texture to support the atmosphere rather than dominate it.'
-                : 'Focus on clear delivery, emotional honesty, and phrasing that supports the song instead of forcing it.',
+  instrumentLabel === 'Acoustic Guitar'
+    ? 'Hold steady rhythm, keep your strumming intentional, and do not rush to fill every space.'
+    : instrumentLabel === 'Electric Guitar'
+      ? 'Support the pocket, stay restrained, and add texture only where it actually helps the song breathe.'
+      : instrumentLabel === 'Bass'
+        ? 'Lock in the foundation, keep the pulse steady, and let consistency carry more than complexity.'
+        : instrumentLabel === 'Drums'
+          ? 'Keep transitions clean, avoid overplaying, and let the groove serve the song’s shape.'
+          : instrumentLabel === 'Keys / Piano'
+            ? 'Think in layers, leave room, and use texture to support the atmosphere rather than dominate it.'
+            : instrumentLabel === 'Listener'
+              ? 'Pay attention to what the song strengthens in your thoughts, mood, and values. Notice whether it leaves you clearer, steadier, and more honest, or more numb, restless, and pulled off center.'
+              : 'Focus on clear delivery, emotional honesty, and phrasing that supports the song instead of forcing it.',
     mood_summary: 'Reflective and unresolved.',
     discernment_note:
       'If a song leaves you more numb, restless, hopeless, or pulled toward unhealthy patterns, listen with wisdom and limits.',
