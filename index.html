@@ -1242,6 +1242,152 @@
     #signinPromptModal .skip-button {
       padding-top: 2px;
     }
+
+    @media (min-width: 980px) {
+  :root {
+    --phone: 1180px;
+  }
+
+  body {
+    padding: 0;
+    background:
+      radial-gradient(circle at 12% 8%, rgba(168, 197, 160, 0.08), transparent 24rem),
+      radial-gradient(circle at 88% 22%, rgba(232, 201, 122, 0.08), transparent 24rem),
+      radial-gradient(circle at 50% 100%, rgba(184, 168, 216, 0.07), transparent 28rem),
+      linear-gradient(180deg, #0b100d 0%, #111714 100%);
+  }
+
+  .app-shell {
+    width: min(1180px, calc(100% - 48px));
+    min-height: 100vh;
+    border-left: 0;
+    border-right: 0;
+    border-radius: 0;
+    box-shadow: none;
+    background:
+      radial-gradient(circle at 50% -10%, rgba(168, 197, 160, 0.08), transparent 24rem),
+      linear-gradient(180deg, #111714 0%, #0f1512 100%);
+  }
+
+  .app-header {
+    height: 72px;
+    padding: 0 28px;
+  }
+
+  .profile-button {
+    width: 42px;
+    height: 42px;
+  }
+
+  .app-main {
+    padding: 42px 28px 140px;
+  }
+
+  .hero {
+    text-align: left;
+    padding: 8px 0 12px;
+  }
+
+  .hero h1 {
+    max-width: 720px;
+    margin: 0;
+    font-size: clamp(4rem, 7vw, 5.6rem);
+  }
+
+  .hero p {
+    max-width: 680px;
+    margin: 18px 0 0;
+    font-size: 1.02rem;
+  }
+
+  .wisdom-strip {
+    justify-items: start;
+    text-align: left;
+    padding: 18px 0 10px;
+    margin: 8px 0 26px;
+    min-height: auto;
+  }
+
+  #screen-home .section-block:first-of-type,
+  #screen-home .card {
+    max-width: none;
+  }
+
+  #screen-home .tool-list,
+  #screen-tools .tool-list {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    align-items: stretch;
+  }
+
+  .tool-card {
+    min-height: 210px;
+    padding: 24px;
+  }
+
+  .tool-card h3 {
+    font-size: 1.55rem;
+  }
+
+  .tool-card p {
+    font-size: 0.96rem;
+  }
+
+  .tool-card .tool-kicker {
+    font-size: 0.76rem;
+  }
+
+  .tool-card:not(.signal):not(.sound) h3,
+  #toolInner .tool-title h1 {
+    color: #9fc2ff;
+  }
+
+  .tool-card.signal h3,
+  #toolSignal .tool-title h1 {
+    color: #9fc2ff;
+  }
+
+  .tool-card.sound h3,
+  #toolSound .tool-title h1 {
+    color: #9fc2ff;
+  }
+
+  #screen-growth .stats-grid {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+
+  #screen-growth .focus-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  #screen-journal {
+    max-width: 820px;
+  }
+
+  .journal-empty {
+    min-height: 360px;
+  }
+
+  .app-footer {
+    margin-top: 56px;
+  }
+
+  .bottom-nav {
+    left: 50%;
+    bottom: 24px;
+    width: min(820px, calc(100% - 80px));
+    border-radius: 999px;
+    padding: 10px 14px;
+    background: rgba(13, 18, 15, 0.76);
+    border: 1px solid rgba(168, 197, 160, 0.12);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.28);
+  }
+
+  .bottom-nav button {
+    min-height: 54px;
+    font-size: 0.76rem;
+  }
+}
+    
   </style>
 </head>
 
@@ -1777,644 +1923,794 @@
   </div>
 
   <script>
-    const $ = (selector) => document.querySelector(selector);
-    const $$ = (selector) => Array.from(document.querySelectorAll(selector));
+  const $ = (selector) => document.querySelector(selector);
+  const $$ = (selector) => Array.from(document.querySelectorAll(selector));
 
-    const storageKey = "rootedbyte_app_state_v1";
+  const storageKey = "rootedbyte_app_state_v1";
+  const journalDraftKey = "rootedbyte_journal_draft_v1";
 
-    const defaultState = {
-      onboarded: false,
-      mood: "",
-      streak: [],
-      reflections: 0,
-      signals: 0,
-      songs: 0,
-      journal: [],
-      focus: {
-        Identity: 0,
-        "Digital Habits": 0,
-        Relationships: 0,
-        Purpose: 0,
-        Pressure: 0,
-        Comparison: 0
+  const defaultState = {
+    onboarded: false,
+    mood: "",
+    streak: [],
+    reflections: 0,
+    signals: 0,
+    songs: 0,
+    journal: [],
+    focus: {
+      Identity: 0,
+      "Digital Habits": 0,
+      Relationships: 0,
+      Purpose: 0,
+      Pressure: 0,
+      Comparison: 0
+    }
+  };
+
+  let state = loadState();
+  let latestInnerQuickOutput = null;
+
+  function escapeHtml(value) {
+    return String(value ?? "")
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
+  }
+
+  function loadState() {
+    try {
+      return { ...defaultState, ...JSON.parse(localStorage.getItem(storageKey) || "{}") };
+    } catch {
+      return { ...defaultState };
+    }
+  }
+
+  function saveState() {
+    localStorage.setItem(storageKey, JSON.stringify(state));
+  }
+
+  function todayKey() {
+    return new Date().toISOString().slice(0, 10);
+  }
+
+  function userLooksSignedIn() {
+    try {
+      return localStorage.getItem("rootedbyte_user_signed_in") === "true";
+    } catch {
+      return false;
+    }
+  }
+
+  async function getSupabaseClientSafe() {
+    try {
+      if (
+        window.RootedByteAuth &&
+        typeof window.RootedByteAuth.getClient === "function"
+      ) {
+        return await window.RootedByteAuth.getClient();
       }
+
+      if (window.rootedbyteSupabase) {
+        return window.rootedbyteSupabase;
+      }
+
+      return null;
+    } catch {
+      return null;
+    }
+  }
+
+  async function getCurrentUserSafe() {
+    try {
+      const client = await getSupabaseClientSafe();
+      if (!client) return null;
+
+      const { data, error } = await client.auth.getSession();
+      if (error) return null;
+
+      return data?.session?.user || null;
+    } catch {
+      return null;
+    }
+  }
+
+  async function postJson(url, body) {
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(body)
+    });
+
+    const data = await response.json().catch(() => ({}));
+
+    if (!response.ok) {
+      throw new Error(data.error || "Something went wrong. Please try again.");
+    }
+
+    return data;
+  }
+
+  function saveJournalDraft(value) {
+    try {
+      localStorage.setItem(journalDraftKey, value || "");
+    } catch {}
+  }
+
+  function loadJournalDraft() {
+    try {
+      return localStorage.getItem(journalDraftKey) || "";
+    } catch {
+      return "";
+    }
+  }
+
+  function clearJournalDraft() {
+    try {
+      localStorage.removeItem(journalDraftKey);
+    } catch {}
+  }
+
+  function showGrowthLockedState() {
+    const growthTitle = $("#screen-growth .screen-title");
+    const statsGrid = $("#screen-growth .stats-grid");
+    const focusList = $("#focusList");
+
+    if (!growthTitle || !statsGrid || !focusList) return;
+
+    statsGrid.innerHTML = `
+      <article class="stat-card" style="grid-column: 1 / -1; min-height: 190px; display: grid; align-content: center;">
+        <div class="stat-icon" style="font-size: 1.2rem;">✦</div>
+        <div class="stat-value" style="font-size: 2rem; margin-top: 12px;">Sign in to view growth</div>
+        <div class="stat-label" style="margin-top: 12px; font-size: 0.95rem; line-height: 1.6;">
+          Keep your reflections, journal entries, streak, and progress connected to your account.
+        </div>
+        <div style="margin-top: 18px;">
+          <button class="primary-button" type="button" id="growthSigninButton">Sign in to continue</button>
+        </div>
+      </article>
+    `;
+
+    focusList.innerHTML = `
+      <article class="focus-card">
+        <div class="focus-card-top">
+          <strong>Your focus areas will appear here</strong>
+          <span>Private account feature</span>
+        </div>
+        <div class="progress"><span style="--width: 0%;"></span></div>
+      </article>
+    `;
+
+    const growthSigninButton = $("#growthSigninButton");
+    if (growthSigninButton) {
+      growthSigninButton.addEventListener("click", showSigninPrompt);
+    }
+  }
+
+  function setScreen(name) {
+    $$(".screen").forEach((screen) => {
+      screen.classList.toggle("active", screen.id === `screen-${name}`);
+    });
+
+    $$(".bottom-nav button").forEach((button) => {
+      const isActive = button.dataset.nav === name;
+      button.classList.toggle("active", isActive);
+      button.classList.toggle("tools-active", isActive && name === "tools");
+    });
+
+    if (name === "growth") {
+      if (userLooksSignedIn()) {
+        updateGrowthUI();
+      } else {
+        showGrowthLockedState();
+      }
+    }
+
+    if (name === "journal") {
+      hydrateJournalDraft();
+    }
+
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  $$("[data-nav]").forEach((item) => {
+    item.addEventListener("click", (event) => {
+      const nav = item.dataset.nav;
+      if (!nav) return;
+
+      event.preventDefault();
+      setScreen(nav);
+    });
+  });
+
+  const wisdomQuotes = [
+    "“What you’re building in secret will eventually speak for itself.”",
+    "“Peace grows where attention is guarded.”",
+    "“Slow is not stuck. Slow is where roots form.”",
+    "“Not every signal deserves your reaction.”",
+    "“Return to what is true before you respond to what is loud.”"
+  ];
+
+  let wisdomIndex = 0;
+  setInterval(() => {
+    wisdomIndex = (wisdomIndex + 1) % wisdomQuotes.length;
+    const wisdomStrip = $("#wisdomStrip");
+    if (wisdomStrip) wisdomStrip.textContent = wisdomQuotes[wisdomIndex];
+  }, 6000);
+
+  const onboardingSteps = [
+    {
+      icon: "🌿",
+      title: "Welcome to RootedByte",
+      copy: "A space to slow down, reflect with intention, and grow — grounded in timeless wisdom."
+    },
+    {
+      icon: "🧭",
+      title: "Check in before you scroll",
+      copy: "Track your inner weather, build a weekly rhythm, and notice what shapes your attention."
+    },
+    {
+      icon: "✨",
+      title: "Use tools with purpose",
+      copy: "Reflect with Inner Work, test the feed with Signal, prepare songs with SoundSense, and journal what matters."
+    }
+  ];
+
+  let onboardingIndex = 0;
+
+  function renderOnboarding() {
+    const step = onboardingSteps[onboardingIndex];
+
+    $("#onboardingIcon").textContent = step.icon;
+    $("#onboardingTitle").textContent = step.title;
+    $("#onboardingCopy").textContent = step.copy;
+
+    $$(".progress-pill").forEach((pill, index) => {
+      pill.classList.toggle("active", index === onboardingIndex);
+    });
+
+    $("#nextOnboarding").textContent =
+      onboardingIndex === onboardingSteps.length - 1 ? "Start" : "Next";
+  }
+
+  function openOnboarding() {
+    renderOnboarding();
+    $("#onboarding").classList.add("active");
+    $("#onboarding").setAttribute("aria-hidden", "false");
+  }
+
+  function closeOnboarding() {
+    state.onboarded = true;
+    saveState();
+    $("#onboarding").classList.remove("active");
+    $("#onboarding").setAttribute("aria-hidden", "true");
+  }
+
+  $("#nextOnboarding").addEventListener("click", () => {
+    if (onboardingIndex < onboardingSteps.length - 1) {
+      onboardingIndex += 1;
+      renderOnboarding();
+      return;
+    }
+
+    closeOnboarding();
+  });
+
+  $("#skipOnboarding").addEventListener("click", closeOnboarding);
+  $("#closeOnboarding").addEventListener("click", closeOnboarding);
+
+  if (!state.onboarded) {
+    window.setTimeout(openOnboarding, 450);
+  }
+
+  const signinPromptModal = $("#signinPromptModal");
+  const closeSigninPrompt = $("#closeSigninPrompt");
+  const maybeLaterSigninPrompt = $("#maybeLaterSigninPrompt");
+
+  function showSigninPrompt() {
+    if (!signinPromptModal) return;
+    signinPromptModal.classList.add("active");
+    signinPromptModal.setAttribute("aria-hidden", "false");
+  }
+
+  function hideSigninPrompt() {
+    if (!signinPromptModal) return;
+    signinPromptModal.classList.remove("active");
+    signinPromptModal.setAttribute("aria-hidden", "true");
+  }
+
+  if (closeSigninPrompt) {
+    closeSigninPrompt.addEventListener("click", hideSigninPrompt);
+  }
+
+  if (maybeLaterSigninPrompt) {
+    maybeLaterSigninPrompt.addEventListener("click", hideSigninPrompt);
+  }
+
+  if (signinPromptModal) {
+    signinPromptModal.addEventListener("click", (event) => {
+      if (event.target === signinPromptModal) {
+        hideSigninPrompt();
+      }
+    });
+  }
+
+  function updateMoodUI() {
+    const promptState = $("#moodPromptState");
+    const selectedState = $("#moodSelectedState");
+    const selectedMoodLabel = $("#selectedMoodLabel");
+    const selectedMoodEmoji = $("#selectedMoodEmoji");
+
+    const moodMap = {
+      Heavy: "🪨",
+      Numb: "◻️",
+      Wired: "⚡",
+      Calm: "🌿",
+      Charged: "🔥",
+      Clear: "✨"
     };
 
-    let state = loadState();
-    let latestInnerQuickOutput = null;
-
-    function escapeHtml(value) {
-      return String(value ?? "")
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
-    }
-
-    function loadState() {
-      try {
-        return { ...defaultState, ...JSON.parse(localStorage.getItem(storageKey) || "{}") };
-      } catch {
-        return { ...defaultState };
-      }
-    }
-
-    function saveState() {
-      localStorage.setItem(storageKey, JSON.stringify(state));
-    }
-
-    function todayKey() {
-      return new Date().toISOString().slice(0, 10);
-    }
-
-    function userLooksSignedIn() {
-      try {
-        return localStorage.getItem("rootedbyte_user_signed_in") === "true";
-      } catch {
-        return false;
-      }
-    }
-
-    async function postJson(url, body) {
-      const response = await fetch(url, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(body)
-      });
-
-      const data = await response.json().catch(() => ({}));
-
-      if (!response.ok) {
-        throw new Error(data.error || "Something went wrong. Please try again.");
-      }
-
-      return data;
-    }
-
-    function setScreen(name) {
-      $$(".screen").forEach((screen) => {
-        screen.classList.toggle("active", screen.id === `screen-${name}`);
-      });
-
-      $$(".bottom-nav button").forEach((button) => {
-        const isActive = button.dataset.nav === name;
-        button.classList.toggle("active", isActive);
-        button.classList.toggle("tools-active", isActive && name === "tools");
-      });
-
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    }
-
-    $$("[data-nav]").forEach((item) => {
-      item.addEventListener("click", (event) => {
-        const nav = item.dataset.nav;
-        if (!nav) return;
-
-        event.preventDefault();
-        setScreen(nav);
-      });
+    $$(".mood-button").forEach((button) => {
+      button.classList.toggle("active", button.dataset.mood === state.mood);
     });
 
-    const wisdomQuotes = [
-      "“What you’re building in secret will eventually speak for itself.”",
-      "“Peace grows where attention is guarded.”",
-      "“Slow is not stuck. Slow is where roots form.”",
-      "“Not every signal deserves your reaction.”",
-      "“Return to what is true before you respond to what is loud.”"
-    ];
+    if (state.mood) {
+      promptState.hidden = true;
+      selectedState.hidden = false;
+      selectedMoodLabel.textContent = state.mood;
+      selectedMoodEmoji.textContent = moodMap[state.mood] || "✨";
+    } else {
+      promptState.hidden = false;
+      selectedState.hidden = true;
+    }
+  }
 
-    let wisdomIndex = 0;
-    setInterval(() => {
-      wisdomIndex = (wisdomIndex + 1) % wisdomQuotes.length;
-      const wisdomStrip = $("#wisdomStrip");
-      if (wisdomStrip) wisdomStrip.textContent = wisdomQuotes[wisdomIndex];
-    }, 6000);
+  function updateStreakUI() {
+    const today = todayKey();
 
-    const onboardingSteps = [
-      {
-        icon: "🌿",
-        title: "Welcome to RootedByte",
-        copy: "A space to slow down, reflect with intention, and grow — grounded in timeless wisdom."
-      },
-      {
-        icon: "🧭",
-        title: "Check in before you scroll",
-        copy: "Track your inner weather, build a weekly rhythm, and notice what shapes your attention."
-      },
-      {
-        icon: "✨",
-        title: "Use tools with purpose",
-        copy: "Reflect with Inner Work, test the feed with Signal, prepare songs with SoundSense, and journal what matters."
-      }
-    ];
+    if (!Array.isArray(state.streak)) state.streak = [];
 
-    let onboardingIndex = 0;
+    const days = $$("#weeklyStreak .day");
+    const currentDay = new Date().getDay();
+    const mondayBasedToday = currentDay === 0 ? 6 : currentDay - 1;
 
-    function renderOnboarding() {
-      const step = onboardingSteps[onboardingIndex];
+    days.forEach((day, index) => {
+      day.classList.toggle("today", index === mondayBasedToday);
+      day.classList.toggle("complete", index <= mondayBasedToday && state.streak.includes(today));
+    });
 
-      $("#onboardingIcon").textContent = step.icon;
-      $("#onboardingTitle").textContent = step.title;
-      $("#onboardingCopy").textContent = step.copy;
+    const count = state.streak.length;
 
-      $$(".progress-pill").forEach((pill, index) => {
-        pill.classList.toggle("active", index === onboardingIndex);
-      });
-
-      $("#nextOnboarding").textContent =
-        onboardingIndex === onboardingSteps.length - 1 ? "Start" : "Next";
+    const streakCountNumber = $("#streakCountNumber");
+    if (streakCountNumber) {
+      streakCountNumber.textContent = count;
     }
 
-    function openOnboarding() {
-      renderOnboarding();
-      $("#onboarding").classList.add("active");
-      $("#onboarding").setAttribute("aria-hidden", "false");
-    }
+    $("#streakMessage").textContent = count
+      ? `Day ${count}. Keep showing up with honesty.`
+      : "Day one. Everything starts here.";
 
-    function closeOnboarding() {
-      state.onboarded = true;
-      saveState();
-      $("#onboarding").classList.remove("active");
-      $("#onboarding").setAttribute("aria-hidden", "true");
+    const currentStreakStat = $("#currentStreakStat");
+    if (currentStreakStat) {
+      currentStreakStat.textContent = `${count}d`;
     }
+  }
 
-    $("#nextOnboarding").addEventListener("click", () => {
-      if (onboardingIndex < onboardingSteps.length - 1) {
-        onboardingIndex += 1;
-        renderOnboarding();
+  $$(".mood-button").forEach((button) => {
+    button.addEventListener("click", () => {
+      if (!userLooksSignedIn()) {
+        showSigninPrompt();
         return;
       }
 
-      closeOnboarding();
-    });
+      state.mood = button.dataset.mood;
 
-    $("#skipOnboarding").addEventListener("click", closeOnboarding);
-    $("#closeOnboarding").addEventListener("click", closeOnboarding);
-
-    if (!state.onboarded) {
-      window.setTimeout(openOnboarding, 450);
-    }
-
-    const signinPromptModal = $("#signinPromptModal");
-    const closeSigninPrompt = $("#closeSigninPrompt");
-    const maybeLaterSigninPrompt = $("#maybeLaterSigninPrompt");
-
-    function showSigninPrompt() {
-      if (!signinPromptModal) return;
-      signinPromptModal.classList.add("active");
-      signinPromptModal.setAttribute("aria-hidden", "false");
-    }
-
-    function hideSigninPrompt() {
-      if (!signinPromptModal) return;
-      signinPromptModal.classList.remove("active");
-      signinPromptModal.setAttribute("aria-hidden", "true");
-    }
-
-    if (closeSigninPrompt) {
-      closeSigninPrompt.addEventListener("click", hideSigninPrompt);
-    }
-
-    if (maybeLaterSigninPrompt) {
-      maybeLaterSigninPrompt.addEventListener("click", hideSigninPrompt);
-    }
-
-    if (signinPromptModal) {
-      signinPromptModal.addEventListener("click", (event) => {
-        if (event.target === signinPromptModal) {
-          hideSigninPrompt();
-        }
-      });
-    }
-
-    function updateMoodUI() {
-      const promptState = $("#moodPromptState");
-      const selectedState = $("#moodSelectedState");
-      const selectedMoodLabel = $("#selectedMoodLabel");
-      const selectedMoodEmoji = $("#selectedMoodEmoji");
-
-      const moodMap = {
-        Heavy: "🪨",
-        Numb: "◻️",
-        Wired: "⚡",
-        Calm: "🌿",
-        Charged: "🔥",
-        Clear: "✨"
-      };
-
-      $$(".mood-button").forEach((button) => {
-        button.classList.toggle("active", button.dataset.mood === state.mood);
-      });
-
-      if (state.mood) {
-        promptState.hidden = true;
-        selectedState.hidden = false;
-        selectedMoodLabel.textContent = state.mood;
-        selectedMoodEmoji.textContent = moodMap[state.mood] || "✨";
-      } else {
-        promptState.hidden = false;
-        selectedState.hidden = true;
-      }
-    }
-
-    function updateStreakUI() {
       const today = todayKey();
-
-      if (!Array.isArray(state.streak)) state.streak = [];
-
-      const days = $$("#weeklyStreak .day");
-      const currentDay = new Date().getDay();
-      const mondayBasedToday = currentDay === 0 ? 6 : currentDay - 1;
-
-      days.forEach((day, index) => {
-        day.classList.toggle("today", index === mondayBasedToday);
-        day.classList.toggle("complete", index <= mondayBasedToday && state.streak.includes(today));
-      });
-
-      const count = state.streak.length;
-
-      const streakCountNumber = $("#streakCountNumber");
-      if (streakCountNumber) {
-        streakCountNumber.textContent = count;
+      if (!state.streak.includes(today)) {
+        state.streak.push(today);
       }
 
-      $("#streakMessage").textContent = count
-        ? `Day ${count}. Keep showing up with honesty.`
-        : "Day one. Everything starts here.";
+      saveState();
+      updateMoodUI();
+      updateStreakUI();
+    });
+  });
 
-      $("#currentStreakStat").textContent = `${count}d`;
+  function showTool(tool) {
+    if (tool === "signal") {
+      window.location.href = "newsverse.html";
+      return;
     }
 
-    $$(".mood-button").forEach((button) => {
-      button.addEventListener("click", () => {
-        if (!userLooksSignedIn()) {
-          showSigninPrompt();
-          return;
-        }
+    if (tool === "sound") {
+      window.location.href = "tone.html";
+      return;
+    }
 
-        state.mood = button.dataset.mood;
+    setScreen("tool-detail");
+    $("#toolInner").hidden = false;
+    resetInnerWorkMiniFlow();
+  }
 
-        const today = todayKey();
-        if (!state.streak.includes(today)) {
-          state.streak.push(today);
-        }
+  function resetInnerWorkMiniFlow() {
+    latestInnerQuickOutput = null;
 
-        saveState();
-        updateMoodUI();
-        updateStreakUI();
-      });
+    const inputField = $("#innerInputField");
+    const input = $("#innerInput");
+    const submit = $("#innerSubmit");
+    const note = $("#innerMiniNote");
+    const result = $("#innerMiniResult");
+    const form = $("#innerMiniForm");
+
+    $$("#innerChoices .choice").forEach((item) => {
+      item.classList.remove("active");
     });
 
-    function showTool(tool) {
-  if (tool === "signal") {
-    window.location.href = "newsverse.html";
-    return;
-  }
-
-  if (tool === "sound") {
-    window.location.href = "tone.html";
-    return;
-  }
-
-  setScreen("tool-detail");
-
-  $("#toolInner").hidden = false;
-
-  resetInnerWorkMiniFlow();
-}
-
-    function resetInnerWorkMiniFlow() {
-      latestInnerQuickOutput = null;
-
-      const inputField = $("#innerInputField");
-      const input = $("#innerInput");
-      const submit = $("#innerSubmit");
-      const note = $("#innerMiniNote");
-      const result = $("#innerMiniResult");
-      const form = $("#innerMiniForm");
-
-      $$("#innerChoices .choice").forEach((item) => {
-        item.classList.remove("active");
-      });
-
-      if (inputField) inputField.hidden = true;
-      if (submit) submit.hidden = true;
-      if (input) input.value = "";
-      if (result) {
-        result.hidden = true;
-        result.innerHTML = "";
-      }
-      if (form) form.hidden = false;
-
-      if (note) {
-        note.className = "ghost-note";
-        note.textContent = "Choose what feels loudest first. Then write one honest sentence.";
-      }
+    if (inputField) inputField.hidden = true;
+    if (submit) submit.hidden = true;
+    if (input) input.value = "";
+    if (result) {
+      result.hidden = true;
+      result.innerHTML = "";
     }
+    if (form) form.hidden = false;
 
-    function renderInnerQuickResult(data) {
-      latestInnerQuickOutput = data;
+    if (note) {
+      note.className = "ghost-note";
+      note.textContent = "Choose what feels loudest first. Then write one honest sentence.";
+    }
+  }
 
-      const result = $("#innerMiniResult");
-      const form = $("#innerMiniForm");
+  function renderInnerQuickResult(data) {
+    latestInnerQuickOutput = data;
 
-      if (form) form.hidden = true;
+    const result = $("#innerMiniResult");
+    const form = $("#innerMiniForm");
 
-      result.hidden = false;
-      result.innerHTML = `
-        <article class="mini-result-card">
-          <h3>What I’m hearing</h3>
-          <p>${escapeHtml(data.hearing || "You are carrying something that deserves honesty and care.")}</p>
-        </article>
+    if (form) form.hidden = true;
 
-        <article class="mini-result-card">
-          <h3>A deeper perspective</h3>
-          <p>${escapeHtml(data.deeper_perspective || "This moment can become a place to slow down, tell the truth, and choose one wise step.")}</p>
-        </article>
+    result.hidden = false;
+    result.innerHTML = `
+      <article class="mini-result-card">
+        <h3>What I’m hearing</h3>
+        <p>${escapeHtml(data.hearing || "You are carrying something that deserves honesty and care.")}</p>
+      </article>
 
-        <article class="mini-result-card">
-          <h3>One step you can take today</h3>
-          <p>${escapeHtml(data.one_step || "Choose one small action that brings clarity instead of pressure.")}</p>
-        </article>
+      <article class="mini-result-card">
+        <h3>A deeper perspective</h3>
+        <p>${escapeHtml(data.deeper_perspective || "This moment can become a place to slow down, tell the truth, and choose one wise step.")}</p>
+      </article>
 
-        <article class="mini-result-card">
-          <h3>Sit with this</h3>
-          <p>${escapeHtml(data.reflection_prompt || "What is one honest thing this situation is revealing about what you need?")}</p>
-        </article>
+      <article class="mini-result-card">
+        <h3>One step you can take today</h3>
+        <p>${escapeHtml(data.one_step || "Choose one small action that brings clarity instead of pressure.")}</p>
+      </article>
 
-        ${
-          data.encouragement
-            ? `<article class="mini-result-card">
-                <h3>Remember this</h3>
-                <p>${escapeHtml(data.encouragement)}</p>
-              </article>`
-            : ""
+      <article class="mini-result-card">
+        <h3>Sit with this</h3>
+        <p>${escapeHtml(data.reflection_prompt || "What is one honest thing this situation is revealing about what you need?")}</p>
+      </article>
+
+      ${
+        data.encouragement
+          ? `<article class="mini-result-card">
+              <h3>Remember this</h3>
+              <p>${escapeHtml(data.encouragement)}</p>
+            </article>`
+          : ""
+      }
+
+      <div class="mini-result-actions">
+        <button class="primary-button" type="button" id="journalMiniInner">
+          Write journal
+        </button>
+
+        <button class="secondary-mini-button" type="button" id="shareMiniInner">
+          Share
+        </button>
+
+        <button class="secondary-mini-button" type="button" id="resetMiniInner">
+          Reflect on something else
+        </button>
+
+        <a class="secondary-mini-button" id="fullInnerWorkLink" href="rootedos.html">
+          Continue deeper
+        </a>
+      </div>
+
+      <div class="mini-status" id="innerMiniActionStatus" role="status" aria-live="polite"></div>
+      <div class="mini-share-box" id="innerMiniShareLink" hidden></div>
+    `;
+
+    attachInnerMiniResultActions();
+  }
+
+  function attachInnerMiniResultActions() {
+    const journalButton = $("#journalMiniInner");
+    const shareButton = $("#shareMiniInner");
+    const resetButton = $("#resetMiniInner");
+    const status = $("#innerMiniActionStatus");
+    const shareBox = $("#innerMiniShareLink");
+
+    if (journalButton) {
+      journalButton.addEventListener("click", () => {
+        if (!latestInnerQuickOutput) return;
+
+        const quickJournalText = [
+          "Inner Work quick reflection",
+          "",
+          `Focus: ${latestInnerQuickOutput.focus || ""}`,
+          "",
+          "What I’m hearing:",
+          latestInnerQuickOutput.hearing || "",
+          "",
+          "A deeper perspective:",
+          latestInnerQuickOutput.deeper_perspective || "",
+          "",
+          "One step:",
+          latestInnerQuickOutput.one_step || "",
+          "",
+          "Sit with this:",
+          latestInnerQuickOutput.reflection_prompt || ""
+        ].join("\n");
+
+        const editor = $("#journalEditor");
+        const textarea = $("#journalText");
+
+        setScreen("journal");
+
+        if (editor) editor.classList.add("active");
+        if (textarea) {
+          textarea.value = quickJournalText + "\n\nMy own thoughts:\n";
+          saveJournalDraft(textarea.value);
+          textarea.focus();
         }
-
-        <div class="mini-result-actions">
-          <button class="primary-button" type="button" id="journalMiniInner">
-            Write journal
-          </button>
-
-          <button class="secondary-mini-button" type="button" id="shareMiniInner">
-            Share
-          </button>
-
-          <button class="secondary-mini-button" type="button" id="resetMiniInner">
-            Reflect on something else
-          </button>
-
-          <a class="secondary-mini-button" id="fullInnerWorkLink" href="rootedos.html">
-            Continue deeper
-          </a>
-        </div>
-
-        <div class="mini-status" id="innerMiniActionStatus" role="status" aria-live="polite"></div>
-        <div class="mini-share-box" id="innerMiniShareLink" hidden></div>
-      `;
-
-      attachInnerMiniResultActions();
+      });
     }
 
-    function attachInnerMiniResultActions() {
-      const journalButton = $("#journalMiniInner");
-      const shareButton = $("#shareMiniInner");
-      const resetButton = $("#resetMiniInner");
-      const status = $("#innerMiniActionStatus");
-      const shareBox = $("#innerMiniShareLink");
+    if (shareButton) {
+      shareButton.addEventListener("click", async () => {
+        if (!latestInnerQuickOutput) return;
 
-      if (journalButton) {
-        journalButton.addEventListener("click", () => {
-          if (!latestInnerQuickOutput) return;
+        shareButton.disabled = true;
+        status.className = "mini-status";
+        status.textContent = "Creating share link...";
 
-          if (!userLooksSignedIn()) {
-            showSigninPrompt();
-            return;
+        try {
+          const response = await fetch("/api/share", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+              appType: "inner_work",
+              title: "Inner Work Quick Reflection",
+              inputSummary: latestInnerQuickOutput.focus
+                ? `Quick reflection on ${latestInnerQuickOutput.focus}`
+                : "Quick Inner Work reflection",
+              output: {
+                summary: latestInnerQuickOutput.hearing || "",
+                areas: [
+                  {
+                    area: latestInnerQuickOutput.focus || "Reflection",
+                    current_state: latestInnerQuickOutput.hearing || "",
+                    recommendation: latestInnerQuickOutput.deeper_perspective || "",
+                    scripture: "A truth-rooted reminder for this moment.",
+                    action_step: latestInnerQuickOutput.one_step || "",
+                    urgency: "this week"
+                  }
+                ],
+                reflection_verses: [
+                  {
+                    reference: "Truth Anchor",
+                    text: latestInnerQuickOutput.reflection_prompt || "",
+                    reflection_prompt: latestInnerQuickOutput.reflection_prompt || ""
+                  }
+                ],
+                encouragement: latestInnerQuickOutput.encouragement || ""
+              }
+            })
+          });
+
+          const data = await response.json().catch(() => ({}));
+
+          if (!response.ok) {
+            throw new Error(data.error || "Could not create share link.");
           }
 
-          const quickJournalText = [
-            "Inner Work quick reflection",
-            "",
-            `Focus: ${latestInnerQuickOutput.focus || ""}`,
-            "",
-            "What I’m hearing:",
-            latestInnerQuickOutput.hearing || "",
-            "",
-            "A deeper perspective:",
-            latestInnerQuickOutput.deeper_perspective || "",
-            "",
-            "One step:",
-            latestInnerQuickOutput.one_step || "",
-            "",
-            "Sit with this:",
-            latestInnerQuickOutput.reflection_prompt || ""
-          ].join("\n");
-
-          const editor = $("#journalEditor");
-          const textarea = $("#journalText");
-
-          setScreen("journal");
-
-          if (editor) editor.classList.add("active");
-          if (textarea) {
-            textarea.value = quickJournalText + "\n\nMy own thoughts:\n";
-            textarea.focus();
-          }
-        });
-      }
-
-      if (shareButton) {
-        shareButton.addEventListener("click", async () => {
-          if (!latestInnerQuickOutput) return;
-
-          shareButton.disabled = true;
-          status.className = "mini-status";
-          status.textContent = "Creating share link...";
+          shareBox.hidden = false;
+          shareBox.textContent = data.shareUrl;
 
           try {
-            const response = await fetch("/api/share", {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json"
-              },
-              body: JSON.stringify({
-                appType: "inner_work",
-                title: "Inner Work Quick Reflection",
-                inputSummary: latestInnerQuickOutput.focus
-                  ? `Quick reflection on ${latestInnerQuickOutput.focus}`
-                  : "Quick Inner Work reflection",
-                output: {
-                  summary: latestInnerQuickOutput.hearing || "",
-                  areas: [
-                    {
-                      area: latestInnerQuickOutput.focus || "Reflection",
-                      current_state: latestInnerQuickOutput.hearing || "",
-                      recommendation: latestInnerQuickOutput.deeper_perspective || "",
-                      scripture: "A truth-rooted reminder for this moment.",
-                      action_step: latestInnerQuickOutput.one_step || "",
-                      urgency: "this week"
-                    }
-                  ],
-                  reflection_verses: [
-                    {
-                      reference: "Truth Anchor",
-                      text: latestInnerQuickOutput.reflection_prompt || "",
-                      reflection_prompt: latestInnerQuickOutput.reflection_prompt || ""
-                    }
-                  ],
-                  encouragement: latestInnerQuickOutput.encouragement || ""
-                }
-              })
-            });
-
-            const data = await response.json().catch(() => ({}));
-
-            if (!response.ok) {
-              throw new Error(data.error || "Could not create share link.");
-            }
-
-            shareBox.hidden = false;
-            shareBox.textContent = data.shareUrl;
-
-            try {
-              await navigator.clipboard.writeText(data.shareUrl);
-              status.textContent = "Share link created and copied.";
-            } catch {
-              status.textContent = "Share link created.";
-            }
-          } catch (error) {
-            status.className = "mini-status error";
-            status.textContent = error.message || "Could not create share link.";
-          } finally {
-            shareButton.disabled = false;
+            await navigator.clipboard.writeText(data.shareUrl);
+            status.textContent = "Share link created and copied.";
+          } catch {
+            status.textContent = "Share link created.";
           }
-        });
-      }
-
-      if (resetButton) {
-        resetButton.addEventListener("click", resetInnerWorkMiniFlow);
-      }
+        } catch (error) {
+          status.className = "mini-status error";
+          status.textContent = error.message || "Could not create share link.";
+        } finally {
+          shareButton.disabled = false;
+        }
+      });
     }
 
-    $$("[data-open-tool]").forEach((button) => {
-      button.addEventListener("click", () => showTool(button.dataset.openTool));
+    if (resetButton) {
+      resetButton.addEventListener("click", resetInnerWorkMiniFlow);
+    }
+  }
+
+  $$("[data-open-tool]").forEach((button) => {
+    button.addEventListener("click", () => showTool(button.dataset.openTool));
+  });
+
+  $("#innerChoices").addEventListener("click", (event) => {
+    const choice = event.target.closest(".choice");
+    if (!choice) return;
+
+    $$("#innerChoices .choice").forEach((item) => {
+      item.classList.remove("active");
     });
 
-    $("#innerChoices").addEventListener("click", (event) => {
-      const choice = event.target.closest(".choice");
-      if (!choice) return;
+    choice.classList.add("active");
 
-      $$("#innerChoices .choice").forEach((item) => {
-        item.classList.remove("active");
+    $("#innerInputField").hidden = false;
+    $("#innerInput").focus();
+
+    const note = $("#innerMiniNote");
+    if (note) {
+      note.textContent = "Name it honestly. You do not have to explain everything perfectly.";
+    }
+  });
+
+  $("#innerInput").addEventListener("input", () => {
+    const hasText = $("#innerInput").value.trim().length > 0;
+    $("#innerSubmit").hidden = !hasText;
+
+    const note = $("#innerMiniNote");
+    if (note) {
+      note.textContent = hasText
+        ? "Ready when you are. I’ll turn this into a grounded reflection."
+        : "Name it honestly. You do not have to explain everything perfectly.";
+    }
+  });
+
+  $("#innerSubmit").addEventListener("click", async () => {
+    const selected = $("#innerChoices .choice.active")?.dataset.focus || "";
+    const text = $("#innerInput").value.trim();
+    const submit = $("#innerSubmit");
+    const note = $("#innerMiniNote");
+
+    if (!selected) {
+      if (note) note.textContent = "Choose what feels loudest first.";
+      return;
+    }
+
+    if (!text) {
+      if (note) note.textContent = "Write one honest sentence before getting insight.";
+      return;
+    }
+
+    if (submit) submit.disabled = true;
+
+    if (note) {
+      note.textContent = "Creating your quick reflection...";
+    }
+
+    try {
+      const data = await postJson("/api/inner-quick", {
+        focus: selected,
+        note: text
       });
 
-      choice.classList.add("active");
+      state.reflections += 1;
+      state.focus[selected] = (state.focus[selected] || 0) + 1;
+      saveState();
+      updateGrowthUI();
 
-      $("#innerInputField").hidden = false;
-      $("#innerInput").focus();
-
-      const note = $("#innerMiniNote");
+      renderInnerQuickResult(data);
+    } catch (error) {
       if (note) {
-        note.textContent = "Name it honestly. You do not have to explain everything perfectly.";
+        note.className = "ghost-note";
+        note.textContent = error.message || "Could not create this reflection right now.";
       }
+    } finally {
+      if (submit) submit.disabled = false;
+    }
+  });
+
+  $("#signalKinds").addEventListener("click", (event) => {
+    const button = event.target.closest(".pill-button");
+    if (!button) return;
+
+    $$("#signalKinds .pill-button").forEach((item) => item.classList.remove("active"));
+    button.classList.add("active");
+  });
+
+  $("#signalSubmit").addEventListener("click", () => {
+    window.location.href = "newsverse.html";
+  });
+
+  $("#soundSubmit").addEventListener("click", () => {
+    window.location.href = "tone.html";
+  });
+
+  const journalEditor = $("#journalEditor");
+  const journalText = $("#journalText");
+
+  function hydrateJournalDraft() {
+    if (!journalText) return;
+    const draft = loadJournalDraft();
+    if (draft && !journalText.value.trim()) {
+      journalText.value = draft;
+    }
+  }
+
+  if (journalText) {
+    journalText.addEventListener("input", () => {
+      saveJournalDraft(journalText.value);
     });
+  }
 
-    $("#innerInput").addEventListener("input", () => {
-      const hasText = $("#innerInput").value.trim().length > 0;
-      $("#innerSubmit").hidden = !hasText;
+  $("#addJournalEntry").addEventListener("click", () => {
+    journalEditor.classList.toggle("active");
+    hydrateJournalDraft();
+    if (journalEditor.classList.contains("active")) journalText.focus();
+  });
 
-      const note = $("#innerMiniNote");
-      if (note) {
-        note.textContent = hasText
-          ? "Ready when you are. I’ll turn this into a grounded reflection."
-          : "Name it honestly. You do not have to explain everything perfectly.";
-      }
+  $$(".prompt-chip").forEach((chip) => {
+    chip.addEventListener("click", () => {
+      journalEditor.classList.add("active");
+      journalText.value = chip.textContent.trim() + "\n\n";
+      saveJournalDraft(journalText.value);
+      journalText.focus();
     });
+  });
 
-    $("#innerSubmit").addEventListener("click", async () => {
-      const selected = $("#innerChoices .choice.active")?.dataset.focus || "";
-      const text = $("#innerInput").value.trim();
-      const submit = $("#innerSubmit");
-      const note = $("#innerMiniNote");
+  async function saveJournalToSupabase(text) {
+    const client = await getSupabaseClientSafe();
+    const user = await getCurrentUserSafe();
 
-      if (!selected) {
-        if (note) note.textContent = "Choose what feels loudest first.";
-        return;
-      }
+    if (!client || !user) {
+      return { ok: false, reason: "not_signed_in" };
+    }
 
-      if (!text) {
-        if (note) note.textContent = "Write one honest sentence before getting insight.";
-        return;
-      }
-
-      if (submit) submit.disabled = true;
-
-      if (note) {
-        note.textContent = "Creating your quick reflection...";
-      }
-
-      try {
-        const data = await postJson("/api/inner-quick", {
-          focus: selected,
-          note: text
-        });
-
-        state.reflections += 1;
-        state.focus[selected] = (state.focus[selected] || 0) + 1;
-        saveState();
-        updateGrowthUI();
-
-        renderInnerQuickResult(data);
-      } catch (error) {
-        if (note) {
-          note.className = "ghost-note";
-          note.textContent = error.message || "Could not create this reflection right now.";
-        }
-      } finally {
-        if (submit) submit.disabled = false;
-      }
-    });
-
-    $("#signalKinds").addEventListener("click", (event) => {
-      const button = event.target.closest(".pill-button");
-      if (!button) return;
-
-      $$("#signalKinds .pill-button").forEach((item) => item.classList.remove("active"));
-      button.classList.add("active");
-    });
-
-    $("#signalSubmit").addEventListener("click", () => {
-      window.location.href = "newsverse.html";
-    });
-
-    $("#soundSubmit").addEventListener("click", () => {
-      window.location.href = "tone.html";
-    });
-
-    const journalEditor = $("#journalEditor");
-    const journalText = $("#journalText");
-
-    $("#addJournalEntry").addEventListener("click", () => {
-      journalEditor.classList.toggle("active");
-      if (journalEditor.classList.contains("active")) journalText.focus();
-    });
-
-    $$(".prompt-chip").forEach((chip) => {
-      chip.addEventListener("click", () => {
-        journalEditor.classList.add("active");
-        journalText.value = chip.textContent.trim() + "\n\n";
-        journalText.focus();
+    const { error } = await client
+      .from("journal_entries")
+      .insert({
+        user_id: user.id,
+        entry_text: text
       });
-    });
 
-    $("#saveJournalEntry").addEventListener("click", () => {
-      const text = journalText.value.trim();
-      if (!text) return;
+    if (error) {
+      throw error;
+    }
 
-      if (!userLooksSignedIn()) {
+    return { ok: true };
+  }
+
+  $("#saveJournalEntry").addEventListener("click", async () => {
+    const text = journalText.value.trim();
+    if (!text) return;
+
+    if (!userLooksSignedIn()) {
+      saveJournalDraft(journalText.value);
+      showSigninPrompt();
+      return;
+    }
+
+    const saveButton = $("#saveJournalEntry");
+    if (saveButton) saveButton.disabled = true;
+
+    try {
+      const remoteResult = await saveJournalToSupabase(text);
+
+      if (!remoteResult.ok) {
+        saveJournalDraft(journalText.value);
         showSigninPrompt();
         return;
       }
@@ -2426,126 +2722,148 @@
 
       journalText.value = "";
       journalEditor.classList.remove("active");
+      clearJournalDraft();
 
       saveState();
       renderJournal();
       updateGrowthUI();
+    } catch (error) {
+      console.warn("[RootedByte journal save]", error.message || error);
+    } finally {
+      if (saveButton) saveButton.disabled = false;
+    }
+  });
+
+  function renderJournal() {
+    const list = $("#journalList");
+    const empty = $("#journalEmpty");
+
+    list.innerHTML = "";
+
+    if (!state.journal.length) {
+      empty.style.display = "grid";
+      return;
+    }
+
+    empty.style.display = "none";
+
+    state.journal.forEach((entry) => {
+      const date = new Intl.DateTimeFormat(undefined, {
+        month: "short",
+        day: "numeric"
+      }).format(new Date(entry.createdAt));
+
+      const article = document.createElement("article");
+      article.className = "journal-entry";
+      article.innerHTML = `
+        <strong>${date}</strong>
+        <p>${escapeHtml(entry.text).slice(0, 180)}${entry.text.length > 180 ? "..." : ""}</p>
+      `;
+      list.appendChild(article);
     });
+  }
 
-    function renderJournal() {
-      const list = $("#journalList");
-      const empty = $("#journalEmpty");
-
-      list.innerHTML = "";
-
-      if (!state.journal.length) {
-        empty.style.display = "grid";
-        return;
-      }
-
-      empty.style.display = "none";
-
-      state.journal.forEach((entry) => {
-        const date = new Intl.DateTimeFormat(undefined, {
-          month: "short",
-          day: "numeric"
-        }).format(new Date(entry.createdAt));
-
-        const article = document.createElement("article");
-        article.className = "journal-entry";
-        article.innerHTML = `
-          <strong>${date}</strong>
-          <p>${escapeHtml(entry.text).slice(0, 180)}${entry.text.length > 180 ? "..." : ""}</p>
-        `;
-        list.appendChild(article);
-      });
+  function updateGrowthUI() {
+    if (!userLooksSignedIn()) {
+      showGrowthLockedState();
+      return;
     }
 
-    function updateGrowthUI() {
-      $("#reflectionsStat").textContent = state.reflections || 0;
-      $("#signalStat").textContent = state.signals || 0;
-      $("#soundStat").textContent = state.songs || 0;
-      $("#journalStat").textContent = state.journal.length || 0;
+    $("#reflectionsStat").textContent = state.reflections || 0;
+    $("#signalStat").textContent = state.signals || 0;
+    $("#soundStat").textContent = state.songs || 0;
+    $("#journalStat").textContent = state.journal.length || 0;
 
-      const focusList = $("#focusList");
-      const max = Math.max(1, ...Object.values(state.focus || {}));
+    const focusList = $("#focusList");
+    const max = Math.max(1, ...Object.values(state.focus || {}));
 
-      focusList.innerHTML = Object.entries(state.focus || defaultState.focus).map(([name, count]) => {
-        const width = Math.min(100, Math.round((count / max) * 100));
+    focusList.innerHTML = Object.entries(state.focus || defaultState.focus).map(([name, count]) => {
+      const width = Math.min(100, Math.round((count / max) * 100));
 
-        return `
-          <article class="focus-card">
-            <div class="focus-card-top">
-              <strong>${escapeHtml(name)}</strong>
-              <span>${count} reflection${count === 1 ? "" : "s"}</span>
-            </div>
-            <div class="progress"><span style="--width: ${width}%;"></span></div>
-          </article>
-        `;
-      }).join("");
+      return `
+        <article class="focus-card">
+          <div class="focus-card-top">
+            <strong>${escapeHtml(name)}</strong>
+            <span>${count} reflection${count === 1 ? "" : "s"}</span>
+          </div>
+          <div class="progress"><span style="--width: ${width}%;"></span></div>
+        </article>
+      `;
+    }).join("");
 
-      updateStreakUI();
-    }
-
-    const contactModal = $("#contactModal");
-    const openContactModal = $("#openContactModal");
-    const openInnerWorkContactModal = $("#openInnerWorkContactModal");
-    const closeContactModal = $("#closeContactModal");
-    const contactForm = $("#contactForm");
-
-    function showContactModal() {
-      contactModal.classList.add("active");
-      contactModal.setAttribute("aria-hidden", "false");
-    }
-
-    function hideContactModal() {
-      contactModal.classList.remove("active");
-      contactModal.setAttribute("aria-hidden", "true");
-    }
-
-    if (openContactModal) {
-      openContactModal.addEventListener("click", showContactModal);
-    }
-
-    if (openInnerWorkContactModal) {
-      openInnerWorkContactModal.addEventListener("click", showContactModal);
-    }
-    
-    if (closeContactModal) {
-      closeContactModal.addEventListener("click", hideContactModal);
-    }
-
-    if (contactModal) {
-      contactModal.addEventListener("click", (event) => {
-        if (event.target === contactModal) {
-          hideContactModal();
-        }
-      });
-    }
-
-    if (contactForm) {
-      contactForm.addEventListener("submit", (event) => {
-        event.preventDefault();
-
-        const name = $("#contactName").value.trim();
-        const email = $("#contactEmail").value.trim();
-        const message = $("#contactMessage").value.trim();
-
-        const subject = encodeURIComponent("RootedByte Contact Form");
-        const body = encodeURIComponent(
-          `Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`
-        );
-
-        window.location.href = `mailto:rootedbyte@outlook.com?subject=${subject}&body=${body}`;
-      });
-    }
-
-    updateMoodUI();
     updateStreakUI();
-    renderJournal();
-    updateGrowthUI();
-  </script>
+  }
 
+  const contactModal = $("#contactModal");
+  const openContactModal = $("#openContactModal");
+  const openInnerWorkContactModal = $("#openInnerWorkContactModal");
+  const closeContactModal = $("#closeContactModal");
+  const contactForm = $("#contactForm");
+
+  function showContactModal() {
+    contactModal.classList.add("active");
+    contactModal.setAttribute("aria-hidden", "false");
+  }
+
+  function hideContactModal() {
+    contactModal.classList.remove("active");
+    contactModal.setAttribute("aria-hidden", "true");
+  }
+
+  if (openContactModal) {
+    openContactModal.addEventListener("click", showContactModal);
+  }
+
+  if (openInnerWorkContactModal) {
+    openInnerWorkContactModal.addEventListener("click", showContactModal);
+  }
+
+  if (closeContactModal) {
+    closeContactModal.addEventListener("click", hideContactModal);
+  }
+
+  if (contactModal) {
+    contactModal.addEventListener("click", (event) => {
+      if (event.target === contactModal) {
+        hideContactModal();
+      }
+    });
+  }
+
+  if (contactForm) {
+    contactForm.addEventListener("submit", (event) => {
+      event.preventDefault();
+
+      const name = $("#contactName").value.trim();
+      const email = $("#contactEmail").value.trim();
+      const message = $("#contactMessage").value.trim();
+
+      const subject = encodeURIComponent("RootedByte Contact Form");
+      const body = encodeURIComponent(
+        `Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`
+      );
+
+      window.location.href = `mailto:rootedbyte@outlook.com?subject=${subject}&body=${body}`;
+    });
+  }
+
+  window.addEventListener("focus", () => {
+    if ($("#screen-growth")?.classList.contains("active")) {
+      updateGrowthUI();
+    }
+
+    if ($("#screen-journal")?.classList.contains("active")) {
+      hydrateJournalDraft();
+    }
+  });
+
+  updateMoodUI();
+  updateStreakUI();
+  renderJournal();
+  hydrateJournalDraft();
+  updateGrowthUI();
+</script>
+  
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="js/rootedbyte-auth-nav.js"></script>
 </body>
