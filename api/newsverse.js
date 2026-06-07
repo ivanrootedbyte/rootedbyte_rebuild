@@ -84,13 +84,6 @@ function clampPercent(value) {
     : 0;
 }
 
-function shortenText(value, fallback, maxChars = 320) {
-  const text = String(value || fallback || '').replace(/\s+/g, ' ').trim();
-  if (!text) return fallback;
-  if (text.length <= maxChars) return text;
-  return `${text.slice(0, maxChars).trim()}...`;
-}
-
 function getBaseUrl(req) {
   const host = req.headers['x-forwarded-host'] || req.headers.host;
   const protocol = req.headers['x-forwarded-proto'] || 'https';
@@ -231,18 +224,6 @@ function buildFallbackSignal(contentType, title, sourceMode) {
 
 function normalizeNewsVerse(data, fallback) {
   const result = data && typeof data === 'object' ? data : {};
-
-  result.article_summary = shortenText(
-    result.article_summary,
-    fallback.article_summary,
-    420
-  );
-
-  result.thinking_impact = shortenText(
-    result.thinking_impact,
-    fallback.thinking_impact,
-    360
-  );
 
    result.article_summary = cleanText(
     result.article_summary || fallback.article_summary,
