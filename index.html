@@ -2055,40 +2055,71 @@
   }
 
   function showGrowthLockedState() {
-    const growthTitle = $("#screen-growth .screen-title");
-    const statsGrid = $("#screen-growth .stats-grid");
-    const focusList = $("#focusList");
+  const reflectionsStat = $("#reflectionsStat");
+  const signalStat = $("#signalStat");
+  const soundStat = $("#soundStat");
+  const journalStat = $("#journalStat");
+  const currentStreakStat = $("#currentStreakStat");
+  const focusList = $("#focusList");
 
-    if (!growthTitle || !statsGrid || !focusList) return;
+  if (currentStreakStat) currentStreakStat.textContent = "0d";
+  if (reflectionsStat) reflectionsStat.textContent = "0";
+  if (signalStat) signalStat.textContent = "0";
+  if (soundStat) soundStat.textContent = "0";
+  if (journalStat) journalStat.textContent = "0";
 
-    statsGrid.innerHTML = `
-      <article class="stat-card" style="grid-column: 1 / -1; min-height: 190px; display: grid; align-content: center;">
-        <div class="stat-icon" style="font-size: 1.2rem;">✦</div>
-        <div class="stat-value" style="font-size: 2rem; margin-top: 12px;">Sign in to view growth</div>
-        <div class="stat-label" style="margin-top: 12px; font-size: 0.95rem; line-height: 1.6;">
-          Keep your reflections, journal entries, streak, and progress connected to your account.
-        </div>
-        <div style="margin-top: 18px;">
-          <button class="primary-button" type="button" id="growthSigninButton">Sign in to continue</button>
-        </div>
-      </article>
-    `;
-
+  if (focusList) {
     focusList.innerHTML = `
       <article class="focus-card">
-        <div class="focus-card-top">
-          <strong>Your focus areas will appear here</strong>
-          <span>Private account feature</span>
-        </div>
+        <div class="focus-card-top"><strong>Identity</strong><span>0 reflections</span></div>
         <div class="progress"><span style="--width: 0%;"></span></div>
       </article>
-    `;
+      <article class="focus-card">
+        <div class="focus-card-top"><strong>Digital Habits</strong><span>0 reflections</span></div>
+        <div class="progress"><span style="--width: 0%;"></span></div>
+      </article>
+      <article class="focus-card">
+        <div class="focus-card-top"><strong>Relationships</strong><span>0 reflections</span></div>
+        <div class="progress"><span style="--width: 0%;"></span></div>
+      </article>
+      <article class="focus-card">
+        <div class="focus-card-top"><strong>Purpose</strong><span>0 reflections</span></div>
+        <div class="progress"><span style="--width: 0%;"></span></div>
+      </article>
+      <article class="focus-card">
+        <div class="focus-card-top"><strong>Pressure</strong><span>0 reflections</span></div>
+        <div class="progress"><span style="--width: 0%;"></span></div>
+      </article>
+      <article class="focus-card">
+        <div class="focus-card-top"><strong>Comparison</strong><span>0 reflections</span></div>
+        <div class="progress"><span style="--width: 0%;"></span></div>
+      </article>
 
-    const growthSigninButton = $("#growthSigninButton");
-    if (growthSigninButton) {
-      growthSigninButton.addEventListener("click", showSigninPrompt);
-    }
+      <article class="focus-card growth-signin-note" style="grid-column: 1 / -1;">
+        <div class="focus-card-top" style="align-items: flex-start;">
+          <div>
+            <strong>Sign in to view your real growth</strong>
+            <div style="margin-top: 8px; color: var(--muted); font-size: 0.9rem; font-weight: 500; line-height: 1.6;">
+              Track your reflections, journal entries, streak, and focus patterns across RootedByte.
+            </div>
+          </div>
+          <span>Private account feature</span>
+        </div>
+
+        <div style="margin-top: 16px;">
+          <button class="primary-button" type="button" id="growthSigninButton">
+            Sign in to continue
+          </button>
+        </div>
+      </article>
+    `;
   }
+
+  const growthSigninButton = $("#growthSigninButton");
+  if (growthSigninButton) {
+    growthSigninButton.addEventListener("click", showSigninPrompt);
+  }
+}
 
   function setScreen(name) {
     $$(".screen").forEach((screen) => {
