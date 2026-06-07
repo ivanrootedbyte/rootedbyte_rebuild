@@ -11,6 +11,13 @@
 
   <title>Sign In | RootedByte</title>
 
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&display=swap"
+    rel="stylesheet"
+  >
+
   <style>
     :root {
       --bg: #07110d;
@@ -92,73 +99,65 @@
       align-content: start;
       justify-items: center;
       padding-top: 18px;
+      gap: 22px;
     }
 
-    .hero-icon {
-      width: 56px;
-      height: 56px;
+    .auth-panel {
+      width: 100%;
       display: grid;
-      place-items: center;
-      margin-bottom: 18px;
-      border-radius: 16px;
-      background: var(--sage);
-      color: #08100c;
-      box-shadow: 0 18px 32px rgba(168, 197, 160, 0.14);
+      gap: 18px;
     }
 
-    .hero-icon svg {
-      width: 28px;
-      height: 28px;
+    .auth-side {
+      width: 100%;
     }
 
     .hero-copy {
-  text-align: center;
-  margin-bottom: 24px;
-}
+      text-align: center;
+      margin-bottom: 0;
+    }
 
-.auth-kicker {
-  display: inline-flex;
-  align-items: center;
-  min-height: 30px;
-  padding: 0 12px;
-  margin-bottom: 14px;
-  border-radius: 999px;
-  color: var(--sage);
-  background: rgba(168, 197, 160, 0.08);
-  border: 1px solid rgba(168, 197, 160, 0.12);
-  font-size: 0.73rem;
-  font-weight: 900;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-}
+    .auth-kicker {
+      display: inline-flex;
+      align-items: center;
+      min-height: 30px;
+      padding: 0 12px;
+      margin-bottom: 14px;
+      border-radius: 999px;
+      color: var(--sage);
+      background: rgba(168, 197, 160, 0.08);
+      border: 1px solid rgba(168, 197, 160, 0.12);
+      font-size: 0.73rem;
+      font-weight: 900;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
 
     .hero-copy h1 {
       margin: 0;
-      font-size: 2.05rem;
-      line-height: 1;
-      letter-spacing: -0.05em;
-      font-weight: 800;
+      font-family: "Playfair Display", Georgia, serif;
+      font-size: 2.4rem;
+      line-height: 0.96;
+      letter-spacing: -0.06em;
+      font-weight: 700;
       color: var(--text);
     }
 
     .hero-copy p {
-      margin: 10px 0 0;
+      margin: 12px 0 0;
       color: var(--muted);
       font-size: 0.98rem;
+      line-height: 1.6;
     }
 
     .auth-card {
-  width: 100%;
-  border: 1px solid var(--line);
-  border-radius: var(--radius-xl);
-  background:
-    linear-gradient(180deg, rgba(21, 31, 26, 0.96), rgba(16, 24, 21, 0.98));
-  box-shadow: var(--shadow);
-  padding: 22px 18px 20px;
-}
-
-    .tabs {
-      display: none;
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-xl);
+      background:
+        linear-gradient(180deg, rgba(21, 31, 26, 0.96), rgba(16, 24, 21, 0.98));
+      box-shadow: var(--shadow);
+      padding: 22px 18px 20px;
     }
 
     .auth-form {
@@ -233,8 +232,8 @@
 
     .submit-button {
       width: 100%;
-      min-height: 48px;
-      margin-top: 2px;
+      min-height: 50px;
+      margin-top: 4px;
       border: 0;
       border-radius: 14px;
       background: var(--sage);
@@ -264,7 +263,7 @@
     }
 
     .bottom-switch {
-      margin-top: 22px;
+      margin-top: 0;
       text-align: center;
       color: var(--muted);
       font-size: 0.96rem;
@@ -280,7 +279,7 @@
     }
 
     .small-note {
-      margin-top: 14px;
+      margin-top: 0;
       text-align: center;
       color: var(--muted-soft);
       font-size: 0.8rem;
@@ -304,82 +303,83 @@
     }
 
     @media (min-width: 980px) {
-  :root {
-    --phone: 1180px;
-  }
+      :root {
+        --phone: 1180px;
+      }
 
-  body {
-    padding: 0;
-  }
+      body {
+        padding: 0;
+      }
 
-  .app-shell {
-    width: min(1180px, calc(100% - 48px));
-    min-height: 100vh;
-    padding: 34px 28px 44px;
-    border-left: 0;
-    border-right: 0;
-    border-radius: 0;
-    box-shadow: none;
-  }
+      .app-shell {
+        width: min(1180px, calc(100% - 48px));
+        min-height: 100vh;
+        padding: 34px 28px 44px;
+        border-left: 0;
+        border-right: 0;
+        border-radius: 0;
+        box-shadow: none;
+      }
 
-  .top-link {
-    margin-bottom: 34px;
-    font-size: 0.94rem;
-  }
+      .top-link {
+        margin-bottom: 34px;
+        font-size: 0.94rem;
+      }
 
-  .auth-wrap {
-    min-height: calc(100vh - 140px);
-    grid-template-columns: minmax(0, 1fr) minmax(420px, 500px);
-    align-items: center;
-    justify-items: stretch;
-    column-gap: 56px;
-    padding-top: 0;
-  }
+      .auth-wrap {
+        min-height: calc(100vh - 140px);
+        grid-template-columns: minmax(420px, 520px) minmax(0, 1fr);
+        align-items: center;
+        justify-items: stretch;
+        column-gap: 48px;
+        padding-top: 0;
+      }
 
-  .hero-icon {
-    width: 68px;
-    height: 68px;
-    margin-bottom: 22px;
-    border-radius: 20px;
-  }
+      .auth-panel {
+        max-width: 520px;
+      }
 
-  .hero-copy {
-    text-align: left;
-    margin-bottom: 0;
-    max-width: 520px;
-  }
+      .auth-card {
+        max-width: 520px;
+        margin-left: 0;
+        padding: 24px 22px 22px;
+      }
 
-  .hero-copy h1 {
-  margin: 0;
-  font-family: "Playfair Display", Georgia, serif;
-  font-size: 2.4rem;
-  line-height: 0.96;
-  letter-spacing: -0.06em;
-  font-weight: 700;
-  color: var(--text);
-}
+      .auth-side {
+        display: grid;
+        align-content: center;
+        gap: 28px;
+        min-height: 100%;
+      }
 
-.hero-copy p {
-  margin: 12px 0 0;
-  color: var(--muted);
-  font-size: 0.98rem;
-  line-height: 1.6;
-}
+      .hero-copy {
+        text-align: left;
+        max-width: 560px;
+      }
 
-  .auth-card {
-    max-width: 500px;
-    margin-left: auto;
-    padding: 24px 22px 22px;
-  }
+      .hero-copy h1 {
+        font-size: clamp(3.4rem, 6vw, 5rem);
+        line-height: 0.93;
+      }
 
-  .bottom-switch,
-  .small-note {
-    max-width: 500px;
-    margin-left: auto;
-    text-align: center;
-  }
-}
-    
+      .hero-copy p {
+        margin-top: 14px;
+        font-size: 1.04rem;
+        max-width: 480px;
+      }
+
+      .bottom-switch {
+        max-width: 520px;
+        margin-left: 0;
+        text-align: left;
+      }
+
+      .small-note {
+        max-width: 520px;
+        margin-left: 0;
+        text-align: center;
+      }
+    }
   </style>
 </head>
 
@@ -391,140 +391,134 @@
     </a>
 
     <main class="auth-wrap">
-      <div class="hero-icon" aria-hidden="true">
-        <svg viewBox="0 0 24 24" fill="none">
-          <path d="M8 7V4h9a3 3 0 0 1 3 3v13a3 3 0 0 1-3 3H8v-3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-          <path d="M14 12H4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-          <path d="m10 8-4 4 4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-      </div>
-
-      <div class="hero-copy">
-  <span class="auth-kicker">Private account access</span>
-  <h1 id="authTitle">Welcome back</h1>
-  <p id="authLead">Sign in to save reflections, journal privately, and follow your growth.</p>
-</div>
-
-      <section class="auth-card">
-
-        <form class="auth-form" id="authForm">
-          <div class="field">
-            <label for="email">Email</label>
-            <div class="input-wrap">
-              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                <path d="M4 6h16v12H4V6Z" stroke="currentColor" stroke-width="1.8" />
-                <path d="m4 7 8 6 8-6" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" />
-              </svg>
-              <input
-                id="email"
-                name="email"
-                type="email"
-                autocomplete="email"
-                placeholder="you@example.com"
-                required
-              />
-            </div>
-          </div>
-
-          <div class="field">
-            <div class="field-row">
-              <label for="password">Password</label>
-              <a href="#" class="forgot-link" id="forgotPasswordLink">Forgot password?</a>
+      <div class="auth-panel">
+        <section class="auth-card">
+          <form class="auth-form" id="authForm">
+            <div class="field">
+              <label for="email">Email</label>
+              <div class="input-wrap">
+                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M4 6h16v12H4V6Z" stroke="currentColor" stroke-width="1.8" />
+                  <path d="m4 7 8 6 8-6" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" />
+                </svg>
+                <input
+                  id="email"
+                  name="email"
+                  type="email"
+                  autocomplete="email"
+                  placeholder="you@example.com"
+                  required
+                />
+              </div>
             </div>
 
-            <div class="input-wrap">
-              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                <path d="M7 11V8a5 5 0 0 1 10 0v3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-                <rect x="5" y="11" width="14" height="10" rx="2" stroke="currentColor" stroke-width="1.8"/>
-              </svg>
+            <div class="field">
+              <div class="field-row">
+                <label for="password">Password</label>
+                <a href="#" class="forgot-link" id="forgotPasswordLink">Forgot password?</a>
+              </div>
+
+              <div class="input-wrap">
+                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M7 11V8a5 5 0 0 1 10 0v3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                  <rect x="5" y="11" width="14" height="10" rx="2" stroke="currentColor" stroke-width="1.8"/>
+                </svg>
+                <input
+                  id="password"
+                  name="password"
+                  type="password"
+                  autocomplete="current-password"
+                  placeholder="••••••••"
+                  required
+                  minlength="6"
+                />
+              </div>
+            </div>
+
+            <div class="field" id="confirmPasswordGroup" hidden>
+              <label for="confirmPassword">Confirm password</label>
               <input
-                id="password"
-                name="password"
+                id="confirmPassword"
+                name="confirmPassword"
                 type="password"
-                autocomplete="current-password"
-                placeholder="••••••••"
-                required
+                autocomplete="new-password"
                 minlength="6"
+                placeholder="Confirm password"
               />
             </div>
-          </div>
 
-          <div class="field" id="confirmPasswordGroup" hidden>
-            <label for="confirmPassword">Confirm password</label>
-            <input
-              id="confirmPassword"
-              name="confirmPassword"
-              type="password"
-              autocomplete="new-password"
-              minlength="6"
-              placeholder="Confirm password"
-            />
-          </div>
+            <button class="submit-button" type="submit" id="authSubmit">Log in</button>
+            <div class="status" id="authStatus" role="status" aria-live="polite"></div>
+          </form>
+        </section>
 
-          <button class="submit-button" type="submit" id="authSubmit">Log in</button>
-          <div class="status" id="authStatus" role="status" aria-live="polite"></div>
-        </form>
-      </section>
-
-      <div class="bottom-switch">
-        <span id="switchText">Don't have an account?</span>
-        <button type="button" id="switchModeButton">Create one</button>
+        <p class="small-note">
+          Your reflections, saved outputs, and journal entries stay private unless you choose to share something yourself.
+        </p>
       </div>
 
-      <p class="small-note">
-  Your reflections, saved outputs, and journal entries stay private unless you choose to share something yourself.
-</p>
+      <div class="auth-side">
+        <div class="hero-copy">
+          <span class="auth-kicker">Private account access</span>
+          <h1 id="authTitle">Welcome back</h1>
+          <p id="authLead">Sign in to save reflections, journal privately, and follow your growth.</p>
+        </div>
+
+        <div class="bottom-switch">
+          <span id="switchText">Don't have an account?</span>
+          <button type="button" id="switchModeButton">Create one</button>
+        </div>
+      </div>
     </main>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <script>
-  const $ = (selector) => document.querySelector(selector);
+    const $ = (selector) => document.querySelector(selector);
 
-  const authTitle = $("#authTitle");
-  const authLead = $("#authLead");
-  const authForm = $("#authForm");
-  const authSubmit = $("#authSubmit");
-  const authStatus = $("#authStatus");
-  const emailInput = $("#email");
-  const passwordInput = $("#password");
-  const confirmPasswordGroup = $("#confirmPasswordGroup");
-  const confirmPasswordInput = $("#confirmPassword");
-  const switchText = $("#switchText");
-  const switchModeButton = $("#switchModeButton");
-  const forgotPasswordLink = $("#forgotPasswordLink");
+    const authTitle = $("#authTitle");
+    const authLead = $("#authLead");
+    const authForm = $("#authForm");
+    const authSubmit = $("#authSubmit");
+    const authStatus = $("#authStatus");
+    const emailInput = $("#email");
+    const passwordInput = $("#password");
+    const confirmPasswordGroup = $("#confirmPasswordGroup");
+    const confirmPasswordInput = $("#confirmPassword");
+    const switchText = $("#switchText");
+    const switchModeButton = $("#switchModeButton");
+    const forgotPasswordLink = $("#forgotPasswordLink");
 
-  const SIGNED_IN_FLAG = "rootedbyte_user_signed_in";
+    const SIGNED_IN_FLAG = "rootedbyte_user_signed_in";
 
-  let mode = "signin";
-  let supabaseClient = null;
-  let configPromise = null;
+    let mode = "signin";
+    let supabaseClient = null;
+    let configPromise = null;
 
-  function setStatus(message, type = "info") {
-    authStatus.className = type === "error" ? "status error" : "status";
-    authStatus.textContent = message || "";
-  }
-
-  function setLocalSignedInFlag(isSignedIn) {
-    try {
-      if (isSignedIn) {
-        localStorage.setItem(SIGNED_IN_FLAG, "true");
-      } else {
-        localStorage.removeItem(SIGNED_IN_FLAG);
-      }
-    } catch {
-      // Ignore localStorage issues.
+    function setStatus(message, type = "info") {
+      authStatus.className = type === "error" ? "status error" : "status";
+      authStatus.textContent = message || "";
     }
-  }
 
-  async function loadSupabaseConfig() {
-    if (!configPromise) {
-      configPromise = fetch("/api/public-config", {
-        method: "GET",
-        cache: "no-store"
-      })
-        .then(async (response) => {
+    function setLocalSignedInFlag(isSignedIn) {
+      try {
+        if (isSignedIn) {
+          localStorage.setItem(SIGNED_IN_FLAG, "true");
+        } else {
+          localStorage.removeItem(SIGNED_IN_FLAG);
+        }
+      } catch {
+        // Ignore localStorage issues.
+      }
+    }
+
+    async function loadSupabaseConfig() {
+      if (!configPromise) {
+        configPromise = fetch("/api/public-config", {
+          method: "GET",
+          cache: "no-store"
+        }).then(async (response) => {
           const config = await response.json().catch(() => ({}));
 
           if (!response.ok) {
@@ -537,190 +531,189 @@
 
           return config;
         });
+      }
+
+      return configPromise;
     }
 
-    return configPromise;
-  }
+    async function ensureSupabaseClient() {
+      if (supabaseClient) return supabaseClient;
 
-  async function ensureSupabaseClient() {
-    if (supabaseClient) return supabaseClient;
+      if (window.rootedbyteSupabase) {
+        supabaseClient = window.rootedbyteSupabase;
+        return supabaseClient;
+      }
 
-    if (window.rootedbyteSupabase) {
-      supabaseClient = window.rootedbyteSupabase;
+      if (!window.supabase || !window.supabase.createClient) {
+        throw new Error("Supabase browser client is not loaded.");
+      }
+
+      const config = await loadSupabaseConfig();
+
+      supabaseClient = window.supabase.createClient(
+        config.supabaseUrl,
+        config.supabaseAnonKey
+      );
+
+      window.rootedbyteSupabase = supabaseClient;
+
       return supabaseClient;
     }
 
-    if (!window.supabase || !window.supabase.createClient) {
-      throw new Error("Supabase browser client is not loaded.");
-    }
+    function setMode(nextMode) {
+      mode = nextMode;
 
-    const config = await loadSupabaseConfig();
+      const signingIn = mode === "signin";
 
-    supabaseClient = window.supabase.createClient(
-      config.supabaseUrl,
-      config.supabaseAnonKey
-    );
+      authTitle.textContent = signingIn ? "Welcome back" : "Create account";
+      authLead.textContent = signingIn
+        ? "Sign in to save reflections, journal privately, and follow your growth."
+        : "Create your RootedByte account to save reflections, journal privately, and follow your growth.";
 
-    window.rootedbyteSupabase = supabaseClient;
+      authSubmit.textContent = signingIn ? "Log in" : "Create account";
 
-    return supabaseClient;
-  }
+      switchText.textContent = signingIn
+        ? "Don't have an account?"
+        : "Already have an account?";
 
-  function setMode(nextMode) {
-    mode = nextMode;
+      switchModeButton.textContent = signingIn
+        ? "Create one"
+        : "Sign in";
 
-    const signingIn = mode === "signin";
+      confirmPasswordGroup.hidden = signingIn;
+      confirmPasswordInput.required = !signingIn;
 
-    authTitle.textContent = signingIn ? "Welcome back" : "Create account";
-    authLead.textContent = signingIn
-      ? "Sign in to save reflections, journal privately, and follow your growth."
-      : "Create your RootedByte account";
+      forgotPasswordLink.hidden = !signingIn;
 
-    authSubmit.textContent = signingIn ? "Log in" : "Create account";
-
-    switchText.textContent = signingIn
-      ? "Don't have an account?"
-      : "Already have an account?";
-
-    switchModeButton.textContent = signingIn
-      ? "Create one"
-      : "Sign in";
-
-    confirmPasswordGroup.hidden = signingIn;
-    confirmPasswordInput.required = !signingIn;
-
-    forgotPasswordLink.hidden = !signingIn;
-
-    if (signingIn) {
-      confirmPasswordInput.value = "";
-    }
-
-    passwordInput.autocomplete = signingIn ? "current-password" : "new-password";
-    setStatus("");
-  }
-
-  async function redirectIfAlreadySignedIn() {
-    try {
-      const client = await ensureSupabaseClient();
-      const { data, error } = await client.auth.getSession();
-
-      if (error) throw error;
-
-      if (data && data.session) {
-        setLocalSignedInFlag(true);
-        window.location.href = "account.html";
+      if (signingIn) {
+        confirmPasswordInput.value = "";
       }
-    } catch {
-      setLocalSignedInFlag(false);
-    }
-  }
 
-  switchModeButton.addEventListener("click", () => {
-    setMode(mode === "signin" ? "signup" : "signin");
-  });
-
-  forgotPasswordLink.addEventListener("click", async (event) => {
-    event.preventDefault();
-
-    const email = emailInput.value.trim();
-
-    if (!email) {
-      setStatus("Enter your email first, then tap forgot password again.", "error");
-      return;
+      passwordInput.autocomplete = signingIn ? "current-password" : "new-password";
+      setStatus("");
     }
 
-    forgotPasswordLink.style.pointerEvents = "none";
-    setStatus("Sending password reset email...");
+    async function redirectIfAlreadySignedIn() {
+      try {
+        const client = await ensureSupabaseClient();
+        const { data, error } = await client.auth.getSession();
 
-    try {
-      const client = await ensureSupabaseClient();
+        if (error) throw error;
 
-      const { error } = await client.auth.resetPasswordForEmail(email, {
-        redirectTo: window.location.origin + "/signin.html"
-      });
-
-      if (error) throw error;
-
-      setStatus("Password reset email sent. Check your inbox.");
-    } catch (error) {
-      setStatus(error.message || "Could not send reset email.", "error");
-    } finally {
-      forgotPasswordLink.style.pointerEvents = "";
-    }
-  });
-
-  authForm.addEventListener("submit", async (event) => {
-    event.preventDefault();
-
-    const email = emailInput.value.trim();
-    const password = passwordInput.value;
-    const confirmPassword = confirmPasswordInput.value;
-
-    if (!email || !password) {
-      setStatus("Enter your email and password.", "error");
-      return;
+        if (data && data.session) {
+          setLocalSignedInFlag(true);
+          window.location.href = "account.html";
+        }
+      } catch {
+        setLocalSignedInFlag(false);
+      }
     }
 
-    if (password.length < 6) {
-      setStatus("Password must be at least 6 characters.", "error");
-      return;
-    }
+    switchModeButton.addEventListener("click", () => {
+      setMode(mode === "signin" ? "signup" : "signin");
+    });
 
-    if (mode === "signup" && password !== confirmPassword) {
-      setStatus("Passwords do not match.", "error");
-      return;
-    }
+    forgotPasswordLink.addEventListener("click", async (event) => {
+      event.preventDefault();
 
-    authSubmit.disabled = true;
-    setStatus(mode === "signin" ? "Signing you in..." : "Creating your account...");
+      const email = emailInput.value.trim();
 
-    try {
-      const client = await ensureSupabaseClient();
+      if (!email) {
+        setStatus("Enter your email first, then tap forgot password again.", "error");
+        return;
+      }
 
-      if (mode === "signin") {
-        const { error } = await client.auth.signInWithPassword({
-          email,
-          password
+      forgotPasswordLink.style.pointerEvents = "none";
+      setStatus("Sending password reset email...");
+
+      try {
+        const client = await ensureSupabaseClient();
+
+        const { error } = await client.auth.resetPasswordForEmail(email, {
+          redirectTo: window.location.origin + "/signin.html"
         });
 
         if (error) throw error;
 
-        setLocalSignedInFlag(true);
-        setStatus("Signed in. Redirecting...");
-        window.location.href = "account.html";
+        setStatus("Password reset email sent. Check your inbox.");
+      } catch (error) {
+        setStatus(error.message || "Could not send reset email.", "error");
+      } finally {
+        forgotPasswordLink.style.pointerEvents = "";
+      }
+    });
+
+    authForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
+
+      const email = emailInput.value.trim();
+      const password = passwordInput.value;
+      const confirmPassword = confirmPasswordInput.value;
+
+      if (!email || !password) {
+        setStatus("Enter your email and password.", "error");
         return;
       }
 
-      const { data, error } = await client.auth.signUp({
-        email,
-        password,
-        options: {
-          emailRedirectTo: window.location.origin + "/account.html"
+      if (password.length < 6) {
+        setStatus("Password must be at least 6 characters.", "error");
+        return;
+      }
+
+      if (mode === "signup" && password !== confirmPassword) {
+        setStatus("Passwords do not match.", "error");
+        return;
+      }
+
+      authSubmit.disabled = true;
+      setStatus(mode === "signin" ? "Signing you in..." : "Creating your account...");
+
+      try {
+        const client = await ensureSupabaseClient();
+
+        if (mode === "signin") {
+          const { error } = await client.auth.signInWithPassword({
+            email,
+            password
+          });
+
+          if (error) throw error;
+
+          setLocalSignedInFlag(true);
+          setStatus("Signed in. Redirecting...");
+          window.location.href = "account.html";
+          return;
         }
-      });
 
-      if (error) throw error;
+        const { data, error } = await client.auth.signUp({
+          email,
+          password,
+          options: {
+            emailRedirectTo: window.location.origin + "/account.html"
+          }
+        });
 
-      if (data && data.session) {
-        setLocalSignedInFlag(true);
-        setStatus("Account created. Redirecting...");
-        window.location.href = "account.html";
-        return;
+        if (error) throw error;
+
+        if (data && data.session) {
+          setLocalSignedInFlag(true);
+          setStatus("Account created. Redirecting...");
+          window.location.href = "account.html";
+          return;
+        }
+
+        setStatus("Account created. Check your email to confirm your account.");
+        setMode("signin");
+      } catch (error) {
+        setLocalSignedInFlag(false);
+        setStatus(error.message || "Something went wrong.", "error");
+      } finally {
+        authSubmit.disabled = false;
       }
+    });
 
-      setStatus("Account created. Check your email to confirm your account.");
-      setMode("signin");
-    } catch (error) {
-      setLocalSignedInFlag(false);
-      setStatus(error.message || "Something went wrong.", "error");
-    } finally {
-      authSubmit.disabled = false;
-    }
-  });
-
-  setMode("signin");
-  redirectIfAlreadySignedIn();
-</script>
-  
+    setMode("signin");
+    redirectIfAlreadySignedIn();
+  </script>
 </body>
 </html>
