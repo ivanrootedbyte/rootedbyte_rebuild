@@ -1245,6 +1245,128 @@
       }
     }
 
+    @media (min-width: 980px) {
+  :root {
+    --phone: 1180px;
+  }
+
+  body {
+    padding: 0;
+  }
+
+  .app-shell {
+    width: min(1180px, calc(100% - 48px));
+    min-height: 100vh;
+    border-left: 0;
+    border-right: 0;
+    border-radius: 0;
+    box-shadow: none;
+  }
+
+  .app-header {
+    height: 72px;
+    padding: 0 28px;
+  }
+
+  .brand-name {
+    font-size: 1.15rem;
+  }
+
+  .profile-button {
+    width: 42px;
+    height: 42px;
+  }
+
+  .app-main {
+    padding: 42px 28px 140px;
+  }
+
+  .hero {
+    text-align: left;
+    padding: 8px 0 12px;
+  }
+
+  .hero h1 {
+    max-width: 760px;
+    margin: 0;
+    font-size: clamp(4rem, 7vw, 5.6rem);
+  }
+
+  .hero p {
+    max-width: 640px;
+    margin: 18px 0 0;
+    font-size: 1.02rem;
+  }
+
+  .wisdom-strip {
+    justify-items: start;
+    text-align: left;
+    padding: 18px 0 10px;
+    margin: 8px 0 26px;
+    min-height: auto;
+  }
+
+  .mood-card,
+  .streak-card {
+    max-width: 760px;
+  }
+
+  #screen-home .tool-list,
+  #screen-tools .tool-list {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    align-items: stretch;
+  }
+
+  .tool-card {
+    min-height: 210px;
+    padding: 24px;
+  }
+
+  .tool-card h3 {
+    font-size: 1.55rem;
+  }
+
+  .tool-card p {
+    font-size: 0.96rem;
+  }
+
+  #screen-tool-detail {
+    max-width: 900px;
+  }
+
+  #screen-journal {
+    max-width: 860px;
+  }
+
+  #screen-growth .stats-grid {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+
+  #screen-growth .focus-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .app-footer {
+    margin-top: 56px;
+  }
+
+  .bottom-nav {
+    left: 50%;
+    bottom: 24px;
+    width: min(820px, calc(100% - 80px));
+    border-radius: 999px;
+    padding: 10px 14px;
+    background: rgba(13, 18, 15, 0.76);
+    border: 1px solid rgba(168, 197, 160, 0.12);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.28);
+  }
+
+  .bottom-nav button {
+    min-height: 54px;
+    font-size: 0.76rem;
+  }
+}
+    
     @media (prefers-reduced-motion: reduce) {
       *,
       *::before,
