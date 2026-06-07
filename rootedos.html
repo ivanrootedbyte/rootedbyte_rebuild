@@ -725,6 +725,129 @@
       }
     }
 
+    @media (min-width: 980px) {
+  :root {
+    --phone: 1180px;
+  }
+
+  body {
+    padding: 0;
+  }
+
+  .app-shell {
+    width: min(1180px, calc(100% - 48px));
+    min-height: 100vh;
+    border-left: 0;
+    border-right: 0;
+    border-radius: 0;
+    box-shadow: none;
+  }
+
+  .app-header {
+    height: 72px;
+    padding: 0 28px;
+  }
+
+  .brand-name {
+    font-size: 1.15rem;
+  }
+
+  .profile-button {
+    width: 42px;
+    height: 42px;
+  }
+
+  .page {
+    padding: 34px 28px 140px;
+  }
+
+  .tool-topbar {
+    margin-bottom: 24px;
+    font-size: 0.96rem;
+  }
+
+  .screen-block {
+    padding-top: 24px;
+  }
+
+  .hero-copy {
+    padding: 10px 0 24px;
+    max-width: 760px;
+  }
+
+  .launch-card {
+    padding: 34px 30px 30px;
+    max-width: 860px;
+  }
+
+  .launch-card h2 {
+    font-size: clamp(3rem, 6vw, 4.6rem);
+    color: #9fc2ff;
+  }
+
+  .launch-card p {
+    max-width: 700px;
+    font-size: 1rem;
+  }
+
+  .reflection-card {
+    padding: 28px;
+    max-width: 980px;
+  }
+
+  .reflection-head h2 {
+    font-size: clamp(2.4rem, 5vw, 3.6rem);
+    color: #9fc2ff;
+  }
+
+  .reflection-head p {
+    max-width: 720px;
+    font-size: 1rem;
+  }
+
+  .form-card {
+    padding: 22px;
+  }
+
+  .choice-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .results {
+    gap: 16px;
+    margin-top: 26px;
+  }
+
+  .plan-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .share-panel__actions {
+    grid-template-columns: 1fr 1fr;
+    max-width: 460px;
+  }
+
+  .footer-card {
+    margin-top: 52px;
+  }
+
+  .bottom-nav {
+    left: 50%;
+    bottom: 24px;
+    width: min(820px, calc(100% - 80px));
+    border-radius: 999px;
+    padding: 10px 14px;
+    background: rgba(13, 18, 15, 0.76);
+    border: 1px solid rgba(168, 197, 160, 0.12);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.28);
+  }
+
+  .bottom-nav a {
+    min-height: 54px;
+    font-size: 0.76rem;
+  }
+}
+    
     @media (max-width: 380px) {
       .choice-grid,
       .button-row,
