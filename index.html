@@ -2576,24 +2576,25 @@ if (name === "journal") {
   }
 
   $$(".mood-button").forEach((button) => {
-    button.addEventListener("click", () => {
-      if (!userLooksSignedIn()) {
-        showSigninPrompt();
-        return;
-      }
+  button.addEventListener("click", () => {
+    if (!userLooksSignedIn()) {
+      showSigninPrompt();
+      return;
+    }
 
-      state.mood = button.dataset.mood;
+    state.mood = button.dataset.mood;
 
-      const today = todayKey();
-      if (!state.streak.includes(today)) {
-        state.streak.push(today);
-      }
+    const today = todayKey();
+    if (!state.streak.includes(today)) {
+      state.streak.push(today);
+    }
 
-      saveState();
-await renderJournal();
-await updateGrowthUI();
-    });
+    saveState();
+    updateMoodUI();
+    updateStreakUI();
+    updateGrowthUI();
   });
+});
 
   function showTool(tool) {
     if (tool === "signal") {
@@ -3001,8 +3002,8 @@ await updateGrowthUI();
       clearJournalDraft();
 
       saveState();
-      renderJournal();
-      updateGrowthUI();
+await renderJournal();
+await updateGrowthUI();
     } catch (error) {
       console.warn("[RootedByte journal save]", error.message || error);
     } finally {
@@ -3179,14 +3180,15 @@ await updateGrowthUI();
   }
 
   window.addEventListener("focus", () => {
-    if ($("#screen-growth")?.classList.contains("active")) {
-      updateGrowthUI();
-    }
+  if ($("#screen-growth")?.classList.contains("active")) {
+    updateGrowthUI();
+  }
 
-    if ($("#screen-journal")?.classList.contains("active")) {
-      hydrateJournalDraft();
-    }
-  });
+  if ($("#screen-journal")?.classList.contains("active")) {
+    hydrateJournalDraft();
+    renderJournal();
+  }
+});
 
   updateMoodUI();
 updateStreakUI();
