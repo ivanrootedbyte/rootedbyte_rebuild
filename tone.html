@@ -29,7 +29,7 @@
       --muted-soft: #72857b;
       --line: rgba(168, 197, 160, 0.16);
       --sage: #a8c5a0;
-      --lavender: #b8a8d8;
+      --lavender: #9fc2ff;
       --danger: #d97965;
       --shadow: 0 24px 70px rgba(0, 0, 0, 0.34);
       --radius-xl: 28px;
@@ -206,8 +206,9 @@
     }
 
     .hero-copy h1 {
-      font-size: 2.5rem;
-    }
+  font-size: clamp(3.8rem, 7vw, 5.4rem);
+  color: #9fc2ff;
+}
 
     .hero-copy p {
       margin: 8px 0 0;
@@ -397,6 +398,29 @@
       margin-bottom: 10px;
     }
 
+    .listener-mode .tag {
+  color: var(--listener);
+  background: rgba(159, 194, 255, 0.08);
+  border-color: rgba(159, 194, 255, 0.16);
+}
+
+.listener-mode .spinner {
+  border-color: rgba(159, 194, 255, 0.18);
+  border-top-color: var(--listener);
+}
+
+.listener-mode .primary-button {
+  background: var(--listener);
+}
+
+.listener-mode .hero-copy h1,
+.listener-mode .result-card h2,
+.listener-mode .result-card h3,
+.listener-mode .prep-card h3,
+.listener-mode .share-panel h3 {
+  color: var(--listener);
+}
+    
     .tag.warn {
       color: #111714;
       background: var(--sage);
@@ -827,14 +851,15 @@
 
             <div class="field">
               <label for="instrumentSelect">Your role</label>
-              <select id="instrumentSelect">
-                <option value="acoustic-guitar">Acoustic Guitar</option>
-                <option value="electric-guitar">Electric Guitar</option>
-                <option value="bass">Bass</option>
-                <option value="drums">Drums</option>
-                <option value="keys-piano">Keys / Piano</option>
-                <option value="vocals">Vocals</option>
-              </select>
+             <select id="instrumentSelect">
+  <option value="acoustic-guitar">Acoustic Guitar</option>
+  <option value="electric-guitar">Electric Guitar</option>
+  <option value="bass">Bass</option>
+  <option value="drums">Drums</option>
+  <option value="keys-piano">Keys / Piano</option>
+  <option value="vocals">Vocals</option>
+  <option value="listener">Listener</option>
+</select>
             </div>
 
             <button class="primary-button" type="button" id="toneAnalyzeButton">
@@ -1042,10 +1067,10 @@
   <section class="contact-card-modal" role="dialog" aria-modal="true" aria-labelledby="signinPromptTitle">
     <button class="contact-close" type="button" id="closeSigninPrompt" aria-label="Close sign-in prompt">×</button>
 
-    <h2 class="contact-title" id="signinPromptTitle">Save your check-in</h2>
-    <p class="contact-copy">
-      Sign in to keep your mood check-in, streak, and growth progress connected to your account.
-    </p>
+    <h2 class="contact-title" id="signinPromptTitle">Save this SoundSense result</h2>
+<p class="contact-copy">
+  Sign in to keep this song breakdown, your reflections, and future progress connected to your account.
+</p>
 
     <div style="display:grid; gap:12px; margin-top:20px;">
       <a class="primary-button" href="signin.html">Sign in</a>
@@ -1060,7 +1085,18 @@
     const year = $("#year");
     if (year) year.textContent = new Date().getFullYear();
 
+    const instrumentSelect = $("#instrumentSelect");
+if (instrumentSelect) {
+  instrumentSelect.addEventListener("change", applyListenerMode);
+}
+applyListenerMode();
+    
     let latestToneOutput = null;
+
+function applyListenerMode() {
+  const selectedRole = $("#instrumentSelect")?.value || "";
+  document.body.classList.toggle("listener-mode", selectedRole === "listener");
+}
 
     function userLooksSignedIn() {
   try {
@@ -1278,19 +1314,17 @@ if (signinPromptModal) {
           });
 
           if (!result.ok) {
-            statusElement.className = "status error";
+  statusElement.className = "status error";
 
-            if (result.reason === "not_signed_in") {
-              statusElement.innerHTML = `
-                <span>Please sign in to save this.</span>
-                <a href="signin.html" style="color: var(--sage); font-weight: 900; text-decoration: underline;">Sign in</a>
-              `;
-              return;
-            }
+  if (result.reason === "not_signed_in") {
+    statusElement.textContent = "Please sign in to save this privately.";
+    showSigninPrompt();
+    return;
+  }
 
-            statusElement.textContent = result.message || "Could not save.";
-            return;
-          }
+  statusElement.textContent = result.message || "Could not save.";
+  return;
+}
 
           statusElement.className = "status";
           statusElement.textContent = "Saved.";
