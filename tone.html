@@ -303,6 +303,16 @@ body.listener-mode #toneAnalyzeButton {
   box-shadow: 0 10px 24px rgba(159, 194, 255, 0.16);
 }
 
+.primary-button:hover,
+.primary-button:focus-visible {
+  box-shadow: 0 14px 30px rgba(184, 168, 216, 0.2);
+}
+
+body.listener-mode #toneAnalyzeButton:hover,
+body.listener-mode #toneAnalyzeButton:focus-visible {
+  box-shadow: 0 14px 30px rgba(159, 194, 255, 0.2);
+}
+    
 body.listener-mode #toneAnalyzeButton:hover,
 body.listener-mode #toneAnalyzeButton:focus-visible {
   filter: brightness(1.04);
@@ -329,11 +339,12 @@ body.listener-mode #toneAnalyzeButton:disabled {
     }
 
     .primary-button {
-      border: 0;
-      color: #111714;
-      background: var(--lavender);
-      transition: transform 180ms ease, filter 180ms ease;
-    }
+  border: 0;
+  color: #111714;
+  background: var(--lavender);
+  box-shadow: 0 10px 24px rgba(184, 168, 216, 0.16);
+  transition: transform 180ms ease, filter 180ms ease, box-shadow 180ms ease;
+}
 
     .secondary-button {
       border: 1px solid rgba(168, 197, 160, 0.18);
