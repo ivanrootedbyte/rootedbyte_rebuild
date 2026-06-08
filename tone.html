@@ -29,8 +29,9 @@
       --muted-soft: #72857b;
       --line: rgba(168, 197, 160, 0.16);
       --sage: #a8c5a0;
-      --lavender: #9fc2ff;
-      --danger: #d97965;
+--lavender: #b8a8d8;
+--listener: #9fc2ff;
+--danger: #d97965;
       --shadow: 0 24px 70px rgba(0, 0, 0, 0.34);
       --radius-xl: 28px;
       --radius-lg: 22px;
@@ -286,6 +287,31 @@
       background: rgba(255, 255, 255, 0.055);
     }
 
+    body.listener-mode #instrumentSelect {
+  border-color: rgba(159, 194, 255, 0.52);
+  box-shadow: 0 0 0 3px rgba(159, 194, 255, 0.08);
+  color: var(--listener);
+}
+
+body.listener-mode .field label[for="instrumentSelect"] {
+  color: var(--listener);
+}
+
+body.listener-mode #toneAnalyzeButton {
+  background: var(--listener);
+  color: #08100c;
+  box-shadow: 0 10px 24px rgba(159, 194, 255, 0.16);
+}
+
+body.listener-mode #toneAnalyzeButton:hover,
+body.listener-mode #toneAnalyzeButton:focus-visible {
+  filter: brightness(1.04);
+}
+
+body.listener-mode #toneAnalyzeButton:disabled {
+  opacity: 0.7;
+}
+    
     select option {
       color: #111714;
       background: #f5efe4;
@@ -331,6 +357,16 @@
       line-height: 1.45;
     }
 
+    .role-note {
+  color: var(--muted-soft);
+  font-size: 0.82rem;
+  line-height: 1.45;
+}
+
+body.listener-mode .role-note {
+  color: var(--listener);
+}
+    
     .status {
       min-height: 24px;
       color: var(--sage);
@@ -852,14 +888,17 @@
             <div class="field">
               <label for="instrumentSelect">Your role</label>
              <select id="instrumentSelect">
+  <<option value="listener" selected>Listener</option>
   <option value="acoustic-guitar">Acoustic Guitar</option>
   <option value="electric-guitar">Electric Guitar</option>
   <option value="bass">Bass</option>
   <option value="drums">Drums</option>
   <option value="keys-piano">Keys / Piano</option>
-  <option value="vocals">Vocals</option>
-  <option value="listener">Listener</option>
+  <option value="vocals">Vocals</option>  
 </select>
+             <p class="role-note" id="roleNote">
+    Start as a listener to understand what the song is shaping in your thoughts, mood, and values.
+  </p>
             </div>
 
             <button class="primary-button" type="button" id="toneAnalyzeButton">
@@ -1095,7 +1134,16 @@ applyListenerMode();
 
 function applyListenerMode() {
   const selectedRole = $("#instrumentSelect")?.value || "";
-  document.body.classList.toggle("listener-mode", selectedRole === "listener");
+  const isListener = selectedRole === "listener";
+
+  document.body.classList.toggle("listener-mode", isListener);
+
+  const roleNote = $("#roleNote");
+  if (roleNote) {
+    roleNote.textContent = isListener
+      ? "Start as a listener to understand what the song is shaping in your thoughts, mood, and values."
+      : "Choose your role to get prep that fits how you engage with the song.";
+  }
 }
 
     function userLooksSignedIn() {
