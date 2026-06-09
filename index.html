@@ -3244,11 +3244,18 @@ await updateGrowthUI();
   }
 });
 
-  updateMoodUI();
+ updateMoodUI();
 updateStreakUI();
 renderJournal();
 hydrateJournalDraft();
 updateGrowthUI();
+
+if (window.location.hash === "#screen-journal") {
+  setScreen("journal");
+  const editor = $("#journalEditor");
+  if (editor) editor.classList.add("active");
+  hydrateJournalDraft();
+}
     
 </script>
   
