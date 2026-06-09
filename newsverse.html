@@ -942,10 +942,10 @@
   <section class="contact-card-modal" role="dialog" aria-modal="true" aria-labelledby="signinPromptTitle">
     <button class="contact-close" type="button" id="closeSigninPrompt" aria-label="Close sign-in prompt">×</button>
 
-    <h2 class="contact-title" id="signinPromptTitle">Save your check-in</h2>
-    <p class="contact-copy">
-      Sign in to keep your mood check-in, streak, and growth progress connected to your account.
-    </p>
+   <h2 class="contact-title" id="signinPromptTitle">Save this Signal result</h2>
+<p class="contact-copy">
+  Sign in to keep this Signal reflection, your journal writing, and future growth connected to your account.
+</p>
 
     <div style="display:grid; gap:12px; margin-top:20px;">
       <a class="primary-button" href="signin.html">Sign in</a>
@@ -1174,7 +1174,9 @@ if (signinPromptModal) {
           const result = await window.RootedByteSaveOutput.save({
             appType: "signal",
             title: "Signal Truth Check",
-            inputSummary: "Signal truth check",
+            inputSummary: latestSignalOutput?.overall_theme
+  ? `Signal: ${latestSignalOutput.overall_theme}`
+  : "Signal truth check",
             outputJson: latestSignalOutput
           });
 
@@ -1221,7 +1223,9 @@ if (signinPromptModal) {
           await createSharedOutput({
             appType: "signal",
             title: "Signal Truth Check",
-            inputSummary: "Signal truth check",
+            inputSummary: latestSignalOutput?.overall_theme
+  ? `Signal: ${latestSignalOutput.overall_theme}`
+  : "Signal truth check",
             output: latestSignalOutput,
             statusElement,
             linkElement
@@ -1247,21 +1251,33 @@ if (signinPromptModal) {
       return;
     }
 
-    const draft = [
-      "Signal reflection",
-      "",
-      "Overall theme:",
-      latestSignalOutput.overall_theme || "",
-      "",
-      "Thinking impact:",
-      latestSignalOutput.thinking_impact || "",
-      "",
-      "Truth check:",
-      latestSignalOutput.truth_check || "",
-      "",
-      "Reflection steps:",
-      ...(Array.isArray(latestSignalOutput.prayer_points) ? latestSignalOutput.prayer_points : [])
-    ].join("\n");
+    const emotionalScore = Number(latestSignalOutput.emotional_temperature_score);
+const draft = [
+  "Signal reflection",
+  "",
+  "Overall theme:",
+  latestSignalOutput.overall_theme || "",
+  "",
+  "Summary:",
+  latestSignalOutput.article_summary || "",
+  "",
+  "Thinking impact:",
+  latestSignalOutput.thinking_impact || "",
+  "",
+  "Truth check:",
+  latestSignalOutput.truth_check || "",
+  "",
+  "Grounded response:",
+  latestSignalOutput.jesus_lens || "",
+  "",
+  Number.isFinite(emotionalScore) ? `Emotional temperature: ${Math.round(emotionalScore)}/100` : "",
+  "",
+  "Reflection steps:",
+  ...(Array.isArray(latestSignalOutput.prayer_points) ? latestSignalOutput.prayer_points : []),
+  "",
+  "What I want to remember:",
+  ""
+].filter(Boolean).join("\n");
 
     try {
       localStorage.setItem("rootedbyte_prefill_journal", draft);
@@ -1276,13 +1292,25 @@ if (signinPromptModal) {
       if (!button) return;
 
       button.onclick = () => {
-        latestSignalOutput = null;
-        $("#newsArticleUrl").value = "";
-        $("#newsHeadline").value = "";
-        $("#newsResult").innerHTML = "";
-        $("#newsStatus").textContent = "";
-        window.scrollTo({ top: 0, behavior: "smooth" });
-      };
+  latestSignalOutput = null;
+  $("#newsArticleUrl").value = "";
+  $("#newsHeadline").value = "";
+  $("#newsResult").innerHTML = "";
+  $("#newsStatus").textContent = "";
+  const saveStatus = $("#newsSaveStatus");
+  const shareStatus = $("#newsShareStatus");
+  const shareLink = $("#newsShareLink");
+
+  if (saveStatus) saveStatus.textContent = "";
+  if (shareStatus) shareStatus.textContent = "";
+  if (shareLink) {
+    shareLink.hidden = true;
+    shareLink.textContent = "";
+  }
+
+  $("#newsHeadline").focus();
+  window.scrollTo({ top: 0, behavior: "smooth" });
+};
     }
 
     $("#newsAnalyzeButton").addEventListener("click", async () => {
