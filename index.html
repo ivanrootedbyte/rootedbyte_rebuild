@@ -2068,10 +2068,10 @@
     <section class="contact-card-modal" role="dialog" aria-modal="true" aria-labelledby="signinPromptTitle">
       <button class="contact-close" type="button" id="closeSigninPrompt" aria-label="Close sign-in prompt">×</button>
 
-      <h2 class="contact-title" id="signinPromptTitle">Save your check-in</h2>
-      <p class="contact-copy">
-        Sign in to keep your mood check-in, streak, and growth progress connected to your account.
-      </p>
+      <h2 class="contact-title" id="signinPromptTitle">Save your progress</h2>
+<p class="contact-copy" id="signinPromptCopy">
+  Sign in to keep your mood check-in, streak, and growth progress connected to your account.
+</p>
 
       <div class="onboarding-actions" style="margin-top: 20px;">
         <a class="primary-button" href="signin.html">Sign in</a>
@@ -2487,11 +2487,25 @@ if (name === "journal") {
   const closeSigninPrompt = $("#closeSigninPrompt");
   const maybeLaterSigninPrompt = $("#maybeLaterSigninPrompt");
 
-  function showSigninPrompt() {
-    if (!signinPromptModal) return;
-    signinPromptModal.classList.add("active");
-    signinPromptModal.setAttribute("aria-hidden", "false");
+  function showSigninPrompt(options = {}) {
+  if (!signinPromptModal) return;
+
+  const title = $("#signinPromptTitle");
+  const copy = $("#signinPromptCopy");
+
+  if (title) {
+    title.textContent = options.title || "Save your progress";
   }
+
+  if (copy) {
+    copy.textContent =
+      options.copy ||
+      "Sign in to keep your mood check-in, streak, and growth progress connected to your account.";
+  }
+
+  signinPromptModal.classList.add("active");
+  signinPromptModal.setAttribute("aria-hidden", "false");
+}
 
   function hideSigninPrompt() {
     if (!signinPromptModal) return;
@@ -2578,22 +2592,28 @@ if (name === "journal") {
 
   $$(".mood-button").forEach((button) => {
   button.addEventListener("click", () => {
-    if (!userLooksSignedIn()) {
-      showSigninPrompt();
-      return;
-    }
-
     state.mood = button.dataset.mood;
 
-    const today = todayKey();
-    if (!state.streak.includes(today)) {
-      state.streak.push(today);
+    if (userLooksSignedIn()) {
+      const today = todayKey();
+      if (!state.streak.includes(today)) {
+        state.streak.push(today);
+      }
+
+      saveState();
+      updateMoodUI();
+      updateStreakUI();
+      updateGrowthUI();
+    } else {
+      updateMoodUI();
+
+      showSigninPrompt({
+        title: "Continue without saving?",
+        copy: "You can continue into Inner Work, but this check-in, streak, and progress will not be saved unless you sign in."
+      });
     }
 
-    saveState();
-    updateMoodUI();
-    updateStreakUI();
-    updateGrowthUI();
+    showTool("inner");
   });
 });
 
@@ -2636,9 +2656,11 @@ if (name === "journal") {
     }
     if (form) form.hidden = false;
 
-    if (note) {
+       if (note) {
       note.className = "ghost-note";
-      note.textContent = "Choose what feels loudest first. Then write one honest sentence.";
+      note.textContent = state.mood
+        ? `You checked in as ${state.mood.toLowerCase()}. Choose what feels loudest underneath that, then write one honest sentence.`
+        : "Choose what feels loudest first. Then write one honest sentence.";
     }
   }
 
