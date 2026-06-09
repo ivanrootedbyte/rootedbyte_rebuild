@@ -288,38 +288,35 @@
     }
 
     body.listener-mode #instrumentSelect {
-  border-color: rgba(159, 194, 255, 0.52);
-  box-shadow: 0 0 0 3px rgba(159, 194, 255, 0.08);
   color: var(--listener);
+  border-color: rgba(159, 194, 255, 0.42);
+  background: rgba(159, 194, 255, 0.05);
+  box-shadow: 0 0 0 3px rgba(159, 194, 255, 0.08);
 }
 
 body.listener-mode .field label[for="instrumentSelect"] {
   color: var(--listener);
 }
 
+body.listener-mode .role-note {
+  color: rgba(159, 194, 255, 0.88);
+}
+
 body.listener-mode #toneAnalyzeButton {
   background: var(--listener);
   color: #08100c;
-  box-shadow: 0 10px 24px rgba(159, 194, 255, 0.16);
-}
-
-.primary-button:hover,
-.primary-button:focus-visible {
-  box-shadow: 0 14px 30px rgba(184, 168, 216, 0.2);
+  box-shadow: 0 10px 24px rgba(159, 194, 255, 0.18);
 }
 
 body.listener-mode #toneAnalyzeButton:hover,
 body.listener-mode #toneAnalyzeButton:focus-visible {
-  box-shadow: 0 14px 30px rgba(159, 194, 255, 0.2);
-}
-    
-body.listener-mode #toneAnalyzeButton:hover,
-body.listener-mode #toneAnalyzeButton:focus-visible {
+  box-shadow: 0 14px 30px rgba(159, 194, 255, 0.24);
   filter: brightness(1.04);
 }
 
 body.listener-mode #toneAnalyzeButton:disabled {
   opacity: 0.7;
+  filter: none;
 }
     
     select option {
@@ -466,6 +463,53 @@ body.listener-mode .role-note {
 .listener-mode .prep-card h3,
 .listener-mode .share-panel h3 {
   color: var(--listener);
+}
+
+    .listener-mode .result-card,
+.listener-mode .share-panel,
+.listener-mode .prep-card,
+.listener-mode .resource-panel,
+.listener-mode .verified-item {
+  border-color: rgba(159, 194, 255, 0.16);
+}
+
+.listener-mode .result-card,
+.listener-mode .share-panel {
+  background: rgba(159, 194, 255, 0.035);
+}
+
+.listener-mode .verified-item,
+.listener-mode .prep-card,
+.listener-mode .resource-panel {
+  background: rgba(159, 194, 255, 0.025);
+}
+
+.listener-mode .verified-item span,
+.listener-mode .ghost-note,
+.listener-mode .result-card p,
+.listener-mode .share-panel p,
+.listener-mode .prep-body,
+.listener-mode .meaning-output {
+  color: #bfd3f7;
+}
+
+.listener-mode .verified-item strong,
+.listener-mode .resource-link {
+  color: var(--cream);
+}
+
+.listener-mode .share-link-box {
+  border-color: rgba(159, 194, 255, 0.2);
+  background: rgba(159, 194, 255, 0.04);
+}
+
+.listener-mode .bottom-nav a.active {
+  color: var(--listener);
+}
+
+.listener-mode .bottom-nav a.tools-active {
+  box-shadow: inset 0 0 0 2px rgba(159, 194, 255, 0.75);
+  background: rgba(159, 194, 255, 0.08);
 }
     
     .tag.warn {
@@ -899,13 +943,13 @@ body.listener-mode .role-note {
             <div class="field">
               <label for="instrumentSelect">Your role</label>
              <select id="instrumentSelect">
-  <<option value="listener" selected>Listener</option>
+  <option value="listener" selected>Listener</option>
   <option value="acoustic-guitar">Acoustic Guitar</option>
   <option value="electric-guitar">Electric Guitar</option>
   <option value="bass">Bass</option>
   <option value="drums">Drums</option>
   <option value="keys-piano">Keys / Piano</option>
-  <option value="vocals">Vocals</option>  
+  <option value="vocals">Vocals</option>
 </select>
              <p class="role-note" id="roleNote">
     Start as a listener to understand what the song is shaping in your thoughts, mood, and values.
@@ -1150,11 +1194,21 @@ function applyListenerMode() {
   document.body.classList.toggle("listener-mode", isListener);
 
   const roleNote = $("#roleNote");
-  if (roleNote) {
-    roleNote.textContent = isListener
-      ? "Start as a listener to understand what the song is shaping in your thoughts, mood, and values."
-      : "Choose your role to get prep that fits how you engage with the song.";
-  }
+  if (!roleNote) return;
+
+  const roleNotes = {
+    listener: "Start as a listener to understand what the song is shaping in your thoughts, mood, and values.",
+    "acoustic-guitar": "Focus on groove, strum feel, chord movement, and how the acoustic layer supports the emotion.",
+    "electric-guitar": "Focus on tone, lead texture, rhythmic space, and what should stay simple versus stand out.",
+    bass: "Focus on pulse, root movement, pocket, and where the bass anchors the emotional weight of the song.",
+    drums: "Focus on tempo, energy lift, restraint, transitions, and what the rhythm is teaching the room to feel.",
+    "keys-piano": "Focus on pads, harmony, timing, and whether the keys should lead, support, or leave space.",
+    vocals: "Focus on phrasing, breath, emotional honesty, and how the vocal carries the message clearly."
+  };
+
+  roleNote.textContent =
+    roleNotes[selectedRole] ||
+    "Choose your role to get prep that fits how you engage with the song.";
 }
 
     function userLooksSignedIn() {
