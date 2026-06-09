@@ -2604,13 +2604,16 @@ if (name === "journal") {
       updateMoodUI();
       updateStreakUI();
       updateGrowthUI();
-    } else {
+        } else {
       updateMoodUI();
+      showTool("inner");
 
       showSigninPrompt({
         title: "Continue without saving?",
         copy: "You can continue into Inner Work, but this check-in, streak, and progress will not be saved unless you sign in."
       });
+
+      return;
     }
 
     showTool("inner");
@@ -2907,12 +2910,15 @@ if (name === "journal") {
         note: text
       });
 
-      state.reflections += 1;
-      state.focus[selected] = (state.focus[selected] || 0) + 1;
-      saveState();
-      updateGrowthUI();
+            if (userLooksSignedIn()) {
+        state.reflections += 1;
+        state.focus[selected] = (state.focus[selected] || 0) + 1;
+        saveState();
+        updateGrowthUI();
+      }
 
       renderInnerQuickResult(data);
+      
     } catch (error) {
       if (note) {
         note.className = "ghost-note";
