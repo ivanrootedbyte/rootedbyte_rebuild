@@ -998,14 +998,67 @@
       </svg>
       <span>Growth</span>
     </a>
-  </nav>
+   </nav>
+
+  <div class="contact-modal" id="signinPromptModal" aria-hidden="true">
+    <section class="contact-card-modal" role="dialog" aria-modal="true" aria-labelledby="signinPromptTitle">
+      <button class="contact-close" type="button" id="closeSigninPrompt" aria-label="Close sign-in prompt">×</button>
+
+      <h2 class="contact-title" id="signinPromptTitle">Save this Inner Work reflection</h2>
+      <p class="contact-copy">
+        Sign in to keep this reflection, your journal writing, and future growth connected to your account.
+      </p>
+
+      <div style="display:grid; gap:12px; margin-top:20px;">
+        <a class="primary-button" href="signin.html">Sign in</a>
+        <button class="footer-link-button" type="button" id="maybeLaterSigninPrompt">Maybe later</button>
+      </div>
+    </section>
+  </div>
 
   <script>
   const $ = (selector) => document.querySelector(selector);
 
-  const year = $("#year");
-  if (year) year.textContent = new Date().getFullYear();
+   function userLooksSignedIn() {
+    try {
+      return localStorage.getItem("rootedbyte_user_signed_in") === "true";
+    } catch {
+      return false;
+    }
+  }
 
+  const signinPromptModal = $("#signinPromptModal");
+  const closeSigninPrompt = $("#closeSigninPrompt");
+  const maybeLaterSigninPrompt = $("#maybeLaterSigninPrompt");
+
+  function showSigninPrompt() {
+    if (!signinPromptModal) return;
+    signinPromptModal.classList.add("active");
+    signinPromptModal.setAttribute("aria-hidden", "false");
+  }
+
+  function hideSigninPrompt() {
+    if (!signinPromptModal) return;
+    signinPromptModal.classList.remove("active");
+    signinPromptModal.setAttribute("aria-hidden", "true");
+  }
+
+  if (closeSigninPrompt) {
+    closeSigninPrompt.addEventListener("click", hideSigninPrompt);
+  }
+
+  if (maybeLaterSigninPrompt) {
+    maybeLaterSigninPrompt.addEventListener("click", hideSigninPrompt);
+  }
+
+  if (signinPromptModal) {
+    signinPromptModal.addEventListener("click", (event) => {
+      if (event.target === signinPromptModal) {
+        hideSigninPrompt();
+      }
+    });
+  }
+    
   function escapeHtml(value) {
     return String(value ?? "")
       .replace(/&/g, "&amp;")
@@ -1222,13 +1275,12 @@
     `;
   }
 
-  function renderSharePanel() {
+    function renderSharePanel() {
     return `
       <div class="share-panel">
         <h3>Save or share this Inner Work reflection</h3>
         <p>
-          Save privately to your account, or create a public RootedByte link
-          that anyone with the link can view.
+          Save privately to your account, create a public RootedByte link, or turn it into a journal entry.
         </p>
 
         <div class="share-panel__actions">
@@ -1238,6 +1290,12 @@
 
           <button class="secondary-button" type="button" id="shareRootedOutput">
             Share publicly
+          </button>
+        </div>
+
+        <div class="share-panel__actions" style="margin-top: 10px;">
+          <button class="secondary-button" type="button" id="journalRootedOutput">
+            Write journal
           </button>
         </div>
 
@@ -1315,24 +1373,24 @@
         const result = await window.RootedByteSaveOutput.save({
           appType: "inner_work",
           title: "Inner Work Reflection",
-          inputSummary: "Private Inner Work reflection",
+          inputSummary: outputData?.summary
+  ? `Inner Work: ${outputData.summary.slice(0, 80)}`
+  : "Private Inner Work reflection",
           outputJson: outputData
         });
 
         if (!result.ok) {
-          statusElement.className = "status error";
+  statusElement.className = "status error";
 
-          if (result.reason === "not_signed_in") {
-            statusElement.innerHTML = `
-              <span>Please sign in to save this privately.</span>
-              <a href="signin.html" style="color: var(--sage); font-weight: 900; text-decoration: underline;">Sign in</a>
-            `;
-            return;
-          }
+  if (result.reason === "not_signed_in") {
+    statusElement.textContent = "Please sign in to save this privately.";
+    showSigninPrompt();
+    return;
+  }
 
-          statusElement.textContent = result.message || "Could not save privately.";
-          return;
-        }
+  statusElement.textContent = result.message || "Could not save privately.";
+  return;
+}
 
         statusElement.className = "status";
         statusElement.textContent = "Saved privately to your account.";
@@ -1342,6 +1400,48 @@
       } finally {
         button.disabled = false;
       }
+    });
+  }
+
+      function attachRootedJournalButton(outputData) {
+    const button = document.querySelector("#journalRootedOutput");
+    if (!button) return;
+
+    button.addEventListener("click", () => {
+      if (!outputData) return;
+
+      if (!userLooksSignedIn()) {
+        showSigninPrompt();
+        return;
+      }
+
+      const areas = Array.isArray(outputData.areas) ? outputData.areas : [];
+      const draft = [
+        "Inner Work reflection",
+        "",
+        "Summary:",
+        outputData.summary || "",
+        "",
+        "Focus areas:",
+        ...areas.flatMap((area) => ([
+          area.area ? `- ${area.area}` : "- Reflection",
+          area.current_state ? `  Current state: ${area.current_state}` : "",
+          area.recommendation ? `  Recommendation: ${area.recommendation}` : "",
+          area.action_step ? `  Action step: ${area.action_step}` : ""
+        ].filter(Boolean))),
+        "",
+        "Encouragement:",
+        outputData.encouragement || "",
+        "",
+        "What I want to remember:",
+        ""
+      ].join("\n");
+
+      try {
+        localStorage.setItem("rootedbyte_prefill_journal", draft);
+      } catch {}
+
+      window.location.href = "index.html#screen-journal";
     });
   }
 
@@ -1360,7 +1460,9 @@
         await createSharedOutput({
           appType: "inner_work",
           title: "Inner Work Reflection",
-          inputSummary: "Shared Inner Work reflection",
+          inputSummary: outputData?.summary
+  ? `Inner Work: ${outputData.summary.slice(0, 80)}`
+  : "Shared Inner Work reflection",
           output: outputData,
           statusElement,
           linkElement
@@ -1392,8 +1494,9 @@
 
       result.innerHTML = renderRootedPlan(data) + renderSharePanel();
 
-      attachRootedSaveButton(data);
-      attachRootedShareButton(data);
+attachRootedSaveButton(data);
+attachRootedShareButton(data);
+attachRootedJournalButton(data);
 
       setStatus($("#rootedStatus"), "Inner Work reflection ready.");
     } catch (error) {
