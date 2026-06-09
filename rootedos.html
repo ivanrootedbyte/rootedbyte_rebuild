@@ -1019,7 +1019,10 @@
   <script>
   const $ = (selector) => document.querySelector(selector);
 
-   function userLooksSignedIn() {
+const year = $("#year");
+if (year) year.textContent = new Date().getFullYear();
+
+function userLooksSignedIn() {
     try {
       return localStorage.getItem("rootedbyte_user_signed_in") === "true";
     } catch {
