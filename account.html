@@ -150,6 +150,37 @@
       padding: clamp(2rem, 5vw, 4rem) 0;
     }
 
+    .stats-strip {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.stat-card {
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.78);
+  box-shadow: var(--shadow);
+  padding: 1rem 1.1rem;
+}
+
+.stat-label {
+  display: block;
+  color: var(--muted);
+  font-size: 0.84rem;
+  font-weight: 850;
+}
+
+.stat-value {
+  display: block;
+  margin-top: 0.4rem;
+  color: var(--forest-dark);
+  font-size: clamp(1.5rem, 3vw, 2.2rem);
+  font-weight: 950;
+  letter-spacing: -0.05em;
+}
+    
     .hero-card,
     .panel,
     .saved-card {
@@ -562,6 +593,10 @@
 .saved-output-layout {
   grid-template-columns: 1fr;
 }
+
+  .stats-strip {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
       
 }
 
@@ -640,30 +675,53 @@
 
   <main class="page">
     <section class="hero-card">
-      <span class="pill">Private Account</span>
-      <div class="account-heading">
-  <span class="account-heading-logo-wrap">
-    <img src="images/rootedbyte-icon.png" alt="" class="account-heading-logo" />
-  </span>
+  <span class="pill">Private Account</span>
+  <div class="account-heading">
+    <span class="account-heading-logo-wrap">
+      <img src="images/rootedbyte-icon.png" alt="" class="account-heading-logo" />
+    </span>
 
-  <div>
-    <span class="tag">Private space</span>
-    <h1>My Account</h1>
-    <p>Your saved RootedByte outputs and reflections live here.</p>
+    <div>
+      <span class="tag">Private space</span>
+      <h1>My Account</h1>
+      <p>Your saved RootedByte outputs and reflections live here.</p>
+    </div>
   </div>
-</div>
-      <p class="lead" id="accountLead">
-        Loading your saved outputs and journal space...
-      </p>
-    </section>
+  <p class="lead" id="accountLead">
+    Loading your saved outputs and journal space...
+  </p>
+</section>
 
-    <section class="account-grid">
+<section class="stats-strip" id="accountStatsStrip">
+  <article class="stat-card">
+    <span class="stat-label">Reflections</span>
+    <strong class="stat-value" id="statReflections">0</strong>
+  </article>
+
+  <article class="stat-card">
+    <span class="stat-label">Signal checks</span>
+    <strong class="stat-value" id="statSignals">0</strong>
+  </article>
+
+  <article class="stat-card">
+    <span class="stat-label">Songs prepped</span>
+    <strong class="stat-value" id="statSongs">0</strong>
+  </article>
+
+  <article class="stat-card">
+    <span class="stat-label">Journal entries</span>
+    <strong class="stat-value" id="statJournal">0</strong>
+  </article>
+</section>
+
+<section class="account-grid">
       <aside class="panel">
-        <div class="account-tabs">
-          <button class="tab-button active" type="button" data-tab="saved">Saved Outputs</button>
-          <button class="tab-button" type="button" data-tab="shared">Shared Links</button>
-          <button class="tab-button" type="button" data-tab="journal">Journal</button>
-        </div>
+       <div class="account-tabs">
+  <button class="tab-button active" type="button" data-tab="saved">Saved Outputs</button>
+  <button class="tab-button" type="button" data-tab="growth">Growth</button>
+  <button class="tab-button" type="button" data-tab="shared">Shared Links</button>
+  <button class="tab-button" type="button" data-tab="journal">Journal</button>
+</div>
       </aside>
 
       <section class="panel">
@@ -687,8 +745,10 @@
   const SIGNED_IN_FLAG = 'rootedbyte_user_signed_in';
 
   let supabaseClient = null;
-  let currentUser = null;
-  let currentTab = 'saved';
+let currentUser = null;
+let currentTab = 'saved';
+let cachedSavedOutputs = [];
+let cachedJournalEntries = [];
 
   function escapeHtml(value) {
     return String(value ?? '')
@@ -1062,7 +1122,68 @@
     return data || [];
   }
 
+async function loadAccountData() {
+  const [outputs, journalEntries] = await Promise.all([
+    fetchSavedOutputs(),
+    fetchJournalEntries()
+  ]);
 
+  cachedSavedOutputs = outputs;
+  cachedJournalEntries = journalEntries;
+
+  const stats = {
+    reflections: 0,
+    signals: 0,
+    songs: 0,
+    journalEntries: journalEntries.length,
+    focusCounts: {
+      Identity: 0,
+      'Digital Habits': 0,
+      Relationships: 0,
+      Purpose: 0,
+      Pressure: 0,
+      Comparison: 0
+    }
+  };
+
+  outputs.forEach((item) => {
+    const normalized = normalizeAppType(item.app_type);
+
+    if (normalized === 'inner_work') {
+  stats.reflections += 1;
+
+  const areas = Array.isArray(item.output_json?.areas) ? item.output_json.areas : [];
+  areas.forEach((area) => {
+    const name = area?.area;
+    if (name && Object.prototype.hasOwnProperty.call(stats.focusCounts, name)) {
+      stats.focusCounts[name] += 1;
+    }
+  });
+}
+
+    if (normalized === 'signal') {
+      stats.signals += 1;
+    }
+
+    if (normalized === 'soundsense') {
+      stats.songs += 1;
+    }
+  });
+
+  return stats;
+}
+
+function renderStatsStrip(stats) {
+  const reflections = $('#statReflections');
+  const signals = $('#statSignals');
+  const songs = $('#statSongs');
+  const journal = $('#statJournal');
+
+  if (reflections) reflections.textContent = stats.reflections || 0;
+  if (signals) signals.textContent = stats.signals || 0;
+  if (songs) songs.textContent = stats.songs || 0;
+  if (journal) journal.textContent = stats.journalEntries || 0;
+}
   async function renderSavedTab() {
     setStatus('Loading saved outputs...');
     accountContent.innerHTML = '';
@@ -1154,44 +1275,7 @@
   setStatus('');
 }
 
-      accountContent.innerHTML = `
-        <h2>Shared Links</h2>
-        <div class="saved-list">
-          ${links.map((item) => {
-            const shareSlug = escapeHtml(item.share_slug);
-            const appLabel = getAppLabel(item.app_type);
-            const title = item.title || `${appLabel} Shared Link`;
-            const shareUrl = `${window.location.origin}/share.html?id=${encodeURIComponent(item.share_slug)}`;
-
-            return `
-              <article class="saved-card">
-                <span class="pill">${escapeHtml(appLabel)}</span>
-                <h3>${escapeHtml(title)}</h3>
-
-                <p class="saved-card__meta">
-                  Shared ${escapeHtml(formatDate(item.created_at))}
-                  ${item.input_summary ? ` • ${escapeHtml(item.input_summary)}` : ''}
-                </p>
-
-                <div class="saved-card__actions">
-                  <a class="btn primary" href="${escapeHtml(shareUrl)}" target="_blank" rel="noopener">
-                    Open Link
-                  </a>
-                  <button class="btn" type="button" data-copy-share="${shareSlug}">
-                    Copy Link
-                  </button>
-                </div>
-              </article>
-            `;
-          }).join('')}
-        </div>
-      `;
-
-      setStatus('');
-    } catch (error) {
-      setStatus(error.message || 'Could not load shared links.', 'error');
-    }
-  }
+      
 
   async function renderJournalTab() {
     setStatus('Loading journal entries...');
@@ -1231,17 +1315,85 @@
     }
   }
 
-  function renderCurrentTab() {
-    if (!supabaseClient || !currentUser) return;
+   async function renderGrowthTab() {
+  setStatus('Loading growth overview...');
+  accountContent.innerHTML = '';
 
-    if (currentTab === 'saved') {
-      renderSavedTab();
-    } else if (currentTab === 'shared') {
-      renderSharedTab();
-    } else if (currentTab === 'journal') {
-      renderJournalTab();
-    }
+  try {
+    const stats = await loadAccountData();
+    const focusCounts = stats.focusCounts || {};
+    const max = Math.max(1, ...Object.values(focusCounts));
+
+    accountContent.innerHTML = `
+      <h2>Growth</h2>
+      <p class="lead" style="margin-top:0.6rem;">
+        A simple view of what you have been returning to across Inner Work, Signal, SoundSense, and your journal.
+      </p>
+
+      <div class="saved-list">
+        <article class="saved-card">
+          <h3>Overview</h3>
+          <div class="saved-output-grid" style="margin-top: 1rem;">
+            <div class="saved-output-block">
+              <span class="tag">Reflections</span>
+              <p>${stats.reflections} Inner Work reflection${stats.reflections === 1 ? '' : 's'}</p>
+            </div>
+            <div class="saved-output-block">
+              <span class="tag">Signal</span>
+              <p>${stats.signals} Signal check${stats.signals === 1 ? '' : 's'}</p>
+            </div>
+            <div class="saved-output-block">
+              <span class="tag">SoundSense</span>
+              <p>${stats.songs} song prep${stats.songs === 1 ? '' : 's'}</p>
+            </div>
+            <div class="saved-output-block">
+              <span class="tag">Journal</span>
+              <p>${stats.journalEntries} journal entr${stats.journalEntries === 1 ? 'y' : 'ies'}</p>
+            </div>
+          </div>
+        </article>
+
+        <article class="saved-card">
+          <h3>Focus areas</h3>
+          <div class="saved-list">
+            ${Object.entries(focusCounts).map(([name, count]) => {
+              const width = Math.min(100, Math.round((count / max) * 100));
+              return `
+                <div class="saved-output-block">
+                  <div style="display:flex; justify-content:space-between; gap:12px; align-items:center;">
+                    <strong>${escapeHtml(name)}</strong>
+                    <span class="saved-card__meta">${count} reflection${count === 1 ? '' : 's'}</span>
+                  </div>
+                  <div style="height:8px; margin-top:12px; border-radius:999px; background: rgba(37, 77, 53, 0.12); overflow:hidden;">
+                    <div style="width:${width}%; height:100%; background: linear-gradient(135deg, var(--forest-dark), var(--forest)); border-radius:999px;"></div>
+                  </div>
+                </div>
+              `;
+            }).join('')}
+          </div>
+        </article>
+      </div>
+    `;
+
+    setStatus('');
+  } catch (error) {
+    setStatus(error.message || 'Could not load growth overview.', 'error');
   }
+}
+   
+  function renderCurrentTab() {
+  if (!supabaseClient || !currentUser) return;
+
+  if (currentTab === 'saved') {
+    renderSavedTab();
+  } else if (currentTab === 'growth') {
+    renderGrowthTab();
+  } else if (currentTab === 'shared') {
+    renderSharedTab();
+  } else if (currentTab === 'journal') {
+    renderJournalTab();
+  }
+}
 
   function setActiveTab(tab) {
     currentTab = tab;
@@ -1332,8 +1484,12 @@
       }
 
       textarea.value = '';
-      setStatus('Journal entry saved.');
-      return;
+setStatus('Journal entry saved.');
+
+const stats = await loadAccountData();
+renderStatsStrip(stats);
+
+return;
     }
 
     if (deleteButton) {
@@ -1358,8 +1514,12 @@
       }
 
       setStatus('Saved output deleted.');
-      renderSavedTab();
-      return;
+
+const stats = await loadAccountData();
+renderStatsStrip(stats);
+renderSavedTab();
+
+return;
     }
 
     if (copyShareButton) {
@@ -1439,11 +1599,14 @@
       }
 
       currentUser = data.session.user;
-      setLocalSignedInFlag(true);
+setLocalSignedInFlag(true);
 
-      accountLead.textContent = `Signed in as ${currentUser.email}. Saved outputs are private unless you share them publicly.`;
+accountLead.textContent = `Signed in as ${currentUser.email}. Saved outputs are private unless you share them publicly.`;
 
-      renderCurrentTab();
+const stats = await loadAccountData();
+renderStatsStrip(stats);
+renderCurrentTab();
+      
     } catch (error) {
       setLocalSignedInFlag(false);
       setStatus(error.message || 'Could not load account system.', 'error');
