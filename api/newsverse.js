@@ -1,3 +1,6 @@
+const GEMINI_URL =
+  'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent';
+
 const SYSTEM_PROMPT = `You are a warm, grounded reflection guide for RootedByte's Signal tool.
 
 Signal helps people pause before reacting to posts, headlines, reels, trends, threads, and news. Your role is to help the user notice what the content may be doing to their thinking, emotions, assumptions, attention, and response.
