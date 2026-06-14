@@ -1048,13 +1048,20 @@ if (signinPromptModal) {
       latestSignalOutput = data;
       const anchors = Array.isArray(data.verses) ? data.verses : [];
       const reflectionSteps = Array.isArray(data.prayer_points) ? data.prayer_points : [];
-      const publicPath = data.source_mode === "headline_only";
+      const headlineOnly = data.source_mode === "headline_only";
+const previewMode = data.source_mode === "headline_and_description";
       const emotionalScore = Number(data.emotional_temperature_score);
       const hasEmotionalScore = Number.isFinite(emotionalScore);
 
       return `
         <div class="result-card ${publicPath ? "highlight" : ""}">
-          <span class="tag">${publicPath ? "Headline-based check" : "Signal summary"}</span>
+          <span class="tag">${
+  headlineOnly
+    ? "Headline-based check"
+    : previewMode
+      ? "Preview-based check"
+      : "Signal summary"
+}</span>
           <h2>${escapeHtml(data.overall_theme || "Signal reflection")}</h2>
           <p>${escapeHtml(data.article_summary || "")}</p>
         </div>
