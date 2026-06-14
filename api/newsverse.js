@@ -195,7 +195,7 @@ function extractModelText(data) {
 
 function buildFallbackSignal(contentType, title, sourceMode) {
   return {
-    article_summary: `This ${contentType} may be shaping perception quickly, but the available information is limited.`,
+    article_summary: `This ${contentType} may be shaping perception quickly and needs a careful, grounded read before reacting.`,
     thinking_impact:
       'Fast content can amplify reaction, flatten nuance, and push you toward quick assumptions before careful understanding.',
     emotional_temperature_score: 58,
@@ -282,16 +282,16 @@ function normalizeNewsVerse(data, fallback) {
     : fallback.verses;
 
   result.verses = anchors.map((anchor, index) => ({
-    reference: shortenText(anchor.reference, `Grounding Point ${index + 1}`, 40),
-    text: shortenText(anchor.text, '', 180),
-    relevance_percent: clampPercent(anchor.relevance_percent),
-    relevance_reason: shortenText(anchor.relevance_reason, '', 140),
-    application: shortenText(anchor.application, '', 160)
-  }));
+  reference: cleanText(anchor.reference || `Grounding Point ${index + 1}`, 80),
+  text: cleanText(anchor.text || '', 320),
+  relevance_percent: clampPercent(anchor.relevance_percent),
+  relevance_reason: cleanText(anchor.relevance_reason || '', 240),
+  application: cleanText(anchor.application || '', 260)
+}));
 
-  result.prayer_points = Array.isArray(result.prayer_points)
-    ? result.prayer_points.slice(0, 3).map((item) => shortenText(item, '', 120))
-    : fallback.prayer_points;
+result.prayer_points = Array.isArray(result.prayer_points)
+  ? result.prayer_points.slice(0, 3).map((item) => cleanText(item || '', 220))
+  : fallback.prayer_points;
 
   if (!result.verses.length) {
     result.verses = fallback.verses;
@@ -410,9 +410,11 @@ module.exports = async function handler(req, res) {
         summaryBasis = cleanText(articlePayload.summaryBasis || '', 80);
 
         sourceMode =
-          articlePayload.summaryBasis === 'full_article'
-            ? 'full_article'
-            : 'headline_only';
+  articlePayload.summaryBasis === 'full_article'
+    ? 'full_article'
+    : articlePayload.summaryBasis === 'headline_and_description'
+      ? 'headline_and_description'
+      : 'headline_only';
       }
     }
 
@@ -421,9 +423,12 @@ module.exports = async function handler(req, res) {
     }
 
     if (!summaryBasis) {
-      summaryBasis = contentToAnalyze && contentToAnalyze.length > 220
-        ? 'pasted_content'
-        : 'headline_or_short_text';
+      summaryBasis =
+  contentToAnalyze && contentToAnalyze.length > 900
+    ? 'full_article'
+    : contentToAnalyze && contentToAnalyze.length > 220
+      ? 'headline_and_description'
+      : 'headline_or_short_text';
     }
 
     if (!sourceMode) {
@@ -455,7 +460,7 @@ module.exports = async function handler(req, res) {
     const userPrompt = `Analyze this ${newsType} using the ${basisLabel}.
 
 Important:
-- If this is based only on a headline, short post, public link preview, or URL fallback, clearly say the Signal check is limited.
+- Only say the Signal check is limited when the available content is truly only a headline, a very short excerpt, or a failed article fetch.
 - Do not pretend you read the full article or post if only a headline, short text, or URL was available.
 - Help the user pause before reacting.
 - Focus on what this content may be doing to attention, fear, anger, comparison, assumptions, compassion, truth, and response.
