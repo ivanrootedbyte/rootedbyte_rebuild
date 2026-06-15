@@ -85,23 +85,23 @@ function buildFallbackPayload({ url, title = '', description = '', h1 = '', arti
   }
 
   const fallbackText = [
-  `Headline: ${bestHeadline}`,
-  bestDescription ? `Available page summary: ${bestDescription}` : '',
-  usableText ? `Available article text: ${usableText}` : '',
-  `Source URL: ${url}`
-].filter(Boolean).join('\n\n');
+    `Headline: ${bestHeadline}`,
+    bestDescription ? `Available page summary: ${bestDescription}` : '',
+    usableText ? `Available article text: ${usableText}` : '',
+    `Source URL: ${url}`
+  ].filter(Boolean).join('\n\n');
 
   return {
-  title: bestHeadline,
-  text: fallbackText,
-  summaryBasis: usableText
-    ? 'headline_and_description'
-    : bestDescription
+    title: bestHeadline,
+    text: fallbackText,
+    summaryBasis: usableText
       ? 'headline_and_description'
-      : 'headline_from_url',
-  fallbackUsed: true,
-  sourceUrl: url
-};
+      : bestDescription
+        ? 'headline_and_description'
+        : 'headline_from_url',
+    fallbackUsed: true,
+    sourceUrl: url
+  };
 }
 
 async function fetchHtml(url) {
@@ -176,16 +176,16 @@ module.exports = async function handler(req, res) {
     }
 
     if (!readableText || readableText.length < 180) {
-  const paragraphs = [
-    ...document.querySelectorAll(
-      'article p, main p, [role="main"] p, .article-body p, .story-body p, .entry-content p, .post-content p, .article-content p, p'
-    )
-  ]
-    .map((p) => cleanText(p.textContent))
-    .filter((text) => text.length > 40);
+      const paragraphs = [
+        ...document.querySelectorAll(
+          'article p, main p, [role="main"] p, .article-body p, .story-body p, .entry-content p, .post-content p, .article-content p, p'
+        )
+      ]
+        .map((p) => cleanText(p.textContent))
+        .filter((text) => text.length > 40);
 
-  readableText = cleanText(paragraphs.join(' '));
-}
+      readableText = cleanText(paragraphs.join(' '));
+    }
 
     return res.status(200).json(buildFallbackPayload({
       url: parsedUrl.toString(),
@@ -195,9 +195,9 @@ module.exports = async function handler(req, res) {
       articleText: readableText
     }));
   } catch (error) {
-  console.error('readarticle failed:', error);
+    console.error('readarticle failed:', error);
 
-  return res.status(200).json(buildFallbackPayload({
+    return res.status(200).json(buildFallbackPayload({
       url: parsedUrl.toString(),
       title: '',
       description: '',
