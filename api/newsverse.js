@@ -52,8 +52,8 @@ FIELD RULES:
 - Keep every field concise and UI-ready.
 
 DISCERNMENT RULES:
-- If only a headline, short post, or URL fallback was available, clearly say the reflection is limited and based only on available information.
-- Do not pretend the full article or post was read if only a headline, pasted text, or URL was provided.
+- Only say the reflection is limited when the available content is truly only a headline, a very short excerpt, or a failed article fetch.
+- Do not pretend the full article or post was read if only a headline, short text, or URL fallback was available.
 - Help the user notice what the content may be training in attention, fear, anger, comparison, outrage, pride, despair, compassion, wisdom, or response.
 - Do not flatten the analysis into "be careful." Identify what the content specifically reinforces, normalizes, distorts, provokes, excuses, or strengthens.
 - Be truthful about manipulation, panic, confusion, moral laziness, false urgency, or emotional bait when present.
@@ -200,7 +200,7 @@ function buildFallbackSignal(contentType, title, sourceMode) {
       'Fast content can amplify reaction, flatten nuance, and push you toward quick assumptions before careful understanding.',
     emotional_temperature_score: 58,
     truth_check:
-      'Pause before reacting. Ask what is verified, what is assumed, and what this content is strengthening in your attention, emotion, and response.',
+      'Pause before reacting. Ask what is verified, what is assumed, and whether this content is strengthening clarity, fear, outrage, confusion, compassion, or performative reaction.',
     verses: [
       {
         reference: 'Grounding Point 1',
@@ -225,9 +225,9 @@ function buildFallbackSignal(contentType, title, sourceMode) {
       }
     ],
     exegesis:
-      'Quick content often bypasses thoughtful reflection. Clarity grows when you slow down enough to test what is actually true and what response is worth carrying forward.',
+      'Fast content often compresses reality into something more reactive than truthful. Clarity grows when you slow the moment down enough to test what is actually true, what is emotionally exaggerated, and what response is worth carrying forward.',
     jesus_lens:
-      'A grounded response would slow the moment down, refuse panic, and move toward clarity, honesty, and wise restraint.',
+      'A grounded response would slow the moment down, refuse panic or performance, and move toward clarity, honesty, compassion, and wise restraint.',
     prayer_points: [
       'What is verified here, and what am I assuming?',
       'What is this shaping in my emotions and mindset right now?',
@@ -241,7 +241,7 @@ function buildFallbackSignal(contentType, title, sourceMode) {
 function normalizeNewsVerse(data, fallback) {
   const result = data && typeof data === 'object' ? data : {};
 
-   result.article_summary = cleanText(
+  result.article_summary = cleanText(
     result.article_summary || fallback.article_summary,
     2000
   );
@@ -282,16 +282,16 @@ function normalizeNewsVerse(data, fallback) {
     : fallback.verses;
 
   result.verses = anchors.map((anchor, index) => ({
-  reference: cleanText(anchor.reference || `Grounding Point ${index + 1}`, 80),
-  text: cleanText(anchor.text || '', 320),
-  relevance_percent: clampPercent(anchor.relevance_percent),
-  relevance_reason: cleanText(anchor.relevance_reason || '', 240),
-  application: cleanText(anchor.application || '', 260)
-}));
+    reference: cleanText(anchor.reference || `Grounding Point ${index + 1}`, 80),
+    text: cleanText(anchor.text || '', 320),
+    relevance_percent: clampPercent(anchor.relevance_percent),
+    relevance_reason: cleanText(anchor.relevance_reason || '', 240),
+    application: cleanText(anchor.application || '', 260)
+  }));
 
-result.prayer_points = Array.isArray(result.prayer_points)
-  ? result.prayer_points.slice(0, 3).map((item) => cleanText(item || '', 220))
-  : fallback.prayer_points;
+  result.prayer_points = Array.isArray(result.prayer_points)
+    ? result.prayer_points.slice(0, 3).map((item) => cleanText(item || '', 220))
+    : fallback.prayer_points;
 
   if (!result.verses.length) {
     result.verses = fallback.verses;
@@ -330,11 +330,11 @@ async function callGemini(userPrompt, fallback) {
 
   if (!response.ok) {
     if (response.status === 503 || /high demand|overloaded|try again later/i.test(responseBody)) {
-      throw new Error('The Signal engine is busy right now. Please try again in a minute.');
+      return fallback;
     }
 
     if (response.status === 429 || /quota|rate limit/i.test(responseBody)) {
-      throw new Error('The Signal engine is temporarily limited. Please try again later.');
+      return fallback;
     }
 
     throw new Error('Signal could not analyze this item right now. Please try again.');
@@ -396,26 +396,50 @@ module.exports = async function handler(req, res) {
 
     let title = cleanText(body.title || '', 300);
     let sourceUrl = articleUrl;
-    let contentToAnalyze = pastedText;
+    let contentToAnalyze = '';
     let summaryBasis = cleanText(body.summaryBasis || '', 80);
-    let sourceMode = 'pasted_text';
+    let sourceMode = articleUrl ? 'link_attempted' : 'pasted_text';
 
-    if (articleUrl && !contentToAnalyze) {
+    if (articleUrl) {
       const articlePayload = await readArticleFromUrl(req, articleUrl);
 
       if (articlePayload) {
         title = cleanText(articlePayload.title || title, 300);
         sourceUrl = cleanText(articlePayload.sourceUrl || articleUrl, 1000);
-        contentToAnalyze = cleanText(articlePayload.text || '', 4000);
-        summaryBasis = cleanText(articlePayload.summaryBasis || '', 80);
 
-        sourceMode =
-  articlePayload.summaryBasis === 'full_article'
-    ? 'full_article'
-    : articlePayload.summaryBasis === 'headline_and_description'
-      ? 'headline_and_description'
-      : 'headline_only';
+        const extractedText = cleanText(articlePayload.text || '', 4000);
+        const extractedBasis = cleanText(articlePayload.summaryBasis || '', 80);
+        const usedFallback = articlePayload.fallbackUsed === true;
+
+        if (!usedFallback && extractedText) {
+          contentToAnalyze = extractedText;
+          summaryBasis = extractedBasis || 'full_article';
+          sourceMode =
+            extractedBasis === 'full_article'
+              ? 'full_article'
+              : extractedBasis === 'headline_and_description'
+                ? 'headline_and_description'
+                : 'full_article';
+        } else if (pastedText) {
+          contentToAnalyze = pastedText;
+          summaryBasis =
+            pastedText.length > 900
+              ? 'pasted_content'
+              : pastedText.length > 220
+                ? 'headline_and_description'
+                : 'headline_or_short_text';
+          sourceMode = 'pasted_text';
+        } else {
+          contentToAnalyze = extractedText;
+          summaryBasis = extractedBasis || 'headline_or_short_text';
+          sourceMode =
+            extractedBasis === 'headline_and_description'
+              ? 'headline_and_description'
+              : 'headline_only';
+        }
       }
+    } else {
+      contentToAnalyze = pastedText;
     }
 
     if (!title && articleUrl) {
@@ -424,15 +448,22 @@ module.exports = async function handler(req, res) {
 
     if (!summaryBasis) {
       summaryBasis =
-  contentToAnalyze && contentToAnalyze.length > 900
-    ? 'full_article'
-    : contentToAnalyze && contentToAnalyze.length > 220
-      ? 'headline_and_description'
-      : 'headline_or_short_text';
+        contentToAnalyze && contentToAnalyze.length > 900
+          ? 'full_article'
+          : contentToAnalyze && contentToAnalyze.length > 220
+            ? 'headline_and_description'
+            : 'headline_or_short_text';
     }
 
     if (!sourceMode) {
-      sourceMode = summaryBasis === 'full_article' ? 'full_article' : 'headline_only';
+      sourceMode =
+        summaryBasis === 'full_article'
+          ? 'full_article'
+          : summaryBasis === 'headline_and_description'
+            ? 'headline_and_description'
+            : summaryBasis === 'pasted_content'
+              ? 'pasted_text'
+              : 'headline_only';
     }
 
     if (!contentToAnalyze && title) {
